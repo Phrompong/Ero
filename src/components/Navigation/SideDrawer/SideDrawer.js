@@ -4,7 +4,7 @@ import DrawerToggle from "./DrawerToggle/DrawerToggle";
 import NavigationItems from "../NavigationItems/NavigationItems";
 
 const StyledSideDrawer = styled.div`
-  position: fixed;
+  /* position: fixed; */
   width: 280px;
   background-color: blueviolet;
   left: 0;
@@ -16,6 +16,10 @@ const StyledSideDrawer = styled.div`
   background-color: yellow;
   transform: ${(props) => (props.open ? "translateX(0)" : "translateX(-100%)")};
   transition: transform 0.3s ease-out;
+
+  @media (min-width: 500px) {
+    display: none;
+  }
 `;
 
 const SideDrawer = ({ open }) => (

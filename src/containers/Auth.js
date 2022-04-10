@@ -127,5 +127,5 @@ const Button = styled.input`
 
 const Link = styled.a`
   text-decoration-line: underline;
-  margin-top: 14px;
+  margin-top: 10px;
 `;

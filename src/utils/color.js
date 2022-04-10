@@ -4,3 +4,4 @@ export const portage = "#90A0DA";
 export const brightsun = "#EDB52D";
 export const white = "#FEFEFE";
 export const snow = "#F9F9F9";
+export const balihai = "#809FB8";

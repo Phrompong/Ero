@@ -1,9 +1,19 @@
 import styled from "styled-components";
 
+import { Card } from "../components/UI/Card";
+
 const Container = styled.div`
-  background-color: pink;
-  height: 100vh;
+  padding: 20px;
+  height: 80vh;
+  width: 70vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-const Dashboard = () => <Container>dashboard</Container>;
+const Dashboard = () => (
+  <Card>
+    <Container>Dashboard</Container>
+  </Card>
+);
 export default Dashboard;

@@ -1,9 +1,11 @@
 import styled, { css } from "styled-components";
 
+import { persianblue } from "../../utils/color";
+
 export const Button = styled.button`
   /* background-color: #ce6a6b; */
   background-color: ${({ background }) =>
-    background ? background : "#4a919e"};
+    background ? background : persianblue};
 
   border: none;
   color: white;
