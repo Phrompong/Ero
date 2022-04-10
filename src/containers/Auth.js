@@ -1,18 +1,43 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
+import bg from "../assets/bg.jpg";
+import logo from "../assets/logo_awsc.jpg";
 
 import { Logo } from "../components/Logo/Logo";
 import { Card } from "../components/UI/Card";
 import { Input } from "../components/UI/Input";
-
 import { persianblue } from "../utils/color";
-
-import bg from "../assets/bg.jpg";
-import logo from "../assets/logo_awsc.jpg";
+import { httpFetch } from "../utils/fetch";
 
 const Auth = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const [showError, setShowError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const usernameInputRef = useRef("admin");
+  const passwordInputRef = useRef("1234");
+
+  const handleSubmited = async (event) => {
+    event.preventDefault();
+
+    const username = usernameInputRef.current.value;
+    const password = passwordInputRef.current.value;
+    const endpoint = "auth/signIn";
+
+    const [res, status] = await httpFetch(
+      "POST",
+      { username: username, password: password },
+      endpoint
+    );
+
+    if (status === 200) {
+      navigate(`/`);
+    } else {
+      setShowError(true);
+      setErrorMsg(res.message);
+    }
+  };
 
   const link = (text) => <Link>{text}</Link>;
 
@@ -23,26 +48,32 @@ const Auth = () => {
           <Form>
             <Logo />
             <div className="field">
-              {/* <div className="input"> */}
-              <Input
-                elementType="input"
-                elementConfig={{ type: "text" }}
-                changed={(e) => setUsername(e.target.value)}
-                label="Username"
-                required
-                width="100%"
-              />
-              <Input
-                elementType="input"
-                elementConfig={{ type: "password" }}
-                changed={(e) => setPassword(e.target.value)}
-                label="Password"
-                required
-                width="100%"
-              />
-              {/* </div> */}
+              <div className="input">
+                <Input
+                  elementType="input"
+                  elementConfig={{ type: "text" }}
+                  label="Username"
+                  required
+                  width="100%"
+                  ref={usernameInputRef}
+                />
+                <Input
+                  elementType="input"
+                  elementConfig={{ type: "password" }}
+                  label="Password"
+                  required
+                  width="100%"
+                  ref={passwordInputRef}
+                />
+                <ErrorText show={showError}>{errorMsg}</ErrorText>
+              </div>
+
               <div className="submit">
-                <Button type="submit" value="Sign in" />
+                <Button
+                  type="submit"
+                  value="Sign in"
+                  onClick={handleSubmited}
+                />
                 {link("problem to sign in ?")}
                 {link("มีปัญหาในการเข้าใช้งานกรุณาคลิกที่นี้")}
               </div>
@@ -102,13 +133,19 @@ const Form = styled.form`
     margin-bottom: 20px;
   }
 
-  .field > * {
-    margin-bottom: 40px;
+  .input {
+    width: 100%;
+  }
+
+  .input > :not(:last-child) {
+    margin-top: 35px;
   }
 
   .submit {
     display: flex;
     flex-direction: column;
+    margin-top: 50px;
+    margin-bottom: 40px;
   }
 `;
 
@@ -123,9 +160,20 @@ const Button = styled.input`
   font-weight: 700;
   border-radius: 10px;
   text-transform: capitalize;
+  cursor: pointer;
 `;
 
 const Link = styled.a`
   text-decoration-line: underline;
   margin-top: 10px;
+`;
+
+const ErrorText = styled.p`
+  text-align: left;
+  margin-left: 10px;
+  margin-top: 10px;
+  color: #b20600;
+  font-size: 13px;
+  position: absolute;
+  opacity: ${({ show }) => (show ? 1 : 0)};
 `;

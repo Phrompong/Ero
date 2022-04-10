@@ -1,3 +1,5 @@
+const BASE_URL = "http://134.209.108.248:3000/api/v1/";
+
 class JSONRPCError extends Error {
   constructor(errData) {
     super(errData);
@@ -7,17 +9,13 @@ class JSONRPCError extends Error {
   }
 }
 
-export async function httpFetch(method, body, url) {
+export async function httpFetch(method, body, endpoint) {
+  const url = `${BASE_URL}${endpoint}`;
   const res = await fetch(url, {
     method: method,
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: body,
-    credentials: "include",
   });
 
   const data = await res.json();
-
-  console.log(data);
+  return [data, res.status];
 }

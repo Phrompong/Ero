@@ -1,16 +1,18 @@
+import React from "react";
 import styled from "styled-components";
 import { Label } from "./Label";
 
 import { white, snow } from "../../utils/color";
 
-export const Input = (props) => {
+export const Input = React.forwardRef((props, ref) => {
   let inputElement = null;
 
   switch (props.elementType) {
     case "input":
       inputElement = (
         <StyledInput
-          onChange={props.changed}
+          //   onChange={props.changed}
+          ref={ref}
           {...props.elementConfig}
           autoComplete="new-password"
         />
@@ -23,11 +25,7 @@ export const Input = (props) => {
       break;
     default:
       inputElement = (
-        <input
-          onChange={props.chaged}
-          value={props.value}
-          {...props.elementConfig}
-        />
+        <input ref={ref} value={props.value} {...props.elementConfig} />
       );
   }
   return (
@@ -38,7 +36,7 @@ export const Input = (props) => {
       </Label>
     </Container>
   );
-};
+});
 
 const Container = styled.div`
   position: relative;
