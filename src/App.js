@@ -11,8 +11,8 @@ import "./App.css";
 const App = (props) => {
   const routes = (
     <Routes>
-      {/* <Route path="/login" element={<Auth {...props} />} /> */}
-      <Route path="/login" element={<Login {...props} />} />
+      <Route path="/login/admin" element={<Auth {...props} />} />
+      <Route path="/login/customer" element={<Login {...props} />} />
       <Route path="/import" element={<ImportData {...props} />} />
       <Route path="/" exact element={<Dashboard />} />
     </Routes>

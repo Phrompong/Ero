@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
 
   const location = useLocation();
   const path = location.pathname;
-  const isLogin = path !== "/login";
+  const isLogin = path !== "/login/admin" && path !== "/login/customer";
   const sidebar = isLogin ? (
     <>
       <Sidebar />
