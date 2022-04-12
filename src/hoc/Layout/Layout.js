@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
 
   const location = useLocation();
   const path = location.pathname;
-  const isLogin = path !== "/login";
+  const isLogin = path !== "/Login";
   const sidebar = isLogin ? (
     <>
       <Sidebar />
@@ -43,7 +43,7 @@ const Layout = ({ children }) => {
   ) : null;
   return (
     <Container>
-      {sidebar}
+      {!isLogin || sidebar}
       <Main isLogin={isLogin}>
         {children}
         {/* <Card>{children}</Card> */}
