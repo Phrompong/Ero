@@ -5,3 +5,6 @@ export const brightsun = "#EDB52D";
 export const white = "#FEFEFE";
 export const snow = "#F9F9F9";
 export const balihai = "#809FB8";
+export const shamrock = "#1AD598";
+export const carmine = "#9f0b17";
+export const gold = "#e8a723";

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { persianblue } from "../../../../utils/color";
 
 const Toggle = styled.div`
   width: 40px;
@@ -14,10 +15,10 @@ const Toggle = styled.div`
   div {
     width: 90%;
     height: 3%;
-    background-color: white;
+    background-color: ${persianblue};
   }
 
-  @media (min-width: 500px) {
+  @media (min-width: 999px) {
     display: none;
   }
 `;

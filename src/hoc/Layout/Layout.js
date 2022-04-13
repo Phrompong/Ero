@@ -25,9 +25,10 @@ const Main = styled.main`
   align-items: center;
   /* margin-left: 280px; */
   margin-left: ${({ isLogin }) => (isLogin ? "280px" : 0)};
-  /* @media (max-width: 500px) {
-    margin-left: 280px;
-  } */
+
+  @media (max-width: 999px) {
+    margin-left: 0;
+  }
 `;
 
 const Layout = ({ children }) => {
@@ -39,6 +40,7 @@ const Layout = ({ children }) => {
   const sidebar = isLogin ? (
     <>
       <Sidebar />
+      <SideDrawer />
     </>
   ) : null;
   return (

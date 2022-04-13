@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-import DrawerToggle from "./DrawerToggle/DrawerToggle";
 import NavigationItems from "../NavigationItems/NavigationItems";
+import DrawerToggle from "./DrawerToggle/DrawerToggle";
 
 const StyledSideDrawer = styled.div`
   /* position: fixed; */
@@ -22,8 +22,9 @@ const StyledSideDrawer = styled.div`
   }
 `;
 
-const SideDrawer = ({ open }) => (
+const SideDrawer = ({ open, drawerToggleClicked }) => (
   <StyledSideDrawer open={open}>
+    <DrawerToggle clicked={drawerToggleClicked} />
     <nav>
       <NavigationItems />
     </nav>

@@ -1,10 +1,9 @@
 import styled from "styled-components";
-
-import NavigationItems from "../NavigationItems/NavigationItems";
-import { Logo } from "../../Logo/Logo";
 import logo from "../../../assets/logo_awsc.jpg";
+import { balihai, ivory } from "../../../utils/color";
+import { Logo } from "../../Logo/Logo";
+import NavigationItems from "../NavigationItems/NavigationItems";
 
-import { ivory, balihai } from "../../../utils/color";
 const StyledSidebar = styled.div`
   position: fixed;
   width: 280px;
@@ -18,6 +17,10 @@ const StyledSidebar = styled.div`
   justify-content: space-between;
   background-color: ${ivory};
   /* padding: 20px; */
+
+  @media (max-width: 999px) {
+    display: none;
+  }
 `;
 
 const Footer = styled.div`
