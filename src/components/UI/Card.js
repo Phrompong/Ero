@@ -12,10 +12,15 @@ export const StyledCard = styled.div`
 export const StyledLineCard = styled.div`
   border-radius: 10px;
   border: 1px solid #d9e1e7;
+  margin: 0 10px;
+
+  @media screen and (max-width: 540px) {
+    margin: 0;
+  }
 `;
 
 export const Card = ({ children }) => <StyledCard>{children}</StyledCard>;
 
-export const LineCard = ({ children }) => (
-  <StyledLineCard>{children}</StyledLineCard>
+export const LineCard = ({ children, style }) => (
+  <StyledLineCard style={style}>{children}</StyledLineCard>
 );

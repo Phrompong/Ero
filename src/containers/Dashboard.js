@@ -15,6 +15,10 @@ const Dashboard = () => {
     {
       date: "20/4/2022",
       name: "รชดี ชื่นภักดี",
+      phone: "0890389311",
+      email: "rachadeec@gmail.com",
+      ats: "00877755656",
+      bank: "SCB",
       details: "หุ้นเพิ่มทุน STOWER 2022",
       amount: "70,000",
       extraOffer: "STOWER-W4   140,000",
@@ -24,6 +28,10 @@ const Dashboard = () => {
     {
       date: "20/8/2022",
       name: "รชดี ชื่นภักดี",
+      phone: "0890389311",
+      email: "rachadeec@gmail.com",
+      ats: "00877755656",
+      bank: "SCB",
       details: "หุ้นเพิ่มทุน MFEC 2022",
       amount: "170,000",
       extraOffer: "-",
@@ -33,6 +41,10 @@ const Dashboard = () => {
     {
       date: "20/4/2022",
       name: "รชดี ชื่นภักดี",
+      phone: "0890389311",
+      email: "rachadeec@gmail.com",
+      ats: "00877755656",
+      bank: "SCB",
       details: "หุ้นเพิ่มทุน MFEC 2022",
       amount: "170,000",
       extraOffer: "-",
@@ -42,6 +54,10 @@ const Dashboard = () => {
     {
       date: "20/4/2022",
       name: "รชดี ชื่นภักดี",
+      phone: "0890389311",
+      email: "rachadeec@gmail.com",
+      ats: "00877755656",
+      bank: "SCB",
       details: "หุ้นเพิ่มทุน MFEC 2022",
       amount: "170,000",
       extraOffer: "-",
@@ -117,6 +133,7 @@ const HeaderSection = styled.section`
 
   > :first-child {
     flex-grow: 2;
+    margin-left: 10px;
   }
 
   h3 {

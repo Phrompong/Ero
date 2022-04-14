@@ -9,7 +9,7 @@ const StyledSidebar = styled.div`
   width: 280px;
   left: 0;
   top: 0;
-  z-index: 200;
+  /* z-index: 200; */
   height: 100%;
   display: flex;
   flex-direction: column;

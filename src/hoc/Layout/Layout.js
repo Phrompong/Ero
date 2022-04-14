@@ -9,8 +9,8 @@ import Sidebar from "../../components/Navigation/Sidebar/Sidebar";
 import { white, ivory } from "../../utils/color";
 
 const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
+  /* width: 100vw;
+  height: 100vh; */
 `;
 
 const Drawer = styled.div`
@@ -19,7 +19,7 @@ const Drawer = styled.div`
 
 const Main = styled.main`
   background-color: ${ivory};
-  height: 100%;
+  /* height: 100%; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -44,13 +44,13 @@ const Layout = ({ children }) => {
     </>
   ) : null;
   return (
-    <Container>
+    <>
       {sidebar}
       <Main isLogin={isLogin}>
         {children}
         {/* <Card>{children}</Card> */}
       </Main>
-    </Container>
+    </>
   );
 };
 

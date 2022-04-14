@@ -1,4 +1,7 @@
+import { useState } from "react";
+
 import styled from "styled-components";
+
 import {
   balihai,
   carmine,
@@ -7,9 +10,11 @@ import {
   gold,
 } from "../../utils/color";
 
+import Details from "./Details";
+
 const Container = styled.div`
   padding: 15px;
-  width: 100%;
+  /* width: 100%; */
 `;
 const TableHeader = styled.h3`
   color: ${persianblue};
@@ -18,6 +23,7 @@ const Table = styled.table`
   margin-top: 20px;
   min-width: 900px;
   text-align: center;
+  border-collapse: collapse;
 
   .left {
     text-align: left;
@@ -27,6 +33,11 @@ const Table = styled.table`
 const THead = styled.thead`
   > :first-child {
     text-align: left;
+  }
+
+  > :first-child:hover {
+    background-color: transparent;
+    cursor: default;
   }
 `;
 const TH = styled.th`
@@ -39,8 +50,9 @@ const TH = styled.th`
 const TBody = styled.tbody``;
 
 const TR = styled.tr`
-  > :first-child {
-    text-align: left;
+  :hover {
+    background-color: #ecedf8;
+    cursor: pointer;
   }
 `;
 
@@ -57,6 +69,8 @@ const Status = styled.td`
 `;
 
 const DataTable = ({ theader, data }) => {
+  const [showDetails, setShowDetails] = useState(false);
+  const [details, setDetails] = useState();
   const headers = [
     "วันที่",
     "ชื่อ-นามสกุล",
@@ -65,7 +79,7 @@ const DataTable = ({ theader, data }) => {
     "สิทธิเพิ่มเติม",
     "มูลค่าการสั่งซื้อ",
     "สถานะรายการ",
-  ].map((header) => <TH>{header}</TH>);
+  ].map((header) => <TH key={header}>{header}</TH>);
 
   const color = {
     1: shamrock,
@@ -74,14 +88,21 @@ const DataTable = ({ theader, data }) => {
     4: carmine,
   };
 
+  const handleClicked = (details) => {
+    setShowDetails(true);
+    setDetails(details);
+  };
+
   return (
     <Container>
       <TableHeader>{theader}</TableHeader>
       <Table>
-        <THead>{headers}</THead>
+        <THead>
+          <TR>{headers}</TR>
+        </THead>
         <TBody>
           {data.map((x, index) => (
-            <TR key={index}>
+            <TR key={index} onClick={() => handleClicked(x)}>
               <TD className="left">{x["date"]}</TD>
               <TD>{x["name"]}</TD>
               <TD className="left">{x["details"]}</TD>
@@ -95,6 +116,11 @@ const DataTable = ({ theader, data }) => {
           ))}
         </TBody>
       </Table>
+      <Details
+        show={showDetails}
+        closed={() => setShowDetails(false)}
+        details={details}
+      />
     </Container>
   );
 };
