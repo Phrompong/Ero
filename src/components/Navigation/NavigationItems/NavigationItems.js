@@ -21,6 +21,9 @@ const NavigationItems = () => (
     <NavigationItem link="/import" img={account}>
       import data
     </NavigationItem>
+    <NavigationItem link="/buy" img={traffic}>
+      Buy / สั่งซื้อ
+    </NavigationItem>
   </Items>
 );
 
