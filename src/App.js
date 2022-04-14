@@ -5,6 +5,7 @@ import Auth from "./containers/Auth";
 import Login from "./containers/Login";
 import Dashboard from "./containers/Dashboard";
 import ImportData from "./containers/ImportData";
+import Buy from "./containers/Buy";
 
 import "./App.css";
 
@@ -14,6 +15,7 @@ const App = (props) => {
       <Route path="/login/admin" element={<Auth {...props} />} />
       <Route path="/login/customer" element={<Login {...props} />} />
       <Route path="/import" element={<ImportData {...props} />} />
+      <Route path="/buy" element={<Buy {...props} />} />
       <Route path="/" exact element={<Dashboard />} />
     </Routes>
   );
