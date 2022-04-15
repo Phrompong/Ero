@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import traffic from "../../../assets/icon_traffic.png";
 import account from "../../../assets/icon_account.png";
+import profile from "../../../assets/icon_profile.png";
 
 const Items = styled.ul`
   list-style: none;
@@ -23,6 +24,9 @@ const NavigationItems = () => (
     </NavigationItem>
     <NavigationItem link="/buy" img={traffic}>
       Buy / สั่งซื้อ
+    </NavigationItem>
+    <NavigationItem link="/profile" img={profile}>
+      Profile / ข้อมูลของฉัน
     </NavigationItem>
   </Items>
 );
