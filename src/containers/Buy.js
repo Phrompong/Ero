@@ -355,7 +355,7 @@ const Buy = () => {
                             เลขที่บัญชีซื้อขาย
                           </Col>
                           <Col xl={12}>
-                            <Input value={accountID} onChange={(e) => setAccountID(e.target.value)} />
+                            <Input value={accountID} onChange={(e) => setAccountID(e.target.value)} style={{ width: '80%' }} />
                           </Col>
                         </Col>
                       </Row>
