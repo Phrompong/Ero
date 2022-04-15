@@ -18,6 +18,7 @@ export const Button = styled.button`
   width: ${({ width }) => (width ? width : "fit-content")};
   height: ${({ height }) => (height ? height : "40px")};
   padding: 10px 20px;
+  font-weight: bold;
 `;
 
 export const CancelButton = styled(Button)`

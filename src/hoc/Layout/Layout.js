@@ -5,10 +5,7 @@ import Sidebar from "../../components/Navigation/Sidebar/Sidebar";
 import DrawerToggle from "../../components/Navigation/SideDrawer/DrawerToggle/DrawerToggle";
 import SideDrawer from "../../components/Navigation/SideDrawer/SideDrawer";
 import { ivory } from "../../utils/color";
-
-const Container = styled.div`
-  background-color: green;
-`;
+const Container = styled.div``;
 
 const Main = styled.main`
   position: relative;

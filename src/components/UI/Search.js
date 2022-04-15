@@ -7,7 +7,8 @@ const Container = styled.div`
   border-radius: 10px;
   background: #fff;
   position: relative;
-  height: 37px;
+  height: 40px;
+  /* min-height: fit-content; */
 
   input {
     -webkit-appearance: none;
@@ -15,13 +16,19 @@ const Container = styled.div`
     appearance: none;
     border: none;
     margin: 0;
-    padding-left: 10px;
+    padding-left: 15px;
     background-color: transparent;
     height: 100%;
     font-size: 16px;
 
     :focus {
       outline: none;
+    }
+  }
+
+  @media screen and (max-width: 540px) {
+    input {
+      width: 150px;
     }
   }
 
@@ -41,7 +48,7 @@ const SearchIcon = styled(Search)`
 
 export const SearchableInput = () => (
   <Container>
-    <input placeholder="search..." />
+    <input placeholder="Search..." />
     <SearchIcon />
   </Container>
 );

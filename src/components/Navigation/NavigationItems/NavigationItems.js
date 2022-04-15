@@ -58,18 +58,44 @@ const Nav = styled.nav`
   width: 85%;
 `;
 
+// const NavigationItems = () => (
+//   <Items>
+//     <NavigationItem link="/" exact="true" img={traffic}>
+//       dashboard
+//     </NavigationItem>
+//     <NavigationItem link="/import" img={account}>
+//       import data
+//     </NavigationItem>
+//   </Items>
+// );
+
 const NavigationItems = () => (
-  <Items>
-    <NavigationItem link="/" exact="true" img={traffic}>
-      dashboard
-    </NavigationItem>
-    <NavigationItem link="/import" img={account}>
-      import data
-    </NavigationItem>
-    <NavigationItem link="/buy" img={traffic}>
-      Buy / สั่งซื้อ
-    </NavigationItem>
-  </Items>
+  <>
+    <Nav>
+      <Logo small />
+      <Items>
+        <NavigationItem link="/" exact="true" img={traffic}>
+          dashboard
+        </NavigationItem>
+        <NavigationItem link="/import" img={account}>
+          import data
+        </NavigationItem>
+        <NavigationItem link="/buy" img={traffic}>
+          Buy / สั่งซื้อ
+        </NavigationItem>
+      </Items>
+    </Nav>
+    <Footer>
+      <div className="img">
+        <img src={logo} />
+        <p className="year">© 2022 </p>
+      </div>
+      <p className="text">
+        สงวนสิทธิ์ในการใช้งาน <br />
+        เป็นไปตามเงื่อนไขที่บริษัทกำหนด
+      </p>
+    </Footer>
+  </>
 );
 
 export default NavigationItems;

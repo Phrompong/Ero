@@ -178,7 +178,7 @@ const Container = styled.div`
 
 const SearchDiv = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: flex-end;
 
   > :last-child {
@@ -195,46 +195,6 @@ const Header = styled.div`
   p {
     color: ${balihai};
     word-break: keep-all;
-  }
-`;
-
-const HeaderSection = styled.section`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-
-  > :first-child {
-    flex-grow: 2;
-    margin-left: 10px;
-  }
-
-  h3 {
-    font-weight: 400;
-  }
-
-  .search {
-    display: flex;
-
-    > :last-child {
-      margin-left: 10px;
-    }
-  }
-
-  .date {
-    color: ${balihai};
-  }
-`;
-
-const OverviewSection = styled.section`
-  display: flex;
-  flex-wrap: wrap;
-
-  > :not(:first-child) {
-    margin-left: 10px;
-  }
-
-  div {
-    display: flex;
   }
 `;
 
