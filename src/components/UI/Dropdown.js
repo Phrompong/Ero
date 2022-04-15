@@ -10,6 +10,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  height: 37px;
   /* padding: 10px 20px; */
 `;
 

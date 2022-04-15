@@ -9,17 +9,22 @@ const StyledSidebar = styled.div`
   width: 280px;
   left: 0;
   top: 0;
-  /* z-index: 200; */
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   background-color: ${ivory};
-  /* padding: 20px; */
+  transform: translateX(0);
+  transition: all 0.4s ease-in;
 
-  @media (max-width: 999px) {
-    display: none;
+  @media screen and (max-width: 540px) {
+    transform: translateX(-100%);
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 980px) {
+    transform: translateX(-100%);
   }
 `;
 
@@ -80,6 +85,7 @@ const Sidebar = () => (
         เป็นไปตามเงื่อนไขที่บริษัทกำหนด
       </p>
     </Footer>
+    {/* <NavigationItems /> */}
   </StyledSidebar>
 );
 

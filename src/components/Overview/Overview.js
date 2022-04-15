@@ -3,10 +3,13 @@ import styled from "styled-components";
 import { ProgressPie } from "../UI/ProgressPie";
 import { persianblue } from "../../utils/color";
 
+import { FlexContainer } from "../UI/FlexContainer";
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 15px;
+  width: fit-content;
 
   h2 {
     margin-bottom: 10px;
@@ -21,6 +24,27 @@ const Container = styled.div`
     font-size: 1rem;
     margin-left: 10px;
   }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    h2 {
+      font-size: 2rem;
+    }
+
+    h4 {
+      font-size: 1.2rem;
+    }
+
+    span {
+      font-size: 0.7rem;
+      margin-left: 5px;
+    }
+  }
+`;
+
+const Div = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Header = styled.h3`
@@ -40,7 +64,7 @@ const Paragraph = styled.p``;
 const Overview = ({ header, pvalue, color, p1, p2, num1, num2 }) => (
   <Container color={color}>
     <Header>{header}</Header>
-    <div>
+    <Div>
       <Progress>
         <ProgressPie value={pvalue} color={color} />
       </Progress>
@@ -56,7 +80,7 @@ const Overview = ({ header, pvalue, color, p1, p2, num1, num2 }) => (
           <span>บาท</span>
         </h4>
       </Info>
-    </div>
+    </Div>
   </Container>
 );
 
