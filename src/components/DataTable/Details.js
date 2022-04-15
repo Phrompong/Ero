@@ -1,6 +1,6 @@
 import { DownArrow } from "@styled-icons/boxicons-solid/DownArrow";
 import styled from "styled-components";
-import { balihai, gold, ivory, persianblue } from "../../utils/color";
+import { balihai, carmine, gold, ivory, persianblue } from "../../utils/color";
 import { Card, LineCard } from "../UI/Card";
 import { FlexContainer } from "../UI/FlexContainer";
 import { Modal } from "../UI/Modal";
@@ -132,8 +132,12 @@ const TransactionPhoto = styled(Div)`
 const Footer = styled(Div)`
   text-align: center;
 
-  > :nth-child(2) {
+  > :not(:nth-child(1)) {
     margin-left: 10px;
+  }
+
+  > * {
+    margin-top: 10px;
   }
 `;
 
@@ -141,6 +145,16 @@ const Header = styled.h3`
   color: ${persianblue};
   margin-bottom: 20px;
   margin-left: 10px;
+
+  @media screen and (max-width: 540px) {
+    /* font-size: 16px; */
+    margin-left: 0;
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    margin-left: 0;
+  }
 `;
 
 const SubHeader = styled.h4`
@@ -150,13 +164,13 @@ const SubHeader = styled.h4`
 
 const Details = ({ show, details, closed }) => {
   const info = (label, value) => (
-    <FlexContainer>
+    <FlexContainer style={{ marginBottom: 10 }}>
       <p>{label}</p>
       <p>{value}</p>
     </FlexContainer>
   );
   return (
-    <Modal show={show} modalClosed={closed}>
+    <Modal show={show}>
       {details && (
         <Card>
           <Container>
@@ -231,6 +245,9 @@ const Details = ({ show, details, closed }) => {
                 </span>
               </OutlineButton>
               <Button>ยืนยันสถานะ</Button>
+              <Button background={carmine} onClick={closed}>
+                ยกเลิกการยืนยันสถานะ
+              </Button>
             </Footer>
           </Container>
         </Card>

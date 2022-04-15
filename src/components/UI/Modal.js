@@ -18,7 +18,7 @@ export const ModalStyled = styled.div`
   /* For Mobile */
   @media screen and (max-width: 540px) {
     width: 90%;
-    top: 70%;
+    top: 80%;
     transform: translate(-50%, -50%);
   }
 

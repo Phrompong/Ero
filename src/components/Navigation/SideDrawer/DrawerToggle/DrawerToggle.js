@@ -8,7 +8,7 @@ const Toggle = styled.div`
   flex-flow: column;
   justify-content: space-around;
   align-items: center;
-  padding: 10px 0;
+  padding: 10px;
   box-sizing: border-box;
   cursor: pointer;
 
