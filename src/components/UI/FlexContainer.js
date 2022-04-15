@@ -17,10 +17,15 @@ const Container = styled.div`
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 780px) {
-    /* flex-direction: column; */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    flex-direction: column;
+
+    > div {
+      margin-left: 0;
+      margin-bottom: 20px;
+    }
   }
 `;
-export const FlexContainer = ({ children }) => (
-  <Container>{children}</Container>
+export const FlexContainer = ({ children, style }) => (
+  <Container style={style}>{children}</Container>
 );

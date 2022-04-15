@@ -140,6 +140,7 @@ const Footer = styled(Div)`
 const Header = styled.h3`
   color: ${persianblue};
   margin-bottom: 20px;
+  margin-left: 10px;
 `;
 
 const SubHeader = styled.h4`

@@ -7,8 +7,10 @@ const StyledBackdrop = styled.div`
   z-index: 100;
   left: 0;
   top: 0;
-  background-color: rgba(253, 253, 250, 0.95);
+  /* background-color: rgba(253, 253, 250, 0.95); */
+  background-color: ${({ bgcolor }) =>
+    bgcolor ? bgcolor : "rgba(253, 253, 250, 0.95)"};
 `;
 
-export const Backdrop = (props) =>
-  props.show ? <StyledBackdrop onClick={props.clicked} /> : null;
+export const Backdrop = ({ show, clicked, bgcolor }) =>
+  show ? <StyledBackdrop onClick={clicked} bgcolor={bgcolor} /> : null;

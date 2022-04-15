@@ -7,6 +7,8 @@ const Container = styled.div`
   border-radius: 10px;
   background: #fff;
   position: relative;
+  height: 37px;
+
   input {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -22,6 +24,12 @@ const Container = styled.div`
       outline: none;
     }
   }
+
+  /* @media screen and (min-width: 540px) and (max-width: 880px) {
+    input {
+      width: 200px;
+    }
+  } */
 `;
 
 const SearchIcon = styled(Search)`
@@ -30,6 +38,7 @@ const SearchIcon = styled(Search)`
   vertical-align: text-top;
   color: darkgray;
 `;
+
 export const SearchableInput = () => (
   <Container>
     <input placeholder="search..." />
