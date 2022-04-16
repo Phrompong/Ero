@@ -1,26 +1,37 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { Row, Col, Container } from 'react-grid-system'
+import { Row, Col } from 'react-grid-system'
 
 import { Card } from "../components/UI/Card";
+import { FlexContainer } from "../components/UI/FlexContainer";
+import { Dropdown } from "../components/UI/Dropdown";
+import { LineCard } from "../components/UI/Card";
+import { FieldInput } from "../components/UI/Search";
 
 import { persianblue } from "../utils/color";
 
-// const Container = styled.div`
-//   padding: 20px;
-//   height: 80vh;
-//   // width: 70vw;
-//   display: table;
-//   flex-wrap: wrap;
-//   justify-content: center;
-//   align-items: center;
+const Container = styled.div`
+  padding: 20px 20px;
+  height: 90vh;
+  width: 70vw;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
 
-//   // .step {
-//   //   @media (max-width: 1600px) {
-//   //     display: none;
-//   //   }
-//   // }
-// `;
+  > * {
+    margin: 10px 0;
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    width: 90vw;
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    width: 80vw;
+  }
+`;
 
 const Step = styled.div`
   justify-content: center;
@@ -28,33 +39,82 @@ const Step = styled.div`
   border-radius: 100%;
   text-align: center;
   display: flex;
-  width: 2em;
-  height: 2em;
+  width: 60px;
+  height: 60px;
   color: #fff;
-  font-size: 2vw;
+  font-weight: 400;
   margin: auto;
   background: ${({ isActive }) => (isActive ? '#1D3AB1' : '#C4C4C4')};
+  position: relative;
+  font-size: 20px;
+`
+
+const StepDiv = styled.div`
+  text-align: center;
+  display: flex;
+  background-color: transparent;
+  border: 1px solid transparent;
+  margin-right: 10px;
+  margin-bottom: 1px;
+  float: left;
+`
+
+const InputDiv = styled.div`
+  margin: 10px 0;
+
+  .inputField {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+
+    p {
+      position: relative;
+      top: 8px;
+      margin: 0 10px;
+    }
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    display: block;
+    .inputField {
+      display: inline;
+      flex-wrap: wrap;
+      width: 100%;
+      justify-content: space-between;
+  
+      p {
+        position: static;
+      }
+    }
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
 `
 
 const Line = styled.hr`
   width: 10em;
-  margin: -30px -30px 20px -30px;
   position: absolute;
-  right: 0;
+  top: 20px;
+  left: 90px;
   background: #C4C4C4;
-  // @media (max-width: 1600px) {
-  //   display: none;
-  // }
 `
 
-const StepDetail = styled.div`
+const StepDetail = styled.p`
   font-style: bold;
   font-weight: 700;
-  font-size: 1.5vw;
+  font-size: 20px;
   line-height: 32px;
+  width: 300px;
 
   text-align: center;
-  margin-top: 20px;
+  color: #000000;
 `
 
 const Detail = styled.div`
@@ -193,6 +253,7 @@ const Dot = styled.div`
 
   margin: 0px 20px 5px 0px;
   float: left;
+  clear: both;
 `
 
 const Select = styled.select`
@@ -210,14 +271,9 @@ const Select = styled.select`
 `
 
 const Input = styled.input`
-  font-family: 'Segoe UI';
-  font-weight: bold;
-  font-size: 1em;
-  line-height: 32px;
-  width: 100%;
-  padding: 0px 20px;
-  text-align: center;
-  background: #FDFDFA;
+  font-size: 16px;
+  text-align: end;
+  padding: 2px 10px;
   border: 1px solid #809FB8;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -232,8 +288,48 @@ const Spacer = styled.div`
   float: left;
 `
 
+const Header = styled.div`
+  margin: 10px;
+  h3 {
+    font-weight: 400;
+  } 
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    display: flex;
+    justify-content: space-between;
+  }
+`;
+
+const Content = styled.div`
+  margin: 0 10px;
+  > :last-child {
+    font-size: 17px;
+    overflow-y: scroll;
+    scrollbar-color: rebeccapurple green;
+    scrollbar-width: thin;
+  }
+  p {
+    font-size: 17px;
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    display: flex;
+    justify-content: space-between;
+  }
+`
+
 const Buy = () => {
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(4)
   const [shareName, setShareName] = useState(null)
   const [shareDescription, setShareDescription] = useState(null)
   const [fullname, setFullname] = useState(null)
@@ -252,120 +348,111 @@ const Buy = () => {
 
   return (
     <Card>
-      <Container fluid>
-        <Row>
-          <Col xl={4}>
-            <div className="step">
-              <Step isActive={page === 1} onClick={() => setPage(1)}><b>1</b></Step>
-              <Line />
+      <Container>
+        <FlexContainer >
+          {/* <StepDiv>
+            <div style={{ display: 'block', margin: '0 20px' }}>
+              <Step isActive={page === 1} onClick={() => setPage(1)}><b>1</b><Line /></Step>
               <StepDetail>
                 ขั้นตอนที่ 1 - ลงทะเบียนจองสิทธิ์
               </StepDetail>
             </div>
-          </Col>
-          <Col xl={4}>
-            <div className="step">
-              <Step isActive={page === 2} onClick={() => setPage(2)}><b>2</b></Step>
-              <Line />
+            <div style={{ display: 'block', margin: '0 20px' }}>
+              <Step isActive={page === 2} onClick={() => setPage(2)}><b>2</b><Line /></Step>
               <StepDetail>
                 ขั้นตอนที่ 2 - จัดการคำสั่งซื้อ
               </StepDetail>
             </div>
-          </Col>
-          <Col xl={4}>
-            <div className="step">
+            <div style={{ display: 'block', margin: '0 20px' }}>
               <Step isActive={page === 3} onClick={() => setPage(3)}><b>3</b></Step>
               <StepDetail>
                 ขั้นตอนที่ 3 - ชำระเงิน
               </StepDetail>
             </div>
-          </Col>
-        </Row>
-
+          </StepDiv> */}
+        </FlexContainer>
+        <FlexContainer style={{ display: 'block', justifyContent: "flex-start" }}>
+          {
+            (() => {
+              if (page === 1) {
+                return (
+                  <>
+                    <LineCard style={{ height: '271px', width: '100%', marginBottom: '20px' }}>
+                      <Header>
+                        <h3>ข้อมูลการเสนอขายหุ้นเพิ่มทุน</h3>
+                        <h3 style={{ color: '#1D3AB1', fontWeight: 'bold' }}>{shareName}</h3>
+                      </Header>
+                      <Content>
+                        <p style={{
+                          color: '#1D3AB1',
+                          fontWeight: 'bold'
+                        }}>
+                          ข้อมูลโดยสรุป
+                        </p>
+                        <p style={{ height: '157.4px' }}>
+                          {shareDescription}
+                        </p>
+                      </Content>
+                    </LineCard>
+                    <LineCard style={{ width: '100%', paddingBottom: '20px' }}>
+                      <Header>
+                        <h3 style={{ color: '#1D3AB1', fontWeight: 'bold' }}>กรอกข้อมูลจองสิทธิ์</h3>
+                      </Header>
+                      <Content style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <InputDiv>
+                          <div className="inputField">
+                            <p>ชื่อ-นามสกุล</p>
+                            {/* <Input value={fullname} onChange={(e) => setFullname(e.target.value)} /> */}
+                            <FieldInput />
+                          </div>
+                        </InputDiv>
+                        <InputDiv>
+                          <div className="inputField">
+                            <p>เลขทะเบียนผู้ถือหุ้น</p>
+                            {/* <Input value={fullname} onChange={(e) => setFullname(e.target.value)} /> */}
+                            <FieldInput />
+                          </div>
+                        </InputDiv>
+                      </Content>
+                      <Content>
+                        <InputDiv>
+                          <div className="inputField">
+                            <p>เบอร์โทรศัพท์ที่สามารถติดต่อได้</p>
+                            {/* <Input value={fullname} onChange={(e) => setFullname(e.target.value)} /> */}
+                            <FieldInput />
+                          </div>
+                        </InputDiv>
+                      </Content>
+                      <Header>
+                        <h3 style={{ color: '#1D3AB1', fontWeight: 'bold' }}>รายละเอียดการจัดสรรหุ้น</h3>
+                      </Header>
+                      <Content>
+                        <InputDiv>
+                          <Dot />
+                          <p>ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก</p>
+                        </InputDiv>
+                        <InputDiv style={{ marginTop: '20px' }}>
+                          <Spacer />
+                          <Dropdown />
+                        </InputDiv>
+                        <InputDiv>
+                          <Spacer />
+                          <p>เลขที่บัญชีซื้อขาย</p>
+                        </InputDiv>
+                        <InputDiv>
+                          <Spacer />
+                          <FieldInput />
+                        </InputDiv>
+                      </Content>
+                    </LineCard>
+                  </>
+                )
+              }
+            })()
+          }
+        </FlexContainer>
         {
           (() => {
-            if (page === 1) {
-              return (
-                <>
-                  <Detail>
-                    <div className="title">
-                      <Row>
-                        <Col xl={4} lg={12}>
-                          ข้อมูลการเสนอขายหุ้นเพิ่มทุน
-                        </Col>
-                        <Col xl={8} lg={12}>
-                          <span>{shareName}</span>
-                        </Col>
-                      </Row>
-                    </div>
-                    <div className="detail">
-                      ข้อมูลโดยสรุป
-                      <p>
-                        {shareDescription}
-                      </p>
-                    </div>
-                  </Detail>
-                  <Detail>
-                    <div className="title-contact">
-                      กรอกข้อมูลจองสิทธิ์
-                    </div>
-                    <div className="contact">
-                      <Row>
-                        <Col xl={3} lg={6}>
-                          ชื่อ-นามสกุล
-                        </Col>
-                        <Col xl={3} lg={6}>
-                          <Input value={fullname} onChange={(e) => setFullname(e.target.value)} />
-                        </Col>
-                        <Col xl={3} lg={6}>
-                          เลขทะเบียนผู้ถือหุ้น
-                        </Col>
-                        <Col xl={3} lg={6}>
-                          <Input value={holderAccountID} onChange={(e) => setHolderAccountID(e.target.value)} />
-                        </Col>
-                      </Row>
-                    </div>
-                    <div className="contact">
-                      <Row>
-                        <Col xl={3} lg={6}>
-                          เบอร์โทรศัพท์ที่สามารถติดต่อได้
-                        </Col>
-                        <Col xl={3} lg={6}>
-                          <Input value={phoneNo} onChange={(e) => setPhoneNo(e.target.value)} />
-                        </Col>
-                      </Row>
-                    </div>
-                    <div className="title-contact">
-                      รายละเอียดจัดสรรหุ้น
-                    </div>
-                    <div className="share">
-                      <Row>
-                        <Col xl={12}>
-                          <Col xl={12}>
-                            <Dot />
-                            ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก
-                          </Col>
-                          <Col xl={12}>
-                            <Select>
-                              <option>005 บริษัทหลักทรัพย์ แลน แอน เฮ้าส  จำกัด (มหาชน)</option>
-                            </Select>
-                          </Col>
-                          <Col xl={12}>
-                            <Spacer />
-                            เลขที่บัญชีซื้อขาย
-                          </Col>
-                          <Col xl={12}>
-                            <Input value={accountID} onChange={(e) => setAccountID(e.target.value)} style={{ width: '80%' }} />
-                          </Col>
-                        </Col>
-                      </Row>
-                    </div>
-                  </Detail>
-                  <Spacer />
-                </>
-              )
-            }
-
             if (page === 2) {
               return (
                 <>
@@ -654,7 +741,7 @@ const Buy = () => {
         }
 
       </Container>
-    </Card>
+    </Card >
   )
 };
 export default Buy;
