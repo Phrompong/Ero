@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 import { ProgressPie } from "../UI/ProgressPie";
 import { persianblue } from "../../utils/color";
+import { FlexContainer } from "../UI/FlexContainer";
+import { gold } from "../../utils/color";
 
 const Container = styled.div`
   display: flex;
@@ -47,22 +49,73 @@ const Progress = styled.div``;
 
 const Paragraph = styled.p``;
 
-const Overview = ({ header, pvalue, color, p1, p2, num1, num2 }) => (
-  <Container color={color}>
-    <Header>{header}</Header>
-    <div>
-      <Info>
-        <Paragraph>ชื่อ-นามสกุล / Name-Lastname : </Paragraph>
-        <Paragraph>ชื่อ-นามสกุล / Name-Lastname : </Paragraph>
+const Div = styled.div`
+  padding: 10px;
+`;
 
-        {/* <Paragraph>ชื่อ-นามสกุล / Name-Lastname :</Paragraph>
-        <Paragraph>โทรศัพท์ / Telephone :</Paragraph>
-        <Paragraph>อีเมล์ / Email :</Paragraph>
-        <Paragraph>หมายเลขบัญชี ATS :</Paragraph>
-        <Paragraph>Bank ATS :</Paragraph> */}
-      </Info>
-    </div>
-  </Container>
-);
+const UserInfo = styled(Div)`
+  .info {
+    padding: 2px 0;
+    flex: 1;
+  }
+`;
 
-export default Overview;
+const Link = styled.div`
+  a {
+    text-decoration: underline;
+    color: ${gold};
+  }
+  text-align: right;
+
+  @media screen and (max-width: 540px) {
+    text-align: left;
+  }
+`;
+
+const Datagrid = styled(Div)`
+  .grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    background-color: #2196f3;
+    padding: 10px;
+  }
+`;
+
+const ViewProfile = ({
+  header,
+  name,
+  telephone,
+  email,
+  bankNumber,
+  bankName,
+  color,
+}) => {
+  const info = (label, value, link) => (
+    <FlexContainer>
+      <p style={{ flex: 1 }}>{label}</p>
+      <p style={{ flex: 1 }}> {value}</p>
+      <p>{link}</p>
+    </FlexContainer>
+  );
+  return (
+    <Container color={color}>
+      <Header>{header}</Header>
+      <br />
+      {info("ชื่อ-นามสกุล / Name-Lastname   :", name)}
+      {info("โทรศัพท์ / Telephone  :", telephone)}
+      {info("อีเมล์ / Email  :", email)}
+      {info("หมายเลขบัญชี ATS :", bankNumber)}
+      {info("BANK ATS :", bankName)}
+      <br />
+      {info(
+        "",
+        "",
+        <Link>
+          <a href="">หากข้อมูลไม่ถูกต้องกรุณาคลิก</a>
+        </Link>
+      )}
+    </Container>
+  );
+};
+
+export default ViewProfile;

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Overview from "../components/Overview/Overview";
 import DataTable from "../components/DataTable/DataTable";
 import ViewProfile from "../components/ViewProfile/ViewProfile";
+import News from "../components/News/News";
 
 import { Card, LineCard } from "../components/UI/Card";
 import { Dropdown } from "../components/UI/Dropdown";
@@ -73,24 +74,16 @@ const Dashboard = () => {
           <LineCard>
             <ViewProfile
               header="ข้อมูลทั่วไปของท่าน"
-              pvalue={62}
-              p1="ยอดรวมที่ชำระเงินแล้ว"
-              num1="32,000,000"
-              p2="จากยอดสั่งซื้อทั้งหมด"
-              num2="51,000,000"
+              name="รชดี ชื่นภัคดี"
+              telephone="085-515-4560"
+              email="test@mail.com"
+              bankNumber="1234567891"
+              bankName="SCB"
             />
           </LineCard>
 
           <LineCard>
-            <Overview
-              header="จำนวนคำสั่งซื้อเมื่อเทียบกับยอดจัดจำหน่าย"
-              pvalue={88}
-              color={shamrock}
-              p1="คำสั่งซื้อทั้งหมด"
-              num1="51,000,000"
-              p2="ยอดจัดจำหน่ายทั้งหมด"
-              num2="57,950,000"
-            />
+            <News header="ข้อมูลประชาสัมพันธ์" imageUrl="" />
           </LineCard>
         </OverviewSection>
 
