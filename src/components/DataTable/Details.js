@@ -131,7 +131,7 @@ const Details = ({ show, details, closed }) => {
               </LineCard>
               <LineCard style={{ flex: 1 }}>
                 <TransactionPhoto>
-                  <img src={transaction} />
+                  <img src={details["attachedFile"]} />
                 </TransactionPhoto>
               </LineCard>
             </FlexContainer>
@@ -274,7 +274,7 @@ const TransactionPhoto = styled(Div)`
 
   img {
     /* height: 250px; */
-    width: 130px;
+    width: 300px;
   }
 `;
 
