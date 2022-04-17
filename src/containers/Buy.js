@@ -6,7 +6,7 @@ import change from "../assets/icon_change.png";
 
 import { Card } from "../components/UI/Card";
 import { FlexContainer } from "../components/UI/FlexContainer";
-import { Dropdown, DropdownSelect } from "../components/UI/Dropdown";
+import { DropdownSelect } from "../components/UI/Dropdown";
 import { LineCard } from "../components/UI/Card";
 import { FieldInput } from "../components/UI/Search";
 
@@ -14,6 +14,9 @@ import { balihai, ivory, persianblue } from "../utils/color";
 
 const Buy = () => {
   const [page, setPage] = useState(1)
+
+  const [currentStockVolume, setCurrentStockVolume] = useState(0)
+  const [currentPrice, setCurrentPrice] = useState(0)
 
   // step 1
   const [shareName, setShareName] = useState(null)
@@ -103,6 +106,10 @@ const Buy = () => {
       fetchStep3()
     }
   }, [page])
+
+  useEffect(() => {
+    setCurrentPrice(Number(currentStockVolume) * Number(offerPrice))
+  }, [currentStockVolume])
 
   useEffect(() => {
     setShareName('บมจ.สกาย ทาวเวอร์ (STOWER)')
@@ -281,21 +288,19 @@ const Buy = () => {
                         </Header>
                         <ShareDetail style={{ marginBottom: '-10px' }}>
                           <p>{rightStockName}</p>
-                          <div className="num-box" style={{ position: 'relative' }}>71,000</div>
-                          {/* <div className="unit">หุ้น</div> */}
+                          <Input type={'number'} value={currentStockVolume} onChange={(e) => setCurrentStockVolume(e.target.value.replace(/[^0-9.]/, ''))} />
                           <p style={{ position: 'relative' }}>หุ้น</p>
                         </ShareDetail>
                         <ShareDetail>
                           <p></p>
                           <div className="num-box-hidden" style={{ position: 'relative' }}><Icon /></div>
-                          {/* <div className="unit">หุ้น</div> */}
                           <p style={{ position: 'relative' }}>
-                            <img src={change} className="icon-change" />
+                            <img src={change} className="icon-change" onClick={() => setCurrentStockVolume(0)}/>
                           </p>
                         </ShareDetail>
                         <ShareDetail>
                           <p>จำนวนเงิน</p>
-                          <div className="num-box">745,000</div>
+                          <div className="num-box">{currentPrice}</div>
                           <p>บาท</p>
                         </ShareDetail>
                         <Header>
@@ -318,7 +323,7 @@ const Buy = () => {
                           </Header>
                           <ShareDetail>
                             <p>{rightStockName}</p>
-                            <b>1,000</b>
+                            <b>{Number(currentStockVolume) > Number(rightStockVolume) ? Number(currentStockVolume) - Number(rightStockVolume) : 0}</b>
                             <p>หุ้น</p>
                           </ShareDetail>
                         </LineCard>
@@ -744,5 +749,27 @@ const Icon = styled(DownArrow)`
     // width: 180px;
   }
 `;
+
+const Input = styled.input`
+  width: 200px;
+  text-align: center;
+  padding: 7px 0;
+  background: ${ivory};
+  border: 1px solid ${balihai};
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+
+  @media screen and (max-width: 540px) {
+    width: 150px;
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    width: 180px;
+  }
+`
 
 export default Buy;
