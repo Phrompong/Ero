@@ -9,7 +9,7 @@ import { Logo } from "../components/Logo/Logo";
 import { Card } from "../components/UI/Card";
 import { Input } from "../components/UI/Input";
 import { persianblue } from "../utils/color";
-import { httpFetch } from "../utils/fetch";
+import { httpPost } from "../utils/fetch";
 
 const Login = () => {
   const navigate = useNavigate();

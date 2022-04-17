@@ -12,13 +12,21 @@ export const Button = styled.button`
   outline: none;
   /* font-weight: bold; */
   cursor: pointer;
-  font-size: 13px;
+  font-size: 16px;
   border-radius: 7px;
   overflow: hidden;
   width: ${({ width }) => (width ? width : "fit-content")};
-  height: ${({ height }) => (height ? height : "40px")};
+  /* height: ${({ height }) => (height ? height : "40px")}; */
   padding: 10px 20px;
   font-weight: bold;
+
+  @media screen and (max-width: 540px) {
+    font-size: 14px;
+  }
+
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    font-size: 14px;
+  }
 `;
 
 export const CancelButton = styled(Button)`

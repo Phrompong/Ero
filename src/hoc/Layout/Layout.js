@@ -5,16 +5,19 @@ import Sidebar from "../../components/Navigation/Sidebar/Sidebar";
 import DrawerToggle from "../../components/Navigation/SideDrawer/DrawerToggle/DrawerToggle";
 import SideDrawer from "../../components/Navigation/SideDrawer/SideDrawer";
 import { ivory } from "../../utils/color";
-const Container = styled.div``;
+const Container = styled.div`
+  overflow: hidden;
+`;
 
 const Main = styled.main`
   position: relative;
   background-color: ${ivory};
-  height: 100vh;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-left: ${({ isLogin }) => (isLogin ? "280px" : 0)};
+  overflow: hidden;
 
   @media screen and (max-width: 540px) {
     margin-left: 0;

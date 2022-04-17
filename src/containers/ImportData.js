@@ -1,10 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-import { httpFetch } from "../utils/fetch";
+import { httpPostRequest } from "../utils/fetch";
 import { showAlert } from "../utils/showAlert";
 
-import { SuccessAlert, ErrorAlert } from "../components/UI/Alert";
 import { Card } from "../components/UI/Card";
 import { Button } from "../components/UI/Button";
 import { ModalAlert } from "../components/ModalAlert/ModalAlert";
@@ -35,7 +34,7 @@ const ImportData = () => {
     formData.append("File", file);
     const endpoint = "uploads";
 
-    const [res, status] = await httpFetch("POST", formData, endpoint);
+    const [res, status] = await httpPostRequest(formData, endpoint);
     setStatus(status);
     let msg = res.message;
     if (status === 200) {
