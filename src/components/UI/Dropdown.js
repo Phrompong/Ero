@@ -61,7 +61,6 @@ export const Dropdown = ({ }) => {
 };
 
 export const DropdownSelect = ({ options }) => {
-  console.log(options)
   const _options = options.map((option, index) => {
     return <Option key={index} value={option.code}>{option.code} {option.name}</Option>
   })

@@ -20,10 +20,23 @@ const Buy = () => {
   const [shareDescription, setShareDescription] = useState(null)
   const [fullname, setFullname] = useState(null)
   const [shareId, setShareId] = useState(null)
-  const [holderAccountID, setHolderAccountID] = useState(null)
   const [phoneNo, setPhoneNo] = useState(null)
-  const [accountID, setAccountID] = useState(null)
   const [shareOption, setShareOption] = useState([])
+
+  // step 2
+  const [rightStockName, setRightStockName] = useState(null)
+  const [stockVolume, setStockVolume] = useState(null)
+  const [offerPrice, setOfferPrice] = useState(null)
+  const [rightStockVolume, setRightStockVolume] = useState(null)
+  const [rightSpecialName, setRightSpecialName] = useState(null)
+  const [rightSpecialVolume, setRightSpecialVolume] = useState(null)
+
+  // step 3
+  const [logo, setLogo] = useState(null)
+  const [nameTH, setNameTH] = useState(null)
+  const [ref1, setRef1] = useState(null)
+  const [ref2, setRef2] = useState(null)
+  const [qrCode, setQRCode] = useState(null)
 
   const endpoint = 'http://134.209.108.248:3000'
 
@@ -49,6 +62,48 @@ const Buy = () => {
       })
   }
 
+  const fetchStep2 = () => {
+    fetch(`${endpoint}/api/v1/customerStocks?customerId=6258d347930c4c210c0f5b97`)
+      .then((res) => {
+        return res.json()
+      })
+      .then((json) => {
+        const payload = json.data
+        setRightStockName(payload.rightStockName)
+        setStockVolume(payload.stockVolume)
+        setOfferPrice(payload.offerPrice)
+        setRightStockName(payload.rightStockName)
+        setRightStockVolume(payload.rightStockVolume)
+        setRightSpecialName(payload.rightSpecialName)
+        setRightSpecialVolume(payload.rightSpecialVolume)
+      })
+  }
+
+  const fetchStep3 = () => {
+    fetch(`${endpoint}/api/v1/masterBanks`)
+      .then((res) => {
+        return res.json()
+      })
+      .then((json) => {
+        const payload = json.data[0]
+        setLogo(payload.logo)
+        setNameTH(payload.nameTH)
+        setRef1(payload.ref1)
+        setRef2(payload.ref2)
+        setQRCode(payload.qrCode)
+      })
+  }
+
+  useEffect(() => {
+    if (page === 1) {
+      fetchStep1()
+    } else if (page === 2) {
+      fetchStep2()
+    } else if (page === 3) {
+      fetchStep3()
+    }
+  }, [page])
+
   useEffect(() => {
     setShareName('บมจ.สกาย ทาวเวอร์ (STOWER)')
     const desc = `บมจ.สกาย ทาวเวอร์ (STOWER) เปิดเผยว่า ที่ประชุมคณะกรรมการบริษัท ครั้งที่ 3/2565 เมื่อวันที่ 18 มี.ค.65 มีมติให้นำเสนอต่อที่ประชุมสามัญผู้ถือหุ้น ประจำปี 2565 เพื่อพิจารณาอนุมัติการออกและเสนอขายหุ้นสามัญเพิ่มทุนของบริษัทจำนวนไม่เกิน 17,979,717,949 หุ้นให้แก่ผู้ถือหุ้นเดิมตามสัดส่วนจำนวนหุ้น
@@ -56,7 +111,6 @@ const Buy = () => {
                และหุ้นสามัญเพิ่มทุนส่วนที่เหลือจาก Right Offering จะจัดสรรให้กับบุคคลในวงจำกัด พร้อมใบสำคัญแสดงสิทธิ STOWER-W4 ในอัตราส่วน 3 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
     `
     setShareDescription(desc)
-    fetchStep1()
   }, [])
 
   return (
@@ -144,7 +198,7 @@ const Buy = () => {
                           <p>ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก</p>
                         </InputDiv>
                         <InputDiv style={{ marginTop: '20px', marginLeft: '50px' }}>
-                          <DropdownSelect options={shareOption}/>
+                          <DropdownSelect options={shareOption} />
                         </InputDiv>
                         <InputDiv style={{ marginLeft: '50px' }}>
                           <p>เลขที่บัญชีซื้อขาย</p>
@@ -167,8 +221,8 @@ const Buy = () => {
                           <h3 style={{ color: '#1D3AB1', fontWeight: 'bold' }}>จำนวนหุ้นเดิมของท่าน</h3>
                         </Header>
                         <ShareDetail>
-                          <p>STOWER</p>
-                          <b>35,000</b>
+                          <p>{rightStockName}</p>
+                          <b>{stockVolume}</b>
                           <p>หุ้น</p>
                         </ShareDetail>
                       </LineCard>
@@ -178,7 +232,7 @@ const Buy = () => {
                             <h3 style={{ color: '#1D3AB1', fontWeight: 'bold' }}>ราคาเสนอขายหุ้นละ</h3>
                           </Header>
                           <Header>
-                            <h3>10.50</h3>
+                            <h3>{offerPrice}</h3>
                           </Header>
                           <Header>
                             <h3>บาท</h3>
@@ -192,17 +246,17 @@ const Buy = () => {
                           <h3 style={{ color: '#1D3AB1', fontWeight: 'bold' }}>สิทธิในการซื้อหุ้นเพิ่มทุนของท่าน</h3>
                         </Header>
                         <ShareDetail>
-                          <p>STOWER</p>
-                          <b>70,000</b>
+                          <p>{rightStockName}</p>
+                          <b>{rightStockVolume}</b>
                           <p>หุ้น</p>
                         </ShareDetail>
                         <ShareDetail style={{ fontSize: '14px', color: '#1D3AB1', fontWeight: 'bold' }}>
                           <p>เป็นจำนวนเงิน</p>
-                          <b>735,000</b>
+                          <b>{Number(rightStockVolume) * Number(offerPrice)}</b>
                           <p>บาท</p>
                         </ShareDetail>
                         <ShareDetail style={{ fontSize: '14px' }}>
-                          <p>(การคำนวนจากราคาเสนอขาย 10.50 บาท ต่อ หุ้น)</p>
+                          <p>(การคำนวนจากราคาเสนอขาย {offerPrice} บาท ต่อ หุ้น)</p>
                         </ShareDetail>
                       </LineCard>
                       <LineCard style={{ width: '100%', marginBottom: '20px', paddingBottom: '30px' }}>
@@ -210,8 +264,8 @@ const Buy = () => {
                           <h3 style={{ color: '#1D3AB1', fontWeight: 'bold' }}>สิทธิเพิ่มเติม</h3>
                         </Header>
                         <ShareDetail>
-                          <p>STOWER-W4</p>
-                          <b>140,000</b>
+                          <p>{rightSpecialName}</p>
+                          <b>{rightSpecialVolume}</b>
                           <p>หุ้น</p>
                         </ShareDetail>
                       </LineCard>
@@ -226,7 +280,7 @@ const Buy = () => {
                           <h3 style={{ color: '#1D3AB1', fontWeight: 'bold' }}>การสั่งซื้อหุ้นเพิ่มทุนของท่าน</h3>
                         </Header>
                         <ShareDetail style={{ marginBottom: '-10px' }}>
-                          <p>STOWER</p>
+                          <p>{rightStockName}</p>
                           <div className="num-box" style={{ position: 'relative' }}>71,000</div>
                           {/* <div className="unit">หุ้น</div> */}
                           <p style={{ position: 'relative' }}>หุ้น</p>
@@ -248,8 +302,8 @@ const Buy = () => {
                           <h3 style={{ color: '#1D3AB1', fontWeight: 'bold' }}>สิทธิเพิ่มเติมที่ท่านได้รับ</h3>
                         </Header>
                         <ShareDetail>
-                          <p>STOWER-W4</p>
-                          <b>140,000</b>
+                          <p>{rightSpecialName}</p>
+                          <b>{rightSpecialVolume}</b>
                           <p>หุ้น</p>
                         </ShareDetail>
                       </LineCard>
@@ -263,7 +317,7 @@ const Buy = () => {
                             <h3 style={{ color: '#1D3AB1', fontWeight: 'bold' }}>จำนวนหุ้นที่ท่านซื้อเกินสิทธิ์</h3>
                           </Header>
                           <ShareDetail>
-                            <p>STOWER</p>
+                            <p>{rightStockName}</p>
                             <b>1,000</b>
                             <p>หุ้น</p>
                           </ShareDetail>
@@ -329,20 +383,28 @@ const Buy = () => {
                       </ShareDetail>
                       <ShareDetail>
                         <div className="payment-image">
-                          <img src='https://bit.ly/3JPQt8C' height={'105px'} width={'105px'} />
+                          <img src={logo} height={'105px'} width={'105px'} style={{ margin: '20px' }} />
                           <div className="payment-detail">
-                            <p>ธนาคารไทนพานิชย์</p>
-                            <p>REF 1: 0000000</p>
-                            <p>REF 2: XXXXX</p>
+                            <p>{nameTH}</p>
+                            <p>REF 1: {ref1}</p>
+                            <p>REF 2: {ref2}</p>
                           </div>
                         </div>
-                        <img src='https://bit.ly/3JPQt8C' height={'200px'} width={'200px'} style={{ margin: 'auto' }} />
+                        <img src={qrCode} height={'200px'} width={'200px'} style={{ margin: 'auto' }} />
                       </ShareDetail>
                       <ShareDetail>
                         <Button
                           type="submit"
                           value="แนบหลักฐานการชำระเงิน"
                           style={{ width: '50%', fontSize: '17px', margin: 'auto', marginBottom: '20px', marginTop: '20px' }} />
+                      </ShareDetail>
+                    </LineCard>
+                    <LineCard style={{ width: '729px', margin: 'auto', border: 'none', display: 'flex', justifyContent: 'flex-end' }}>
+                      <ShareDetail style={{ textAlign: 'end' }}>
+                        <Button
+                          type="submit"
+                          value="ส่งแบบฟอร์ม"
+                          style={{ width: '100%', fontSize: '17px', marginBottom: '20px', marginTop: '20px' }} />
                       </ShareDetail>
                     </LineCard>
                   </>
