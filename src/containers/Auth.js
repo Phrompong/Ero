@@ -9,14 +9,14 @@ import { Logo } from "../components/Logo/Logo";
 import { Card } from "../components/UI/Card";
 import { Input } from "../components/UI/Input";
 import { persianblue } from "../utils/color";
-import { httpFetch } from "../utils/fetch";
+import { httpPostRequest } from "../utils/fetch";
 
 const Auth = () => {
   const navigate = useNavigate();
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const usernameInputRef = useRef("admin");
-  const passwordInputRef = useRef("1234");
+  const usernameInputRef = useRef("");
+  const passwordInputRef = useRef("");
 
   const handleSubmited = async (event) => {
     event.preventDefault();
@@ -25,8 +25,7 @@ const Auth = () => {
     const password = passwordInputRef.current.value;
     const endpoint = "auth/signIn";
 
-    const [res, status] = await httpFetch(
-      "POST",
+    const [res, status] = await httpPostRequest(
       { username: username, password: password },
       endpoint
     );
@@ -118,7 +117,6 @@ const Form = styled.form`
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
-  width: 271px;
   height: 90%;
   overflow: scroll;
 

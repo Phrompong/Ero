@@ -10,7 +10,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 40px;
+  /* height: 40px; */
 `;
 
 const Select = styled.select`
@@ -25,6 +25,14 @@ const Select = styled.select`
   text-align: center;
   :focus {
     outline: none;
+  }
+
+  @media screen and (max-width: 540px) {
+    font-size: 14px;
+  }
+
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    font-size: 14px;
   }
 `;
 
@@ -41,21 +49,20 @@ const Arrow = styled.i`
   border-width: 0 2px 2px 0;
   display: inline-block;
   padding: 3px 3px;
-  /* margin-right: 10px; */
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
 `;
 
-export const Dropdown = ({}) => {
-  const years = ["2023", "2024", "2025", 2026];
-  const options = () => years.map((year) => <Option key={year}>{year}</Option>);
-  return (
-    <Container>
-      <Select>
-        <Option>This year</Option>
-        {options()}
-      </Select>
-      <Arrow />
-    </Container>
-  );
-};
+export const Dropdown = ({ options, setStatus, selected }) => (
+  <Container>
+    <Select onChange={(e) => setStatus(e.target.value)} value={selected}>
+      {options &&
+        options.map((option, index) => (
+          <Option key={index} value={option["value"]}>
+            {option["label"]}
+          </Option>
+        ))}
+    </Select>
+    <Arrow />
+  </Container>
+);
