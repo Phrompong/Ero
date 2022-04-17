@@ -46,7 +46,7 @@ const Arrow = styled.i`
   -webkit-transform: rotate(45deg);
 `;
 
-export const Dropdown = ({}) => {
+export const Dropdown = ({ }) => {
   const years = ["2023", "2024", "2025", 2026];
   const options = () => years.map((year) => <Option key={year}>{year}</Option>);
   return (
@@ -54,6 +54,21 @@ export const Dropdown = ({}) => {
       <Select>
         <Option>This year</Option>
         {options()}
+      </Select>
+      <Arrow />
+    </Container>
+  );
+};
+
+export const DropdownSelect = ({ options }) => {
+  console.log(options)
+  const _options = options.map((option, index) => {
+    return <Option key={index} value={option.code}>{option.code} {option.name}</Option>
+  })
+  return (
+    <Container>
+      <Select style={{ padding: '0 32px 0  20px' }}>
+        {_options}
       </Select>
       <Arrow />
     </Container>

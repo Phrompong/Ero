@@ -6,7 +6,7 @@ import change from "../assets/icon_change.png";
 
 import { Card } from "../components/UI/Card";
 import { FlexContainer } from "../components/UI/FlexContainer";
-import { Dropdown } from "../components/UI/Dropdown";
+import { Dropdown, DropdownSelect } from "../components/UI/Dropdown";
 import { LineCard } from "../components/UI/Card";
 import { FieldInput } from "../components/UI/Search";
 
@@ -14,6 +14,8 @@ import { balihai, ivory, persianblue } from "../utils/color";
 
 const Buy = () => {
   const [page, setPage] = useState(1)
+
+  // step 1
   const [shareName, setShareName] = useState(null)
   const [shareDescription, setShareDescription] = useState(null)
   const [fullname, setFullname] = useState(null)
@@ -21,6 +23,7 @@ const Buy = () => {
   const [holderAccountID, setHolderAccountID] = useState(null)
   const [phoneNo, setPhoneNo] = useState(null)
   const [accountID, setAccountID] = useState(null)
+  const [shareOption, setShareOption] = useState([])
 
   const endpoint = 'http://134.209.108.248:3000'
 
@@ -34,6 +37,15 @@ const Buy = () => {
         setFullname(`${payload.name} ${payload.lastname}`)
         setShareId(payload.id)
         setPhoneNo(`0${payload.telephone}`)
+      })
+
+    fetch(`${endpoint}/api/v1/masterBrokers`)
+      .then((res) => {
+        return res.json()
+      })
+      .then((json) => {
+        const payload = json.data
+        setShareOption(payload)
       })
   }
 
@@ -132,7 +144,7 @@ const Buy = () => {
                           <p>ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก</p>
                         </InputDiv>
                         <InputDiv style={{ marginTop: '20px', marginLeft: '50px' }}>
-                          <Dropdown />
+                          <DropdownSelect options={shareOption}/>
                         </InputDiv>
                         <InputDiv style={{ marginLeft: '50px' }}>
                           <p>เลขที่บัญชีซื้อขาย</p>
