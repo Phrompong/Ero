@@ -1,29 +1,35 @@
 import styled from "styled-components";
+import { persianblue } from "../../../../utils/color";
 
 const Toggle = styled.div`
-  width: 40px;
-  height: 100%;
-  display: flex;
+  width: 50px;
+  height: 40px;
+  display: none;
   flex-flow: column;
   justify-content: space-around;
   align-items: center;
-  padding: 10px 0;
+  padding: 10px;
   box-sizing: border-box;
   cursor: pointer;
 
-  div {
+  > div {
     width: 90%;
-    height: 3%;
-    background-color: white;
+    height: 20%;
+    border-radius: 500px;
+    background-color: ${persianblue};
   }
 
-  @media (min-width: 500px) {
-    display: none;
+  @media screen and (max-width: 540px) {
+    display: flex;
+  }
+
+  @media screen and (min-width: 540px) and (max-width: 1000px) {
+    display: flex;
   }
 `;
 
-const DrawerToggle = (props) => (
-  <Toggle onClick={props.clicked}>
+const DrawerToggle = ({ clicked }) => (
+  <Toggle onClick={clicked}>
     <div />
     <div />
     <div />

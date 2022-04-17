@@ -8,7 +8,7 @@ export const Button = styled.button`
     background ? background : persianblue};
 
   border: none;
-  color: white;
+  color: ${({ color }) => (color ? color : "#fff")};
   outline: none;
   /* font-weight: bold; */
   cursor: pointer;
@@ -18,6 +18,7 @@ export const Button = styled.button`
   width: ${({ width }) => (width ? width : "fit-content")};
   height: ${({ height }) => (height ? height : "40px")};
   padding: 10px 20px;
+  font-weight: bold;
 `;
 
 export const CancelButton = styled(Button)`
@@ -39,4 +40,10 @@ export const SaveButton = styled(Button)`
 export const DeleteButton = styled(Button)`
   background-color: #ce6a6b;
   padding: 1px 1px;
+`;
+
+export const OutlineButton = styled(Button)`
+  background-color: transparent;
+  border: 1px solid #d9e1e7;
+  color: #000;
 `;

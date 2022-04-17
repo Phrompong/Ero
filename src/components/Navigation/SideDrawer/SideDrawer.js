@@ -1,33 +1,36 @@
 import styled from "styled-components";
 
-import DrawerToggle from "./DrawerToggle/DrawerToggle";
 import NavigationItems from "../NavigationItems/NavigationItems";
+import { Backdrop } from "../../UI/Backdrop";
+import { ivory, persianblue } from "../../../utils/color";
 
 const StyledSideDrawer = styled.div`
-  /* position: fixed; */
+  position: fixed;
   width: 280px;
-  background-color: blueviolet;
+  background-color: ${ivory};
   left: 0;
   top: 0;
   z-index: 200;
   height: 100%;
   display: flex;
-  /* background-color: #fff; */
-  background-color: yellow;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   transform: ${(props) => (props.open ? "translateX(0)" : "translateX(-100%)")};
   transition: transform 0.3s ease-out;
 
-  @media (min-width: 500px) {
-    display: none;
+  nav {
+    width: 90%;
   }
 `;
 
-const SideDrawer = ({ open }) => (
-  <StyledSideDrawer open={open}>
-    <nav>
+const SideDrawer = ({ open, clicked }) => (
+  <>
+    <Backdrop show={open} clicked={clicked} bgcolor="rgba(0, 0, 0, 0.8)" />
+    <StyledSideDrawer open={open} onClick={clicked}>
       <NavigationItems />
-    </nav>
-  </StyledSideDrawer>
+    </StyledSideDrawer>
+  </>
 );
 
 export default SideDrawer;
