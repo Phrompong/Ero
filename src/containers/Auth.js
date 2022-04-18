@@ -32,6 +32,7 @@ const Auth = () => {
       endpoint
     );
 
+    console.log(status);
     if (status === 200) {
       dispatch({
         type: "SET",

@@ -19,9 +19,9 @@ export async function httpPostRequest(body, endpoint) {
     body: JSON.stringify(body),
   });
 
-  if (!res.ok) {
-    throw new Error("Could not fetch data", endpoint);
-  }
+  // if (!res.ok) {
+  //   throw new Error("Could not fetch data", endpoint);
+  // }
 
   const data = await res.json();
   return [data, res.status];
