@@ -66,3 +66,19 @@ export const Dropdown = ({ options, setStatus, selected }) => (
     <Arrow />
   </Container>
 );
+
+export const DropdownSelect = ({ options }) => {
+  const _options = options.map((option, index) => {
+    return (
+      <Option key={index} value={option.code}>
+        {option.code} {option.name}
+      </Option>
+    );
+  });
+  return (
+    <Container>
+      <Select style={{ padding: "0 32px 0  20px" }}>{_options}</Select>
+      <Arrow />
+    </Container>
+  );
+};

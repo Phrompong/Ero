@@ -52,3 +52,9 @@ export const SearchableInput = () => (
     <SearchIcon />
   </Container>
 );
+
+export const FieldInput = () => (
+  <Container>
+    <input placeholder="input..." />
+  </Container>
+);
