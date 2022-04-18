@@ -17,6 +17,7 @@ const Container = styled.div`
     border: none;
     margin: 0;
     padding-left: 15px;
+    padding-right: 15px;
     background-color: transparent;
     height: 100%;
     font-size: 16px;
@@ -55,6 +56,6 @@ export const SearchableInput = () => (
 
 export const FieldInput = ({ placeholder }) => (
   <Container style={{ width: '100%', textAlign: 'center' }}>
-    <input placeholder={placeholder || 'input...'} />
+    <input style={{ width: '100%' }} placeholder={placeholder || 'input...'} />
   </Container>
 );

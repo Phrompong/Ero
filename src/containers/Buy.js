@@ -10,9 +10,9 @@ import { DropdownSelect } from "../components/UI/Dropdown";
 import { LineCard } from "../components/UI/Card";
 import { FieldInput } from "../components/UI/Search";
 
-import { balihai, ivory, persianblue } from "../utils/color";
-
-import { useDispatch, useSelector } from 'react-redux'
+import { balihai, ivory, persianblue, shamrock, white } from "../utils/color";
+import { httpFetch, httpPostRequest } from "../utils/fetch";
+import { useSelector } from 'react-redux'
 
 const Buy = () => {
   const { user } = useSelector(state => state)
@@ -36,6 +36,7 @@ const Buy = () => {
   const [rightStockVolume, setRightStockVolume] = useState(null)
   const [rightSpecialName, setRightSpecialName] = useState(null)
   const [rightSpecialVolume, setRightSpecialVolume] = useState(null)
+  const [excessVolume, setExcessVolume] = useState(null)
 
   // step 3
   const [logo, setLogo] = useState(null)
@@ -44,7 +45,10 @@ const Buy = () => {
   const [ref2, setRef2] = useState(null)
   const [qrCode, setQRCode] = useState(null)
 
-  const endpoint = 'http://134.209.108.248:3000'
+  const [file, setFile] = useState();
+  const [orderId, setOrderId] = useState(null)
+
+  const endpoint = 'http://cbe6-124-120-89-19.ngrok.io'
 
   const fetchStep1 = () => {
     fetch(`${endpoint}/api/v1/masterCustomers/${user.customerId}`)
@@ -100,6 +104,50 @@ const Buy = () => {
       })
   }
 
+  const handlerOnSubmited = async () => {
+    setPage(3)
+
+    const [res, status] = await httpFetch(
+      "POST",
+      {
+        customerId: user.customerId,
+        rightStockName,
+        stockVolume,
+        rightSpecialName,
+        paidRightVolume: Number(currentStockVolume),
+        paidSpecialVolume: 0,
+        paymentAmount: Number(currentPrice),
+        returnAmount: 0,
+        excessVolume
+      },
+      'orders'
+    );
+
+    setOrderId(res.data._id)
+  }
+
+  const handleSelectedFile = (e) => {
+    const [file] = e.target.files;
+    const { name: fileName, size } = file;
+    setFile(file);
+  };
+
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append("File", file);
+    const endpoint = `uploads/image?orderId=${orderId}`;
+
+    const [res, status] = await httpPostRequest(formData, endpoint);
+    let msg = res.message;
+    if (status === 200) {
+      msg = "Upload Completed";
+      console.log(msg)
+    }
+    // setAlertMessage(msg);
+    // showAlert(setShow, 2000);
+    setFile();
+  };
+
   useEffect(() => {
     if (page === 1) {
       fetchStep1()
@@ -112,6 +160,7 @@ const Buy = () => {
 
   useEffect(() => {
     setCurrentPrice(Number(currentStockVolume) * Number(offerPrice))
+    setExcessVolume(Number(currentStockVolume) > Number(rightStockVolume) ? Number(currentStockVolume) - Number(rightStockVolume) : 0)
   }, [currentStockVolume])
 
   useEffect(() => {
@@ -329,7 +378,7 @@ const Buy = () => {
                           </Header>
                           <ShareDetail>
                             <p>{rightStockName}</p>
-                            <b>{Number(currentStockVolume) > Number(rightStockVolume) ? Number(currentStockVolume) - Number(rightStockVolume) : 0}</b>
+                            <b>{excessVolume}</b>
                             <p>หุ้น</p>
                           </ShareDetail>
                         </LineCard>
@@ -364,7 +413,7 @@ const Buy = () => {
                           <Button
                             type="submit"
                             value="ยืนยันคำสั่งซื้อ"
-                            onClick={() => setPage(3)}
+                            onClick={() => handlerOnSubmited()}
                           // onClick={handleSubmited}
                           />
                         </LineCard>
@@ -389,9 +438,9 @@ const Buy = () => {
                         <p style={{ width: '100%' }}>ท่านสามารถดำเนินการชำระเงินในการซื้อหุ้นเพิ่มทุนของท่านได้ที่</p>
                       </ShareDetail>
                       <ShareDetail style={{ fontSize: '22px' }}>
-                        <b>ยอดที่ท่านต้องทำรายการ</b>
-                        <b>{currentStockVolume}</b>
-                        <b>บาท</b>
+                        <b style={{ width: '300px' }}>ยอดที่ท่านต้องทำรายการ</b>
+                        <b style={{ textAlign: 'start' }}>{currentStockVolume}</b>
+                        <b style={{ textAlign: 'start' }}>บาท</b>
                       </ShareDetail>
                       <ShareDetail>
                         <div className="payment-image" style={{ width: '100%' }}>
@@ -405,18 +454,22 @@ const Buy = () => {
                         <img src={qrCode} height={'200px'} width={'200px'} style={{ margin: 'auto', textAlign: 'start' }} />
                       </ShareDetail>
                       <ShareDetail>
-                        <Button
-                          type="submit"
-                          value="แนบหลักฐานการชำระเงิน"
-                          style={{ width: '50%', fontSize: '17px', margin: 'auto', marginBottom: '20px', marginTop: '20px' }} />
+                        <UploadButton>
+                          <p style={{ width: '100%', fontSize: '17px', margin: 'auto', marginBottom: '20px', marginTop: '20px' }}>แนบหลักฐานการชำระเงิน</p>
+                          <input type="file" style={{ display: "none" }} onChange={handleSelectedFile} />
+                        </UploadButton>
+                      </ShareDetail>
+                      <ShareDetail style={{ margin: "20px 0" }}>
+                        <p style={{ margin: 'auto', textAlign: 'center' }}>{file ? file.name : ''}</p>
                       </ShareDetail>
                     </LineCard>
                     <LineCard style={{ width: '729px', margin: 'auto', border: 'none', display: 'flex', justifyContent: 'flex-end' }}>
                       <ShareDetail style={{ textAlign: 'end' }}>
                         <Button
                           type="submit"
-                          value="ส่งแบบฟอร์ม"
-                          style={{ width: '100%', fontSize: '17px', marginBottom: '20px', marginTop: '20px' }} />
+                          value="ยืนยันหลักฐาน"
+                          onClick={handleSubmit}
+                          style={{ backgroundColor: shamrock, color: white, width: '100%', fontSize: '17px', padding: '0 20px', marginBottom: '20px', marginTop: '20px' }} />
                       </ShareDetail>
                     </LineCard>
                   </>
@@ -429,6 +482,19 @@ const Buy = () => {
     </Card >
   )
 };
+
+const UploadButton = styled.label`
+  margin: auto;
+  width: 100%;
+  text-align: center;
+  color: ${ivory};
+  background: ${persianblue};
+  border: none;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  font-size: 17px;
+`
 
 const Container = styled.div`
   padding: 20px 20px;
@@ -766,7 +832,7 @@ const Icon = styled(DownArrow)`
 
 const Input = styled.input`
   width: 200px;
-  text-align: center;
+  text-align: start;
   padding: 7px 0;
   background: ${ivory};
   border: 1px solid ${balihai};
