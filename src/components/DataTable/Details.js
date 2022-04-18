@@ -94,7 +94,7 @@ const Details = ({ show, details, closed, options }) => {
                     <p className="unit">หุ้น</p>
                   </div>
                   <BoldText style={{ margin: "20px 0 5px 0" }}>
-                    ซื้อเกินสิทธิเป็นเงิน 0 บาท
+                    ซื้อเกินสิทธิเป็นเงิน {details["excessAmount"]} บาท
                   </BoldText>
 
                   <div className="row">
