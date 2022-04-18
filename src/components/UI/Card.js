@@ -4,7 +4,6 @@ import { white } from "../../utils/color";
 
 export const StyledCard = styled.div`
   /* padding: 1rem; */
-  width: 100%;
   margin: 1rem;
   border-radius: 15px;
   background: ${white};

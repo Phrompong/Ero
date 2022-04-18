@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux'
 
 import styled from "styled-components";
 import bg from "../assets/bg.jpg";
@@ -12,32 +13,38 @@ import { persianblue } from "../utils/color";
 import { httpFetch } from "../utils/fetch";
 
 const Login = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const usernameInputRef = useRef("admin");
+  const usernameInputRef = useRef("110140088479625");
   const passwordInputRef = useRef("1234");
+
+  const endpoint = "auth/signIn?type=customer";
 
   const handleSubmited = async (event) => {
     event.preventDefault();
-    navigate(`/`);
-    // waiting for API
-    // const username = usernameInputRef.current.value;
-    // const password = passwordInputRef.current.value;
-    // const endpoint = "auth/signIn";
 
-    // const [res, status] = await httpFetch(
-    //   "POST",
-    //   { username: username, password: password },
-    //   endpoint
-    // );
+    const username = usernameInputRef.current.value;
 
-    // if (status === 200) {
-    //   navigate(`/`);
-    // } else {
-    //   setShowError(true);
-    //   setErrorMsg(res.message);
-    // }
+    const [res, status] = await httpFetch(
+      "POST",
+      { nationalId: username },
+      endpoint
+    );
+
+    if (status === 200) {
+      dispatch({
+        type: 'SET', payload: {
+          username,
+          role: "client"
+        }
+      })
+      navigate(`/`);
+    } else {
+      setShowError(true);
+      setErrorMsg(res.message);
+    }
   };
 
   const link = (text) => <Link>{text}</Link>;

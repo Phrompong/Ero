@@ -235,7 +235,10 @@ const Buy = () => {
                       </LineCard>
                       <LineCard style={{ width: '100%', marginBottom: '20px', paddingBottom: '30px' }}>
                         <ShareDetail style={{ display: 'flex', top: '15px', position: 'relative' }}>
-                          <Header>
+                          <p style={{ color: '#1D3AB1', fontWeight: 'bold', fontSize: '18.72px' }}>ราคาเสนอขายหุ้นละ</p>
+                          <p style={{ fontSize: '18.72px' }}>{offerPrice}</p>
+                          <p style={{ fontSize: '18.72px' }}>บาท</p>
+                          {/* <Header>
                             <h3 style={{ color: '#1D3AB1', fontWeight: 'bold' }}>ราคาเสนอขายหุ้นละ</h3>
                           </Header>
                           <Header>
@@ -243,7 +246,7 @@ const Buy = () => {
                           </Header>
                           <Header>
                             <h3>บาท</h3>
-                          </Header>
+                          </Header> */}
                         </ShareDetail>
                       </LineCard>
                     </div>
@@ -263,7 +266,7 @@ const Buy = () => {
                           <p>บาท</p>
                         </ShareDetail>
                         <ShareDetail style={{ fontSize: '14px' }}>
-                          <p>(การคำนวนจากราคาเสนอขาย {offerPrice} บาท ต่อ หุ้น)</p>
+                          <p style={{ width: '100%' }}>(การคำนวนจากราคาเสนอขาย {offerPrice} บาท ต่อ หุ้น)</p>
                         </ShareDetail>
                       </LineCard>
                       <LineCard style={{ width: '100%', marginBottom: '20px', paddingBottom: '30px' }}>
@@ -289,27 +292,27 @@ const Buy = () => {
                         <ShareDetail style={{ marginBottom: '-10px' }}>
                           <p>{rightStockName}</p>
                           <Input type={'number'} value={currentStockVolume} onChange={(e) => setCurrentStockVolume(e.target.value.replace(/[^0-9.]/, ''))} />
-                          <p style={{ position: 'relative' }}>หุ้น</p>
+                          <p>หุ้น</p>
                         </ShareDetail>
                         <ShareDetail>
                           <p></p>
-                          <div className="num-box-hidden" style={{ position: 'relative' }}><Icon /></div>
-                          <p style={{ position: 'relative' }}>
-                            <img src={change} className="icon-change" onClick={() => setCurrentStockVolume(0)}/>
+                          <div className="num-box-hidden"><Icon /></div>
+                          <p>
+                            <img src={change} className="icon-change" onClick={() => setCurrentStockVolume(0)} />
                           </p>
                         </ShareDetail>
                         <ShareDetail>
                           <p>จำนวนเงิน</p>
-                          <div className="num-box">{currentPrice}</div>
-                          <p>บาท</p>
+                          <Input type={'number'} value={currentPrice} disabled />
+                          <p >บาท</p>
                         </ShareDetail>
                         <Header>
                           <h3 style={{ color: '#1D3AB1', fontWeight: 'bold' }}>สิทธิเพิ่มเติมที่ท่านได้รับ</h3>
                         </Header>
                         <ShareDetail>
                           <p>{rightSpecialName}</p>
-                          <b>{rightSpecialVolume}</b>
-                          <p>หุ้น</p>
+                          <b >{rightSpecialVolume}</b>
+                          <p >หุ้น</p>
                         </ShareDetail>
                       </LineCard>
                       <div style={{ width: '100%' }}>
@@ -341,15 +344,15 @@ const Buy = () => {
                                 <p>ฝากเงินเข้าบัญชีธนาคาร</p>
                               </InputDiv>
                               <InputDiv style={{ marginTop: '20px', width: '100%' }}>
-                                <FieldInput />
+                                <FieldInput placeholder={'ฝากเงินเข้าบัญชีธนาคาร'} />
                               </InputDiv>
                             </div>
                             <div className="input-div">
                               <InputDiv style={{ width: '100%' }}>
-                                <p>หมายเลขบัญชีธนาคาร</p>
+                                <p style={{ width: '200px', textAlign: 'start' }}>หมายเลขบัญชีธนาคาร</p>
                               </InputDiv>
                               <InputDiv style={{ marginTop: '20px', width: '100%' }}>
-                                <FieldInput />
+                                <FieldInput placeholder={'หมายเลขบัญชีธนาคาร'} />
                               </InputDiv>
                             </div>
                           </ShareDetail>
@@ -358,6 +361,7 @@ const Buy = () => {
                           <Button
                             type="submit"
                             value="ยืนยันคำสั่งซื้อ"
+                            onClick={() => setPage(3)}
                           // onClick={handleSubmited}
                           />
                         </LineCard>
@@ -379,23 +383,23 @@ const Buy = () => {
                           style={{ width: '20%', fontSize: '17px', color: '#000000', backgroundColor: '#EDB52D', height: '42px' }} />
                       </ShareDetail>
                       <ShareDetail>
-                        <p>ท่านสามารถดำเนินการชำระเงินในการซื้อหุ้นเพิ่มทุนของท่านได้ที่</p>
+                        <p style={{ width: '100%' }}>ท่านสามารถดำเนินการชำระเงินในการซื้อหุ้นเพิ่มทุนของท่านได้ที่</p>
                       </ShareDetail>
                       <ShareDetail style={{ fontSize: '22px' }}>
                         <b>ยอดที่ท่านต้องทำรายการ</b>
-                        <b>745,500</b>
+                        <b>{currentStockVolume}</b>
                         <b>บาท</b>
                       </ShareDetail>
                       <ShareDetail>
-                        <div className="payment-image">
-                          <img src={logo} height={'105px'} width={'105px'} style={{ margin: '20px' }} />
+                        <div className="payment-image" style={{ width: '100%' }}>
+                          <img src={logo} style={{ width: '105px', height: '105px', margin: '20px' }} />
                           <div className="payment-detail">
                             <p>{nameTH}</p>
                             <p>REF 1: {ref1}</p>
                             <p>REF 2: {ref2}</p>
                           </div>
                         </div>
-                        <img src={qrCode} height={'200px'} width={'200px'} style={{ margin: 'auto' }} />
+                        <img src={qrCode} height={'200px'} width={'200px'} style={{ margin: 'auto', textAlign: 'start' }} />
                       </ShareDetail>
                       <ShareDetail>
                         <Button
@@ -565,11 +569,6 @@ const Dot = styled.div`
   clear: both;
 `
 
-const Spacer = styled.div`
-
-  margin: 0px 20px 5px 50px;
-`
-
 const Header = styled.div`
   margin: 10px;
   h3 {
@@ -640,6 +639,17 @@ const ShareDetail = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 5px 10px;
+  
+  > :nth-child(2) {
+    text-align: center;
+  }
+  > :nth-child(3) {
+    text-align: end;
+  }
+
+  * {
+    width: 200px;
+  }
 
   .payment-detail {
     margin: auto;
@@ -654,6 +664,7 @@ const ShareDetail = styled.div`
   .input-div {
     display: flex;
     justify-content: space-between;
+    width: 100%;
     
     p {
       margin-top: 10px;
@@ -734,8 +745,8 @@ const ShareDetail = styled.div`
 const Icon = styled(DownArrow)`
   color: ${persianblue};
   margin-top: 10px;
-  position: relative;
-  left: 30px;
+  // position: relative;
+  // left: 30px;
 
   width: 20px;
   text-align: center;
