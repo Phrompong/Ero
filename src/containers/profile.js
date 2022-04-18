@@ -109,6 +109,7 @@ const Dashboard = () => {
     let endpoint = `news`;
 
     const [res, status] = await httpGetRequest(endpoint);
+    console.log(res["data"][0]);
     setNews(res["data"][0]);
     console.log(news);
   }
@@ -128,7 +129,7 @@ const Dashboard = () => {
           </LineCard>
 
           <LineCard>
-            <News header="ข้อมูลประชาสัมพันธ์" imageUrl={news.newsUrl} />
+            <News header="ข้อมูลประชาสัมพันธ์" news={news} />
           </LineCard>
         </OverviewSection>
 

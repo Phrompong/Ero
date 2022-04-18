@@ -37,11 +37,13 @@ const Progress = styled.div``;
 
 const Paragraph = styled.p``;
 
-const News = ({ header, imageUrl, color }) => (
-  <Container color={color}>
-    <Header>{header}</Header>
-    <img src={imageUrl} className="icon-change" width={400} />
-  </Container>
-);
+const News = ({ header, news, color }) => {
+  return (
+    <Container color={color}>
+      <Header>{header}</Header>
+      {news && <img src={news.newsUrl} className="icon-change" width={400} />}
+    </Container>
+  );
+};
 
 export default News;
