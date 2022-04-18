@@ -17,8 +17,8 @@ const App = (props) => {
       <Route path="/login/customer" element={<Login {...props} />} />
       <Route path="/import" element={<ImportData {...props} />} />
       <Route path="/buy" element={<Buy {...props} />} />
-      <Route path="/" exact element={<Dashboard />} />
-      <Route path="/profile" exact element={<ProfileView />} />
+      <Route path="/dashboard" exact element={<Dashboard />} />
+      <Route path="/profile" element={<ProfileView />} />
     </Routes>
   );
 

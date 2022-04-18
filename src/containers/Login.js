@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import bg from "../assets/bg.jpg";
@@ -9,35 +10,42 @@ import { Logo } from "../components/Logo/Logo";
 import { Card } from "../components/UI/Card";
 import { Input } from "../components/UI/Input";
 import { persianblue } from "../utils/color";
-import { httpPost } from "../utils/fetch";
+import { httpFetch } from "../utils/fetch";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const usernameInputRef = useRef("admin");
+  const usernameInputRef = useRef("110140088479625");
   const passwordInputRef = useRef("1234");
+
+  const endpoint = "auth/signIn?type=customer";
 
   const handleSubmited = async (event) => {
     event.preventDefault();
-    navigate(`/`);
-    // waiting for API
-    // const username = usernameInputRef.current.value;
-    // const password = passwordInputRef.current.value;
-    // const endpoint = "auth/signIn";
 
-    // const [res, status] = await httpFetch(
-    //   "POST",
-    //   { username: username, password: password },
-    //   endpoint
-    // );
+    const username = usernameInputRef.current.value;
 
-    // if (status === 200) {
-    //   navigate(`/`);
-    // } else {
-    //   setShowError(true);
-    //   setErrorMsg(res.message);
-    // }
+    const [res, status] = await httpFetch(
+      "POST",
+      { nationalId: username },
+      endpoint
+    );
+
+    if (status === 200) {
+      dispatch({
+        type: "SET",
+        payload: {
+          username,
+          role: "client",
+        },
+      });
+      navigate(`/buy`);
+    } else {
+      setShowError(true);
+      setErrorMsg(res.message);
+    }
   };
 
   const link = (text) => <Link>{text}</Link>;
@@ -104,7 +112,6 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
-
   .inner {
     display: flex;
     justify-content: center;
@@ -122,7 +129,6 @@ const Form = styled.form`
   width: 271px;
   height: 80%;
   overflow: scroll;
-
   .field {
     width: 100%;
     flex-grow: 2;
@@ -133,15 +139,12 @@ const Form = styled.form`
     text-align: center;
     margin-bottom: 20px;
   }
-
   .input {
     width: 100%;
   }
-
   .input > :not(:last-child) {
     margin-top: 35px;
   }
-
   .submit {
     display: flex;
     flex-direction: column;

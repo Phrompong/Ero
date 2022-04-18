@@ -9,6 +9,8 @@ import { Logo } from "../../Logo/Logo";
 import { balihai, ivory } from "../../../utils/color";
 import logo from "../../../assets/logo_awsc.jpg";
 
+import { useSelector } from "react-redux";
+
 const Items = styled.ul`
   list-style: none;
   display: flex;
@@ -70,36 +72,56 @@ const Nav = styled.nav`
 //   </Items>
 // );
 
-const NavigationItems = () => (
-  <>
-    <Nav>
-      <Logo small />
-      <Items>
-        <NavigationItem link="/" exact="true" img={traffic}>
-          dashboard
-        </NavigationItem>
-        <NavigationItem link="/import" img={account}>
-          import data
-        </NavigationItem>
-        <NavigationItem link="/buy" img={traffic}>
-          Buy / สั่งซื้อ
-        </NavigationItem>
-        <NavigationItem link="/profile" img={profile}>
-          Profile / ข้อมูลของฉัน
-        </NavigationItem>
-      </Items>
-    </Nav>
-    <Footer>
-      <div className="img">
-        <img src={logo} />
-        <p className="year">© 2022 </p>
-      </div>
-      <p className="text">
-        สงวนสิทธิ์ในการใช้งาน <br />
-        เป็นไปตามเงื่อนไขที่บริษัทกำหนด
-      </p>
-    </Footer>
-  </>
-);
+const NavigationItems = () => {
+  const { user } = useSelector((state) => state);
+  return (
+    <>
+      <Nav>
+        <Logo small />
+
+        <Items>
+          {(() => {
+            if (user.role === "admin") {
+              return (
+                <>
+                  <NavigationItem link="/dashboard" exact="true" img={traffic}>
+                    Dashboard
+                  </NavigationItem>
+                  <NavigationItem link="/import" img={account}>
+                    import data
+                  </NavigationItem>
+                </>
+              );
+            } else if (user.role === "client") {
+              return (
+                <>
+                  {/* <NavigationItem link="/" exact="true" img={traffic}>
+                      News / ข่าวสาร
+                    </NavigationItem> */}
+                  <NavigationItem link="/buy" img={traffic}>
+                    Buy / สั่งซื้อ
+                  </NavigationItem>
+                  <NavigationItem link="/profile" img={profile}>
+                    Profile / ข้อมูลของฉัน
+                  </NavigationItem>
+                </>
+              );
+            }
+          })()}
+        </Items>
+      </Nav>
+      <Footer>
+        <div className="img">
+          <img src={logo} />
+          <p className="year">© 2022 </p>
+        </div>
+        <p className="text">
+          สงวนสิทธิ์ในการใช้งาน <br />
+          เป็นไปตามเงื่อนไขที่บริษัทกำหนด
+        </p>
+      </Footer>
+    </>
+  );
+};
 
 export default NavigationItems;

@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import bg from "../assets/bg.jpg";
@@ -12,6 +13,7 @@ import { persianblue } from "../utils/color";
 import { httpPostRequest } from "../utils/fetch";
 
 const Auth = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -31,7 +33,14 @@ const Auth = () => {
     );
 
     if (status === 200) {
-      navigate(`/`);
+      dispatch({
+        type: "SET",
+        payload: {
+          username,
+          role: "admin",
+        },
+      });
+      navigate(`/dashboard`);
     } else {
       setShowError(true);
       setErrorMsg(res.message);

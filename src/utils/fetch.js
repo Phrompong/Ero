@@ -60,3 +60,17 @@ export async function httpPutRequest(body, endpoint) {
   const data = await res.json();
   return [data, res.status];
 }
+
+export async function httpFetch(method, body, endpoint) {
+  const url = `${BASE_URL}${endpoint}`;
+  const res = await fetch(url, {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  const data = await res.json();
+  return [data, res.status];
+}

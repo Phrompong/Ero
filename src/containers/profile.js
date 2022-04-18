@@ -89,7 +89,7 @@ const Dashboard = () => {
 
         <TableSection>
           <LineCard>
-            <DataTable theader="รายการสั่งซื้อทั้งหมดในระบบ" data={fakedata} />
+            {/* <DataTable theader="รายการสั่งซื้อทั้งหมดในระบบ" data={fakedata} /> */}
           </LineCard>
         </TableSection>
       </Container>
@@ -104,7 +104,6 @@ const Container = styled.div`
   min-width: 60vw;
   display: flex;
   flex-direction: column;
-
   section {
     margin: 10px 0;
   }
@@ -114,24 +113,19 @@ const HeaderSection = styled.section`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-
   > :first-child {
     flex-grow: 2;
     margin-left: 10px;
   }
-
   h3 {
     font-weight: 400;
   }
-
   .search {
     display: flex;
-
     > :last-child {
       margin-left: 10px;
     }
   }
-
   .date {
     color: ${balihai};
   }
@@ -140,11 +134,9 @@ const HeaderSection = styled.section`
 const OverviewSection = styled.section`
   display: flex;
   flex-wrap: wrap;
-
   > :not(:first-child) {
     margin-left: 10px;
   }
-
   div {
     display: flex;
   }
