@@ -22,7 +22,7 @@ const Select = styled.select`
   padding: 10px 32px 10px 20px;
   font-size: 16px;
   text-transform: capitalize;
-  text-align: center;
+  text-align: left;
   :focus {
     outline: none;
   }

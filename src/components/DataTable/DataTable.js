@@ -87,7 +87,9 @@ const DataTable = ({ header, theaders, data, refreshData }) => {
                 <TD className="left">{`${x["customerId"]["name"]} ${x["customerId"]["lastname"]} `}</TD>
                 <TD>{x["rightStockName"]}</TD>
                 <TD>{x["paidRightVolume"]}</TD>
-                <TD>{`${x["rightSpacialName"]} ${x["rightSpacialVolume"]}`}</TD>
+                <TD>{`${x["rightSpacialName"] || ""} ${
+                  x["rightSpacialVolume"] || ""
+                }`}</TD>
                 <TD>{x["paymentAmount"]}</TD>
                 <Status className="left" color={color[x["status"]["value"]]}>
                   {x["status"]["status"]}

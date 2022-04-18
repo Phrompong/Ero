@@ -38,7 +38,9 @@ const Details = ({ show, details, closed, options }) => {
 
   const customer = details["customerId"];
 
-  const formatDate = (date) => new Date(date).toLocaleDateString();
+  const formatDate = (date) => {
+    return date ? new Date(date).toLocaleDateString() : "-";
+  };
 
   return (
     <Modal show={show}>
