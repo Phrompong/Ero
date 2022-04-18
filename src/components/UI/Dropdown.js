@@ -53,9 +53,9 @@ const Arrow = styled.i`
   -webkit-transform: rotate(45deg);
 `;
 
-export const Dropdown = ({ options, setStatus, selected }) => (
+export const Dropdown = ({ options, setSelected, selected }) => (
   <Container>
-    <Select onChange={(e) => setStatus(e.target.value)} value={selected}>
+    <Select onChange={(e) => setSelected(e.target.value)} value={selected}>
       {options &&
         options.map((option, index) => (
           <Option key={index} value={option["value"]}>

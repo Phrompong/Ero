@@ -13,30 +13,10 @@ import change from "../../assets/icon_change.png";
 import transaction from "../../assets/transaction.png";
 import { httpGetRequest, httpPutRequest } from "../../utils/fetch";
 
-const Details = ({ show, details, closed }) => {
-  const [options, setOptions] = useState([]);
-  const [selectedStatus, setSelectedStatus] = useState("");
-
-  console.log("details", details);
-
-  useEffect(() => {
-    async function fetchData() {
-      const endpoint = "status";
-
-      const [res, status] = await httpGetRequest(endpoint);
-      handleFetchStatusOption(res);
-    }
-    fetchData();
-  }, []);
-
-  const handleFetchStatusOption = (res) => {
-    const options = res["data"].map((x) => ({
-      label: x["status"],
-      value: x["_id"],
-    }));
-    setOptions(options);
-    setSelectedStatus(details["status"]["_id"]);
-  };
+const Details = ({ show, details, closed, options }) => {
+  const [selectedStatus, setSelectedStatus] = useState(
+    details["status"]["_id"]
+  );
 
   const handleConfirmStatus = async () => {
     const orderId = details["_id"];
@@ -138,7 +118,7 @@ const Details = ({ show, details, closed }) => {
             <Footer>
               <Dropdown
                 options={options}
-                setStatus={setSelectedStatus}
+                setSelected={setSelectedStatus}
                 selected={selectedStatus}
               />
               <Button onClick={() => handleConfirmStatus()}>ยืนยันสถานะ</Button>
