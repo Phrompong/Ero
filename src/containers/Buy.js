@@ -147,8 +147,8 @@ const Buy = () => {
       msg = "Upload Completed";
       console.log(msg);
     }
-    // setAlertMessage(msg);
-    // showAlert(setShow, 2000);
+    setAlertMessage(msg);
+    showAlert(setShow, 2000);
     setFile();
   };
 
