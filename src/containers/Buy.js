@@ -52,7 +52,7 @@ const Buy = () => {
   const [file, setFile] = useState();
   const [orderId, setOrderId] = useState(null);
 
-  const endpoint = "http://cbe6-124-120-89-19.ngrok.io";
+  const endpoint = "http://134.209.108.248:3000";
 
   const fetchStep1 = () => {
     fetch(`${endpoint}/api/v1/masterCustomers/${user.customerId}`)
