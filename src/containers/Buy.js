@@ -9,6 +9,8 @@ import { FlexContainer } from "../components/UI/FlexContainer";
 import { DropdownSelect } from "../components/UI/Dropdown";
 import { LineCard } from "../components/UI/Card";
 import { FieldInput } from "../components/UI/Search";
+import { ModalAlert } from "../components/ModalAlert/ModalAlert";
+import { showAlert } from "../utils/showAlert";
 
 import { balihai, ivory, persianblue, shamrock, white } from "../utils/color";
 import {
@@ -21,6 +23,9 @@ import { useSelector } from "react-redux";
 const Buy = () => {
   const { user } = useSelector((state) => state);
   const [page, setPage] = useState(1);
+  const [alertMessage, setAlertMessage] = useState();
+  const [show, setShow] = useState(false);
+  const [status, setStatus] = useState();
 
   const [currentStockVolume, setCurrentStockVolume] = useState(0);
   const [currentPrice, setCurrentPrice] = useState(0);
@@ -143,6 +148,7 @@ const Buy = () => {
 
     const [res, status] = await httpPostRequestUploadFile(formData, endpoint);
     let msg = res.message;
+    setStatus(status);
     if (status === 200) {
       msg = "Upload Completed";
       console.log(msg);
@@ -183,6 +189,7 @@ const Buy = () => {
   return (
     <Card>
       <Container>
+        <ModalAlert show={show} msg={alertMessage} status={status} />
         <FlexContainer>
           <StepDiv>
             <div style={{ display: "block", margin: "0 20px" }}>
