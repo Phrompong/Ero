@@ -14,38 +14,28 @@ import Details from "./Details";
 import Paginate from "../Paginate/Paginate";
 import { httpGetRequest } from "../../utils/fetch";
 
-const DataTable = ({ theader }) => {
-  const [data, setData] = useState(null);
+const DataTable = ({ header, theaders, data, refreshData }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [details, setDetails] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-
-  async function fetchData() {
-    const endpoint = `orders?limit=10&page=${currentPage}`;
-    const [res, status] = await httpGetRequest(endpoint);
-    handleFetchData(res, status);
-  }
+  const [options, setOptions] = useState([]);
 
   useEffect(() => {
+    async function fetchData() {
+      const endpoint = "status";
+
+      const [res, status] = await httpGetRequest(endpoint);
+      handleFetchStatusOption(res);
+    }
     fetchData();
-  }, [currentPage]);
+  }, []);
 
-  const handleFetchData = (res) => {
-    const { totalPages } = res["_metadata"];
-    setTotalPages(totalPages);
-    setData(res["data"]);
+  const handleFetchStatusOption = (res) => {
+    const options = res["data"].map((x) => ({
+      label: x["status"],
+      value: x["_id"],
+    }));
+    setOptions(options);
   };
-
-  const headers = [
-    "วันที่",
-    "ชื่อ-นามสกุล",
-    "รายละเอียด",
-    "จำนวนการสั่งซื้อหุ้นเพิ่มทุน",
-    "สิทธิเพิ่มเติม",
-    "มูลค่าการสั่งซื้อ",
-    "สถานะรายการ",
-  ].map((header) => <TH key={header}>{header}</TH>);
 
   const color = {
     1: shamrock,
@@ -59,45 +49,53 @@ const DataTable = ({ theader }) => {
     setDetails(details);
   };
 
-  const refreshData = () => {
+  const handleClosedModal = () => {
     setShowDetails(false);
-    fetchData();
+    refreshData();
   };
 
   const detailsModal = useMemo(
-    () => <Details show={showDetails} closed={refreshData} details={details} />,
+    () => (
+      <Details
+        options={options}
+        show={showDetails}
+        closed={handleClosedModal}
+        details={details}
+      />
+    ),
     [details, showDetails]
   );
 
   return (
     <Container>
-      <TableHeader>{theader}</TableHeader>
+      <TableHeader>{header}</TableHeader>
       {data && (
-        <div className="table">
-          <Table>
-            <THead>
-              <TR>{headers}</TR>
-            </THead>
-            <TBody>
-              {data.map((x, index) => (
-                <TR key={index} onClick={() => handleClicked(x)}>
-                  <TD className="left">
-                    {new Date(x["createdOn"]).toLocaleDateString()}
-                  </TD>
-                  <TD className="left">{`${x["customerId"]["name"]} ${x["customerId"]["lastname"]} `}</TD>
-                  <TD>{x["rightStockName"]}</TD>
-                  <TD>{x["paidRightVolume"]}</TD>
-                  <TD>{`${x["rightSpacialName"]} ${x["rightSpacialVolume"]}`}</TD>
-                  <TD>{x["paymentAmount"]}</TD>
-                  <Status className="left" color={color[x["status"]["value"]]}>
-                    {x["status"]["status"]}
-                  </Status>
-                </TR>
+        <Table>
+          <THead>
+            <TR>
+              {theaders.map((header) => (
+                <TH key={header}>{header}</TH>
               ))}
-            </TBody>
-          </Table>
-          <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
-        </div>
+            </TR>
+          </THead>
+          <TBody>
+            {data.map((x, index) => (
+              <TR key={index} onClick={() => handleClicked(x)}>
+                <TD className="left">
+                  {new Date(x["createdOn"]).toLocaleDateString()}
+                </TD>
+                <TD className="left">{`${x["customerId"]["name"]} ${x["customerId"]["lastname"]} `}</TD>
+                <TD>{x["rightStockName"]}</TD>
+                <TD>{x["paidRightVolume"]}</TD>
+                <TD>{`${x["rightSpacialName"]} ${x["rightSpacialVolume"]}`}</TD>
+                <TD>{x["paymentAmount"]}</TD>
+                <Status className="left" color={color[x["status"]["value"]]}>
+                  {x["status"]["status"]}
+                </Status>
+              </TR>
+            ))}
+          </TBody>
+        </Table>
       )}
       {showDetails && detailsModal}
     </Container>
@@ -109,14 +107,7 @@ export default DataTable;
 const Container = styled.div`
   padding: 15px;
   min-width: 1200px;
-
-  .table {
-    min-height: 400px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+  min-height: 450px;
 `;
 
 const TableHeader = styled.h3`

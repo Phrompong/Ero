@@ -3,13 +3,38 @@ import styled from "styled-components";
 import { ProgressPie } from "../UI/ProgressPie";
 import { persianblue } from "../../utils/color";
 
-import { FlexContainer } from "../UI/FlexContainer";
+import { LineCard } from "../UI/Card";
+
+const Overview = ({ header, pvalue, color, p1, p2, num1, num2 }) => (
+  <Container color={color}>
+    <LineCard style={{ padding: 15 }}>
+      <Header>{header}</Header>
+      <Div>
+        <Progress>
+          <ProgressPie value={pvalue} color={color} />
+        </Progress>
+        <Info>
+          <Paragraph>{p1}</Paragraph>
+          <h2>
+            {num1}
+            <span>บาท</span>
+          </h2>
+          <Paragraph>{p2}</Paragraph>
+          <h4>
+            {num2}
+            <span>บาท</span>
+          </h4>
+        </Info>
+      </Div>
+    </LineCard>
+  </Container>
+);
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 15px;
-  width: fit-content;
+  white-space: nowrap;
+  min-width: 400px;
 
   h2 {
     margin-bottom: 10px;
@@ -59,29 +84,8 @@ const Info = styled.div`
 
 const Progress = styled.div``;
 
-const Paragraph = styled.p``;
-
-const Overview = ({ header, pvalue, color, p1, p2, num1, num2 }) => (
-  <Container color={color}>
-    <Header>{header}</Header>
-    <Div>
-      <Progress>
-        <ProgressPie value={pvalue} color={color} />
-      </Progress>
-      <Info>
-        <Paragraph>{p1}</Paragraph>
-        <h2>
-          {num1}
-          <span>บาท</span>
-        </h2>
-        <Paragraph>{p2}</Paragraph>
-        <h4>
-          {num2}
-          <span>บาท</span>
-        </h4>
-      </Info>
-    </Div>
-  </Container>
-);
+const Paragraph = styled.p`
+  /* white-space: nowrap; */
+`;
 
 export default Overview;
