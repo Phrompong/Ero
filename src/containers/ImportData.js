@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-import { httpPostRequest } from "../utils/fetch";
+import { httpPostRequest, httpPostRequestUploadFile } from "../utils/fetch";
 import { showAlert } from "../utils/showAlert";
 
 import { Card } from "../components/UI/Card";
@@ -34,7 +34,7 @@ const ImportData = () => {
     formData.append("File", file);
     const endpoint = "uploads";
 
-    const [res, status] = await httpPostRequest(formData, endpoint);
+    const [res, status] = await httpPostRequestUploadFile(formData, endpoint);
     setStatus(status);
     let msg = res.message;
     if (status === 200) {
