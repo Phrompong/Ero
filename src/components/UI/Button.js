@@ -3,47 +3,43 @@ import styled, { css } from "styled-components";
 import { persianblue } from "../../utils/color";
 
 export const Button = styled.button`
-  /* background-color: #ce6a6b; */
   background-color: ${({ background }) =>
     background ? background : persianblue};
 
   border: none;
   color: ${({ color }) => (color ? color : "#fff")};
   outline: none;
-  /* font-weight: bold; */
   cursor: pointer;
-  font-size: 13px;
+  font-size: 16px;
   border-radius: 7px;
   overflow: hidden;
   width: ${({ width }) => (width ? width : "fit-content")};
-  height: ${({ height }) => (height ? height : "40px")};
+  /* height: ${({ height }) => (height ? height : "40px")}; */
   padding: 10px 20px;
   font-weight: bold;
-`;
 
-export const CancelButton = styled(Button)`
-  background-color: #ce6a6b;
-`;
+  @media screen and (max-width: 540px) {
+    font-size: 14px;
+  }
 
-export const SaveButton = styled(Button)`
-  background-color: transparent;
-  border: 1px solid #4a919e;
-  color: #4a919e;
-  margin-right: 10px;
-
-  :hover {
-    background-color: #4a919e;
-    color: #fff;
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    font-size: 14px;
   }
 `;
 
-export const DeleteButton = styled(Button)`
-  background-color: #ce6a6b;
-  padding: 1px 1px;
-`;
+// export const SaveButton = styled(Button)`
+//   background-color: transparent;
+//   border: 1px solid #4a919e;
+//   color: #4a919e;
+//   margin-right: 10px;
 
-export const OutlineButton = styled(Button)`
-  background-color: transparent;
-  border: 1px solid #d9e1e7;
-  color: #000;
-`;
+//   :hover {
+//     background-color: #4a919e;
+//     color: #fff;
+//   }
+// `;
+
+// export const DeleteButton = styled(Button)`
+//   background-color: #ce6a6b;
+//   padding: 1px 1px;
+// `;

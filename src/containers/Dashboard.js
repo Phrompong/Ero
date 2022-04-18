@@ -1,152 +1,188 @@
+import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import { Card } from "../components/UI/Card";
+
+import DataTable from "../components/DataTable/DataTable";
+import Overview from "../components/Overview/Overview";
+import Paginate from "../components/Paginate/Paginate";
+
+import { Button } from "../components/UI/Button";
+import { Card, LineCard } from "../components/UI/Card";
 import { Dropdown } from "../components/UI/Dropdown";
 import { FlexContainer } from "../components/UI/FlexContainer";
-import { SearchableInput } from "../components/UI/Search";
 import { balihai, shamrock } from "../utils/color";
+import { httpGetRequest } from "../utils/fetch";
 
-import { LineCard } from "../components/UI/Card";
-import Overview from "../components/Overview/Overview";
-import DataTable from "../components/DataTable/DataTable";
+import { Search } from "@styled-icons/bootstrap/Search";
 
 const Dashboard = () => {
-  let nowDate = new Date().toDateString();
+  const [data, setData] = useState(null);
 
-  const fakedata = [
-    {
-      date: "20/4/2022",
-      name: "รชดี ชื่นภักดี",
-      phone: "0890389311",
-      email: "rachadeec@gmail.com",
-      ats: "00877755656",
-      bank: "SCB",
-      details: "หุ้นเพิ่มทุน STOWER 2022",
-      amount: "70,000",
-      extraOffer: "STOWER-W4   140,000",
-      totalPrice: "2,200,000",
-      status: { status: 1, text: "ยืนยันการชำระเงิน" },
-    },
-    {
-      date: "20/8/2022",
-      name: "รชดี ชื่นภักดี",
-      phone: "0890389311",
-      email: "rachadeec@gmail.com",
-      ats: "00877755656",
-      bank: "SCB",
-      details: "หุ้นเพิ่มทุน MFEC 2022",
-      amount: "170,000",
-      extraOffer: "-",
-      totalPrice: "2,100,000",
-      status: { status: 2, text: "รอหลักฐานการโอนเงิน" },
-    },
-    {
-      date: "20/4/2022",
-      name: "รชดี ชื่นภักดี",
-      phone: "0890389311",
-      email: "rachadeec@gmail.com",
-      ats: "00877755656",
-      bank: "SCB",
-      details: "หุ้นเพิ่มทุน MFEC 2022",
-      amount: "170,000",
-      extraOffer: "-",
-      totalPrice: "2,100,000",
-      status: { status: 3, text: "ยืนยันการชำระเงินเกินสิทธิ" },
-    },
-    {
-      date: "20/4/2022",
-      name: "รชดี ชื่นภักดี",
-      phone: "0890389311",
-      email: "rachadeec@gmail.com",
-      ats: "00877755656",
-      bank: "SCB",
-      details: "หุ้นเพิ่มทุน MFEC 2022",
-      amount: "170,000",
-      extraOffer: "-",
-      totalPrice: "2,100,000",
-      status: { status: 4, text: "รอดำเนินการโอนเงินคืน" },
-    },
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [selectedType, setSelectedType] = useState("year");
+  const [currentOrderAmount, setCurrentOrderAmount] = useState(0);
+  const [paidAmount, setPaidAmount] = useState(0);
+  const [paymentAmount, setPaymentAmount] = useState(0);
+  const [orderAmount, setOrderAmount] = useState(0);
+  const [saleAmount, setSaleAmount] = useState(0);
+  const [currentSaleAmount, setCurrentSaleAmount] = useState(0);
+
+  const searchInputRef = useRef("");
+
+  async function fetchDataTable() {
+    let endpoint = `orders/search/value?type=${selectedType}&page=${currentPage}`;
+    const inputValue = searchInputRef.current.value;
+    if (inputValue) {
+      endpoint = `${endpoint}&key=${inputValue}`;
+    }
+
+    const [res, status] = await httpGetRequest(endpoint);
+    const { totalPages } = res["_metadata"];
+
+    setTotalPages(totalPages);
+    setData(res["data"]);
+  }
+
+  async function fetchDataProgress(path, key, type, func) {
+    let endpoint = `orders/progressPie/${path}?type=${type}`;
+    if (key) endpoint = `${endpoint}&&key=${key}`;
+
+    const [res, status] = await httpGetRequest(endpoint);
+    func(res["data"]);
+  }
+
+  useEffect(() => {
+    fetchDataTable();
+    fetchDataProgress(
+      "currentOrderAmount",
+      null,
+      selectedType,
+      handleFetchCurrentOrderAmount
+    );
+    fetchDataProgress(
+      "orderCompareSales",
+      null,
+      selectedType,
+      handleFetchOrderAmount
+    );
+  }, [selectedType]);
+
+  useEffect(() => {
+    fetchDataTable();
+  }, [currentPage]);
+
+  const handleFetchCurrentOrderAmount = (data) => {
+    if (data) {
+      setPaidAmount(data["paidAmount"]);
+      setPaymentAmount(data["paymentAmount"]);
+      setCurrentOrderAmount(Math.round(data["percent"]));
+    } else {
+      setPaidAmount(0);
+      setPaymentAmount(0);
+      setCurrentOrderAmount(0);
+    }
+  };
+
+  const handleFetchOrderAmount = (data) => {
+    if (data) {
+      setOrderAmount(data["order"]);
+      setSaleAmount(data["paymentAmount"]);
+      setCurrentSaleAmount(Math.round(data["percent"]));
+    } else {
+      setOrderAmount(0);
+      setSaleAmount(0);
+      setCurrentSaleAmount(0);
+    }
+  };
+
+  const handleSearchButtonClicked = async () => {
+    const inputValue = searchInputRef.current.value;
+    setCurrentPage(1);
+    fetchDataTable();
+    fetchDataProgress(
+      "currentOrderAmount",
+      inputValue,
+      selectedType,
+      handleFetchCurrentOrderAmount
+    );
+    fetchDataProgress(
+      "orderCompareSales",
+      inputValue,
+      selectedType,
+      handleFetchOrderAmount
+    );
+  };
+
+  const theaders = [
+    "วันที่",
+    "ชื่อ-นามสกุล",
+    "รายละเอียด",
+    "จำนวนการสั่งซื้อหุ้นเพิ่มทุน",
+    "สิทธิเพิ่มเติม",
+    "มูลค่าการสั่งซื้อ",
+    "สถานะรายการ",
   ];
+
+  const type = [
+    { label: "This year", value: "year" },
+    { label: "This day", value: "day" },
+  ];
+
   return (
     <Card>
       <Container>
-        {/* <HeaderSection>
-          <div>
-            <h3>Overview</h3>
-            <p className="date">{nowDate.toString()}</p>
-          </div>
-          <div className="search">
-            <SearchableInput />
-            <Dropdown />
-          </div>
-        </HeaderSection> */}
         <FlexContainer>
           <Header>
             <h3>Overview</h3>
             <p>12:15 PM at 19th November 2020</p>
           </Header>
           <SearchDiv>
-            <SearchableInput />
-            <Dropdown />
+            <Dropdown
+              options={type}
+              selected={selectedType}
+              setSelected={setSelectedType}
+            />
+            <InputSeacrh placeholder="Search..." ref={searchInputRef} />
+            <Button onClick={handleSearchButtonClicked}>
+              <SearchIcon />
+            </Button>
           </SearchDiv>
         </FlexContainer>
-        <FlexContainer style={{ justifyContent: "flex-start" }}>
-          <LineCard>
-            <Overview
-              header="จำนวนคำสั่งซื้อในปัจจุบัน"
-              pvalue={62}
-              p1="ยอดรวมที่ชำระเงินแล้ว"
-              num1="32,000,000"
-              p2="จากยอดสั่งซื้อทั้งหมด"
-              num2="51,000,000"
-            />
-          </LineCard>
-          <LineCard>
-            <Overview
-              header="จำนวนคำสั่งซื้อเมื่อเทียบกับยอดจัดจำหน่าย"
-              pvalue={88}
-              color={shamrock}
-              p1="คำสั่งซื้อทั้งหมด"
-              num1="51,000,000"
-              p2="ยอดจัดจำหน่ายทั้งหมด"
-              num2="57,950,000"
-            />
-          </LineCard>
+        <FlexContainer
+          style={{
+            justifyContent: "flex-start",
+            width: "fit-content",
+          }}
+        >
+          <Overview
+            header="จำนวนคำสั่งซื้อในปัจจุบัน"
+            pvalue={currentOrderAmount}
+            p1="ยอดรวมที่ชำระเงินแล้ว"
+            num1={paidAmount}
+            p2="จากยอดสั่งซื้อทั้งหมด"
+            num2={paymentAmount}
+          />
+          <Overview
+            header="จำนวนคำสั่งซื้อเมื่อเทียบกับยอดจัดจำหน่าย"
+            pvalue={currentSaleAmount}
+            color={shamrock}
+            p1="คำสั่งซื้อทั้งหมด"
+            num1={orderAmount}
+            p2="ยอดจัดจำหน่ายทั้งหมด"
+            num2={saleAmount}
+          />
         </FlexContainer>
         <TableSection>
           <LineCard>
-            <DataTable theader="รายการสั่งซื้อทั้งหมดในระบบ" data={fakedata} />
+            <DataTable
+              header="รายการสั่งซื้อทั้งหมดในระบบ"
+              theaders={theaders}
+              data={data}
+              refreshData={fetchDataTable}
+            />
+            <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
           </LineCard>
         </TableSection>
-        {/* <OverviewSection>
-          <LineCard>
-            <Overview
-              header="จำนวนคำสั่งซื้อในปัจจุบัน"
-              pvalue={62}
-              p1="ยอดรวมที่ชำระเงินแล้ว"
-              num1="32,000,000"
-              p2="จากยอดสั่งซื้อทั้งหมด"
-              num2="51,000,000"
-            />
-          </LineCard>
-
-          <LineCard>
-            <Overview
-              header="จำนวนคำสั่งซื้อเมื่อเทียบกับยอดจัดจำหน่าย"
-              pvalue={88}
-              color={shamrock}
-              p1="คำสั่งซื้อทั้งหมด"
-              num1="51,000,000"
-              p2="ยอดจัดจำหน่ายทั้งหมด"
-              num2="57,950,000"
-            />
-          </LineCard>
-        </OverviewSection>
-
-        <TableSection>
-          <LineCard>
-            <DataTable theader="รายการสั่งซื้อทั้งหมดในระบบ" data={fakedata} />
-          </LineCard>
-        </TableSection> */}
       </Container>
     </Card>
   );
@@ -155,11 +191,10 @@ export default Dashboard;
 
 const Container = styled.div`
   padding: 20px 20px;
-  height: 90vh;
-  width: 70vw;
   display: flex;
+  justify-content: center;
   flex-direction: column;
-  overflow: auto;
+  overflow: scroll;
 
   > * {
     margin: 10px 0;
@@ -167,22 +202,41 @@ const Container = styled.div`
 
   /* For Mobile */
   @media screen and (max-width: 540px) {
-    width: 90vw;
+    justify-content: flex-start;
   }
 
   /* For Tablets */
   @media screen and (min-width: 540px) and (max-width: 880px) {
-    width: 80vw;
+    justify-content: flex-start;
   }
 `;
 
 const SearchDiv = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: flex-end;
+  /* justify-content: center; */
 
-  > :last-child {
+  > :not(:first-child) {
     margin-left: 10px;
+  }
+`;
+
+const SearchIcon = styled(Search)`
+  width: 17px;
+  vertical-align: text-top;
+  color: darkgray;
+  margin: 0 -10px;
+`;
+
+const InputSeacrh = styled.input`
+  border: 2px solid #d9e1e7;
+  border-radius: 10px;
+  background: #fff;
+  position: relative;
+  font-size: 16px;
+  padding: 10px;
+
+  :focus {
+    outline: none;
   }
 `;
 
@@ -199,7 +253,5 @@ const Header = styled.div`
 `;
 
 const TableSection = styled.section`
-  /* background-color: lightblue; */
-  height: 100%;
   display: flex;
 `;

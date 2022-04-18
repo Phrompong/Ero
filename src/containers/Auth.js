@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import bg from "../assets/bg.jpg";
@@ -10,15 +10,15 @@ import { Logo } from "../components/Logo/Logo";
 import { Card } from "../components/UI/Card";
 import { Input } from "../components/UI/Input";
 import { persianblue } from "../utils/color";
-import { httpFetch } from "../utils/fetch";
+import { httpPostRequest } from "../utils/fetch";
 
 const Auth = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const usernameInputRef = useRef("admin");
-  const passwordInputRef = useRef("1234");
+  const usernameInputRef = useRef("");
+  const passwordInputRef = useRef("");
 
   const handleSubmited = async (event) => {
     event.preventDefault();
@@ -27,20 +27,20 @@ const Auth = () => {
     const password = passwordInputRef.current.value;
     const endpoint = "auth/signIn";
 
-    const [res, status] = await httpFetch(
-      "POST",
+    const [res, status] = await httpPostRequest(
       { username: username, password: password },
       endpoint
     );
 
     if (status === 200) {
       dispatch({
-        type: 'SET', payload: {
+        type: "SET",
+        payload: {
           username,
-          role: "admin"
-        }
-      })
-      navigate(`/`);
+          role: "admin",
+        },
+      });
+      navigate(`/dashboard`);
     } else {
       setShowError(true);
       setErrorMsg(res.message);
@@ -126,7 +126,6 @@ const Form = styled.form`
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
-  width: 271px;
   height: 90%;
   overflow: scroll;
 

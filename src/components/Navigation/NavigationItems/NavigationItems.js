@@ -3,12 +3,13 @@ import styled from "styled-components";
 
 import traffic from "../../../assets/icon_traffic.png";
 import account from "../../../assets/icon_account.png";
+import profile from "../../../assets/icon_profile.png";
 
 import { Logo } from "../../Logo/Logo";
 import { balihai, ivory } from "../../../utils/color";
 import logo from "../../../assets/logo_awsc.jpg";
 
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 
 const Items = styled.ul`
   list-style: none;
@@ -72,45 +73,41 @@ const Nav = styled.nav`
 // );
 
 const NavigationItems = () => {
-  const { user } = useSelector(state => state)
+  const { user } = useSelector((state) => state);
   return (
     <>
       <Nav>
         <Logo small />
 
         <Items>
-          {
-            (() => {
-              if (user.role === "admin") {
-                return (
-                  <>
-                    <NavigationItem link="/" exact="true" img={traffic}>
-                      Dashboard
-                    </NavigationItem>
-                    <NavigationItem link="/import" img={account}>
-                      import data
-                    </NavigationItem>
-                  </>
-                )
-              }
-
-              else if (user.role === "client") {
-                return (
-                  <>
-                    <NavigationItem link="/" exact="true" img={traffic}>
+          {(() => {
+            if (user.role === "admin") {
+              return (
+                <>
+                  <NavigationItem link="/dashboard" exact="true" img={traffic}>
+                    Dashboard
+                  </NavigationItem>
+                  <NavigationItem link="/import" img={account}>
+                    import data
+                  </NavigationItem>
+                </>
+              );
+            } else if (user.role === "client") {
+              return (
+                <>
+                  {/* <NavigationItem link="/" exact="true" img={traffic}>
                       News / ข่าวสาร
-                    </NavigationItem>
-                    <NavigationItem link="/buy" img={traffic}>
-                      Buy / สั่งซื้อ
-                    </NavigationItem>
-                    <NavigationItem link="/import" img={account}>
-                      Profile / ข้อมูลของฉัน
-                    </NavigationItem>
-                  </>
-                )
-              }
-            })()
-          }
+                    </NavigationItem> */}
+                  <NavigationItem link="/buy" img={traffic}>
+                    Buy / สั่งซื้อ
+                  </NavigationItem>
+                  <NavigationItem link="/profile" img={profile}>
+                    Profile / ข้อมูลของฉัน
+                  </NavigationItem>
+                </>
+              );
+            }
+          })()}
         </Items>
       </Nav>
       <Footer>
@@ -124,7 +121,7 @@ const NavigationItems = () => {
         </p>
       </Footer>
     </>
-  )
-}
+  );
+};
 
 export default NavigationItems;

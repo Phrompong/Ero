@@ -12,7 +12,10 @@ import { FieldInput } from "../components/UI/Search";
 
 import { balihai, ivory, persianblue } from "../utils/color";
 
+import { useDispatch, useSelector } from 'react-redux'
+
 const Buy = () => {
+  const { user } = useSelector(state => state)
   const [page, setPage] = useState(1)
 
   const [currentStockVolume, setCurrentStockVolume] = useState(0)
@@ -44,7 +47,7 @@ const Buy = () => {
   const endpoint = 'http://134.209.108.248:3000'
 
   const fetchStep1 = () => {
-    fetch(`${endpoint}/api/v1/masterCustomers/6258d347930c4c210c0f5b97`)
+    fetch(`${endpoint}/api/v1/masterCustomers/${user.customerId}`)
       .then((res) => {
         return res.json()
       })
@@ -66,7 +69,7 @@ const Buy = () => {
   }
 
   const fetchStep2 = () => {
-    fetch(`${endpoint}/api/v1/customerStocks?customerId=6258d347930c4c210c0f5b97`)
+    fetch(`${endpoint}/api/v1/customerStocks?customerId=${user.customerId}`)
       .then((res) => {
         return res.json()
       })

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import bg from "../assets/bg.jpg";
@@ -13,7 +13,7 @@ import { persianblue } from "../utils/color";
 import { httpFetch } from "../utils/fetch";
 
 const Login = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -35,12 +35,14 @@ const Login = () => {
 
     if (status === 200) {
       dispatch({
-        type: 'SET', payload: {
+        type: "SET",
+        payload: {
           username,
-          role: "client"
-        }
-      })
-      navigate(`/`);
+          customerId: res.data.customerId,
+          role: "client",
+        },
+      });
+      navigate(`/buy`);
     } else {
       setShowError(true);
       setErrorMsg(res.message);
@@ -111,7 +113,6 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
-
   .inner {
     display: flex;
     justify-content: center;
@@ -129,7 +130,6 @@ const Form = styled.form`
   width: 271px;
   height: 80%;
   overflow: scroll;
-
   .field {
     width: 100%;
     flex-grow: 2;
@@ -140,15 +140,12 @@ const Form = styled.form`
     text-align: center;
     margin-bottom: 20px;
   }
-
   .input {
     width: 100%;
   }
-
   .input > :not(:last-child) {
     margin-top: 35px;
   }
-
   .submit {
     display: flex;
     flex-direction: column;
