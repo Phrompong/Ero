@@ -38,6 +38,7 @@ const Login = () => {
         type: "SET",
         payload: {
           username,
+          customerId: res.data.customerId,
           role: "client",
         },
       });
