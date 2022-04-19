@@ -68,7 +68,7 @@ const Buy = () => {
         const payload = json.data;
         setFullname(`${payload.name} ${payload.lastname}`);
         setShareId(payload.id);
-        setPhoneNo(`0${payload.telephone}`);
+        setPhoneNo(`${payload.telephone}`);
       });
 
     fetch(`${endpoint}/api/v1/masterBrokers`)
