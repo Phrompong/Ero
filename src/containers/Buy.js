@@ -580,7 +580,7 @@ const Buy = () => {
                     </ShareDetail>
                     <ShareDetail style={{ fontSize: "22px" }}>
                       <b style={{ width: "300px" }}>ยอดที่ท่านต้องทำรายการ</b>
-                      <b style={{ textAlign: "start" }}>{currentStockVolume}</b>
+                      <b style={{ textAlign: "start" }}>{currentPrice}</b>
                       <b style={{ textAlign: "start" }}>บาท</b>
                     </ShareDetail>
                     <ShareDetail>
