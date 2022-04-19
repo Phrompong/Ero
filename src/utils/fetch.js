@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3001/api/v1/";
+const BASE_URL = "http://134.209.108.248:3000/api/v1/";
 
 class JSONRPCError extends Error {
   constructor(errData) {
@@ -19,9 +19,9 @@ export async function httpPostRequest(body, endpoint) {
     body: JSON.stringify(body),
   });
 
-  if (!res.ok) {
-    throw new Error("Could not fetch data", endpoint);
-  }
+  // if (!res.ok) {
+  //   throw new Error("Could not fetch data", endpoint);
+  // }
 
   const data = await res.json();
   return [data, res.status];

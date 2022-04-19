@@ -9,11 +9,14 @@ import { FlexContainer } from "../components/UI/FlexContainer";
 import { DropdownSelect } from "../components/UI/Dropdown";
 import { LineCard } from "../components/UI/Card";
 import { FieldInput } from "../components/UI/Search";
+import { ModalAlert } from "../components/ModalAlert/ModalAlert";
+import { showAlert } from "../utils/showAlert";
 
 import { balihai, ivory, persianblue, shamrock, white } from "../utils/color";
 import {
   httpFetch,
   httpPostRequest,
+  httpGetRequest,
   httpPostRequestUploadFile,
 } from "../utils/fetch";
 import { useSelector } from "react-redux";
@@ -21,6 +24,9 @@ import { useSelector } from "react-redux";
 const Buy = () => {
   const { user } = useSelector((state) => state);
   const [page, setPage] = useState(1);
+  const [alertMessage, setAlertMessage] = useState();
+  const [show, setShow] = useState(false);
+  const [status, setStatus] = useState();
 
   const [currentStockVolume, setCurrentStockVolume] = useState(0);
   const [currentPrice, setCurrentPrice] = useState(0);
@@ -52,61 +58,77 @@ const Buy = () => {
   const [file, setFile] = useState();
   const [orderId, setOrderId] = useState(null);
 
-  const endpoint = "http://cbe6-124-120-89-19.ngrok.io";
+  const [bank, setBank] = useState(null)
+  const [depositBank, setDepositBank] = useState(null)
 
   const fetchStep1 = () => {
-    fetch(`${endpoint}/api/v1/masterCustomers/${user.customerId}`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        const payload = json.data;
-        setFullname(`${payload.name} ${payload.lastname}`);
-        setShareId(payload.id);
-        setPhoneNo(`0${payload.telephone}`);
-      });
-
-    fetch(`${endpoint}/api/v1/masterBrokers`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        const payload = json.data;
-        setShareOption(payload);
-      });
+    getCustomerProfile()
+    getBrokers()
   };
 
   const fetchStep2 = () => {
-    fetch(`${endpoint}/api/v1/customerStocks?customerId=${user.customerId}`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        const payload = json.data;
-        setRightStockName(payload.rightStockName);
-        setStockVolume(payload.stockVolume);
-        setOfferPrice(payload.offerPrice);
-        setRightStockName(payload.rightStockName);
-        setRightStockVolume(payload.rightStockVolume);
-        setRightSpecialName(payload.rightSpecialName);
-        setRightSpecialVolume(payload.rightSpecialVolume);
-      });
+    getCustomerStock()
   };
 
   const fetchStep3 = () => {
-    fetch(`${endpoint}/api/v1/masterBanks`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        const payload = json.data[0];
-        setLogo(payload.logo);
-        setNameTH(payload.nameTH);
-        setRef1(payload.ref1);
-        setRef2(payload.ref2);
-        setQRCode(payload.qrCode);
-      });
+    getMasterBank()
   };
+
+  const getCustomerProfile = async () => {
+    const [res, status] = await httpGetRequest(
+      `masterCustomers/${user.customerId}`
+    );
+
+    if (status === 200) {
+      const payload = res.data;
+      setFullname(`${payload.name} ${payload.lastname}`);
+      setShareId(payload.id);
+      setPhoneNo(payload.telephone);
+    }
+  }
+
+  const getBrokers = async () => {
+    const [res, status] = await httpGetRequest(
+      "masterBrokers"
+    );
+
+    if (status === 200) {
+      const payload = res.data;
+      setShareOption(payload);
+    }
+  }
+
+  const getCustomerStock = async () => {
+    const [res, status] = await httpGetRequest(
+      `customerStocks?customerId=${user.customerId}`
+    );
+
+    if (status === 200) {
+      const payload = res.data;
+      setRightStockName(payload.rightStockName);
+      setStockVolume(payload.stockVolume);
+      setOfferPrice(payload.offerPrice);
+      setRightStockName(payload.rightStockName);
+      setRightStockVolume(payload.rightStockVolume);
+      setRightSpecialName(payload.rightSpecialName);
+      setRightSpecialVolume(payload.rightSpecialVolume);
+    }
+  }
+
+  const getMasterBank = async () => {
+    const [res, status] = await httpGetRequest(
+      "masterBanks"
+    );
+
+    if (status === 200) {
+      const payload = res.data[0];
+      setLogo(payload.logo);
+      setNameTH(payload.nameTH);
+      setRef1(payload.ref1);
+      setRef2(payload.ref2);
+      setQRCode(payload.qrCode);
+    }
+  }
 
   const handlerOnSubmited = async () => {
     setPage(3);
@@ -143,12 +165,13 @@ const Buy = () => {
 
     const [res, status] = await httpPostRequestUploadFile(formData, endpoint);
     let msg = res.message;
+    setStatus(status);
     if (status === 200) {
       msg = "Upload Completed";
       console.log(msg);
     }
-    // setAlertMessage(msg);
-    // showAlert(setShow, 2000);
+    setAlertMessage(msg);
+    showAlert(setShow, 2000);
     setFile();
   };
 
@@ -183,6 +206,7 @@ const Buy = () => {
   return (
     <Card>
       <Container>
+        <ModalAlert show={show} msg={alertMessage} status={status} />
         <FlexContainer>
           <StepDiv>
             <div style={{ display: "block", margin: "0 20px" }}>
@@ -264,8 +288,7 @@ const Buy = () => {
                     <Content>
                       <InputDiv>
                         <div className="inputField">
-                          <p>เบอร์โทรศัพท์ที่สามารถติดต่อได้</p>
-                          <p>{phoneNo}</p>
+                          <p>เบอร์โทรศัพท์ที่สามารถติดต่อได้ <span>{phoneNo}</span></p>
                         </div>
                       </InputDiv>
                     </Content>
@@ -288,7 +311,7 @@ const Buy = () => {
                         <p>เลขที่บัญชีซื้อขาย</p>
                       </InputDiv>
                       <InputDiv style={{ marginLeft: "50px" }}>
-                        <FieldInput />
+                        <FieldInput placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"} />
                       </InputDiv>
                     </Content>
                   </LineCard>
@@ -428,7 +451,7 @@ const Buy = () => {
                       <ShareDetail style={{ marginBottom: "-10px" }}>
                         <p>{rightStockName}</p>
                         <Input
-                          type={"number"}
+                          type={"text"}
                           value={currentStockVolume}
                           onChange={(e) =>
                             setCurrentStockVolume(
@@ -453,7 +476,7 @@ const Buy = () => {
                       </ShareDetail>
                       <ShareDetail>
                         <p>จำนวนเงิน</p>
-                        <Input type={"number"} value={currentPrice} disabled />
+                        <Input type={"text"} value={currentPrice} disabled />
                         <p>บาท</p>
                       </ShareDetail>
                       <Header>
@@ -515,6 +538,8 @@ const Buy = () => {
                             >
                               <FieldInput
                                 placeholder={"ฝากเงินเข้าบัญชีธนาคาร"}
+                                value={depositBank}
+                                onChange={(e) => setDepositBank(e.target.value.replace(/[^0-9.]/, ""))}
                               />
                             </InputDiv>
                           </div>
@@ -527,7 +552,11 @@ const Buy = () => {
                             <InputDiv
                               style={{ marginTop: "20px", width: "100%" }}
                             >
-                              <FieldInput placeholder={"หมายเลขบัญชีธนาคาร"} />
+                              <FieldInput
+                                placeholder={"หมายเลขบัญชีธนาคาร"}
+                                value={bank}
+                                onChange={(e) => setBank(e.target.value.replace(/[^0-9.]/, ""))}
+                              />
                             </InputDiv>
                           </div>
                         </ShareDetail>
@@ -537,7 +566,7 @@ const Buy = () => {
                           type="submit"
                           value="ยืนยันคำสั่งซื้อ"
                           onClick={() => handlerOnSubmited()}
-                          // onClick={handleSubmited}
+                        // onClick={handleSubmited}
                         />
                       </LineCard>
                     </div>
@@ -573,7 +602,7 @@ const Buy = () => {
                     </ShareDetail>
                     <ShareDetail style={{ fontSize: "22px" }}>
                       <b style={{ width: "300px" }}>ยอดที่ท่านต้องทำรายการ</b>
-                      <b style={{ textAlign: "start" }}>{currentStockVolume}</b>
+                      <b style={{ textAlign: "start" }}>{currentPrice}</b>
                       <b style={{ textAlign: "start" }}>บาท</b>
                     </ShareDetail>
                     <ShareDetail>
@@ -758,6 +787,10 @@ const InputDiv = styled.div`
 
       p {
         position: static;
+
+        span {
+          width: 200px;
+        }
       }
     }
   }

@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import bg from "../assets/bg.jpg";
 import logo from "../assets/logo_awsc.jpg";
+import Cookies from 'js-cookie'
 
 import { Logo } from "../components/Logo/Logo";
 import { Card } from "../components/UI/Card";
@@ -17,13 +18,14 @@ const Login = () => {
   const navigate = useNavigate();
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const usernameInputRef = useRef("110140088479699");
+  const usernameInputRef = useRef("4654499830700");
   const passwordInputRef = useRef("1234");
 
   const endpoint = "auth/signIn?type=customer";
 
   const handleSubmited = async (event) => {
     event.preventDefault();
+    Cookies.remove('token')
 
     const username = usernameInputRef.current.value;
 
@@ -34,14 +36,19 @@ const Login = () => {
     );
 
     if (status === 200) {
+      const payload = {
+        username,
+        customerId: res.data.customerId,
+        role: "client",
+      }
       dispatch({
         type: "SET",
-        payload: {
-          username,
-          customerId: res.data.customerId,
-          role: "client",
-        },
+        payload
       });
+      console.log(payload)
+      Cookies.set('token', JSON.stringify({
+        user: payload
+      }));
       navigate(`/buy`);
     } else {
       setShowError(true);
@@ -129,7 +136,7 @@ const Form = styled.form`
   flex-direction: column;
   width: 271px;
   height: 80%;
-  overflow: scroll;
+  // overflow: scroll;
   .field {
     width: 100%;
     flex-grow: 2;

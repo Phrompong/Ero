@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 import Overview from "../components/Overview/Overview";
 import DataTable from "../components/DataTable/DataTable";
+import DataTableProfile from "../components/DataTable/DataTableProfile";
 import ViewProfile from "../components/ViewProfile/ViewProfile";
 import News from "../components/News/News";
 
@@ -9,9 +10,18 @@ import { Card, LineCard } from "../components/UI/Card";
 import { Dropdown } from "../components/UI/Dropdown";
 import { SearchableInput } from "../components/UI/Search";
 import { balihai, shamrock } from "../utils/color";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect, useMemo } from "react";
+import { httpGetRequest } from "../utils/fetch";
 
 const Dashboard = () => {
-  let nowDate = new Date();
+  const [data, setData] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [news, setNews] = useState(null);
+
+  const { user } = useSelector((state) => state);
+  const [totalPages, setTotalPages] = useState(1);
+
   // nowDate = `${nowDate.getHours()}:${nowDate.getMinutes()} at ${nowDate.getDate()}th ${nowDate.getMonth()}`;
   const fakedata = [
     {
@@ -67,29 +77,70 @@ const Dashboard = () => {
       status: { status: 4, text: "รอดำเนินการโอนเงินคืน" },
     },
   ];
+
+  const theaders = [
+    "วันที่",
+    "รายละเอียด",
+    "จำนวนการสั่งซื้อหุ้นเพิ่มทุน",
+    "สิทธิเพิ่มเติม",
+    "มูลค่าการสั่งซื้อ",
+    "สถานะรายการ",
+  ];
+
+  async function fetchDataTable() {
+    let endpoint = `orders?customerId=${user.customerId}`;
+
+    const [res, status] = await httpGetRequest(endpoint);
+    const { totalPages } = res["_metadata"];
+
+    setTotalPages(totalPages);
+    setData(res["data"]);
+  }
+
+  async function fetchDataProfile() {
+    let endpoint = `masterCustomers/${user.customerId}`;
+
+    const [res, status] = await httpGetRequest(endpoint);
+    console.log(res["data"]);
+    setProfile(res["data"]);
+  }
+
+  async function fetchDataNews() {
+    let endpoint = `news`;
+
+    const [res, status] = await httpGetRequest(endpoint);
+    console.log(res["data"][0]);
+    setNews(res["data"][0]);
+    console.log(news);
+  }
+
+  useEffect(() => {
+    fetchDataTable();
+    fetchDataProfile();
+    fetchDataNews();
+  }, []);
+
   return (
     <Card>
       <Container>
         <OverviewSection>
           <LineCard>
-            <ViewProfile
-              header="ข้อมูลทั่วไปของท่าน"
-              name="รชดี ชื่นภัคดี"
-              telephone="085-515-4560"
-              email="test@mail.com"
-              bankNumber="1234567891"
-              bankName="SCB"
-            />
+            <ViewProfile header="ข้อมูลทั่วไปของท่าน" profile={profile} />
           </LineCard>
 
           <LineCard>
-            <News header="ข้อมูลประชาสัมพันธ์" imageUrl="" />
+            <News header="ข้อมูลประชาสัมพันธ์" news={news} />
           </LineCard>
         </OverviewSection>
 
         <TableSection>
           <LineCard>
-            {/* <DataTable theader="รายการสั่งซื้อทั้งหมดในระบบ" data={fakedata} /> */}
+            <DataTableProfile
+              header="รายการสั่งซื้อของท่าน"
+              theaders={theaders}
+              data={data}
+              refreshData={fetchDataTable}
+            />
           </LineCard>
         </TableSection>
       </Container>
