@@ -18,7 +18,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const usernameInputRef = useRef("110140088479699");
+  const usernameInputRef = useRef("4654499830700");
   const passwordInputRef = useRef("1234");
 
   const endpoint = "auth/signIn?type=customer";
@@ -45,6 +45,7 @@ const Login = () => {
         type: "SET",
         payload
       });
+      console.log(payload)
       Cookies.set('token', JSON.stringify({
         user: payload
       }));

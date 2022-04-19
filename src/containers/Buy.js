@@ -14,6 +14,7 @@ import { balihai, ivory, persianblue, shamrock, white } from "../utils/color";
 import {
   httpFetch,
   httpPostRequest,
+  httpGetRequest,
   httpPostRequestUploadFile,
 } from "../utils/fetch";
 import { useSelector } from "react-redux";
@@ -52,61 +53,74 @@ const Buy = () => {
   const [file, setFile] = useState();
   const [orderId, setOrderId] = useState(null);
 
-  const endpoint = "http://cbe6-124-120-89-19.ngrok.io";
-
   const fetchStep1 = () => {
-    fetch(`${endpoint}/api/v1/masterCustomers/${user.customerId}`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        const payload = json.data;
-        setFullname(`${payload.name} ${payload.lastname}`);
-        setShareId(payload.id);
-        setPhoneNo(`0${payload.telephone}`);
-      });
-
-    fetch(`${endpoint}/api/v1/masterBrokers`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        const payload = json.data;
-        setShareOption(payload);
-      });
+    getCustomerProfile()
+    getBrokers()
   };
 
   const fetchStep2 = () => {
-    fetch(`${endpoint}/api/v1/customerStocks?customerId=${user.customerId}`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        const payload = json.data;
-        setRightStockName(payload.rightStockName);
-        setStockVolume(payload.stockVolume);
-        setOfferPrice(payload.offerPrice);
-        setRightStockName(payload.rightStockName);
-        setRightStockVolume(payload.rightStockVolume);
-        setRightSpecialName(payload.rightSpecialName);
-        setRightSpecialVolume(payload.rightSpecialVolume);
-      });
+    getCustomerStock()
   };
 
   const fetchStep3 = () => {
-    fetch(`${endpoint}/api/v1/masterBanks`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        const payload = json.data[0];
-        setLogo(payload.logo);
-        setNameTH(payload.nameTH);
-        setRef1(payload.ref1);
-        setRef2(payload.ref2);
-        setQRCode(payload.qrCode);
-      });
+    getMasterBank()
   };
+
+  const getCustomerProfile = async () => {
+    const [res, status] = await httpGetRequest(
+      `masterCustomers/${user.customerId}`
+    );
+
+    if (status === 200) {
+      const payload = res.data;
+      setFullname(`${payload.name} ${payload.lastname}`);
+      setShareId(payload.id);
+      setPhoneNo(payload.telephone);
+    }
+  }
+
+  const getBrokers = async () => {
+    const [res, status] = await httpGetRequest(
+      "masterBrokers"
+    );
+
+    if (status === 200) {
+      const payload = res.data;
+      setShareOption(payload);
+    }
+  }
+
+  const getCustomerStock = async () => {
+    const [res, status] = await httpGetRequest(
+      `customerStocks?customerId=${user.customerId}`
+    );
+
+    if (status === 200) {
+      const payload = res.data;
+      setRightStockName(payload.rightStockName);
+      setStockVolume(payload.stockVolume);
+      setOfferPrice(payload.offerPrice);
+      setRightStockName(payload.rightStockName);
+      setRightStockVolume(payload.rightStockVolume);
+      setRightSpecialName(payload.rightSpecialName);
+      setRightSpecialVolume(payload.rightSpecialVolume);
+    }
+  }
+
+  const getMasterBank = async () => {
+    const [res, status] = await httpGetRequest(
+      "masterBanks"
+    );
+
+    if (status === 200) {
+      const payload = res.data[0];
+      setLogo(payload.logo);
+      setNameTH(payload.nameTH);
+      setRef1(payload.ref1);
+      setRef2(payload.ref2);
+      setQRCode(payload.qrCode);
+    }
+  }
 
   const handlerOnSubmited = async () => {
     setPage(3);
@@ -537,7 +551,7 @@ const Buy = () => {
                           type="submit"
                           value="ยืนยันคำสั่งซื้อ"
                           onClick={() => handlerOnSubmited()}
-                          // onClick={handleSubmited}
+                        // onClick={handleSubmited}
                         />
                       </LineCard>
                     </div>

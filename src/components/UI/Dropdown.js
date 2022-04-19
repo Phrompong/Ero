@@ -77,7 +77,7 @@ export const DropdownSelect = ({ options }) => {
   });
   return (
     <Container>
-      <Select style={{ padding: "0 32px 0  20px" }}>{_options}</Select>
+      <Select style={{ padding: "5px 32px 5px  20px", width: '100%' }}>{_options}</Select>
       <Arrow />
     </Container>
   );

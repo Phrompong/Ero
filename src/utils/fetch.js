@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3001/api/v1/";
+const BASE_URL = "http://134.209.108.248:3000/api/v1/";
 
 class JSONRPCError extends Error {
   constructor(errData) {
