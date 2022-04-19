@@ -73,7 +73,9 @@ const Details = ({ show, details, closed, options }) => {
                   <div className="transaction-details">
                     <div className="row">
                       <p className="text-box">{details["rightStockName"]}</p>
-                      <div className="num-box">{details["stockVolume"]}</div>
+                      <div className="num-box">
+                        {details["paidRightVolume"]}
+                      </div>
                       <p className="unit">หุ้น</p>
                     </div>
                     <div className="row">

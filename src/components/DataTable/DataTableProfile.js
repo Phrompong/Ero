@@ -86,7 +86,7 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
                 </TD>
                 <TD>{x["rightStockName"]}</TD>
                 <TD>{x["paidRightVolume"]}</TD>
-                <TD>{`${x["rightSpacialName"] || ""} ${
+                <TD>{`${x["rightSpacialName"] || ""}  ${
                   x["rightSpacialVolume"] || ""
                 }`}</TD>
                 <TD>{x["paymentAmount"]}</TD>
