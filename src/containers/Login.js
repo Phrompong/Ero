@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import bg from "../assets/bg.jpg";
 import logo from "../assets/logo_awsc.jpg";
+import Cookies from 'js-cookie'
 
 import { Logo } from "../components/Logo/Logo";
 import { Card } from "../components/UI/Card";
@@ -24,6 +25,7 @@ const Login = () => {
 
   const handleSubmited = async (event) => {
     event.preventDefault();
+    Cookies.remove('token')
 
     const username = usernameInputRef.current.value;
 
@@ -34,14 +36,18 @@ const Login = () => {
     );
 
     if (status === 200) {
+      const payload = {
+        username,
+        customerId: res.data.customerId,
+        role: "client",
+      }
       dispatch({
         type: "SET",
-        payload: {
-          username,
-          customerId: res.data.customerId,
-          role: "client",
-        },
+        payload
       });
+      Cookies.set('token', JSON.stringify({
+        user: payload
+      }));
       navigate(`/buy`);
     } else {
       setShowError(true);
