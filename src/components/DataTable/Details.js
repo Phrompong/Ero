@@ -14,6 +14,9 @@ import transaction from "../../assets/transaction.png";
 import { httpGetRequest, httpPutRequest } from "../../utils/fetch";
 
 const Details = ({ show, details, closed, options }) => {
+  console.log(show)
+  console.log(details)
+  console.log(options)
   const [selectedStatus, setSelectedStatus] = useState(
     details["status"]["_id"]
   );

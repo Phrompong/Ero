@@ -53,6 +53,9 @@ const Buy = () => {
   const [file, setFile] = useState();
   const [orderId, setOrderId] = useState(null);
 
+  const [bank, setBank] = useState(null)
+  const [depositBank, setDepositBank] = useState(null)
+
   const fetchStep1 = () => {
     getCustomerProfile()
     getBrokers()
@@ -278,8 +281,7 @@ const Buy = () => {
                     <Content>
                       <InputDiv>
                         <div className="inputField">
-                          <p>เบอร์โทรศัพท์ที่สามารถติดต่อได้</p>
-                          <p>{phoneNo}</p>
+                          <p>เบอร์โทรศัพท์ที่สามารถติดต่อได้ <span>{phoneNo}</span></p>
                         </div>
                       </InputDiv>
                     </Content>
@@ -302,7 +304,7 @@ const Buy = () => {
                         <p>เลขที่บัญชีซื้อขาย</p>
                       </InputDiv>
                       <InputDiv style={{ marginLeft: "50px" }}>
-                        <FieldInput />
+                        <FieldInput placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"} />
                       </InputDiv>
                     </Content>
                   </LineCard>
@@ -442,7 +444,7 @@ const Buy = () => {
                       <ShareDetail style={{ marginBottom: "-10px" }}>
                         <p>{rightStockName}</p>
                         <Input
-                          type={"number"}
+                          type={"text"}
                           value={currentStockVolume}
                           onChange={(e) =>
                             setCurrentStockVolume(
@@ -467,7 +469,7 @@ const Buy = () => {
                       </ShareDetail>
                       <ShareDetail>
                         <p>จำนวนเงิน</p>
-                        <Input type={"number"} value={currentPrice} disabled />
+                        <Input type={"text"} value={currentPrice} disabled />
                         <p>บาท</p>
                       </ShareDetail>
                       <Header>
@@ -529,6 +531,8 @@ const Buy = () => {
                             >
                               <FieldInput
                                 placeholder={"ฝากเงินเข้าบัญชีธนาคาร"}
+                                value={depositBank}
+                                onChange={(e) => setDepositBank(e.target.value.replace(/[^0-9.]/, ""))}
                               />
                             </InputDiv>
                           </div>
@@ -541,7 +545,11 @@ const Buy = () => {
                             <InputDiv
                               style={{ marginTop: "20px", width: "100%" }}
                             >
-                              <FieldInput placeholder={"หมายเลขบัญชีธนาคาร"} />
+                              <FieldInput
+                                placeholder={"หมายเลขบัญชีธนาคาร"}
+                                value={bank}
+                                onChange={(e) => setBank(e.target.value.replace(/[^0-9.]/, ""))}
+                              />
                             </InputDiv>
                           </div>
                         </ShareDetail>
@@ -587,7 +595,7 @@ const Buy = () => {
                     </ShareDetail>
                     <ShareDetail style={{ fontSize: "22px" }}>
                       <b style={{ width: "300px" }}>ยอดที่ท่านต้องทำรายการ</b>
-                      <b style={{ textAlign: "start" }}>{currentStockVolume}</b>
+                      <b style={{ textAlign: "start" }}>{currentPrice}</b>
                       <b style={{ textAlign: "start" }}>บาท</b>
                     </ShareDetail>
                     <ShareDetail>
@@ -772,6 +780,10 @@ const InputDiv = styled.div`
 
       p {
         position: static;
+
+        span {
+          width: 200px;
+        }
       }
     }
   }

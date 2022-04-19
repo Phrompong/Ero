@@ -136,7 +136,7 @@ const Form = styled.form`
   flex-direction: column;
   width: 271px;
   height: 80%;
-  overflow: scroll;
+  // overflow: scroll;
   .field {
     width: 100%;
     flex-grow: 2;

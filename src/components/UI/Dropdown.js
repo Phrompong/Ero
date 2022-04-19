@@ -23,6 +23,7 @@ const Select = styled.select`
   font-size: 16px;
   text-transform: capitalize;
   text-align: center;
+  z-index: 999;
   :focus {
     outline: none;
   }
@@ -39,6 +40,7 @@ const Select = styled.select`
 const Option = styled.option`
   text-transform: capitalize;
   bottom: 30%;
+  padding: 10px 32px 10px 20px;
 `;
 
 const Arrow = styled.i`
@@ -51,6 +53,7 @@ const Arrow = styled.i`
   padding: 3px 3px;
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
+  z-index: 10;
 `;
 
 export const Dropdown = ({ options, setSelected, selected }) => (
@@ -67,18 +70,19 @@ export const Dropdown = ({ options, setSelected, selected }) => (
   </Container>
 );
 
-export const DropdownSelect = ({ options }) => {
-  const _options = options.map((option, index) => {
-    return (
-      <Option key={index} value={option.code}>
-        {option.code} {option.name}
-      </Option>
-    );
-  });
+export const DropdownSelect = ({ options, setSelected, selected }) => {
   return (
     <Container>
-      <Select style={{ padding: "5px 32px 5px  20px", width: '100%' }}>{_options}</Select>
+      <Select
+        onChange={(e) => setSelected(e.target.value)} value={selected}
+        style={{ padding: "5px 32px 5px  20px", width: '100%' }}>
+        {options && options.map((option, index) => (
+          <Option key={index} value={option.code}>
+            {option.code} {option.name}
+          </Option>
+        ))}
+      </Select>
       <Arrow />
-    </Container>
+    </Container >
   );
 };

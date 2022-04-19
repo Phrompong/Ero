@@ -133,7 +133,7 @@ const Form = styled.form`
   align-items: center;
   flex-direction: column;
   height: 90%;
-  overflow: scroll;
+  // overflow: scroll;
 
   .field {
     width: 100%;
