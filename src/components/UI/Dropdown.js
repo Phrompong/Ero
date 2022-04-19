@@ -22,8 +22,12 @@ const Select = styled.select`
   padding: 10px 32px 10px 20px;
   font-size: 16px;
   text-transform: capitalize;
+<<<<<<< HEAD
   text-align: center;
   z-index: 999;
+=======
+  text-align: left;
+>>>>>>> 15932afe0cceb7f79389a7f3b05f399567e739a1
   :focus {
     outline: none;
   }

@@ -14,7 +14,7 @@ import Details from "./Details";
 import Paginate from "../Paginate/Paginate";
 import { httpGetRequest } from "../../utils/fetch";
 
-const DataTable = ({ header, theaders, data, refreshData }) => {
+const DataTableProfile = ({ header, theaders, data, refreshData }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [details, setDetails] = useState();
   const [options, setOptions] = useState([]);
@@ -80,14 +80,13 @@ const DataTable = ({ header, theaders, data, refreshData }) => {
           </THead>
           <TBody>
             {data.map((x, index) => (
-              <TR key={index} onClick={() => handleClicked(x)}>
+              <TR key={index}>
                 <TD className="left">
                   {new Date(x["createdOn"]).toLocaleDateString()}
                 </TD>
-                <TD className="left">{`${x["customerId"]["name"]} ${x["customerId"]["lastname"]} `}</TD>
                 <TD>{x["rightStockName"]}</TD>
                 <TD>{x["paidRightVolume"]}</TD>
-                <TD>{`${x["rightSpacialName"] || ""} ${
+                <TD>{`${x["rightSpacialName"] || ""}  ${
                   x["rightSpacialVolume"] || ""
                 }`}</TD>
                 <TD>{x["paymentAmount"]}</TD>
@@ -104,7 +103,7 @@ const DataTable = ({ header, theaders, data, refreshData }) => {
   );
 };
 
-export default DataTable;
+export default DataTableProfile;
 
 const Container = styled.div`
   padding: 15px;

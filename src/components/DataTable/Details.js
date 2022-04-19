@@ -41,7 +41,9 @@ const Details = ({ show, details, closed, options }) => {
 
   const customer = details["customerId"];
 
-  const formatDate = (date) => new Date(date).toLocaleDateString();
+  const formatDate = (date) => {
+    return date ? new Date(date).toLocaleDateString() : "-";
+  };
 
   return (
     <Modal show={show}>
@@ -74,7 +76,9 @@ const Details = ({ show, details, closed, options }) => {
                   <div className="transaction-details">
                     <div className="row">
                       <p className="text-box">{details["rightStockName"]}</p>
-                      <div className="num-box">{details["stockVolume"]}</div>
+                      <div className="num-box">
+                        {details["paidRightVolume"]}
+                      </div>
                       <p className="unit">หุ้น</p>
                     </div>
                     <div className="row">
@@ -97,7 +101,7 @@ const Details = ({ show, details, closed, options }) => {
                     <p className="unit">หุ้น</p>
                   </div>
                   <BoldText style={{ margin: "20px 0 5px 0" }}>
-                    ซื้อเกินสิทธิเป็นเงิน 0 บาท
+                    ซื้อเกินสิทธิเป็นเงิน {details["excessAmount"]} บาท
                   </BoldText>
 
                   <div className="row">
