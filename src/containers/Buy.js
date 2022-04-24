@@ -31,6 +31,8 @@ const Buy = () => {
   const [currentStockVolume, setCurrentStockVolume] = useState(0);
   const [currentPrice, setCurrentPrice] = useState(0);
 
+  const [isOpenDropdown, setIsOpenDropdown] = useState(false)
+
   // step 1
   const [shareName, setShareName] = useState(null);
   const [shareDescription, setShareDescription] = useState(null);
@@ -38,6 +40,7 @@ const Buy = () => {
   const [shareId, setShareId] = useState(null);
   const [phoneNo, setPhoneNo] = useState(null);
   const [shareOption, setShareOption] = useState([]);
+  const [dropdownSelect, setDropdownSelect] = useState(null)
 
   // step 2
   const [rightStockName, setRightStockName] = useState(null);
@@ -94,7 +97,46 @@ const Buy = () => {
 
     if (status === 200) {
       const payload = res.data;
-      setShareOption(payload);
+      const fakeData = [
+        {
+          _id: "62601de7c1fa7362f2bc8cd4",
+          code: "001",
+          name: "บริษัทหลักทรัพย์ แลนด์ แอนด์ เฮ้าส์ จํากัด (มหาชน)",
+          status: true
+        },
+        {
+          _id: "62601de7c1fa7362f2bc8cd4",
+          code: "002",
+          name: "บริษัทหลักทรัพย์ แลนด์ แอนด์ เฮ้าส์ จํากัด (มหาชน)",
+          status: true
+        },
+        {
+          _id: "62601de7c1fa7362f2bc8cd4",
+          code: "003",
+          name: "บริษัทหลักทรัพย์ แลนด์ แอนด์ เฮ้าส์ จํากัด (มหาชน)",
+          status: true
+        },
+        {
+          _id: "62601de7c1fa7362f2bc8cd4",
+          code: "004",
+          name: "บริษัทหลักทรัพย์ แลนด์ แอนด์ เฮ้าส์ จํากัด (มหาชน)",
+          status: true
+        },
+        {
+          _id: "62601de7c1fa7362f2bc8cd4",
+          code: "005",
+          name: "บริษัทหลักทรัพย์ แลนด์ แอนด์ เฮ้าส์ จํากัด (มหาชน)",
+          status: true
+        }
+      ]
+      // setShareOption(payload);
+      const _options = fakeData.map((data) => {
+        return {
+          ...data,
+          fullname: `${data.code} ${data.name}`
+        }
+      })
+      setShareOption(_options);
     }
   }
 
@@ -109,7 +151,7 @@ const Buy = () => {
       setStockVolume(payload.stockVolume);
       setOfferPrice(payload.offerPrice);
       setRightStockName(payload.rightStockName);
-      setRightStockVolume(payload.rightStockVolume);
+      setRightStockVolume(payload.rightStockVolume || '-');
       setRightSpecialName(payload.rightSpecialName);
       setRightSpecialVolume(payload.rightSpecialVolume);
     }
@@ -174,6 +216,10 @@ const Buy = () => {
     showAlert(setShow, 2000);
     setFile();
   };
+
+  const handlerOnReadMore = () => {
+    setShareDescription()
+  }
 
   useEffect(() => {
     if (page === 1) {
@@ -242,7 +288,7 @@ const Buy = () => {
                     style={{
                       width: "100%",
                       marginBottom: "20px",
-                      paddingBottom: "30px",
+                      paddingBottom: "60px",
                     }}
                   >
                     <Header>
@@ -261,7 +307,16 @@ const Buy = () => {
                         ข้อมูลโดยสรุป
                       </p>
                       <div className="desc">
-                        <p style={{ height: "157.4px" }}>{shareDescription}</p>
+                        {/* <p style={{ height: "157.4px" }}>{shareDescription}</p> */}
+                        <p>{shareDescription}</p>
+                      </div>
+                      <div className="btn-read-more">
+                        <Button
+                          type="submit"
+                          value="อ่านต่อ"
+                          onClick={() => handlerOnReadMore()}
+                          style={{ height: "35px" }}
+                        />
                       </div>
                     </Content>
                   </LineCard>
@@ -305,7 +360,13 @@ const Buy = () => {
                       <InputDiv
                         style={{ marginTop: "20px", marginLeft: "50px" }}
                       >
-                        <DropdownSelect options={shareOption} />
+                        <DropdownSelect
+                          options={shareOption}
+                          searchFrom={"fullname"}
+                          isOpen={isOpenDropdown}
+                          onClick={() => setIsOpenDropdown(!isOpenDropdown)}
+                          setSelected={setDropdownSelect}
+                        />
                       </InputDiv>
                       <InputDiv style={{ marginLeft: "50px" }}>
                         <p>เลขที่บัญชีซื้อขาย</p>
@@ -709,7 +770,8 @@ const Container = styled.div`
   width: 70vw;
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  // overflow: auto;
+  overflow-y: auto;
 
   > * {
     margin: 10px 0;
@@ -868,24 +930,41 @@ const Header = styled.div`
 
 const Content = styled.div`
   margin: 0 10px;
+  position: relative;
   .desc {
     font-size: 17px;
     overflow-y: scroll;
     scrollbar-color: rebeccapurple green;
     scrollbar-width: thin;
   }
+
+  .btn-read-more {
+    position: absolute;
+    width: 140px;
+    margin-top: 10px;
+    right: 0;
+    font-size: 14px;
+  }
+
   p {
     font-size: 17px;
   }
 
   /* For Mobile */
   @media screen and (max-width: 540px) {
+    .btn-read-more {
+      width: 120px;
+    }
   }
 
   /* For Tablets */
   @media screen and (min-width: 540px) and (max-width: 880px) {
     display: flex;
     justify-content: space-between;
+
+    .btn-read-more {
+      width: 120px;
+    }
   }
 `;
 
