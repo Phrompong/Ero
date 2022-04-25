@@ -385,6 +385,7 @@ const Buy = () => {
                           searchFrom={"fullname"}
                           isOpen={isOpenDropdown}
                           onClick={() => setIsOpenDropdown(!isOpenDropdown)}
+                          onBlur={() => setIsOpenDropdown(false)}
                           setSelected={setDropdownSelect}
                         />
                       </InputDiv>

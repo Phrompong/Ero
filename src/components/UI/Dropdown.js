@@ -122,7 +122,7 @@ export const Dropdown = ({ options, setSelected, selected }) => (
   </Container>
 );
 
-export const DropdownSelect = ({ options, setSelected, selected, searchFrom, isOpen, onClick }) => {
+export const DropdownSelect = ({ options, setSelected, selected, searchFrom, isOpen, onClick, onBlur }) => {
   const [filter, setFilter] = useState(null)
   const [optionsFiltered, setOptionsFiltered] = useState([])
   const [optionSelect, setOptionSelect] = useState(null)
@@ -146,13 +146,13 @@ export const DropdownSelect = ({ options, setSelected, selected, searchFrom, isO
     }
   }, [filter])
   return (
-    <Container onClick={onClick}>
+    <Container onClick={onClick} onBlurCapture={onBlur}>
       <Wrapper>
         <Input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder={'กรุณาเลือก'} />
         <WrapperOption isOpen={isOpen}>
           {
             optionsFiltered && optionsFiltered.map((option, index) => (
-              <OptionSelect onClick={() => setOptionSelect(option)} key={index} value={option.code}>{option.code} {option.name}</OptionSelect>
+              <OptionSelect onMouseDown={() => setOptionSelect(option)} key={index} value={option.code}>{option.code} {option.name}</OptionSelect>
             ))
           }
         </WrapperOption>
