@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useState, useEffect } from "react";
 
 const Container = styled.div`
   position: relative;
@@ -22,12 +23,7 @@ const Select = styled.select`
   padding: 10px 32px 10px 20px;
   font-size: 16px;
   text-transform: capitalize;
-<<<<<<< HEAD
-  text-align: center;
-  z-index: 999;
-=======
   text-align: left;
->>>>>>> 15932afe0cceb7f79389a7f3b05f399567e739a1
   :focus {
     outline: none;
   }
@@ -60,6 +56,58 @@ const Arrow = styled.i`
   z-index: 10;
 `;
 
+const Input = styled.input`
+  position: relative;
+  width: 100%;
+  display: inline-block;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  margin: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: transparent;
+  height: 100%;
+  font-size: 16px;
+  padding: 8px 15px 8px 15px;
+  border-radius: 10px;
+`
+
+const OptionSelect = styled.a`
+  color: black;
+  padding: 12px 16px;
+  // text-decoration: none;
+  display: block;
+  z-index: 999;
+`
+
+const WrapperOption = styled.div`
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+  // display: none;
+  max-height: 150px;
+  overflow: auto;
+  width: 100%;
+  position: absolute;
+  background: #ffffff;
+  z-index: 998;
+  border: 2px solid #d9e1e7;
+  & ${OptionSelect}:hover {
+    background: #90A0DA;
+  }
+`
+
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  $ :focus {
+    background: black;
+  }
+  // & ${Input}:focus-within + ${WrapperOption} {
+  //   display: block;
+  // }
+`
+
 export const Dropdown = ({ options, setSelected, selected }) => (
   <Container>
     <Select onChange={(e) => setSelected(e.target.value)} value={selected}>
@@ -74,19 +122,41 @@ export const Dropdown = ({ options, setSelected, selected }) => (
   </Container>
 );
 
-export const DropdownSelect = ({ options, setSelected, selected }) => {
+export const DropdownSelect = ({ options, setSelected, selected, searchFrom, isOpen, onClick, onBlur }) => {
+  const [filter, setFilter] = useState(null)
+  const [optionsFiltered, setOptionsFiltered] = useState([])
+  const [optionSelect, setOptionSelect] = useState(null)
+  useEffect(() => {
+    setOptionsFiltered(options)
+  }, [options])
+
+  useEffect(() => {
+    if (optionSelect) {
+      setFilter(optionSelect.fullname)
+      setSelected(optionSelect)
+    }
+  }, [optionSelect])
+
+  useEffect(() => {
+    if (filter) {
+      setOptionsFiltered(options.filter((option) => option[searchFrom].includes(filter)))
+    }
+    if (filter === '') {
+      setOptionsFiltered(options)
+    }
+  }, [filter])
   return (
-    <Container>
-      <Select
-        onChange={(e) => setSelected(e.target.value)} value={selected}
-        style={{ padding: "5px 32px 5px  20px", width: '100%' }}>
-        {options && options.map((option, index) => (
-          <Option key={index} value={option.code}>
-            {option.code} {option.name}
-          </Option>
-        ))}
-      </Select>
-      <Arrow />
+    <Container onClick={onClick} onBlurCapture={onBlur}>
+      <Wrapper>
+        <Input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder={'กรุณาเลือก'} />
+        <WrapperOption isOpen={isOpen}>
+          {
+            optionsFiltered && optionsFiltered.map((option, index) => (
+              <OptionSelect onMouseDown={() => setOptionSelect(option)} key={index} value={option.code}>{option.code} {option.name}</OptionSelect>
+            ))
+          }
+        </WrapperOption>
+      </Wrapper>
     </Container >
   );
 };
