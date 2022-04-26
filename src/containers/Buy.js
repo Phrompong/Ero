@@ -21,9 +21,12 @@ import {
 } from "../utils/fetch";
 import { useSelector } from "react-redux";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+
 const Buy = () => {
   const { user } = useSelector((state) => state);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(4);
   const [alertMessage, setAlertMessage] = useState();
   const [show, setShow] = useState(false);
   const [status, setStatus] = useState();
@@ -32,6 +35,9 @@ const Buy = () => {
   const [currentPrice, setCurrentPrice] = useState(0);
 
   const [isOpenDropdown, setIsOpenDropdown] = useState(false)
+
+  const [errorMsg, setErrorMsg] = useState(null)
+  const [showError, setShowError] = useState(false)
 
   // step 1
   const [shareName, setShareName] = useState(null);
@@ -58,6 +64,7 @@ const Buy = () => {
   const [ref1, setRef1] = useState(null);
   const [ref2, setRef2] = useState(null);
   const [qrCode, setQRCode] = useState(null);
+  const [radioCheckedPayment, setRadioCheckPayment] = useState(false)
 
   const [file, setFile] = useState();
   const [orderId, setOrderId] = useState(null);
@@ -197,8 +204,15 @@ const Buy = () => {
 
   const handleSelectedFile = (e) => {
     const [file] = e.target.files;
+    const maxAllowedSize = 5 * 1024 * 1024;
     const { name: fileName, size } = file;
-    setFile(file);
+    if (size > maxAllowedSize) {
+      setErrorMsg('ขนาดไฟล์รูปภาพใหญ่เกินไป');
+      setShowError(true)
+    } else {
+      setFile(file);
+      setShowError(false)
+    }
   };
 
   const handleSubmit = async () => {
@@ -657,6 +671,109 @@ const Buy = () => {
               );
             }
 
+            if (page === 4) {
+              return (
+                <>
+                  <LineCard style={{ borderColor: persianblue }}>
+                    <ShareDetail style={{ fontSize: '20px', padding: '20px' }}>
+                      <b style={{ whiteSpace: 'pre' }}>ยอดที่ท่านต้องการทำรายการ</b>
+                      <b>{currentPrice}</b>
+                      <b>บาท</b>
+                    </ShareDetail>
+                  </LineCard>
+                  <div className="text-message" style={{ margin: '10px 30px' }}>
+                    <p>ท่านสามารถดำเนินการชำระเงินในการซื้อหุ้นเพิ่มทุนของท่านได้ที่</p>
+                  </div>
+                  <LineCard>
+                    <Header>
+                      <ShareDetail>
+                        <h3 style={{ color: '#1D3AB1', fontSize: '24px', whiteSpace: 'pre' }}>ส่งหลักฐานการชำระเงิน</h3>
+                        <div className="btn-payment-tool">
+                          <Button
+                            type="submit"
+                            value="ดูวิธีการชำระเงิน"
+                            style={{
+                              width: "100%",
+                              fontSize: "17px",
+                              color: "#000000",
+                              backgroundColor: "#EDB52D",
+                              height: "42px",
+                            }}
+                          />
+                        </div>
+                      </ShareDetail>
+                    </Header>
+                    <div className="line-space" style={{ padding: '0 20px' }}>
+                      <hr style={{ border: '0.75px solid #D9E1E7' }} />
+                    </div>
+                    <div className="payment-method" style={{ padding: '10px 20px', display: "flex" }}>
+                      <b style={{ width: '20%', margin: '10px' }}>เลือกวิธีการชำระเงิน</b>
+                      <div className="bank-name" style={{ width: '80%' }} onClick={() => setRadioCheckPayment(!radioCheckedPayment)}>
+                        <LineCard style={{ padding: '10px' }}>
+                          <div style={{ display: 'inline-flex', position: "relative", width: "100%" }}>
+                            <input type="radio" style={{ margin: '5px 20px 5px 30px' }} checked={radioCheckedPayment} />
+                            <b>ชำระเงินผ่านเลขบัญชีธนาคาร</b>
+                            <div className="btn-arrow" style={{ position: 'absolute', right: '0', margin: '5px 20px 0 0' }}>
+                              {
+                                radioCheckedPayment ? <OpenArrow /> : <CloseArrow />
+                              }
+                            </div>
+                          </div>
+                          {
+                            radioCheckedPayment && <>
+                              <div className="bank-name-card" style={{ margin: '20px' }}>
+                                <BankCard>
+                                  <div className="bank-img" style={{ marginLeft: '40px' }}>
+                                    <img src="https://bit.ly/3OCube2" height={'33px'} width={'32px'} />
+                                  </div>
+                                  <div className="bank-detail" style={{ margin: '10px 0px 10px 20px' }}>
+                                    <b>BANK NAME</b>
+                                    <p>เลขบัญชี<b style={{ marginLeft: '20px' }}>XXXXX</b></p>
+                                    <p>ชื่อบัญชี<b style={{ margin: '0 20px' }}>XXXXX</b>สาขา<b style={{ margin: '0 20px' }}>ชื่อสาขา</b></p>
+                                  </div>
+                                </BankCard>
+                              </div>
+                            </>
+                          }
+                        </LineCard>
+                      </div>
+                    </div>
+                    <div className="payment-method" style={{ padding: '10px 20px 30px 20px', display: "flex" }}>
+                      <b style={{ width: '20%', margin: '20px 10px 10px 10px' }}>หลักฐานการชำระเงิน</b>
+                      <UploadButton style={{ width: '30%', margin: '0' }}>
+                        <p
+                          style={{
+                            width: "100%",
+                            fontSize: "17px",
+                            margin: "auto",
+                            marginBottom: "20px",
+                            marginTop: "20px",
+                          }}
+                        >
+                          แนบหลักฐานการชำระเงิน
+                        </p>
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          accept="image/png, image/jpeg"
+                          onChange={handleSelectedFile}
+                        />
+                      </UploadButton>
+                      <div className="warning-text"
+                        style={{ width: '50%', margin: '20px 10px 10px 10px', color: '#575656' }}>
+                        {
+                          showError ? (
+                            <p style={{ color: '#b20600', margin: '0 10px' }}>{errorMsg}</p>
+                          ) : <p>
+                            <FontAwesomeIcon icon={faCircleInfo} style={{ margin: '0 10px' }} />กรุณาอัพโหลดไฟล์ .PNG และ JPEG ขนาดไม่เกิน 5 MB</p>
+                        }
+                      </div>
+                    </div>
+                  </LineCard>
+                </>
+              )
+            }
+
             if (page === 3) {
               return (
                 <>
@@ -725,6 +842,7 @@ const Buy = () => {
                         </p>
                         <input
                           type="file"
+                          accept="video/*"
                           style={{ display: "none" }}
                           onChange={handleSelectedFile}
                         />
@@ -1162,5 +1280,30 @@ const Input = styled.input`
     width: 180px;
   }
 `;
+
+const OpenArrow = styled.i`
+  position: absolute;
+
+  width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 15px solid ${persianblue};
+`;
+
+const CloseArrow = styled.i`
+  position: absolute;
+
+  width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 15px solid ${persianblue};
+`;
+
+const BankCard = styled.div`
+  display: flex;
+  margin: auto;
+`
 
 export default Buy;
