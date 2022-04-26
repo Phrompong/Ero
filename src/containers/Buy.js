@@ -26,7 +26,7 @@ import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 const Buy = () => {
   const { user } = useSelector((state) => state);
-  const [page, setPage] = useState(4);
+  const [page, setPage] = useState(1);
   const [alertMessage, setAlertMessage] = useState();
   const [show, setShow] = useState(false);
   const [status, setStatus] = useState();
@@ -671,7 +671,7 @@ const Buy = () => {
               );
             }
 
-            if (page === 4) {
+            if (page === 3) {
               return (
                 <>
                   <LineCard style={{ borderColor: persianblue }}>
@@ -772,116 +772,6 @@ const Buy = () => {
                   </LineCard>
                 </>
               )
-            }
-
-            if (page === 3) {
-              return (
-                <>
-                  <LineCard style={{ width: "729px", margin: "auto" }}>
-                    <ShareDetail>
-                      <b style={{ color: persianblue }}>
-                        ส่งหลักฐานการชำระเงิน
-                      </b>
-                      <Button
-                        type="submit"
-                        value="ดูวิธีการชำระเงิน"
-                        style={{
-                          width: "20%",
-                          fontSize: "17px",
-                          color: "#000000",
-                          backgroundColor: "#EDB52D",
-                          height: "42px",
-                        }}
-                      />
-                    </ShareDetail>
-                    <ShareDetail>
-                      <p style={{ width: "100%" }}>
-                        ท่านสามารถดำเนินการชำระเงินในการซื้อหุ้นเพิ่มทุนของท่านได้ที่
-                      </p>
-                    </ShareDetail>
-                    <ShareDetail style={{ fontSize: "22px" }}>
-                      <b style={{ width: "300px" }}>ยอดที่ท่านต้องทำรายการ</b>
-                      <b style={{ textAlign: "start" }}>{currentPrice}</b>
-                      <b style={{ textAlign: "start" }}>บาท</b>
-                    </ShareDetail>
-                    <ShareDetail>
-                      <div className="payment-image" style={{ width: "100%" }}>
-                        <img
-                          src={logo}
-                          style={{
-                            width: "105px",
-                            height: "105px",
-                            margin: "20px",
-                          }}
-                        />
-                        <div className="payment-detail">
-                          <p>{nameTH}</p>
-                          <p>REF 1: {ref1}</p>
-                          <p>REF 2: {ref2}</p>
-                        </div>
-                      </div>
-                      <img
-                        src={qrCode}
-                        height={"200px"}
-                        width={"200px"}
-                        style={{ margin: "auto", textAlign: "start" }}
-                      />
-                    </ShareDetail>
-                    <ShareDetail>
-                      <UploadButton>
-                        <p
-                          style={{
-                            width: "100%",
-                            fontSize: "17px",
-                            margin: "auto",
-                            marginBottom: "20px",
-                            marginTop: "20px",
-                          }}
-                        >
-                          แนบหลักฐานการชำระเงิน
-                        </p>
-                        <input
-                          type="file"
-                          accept="video/*"
-                          style={{ display: "none" }}
-                          onChange={handleSelectedFile}
-                        />
-                      </UploadButton>
-                    </ShareDetail>
-                    <ShareDetail style={{ margin: "20px 0" }}>
-                      <p style={{ margin: "auto", textAlign: "center" }}>
-                        {file ? file.name : ""}
-                      </p>
-                    </ShareDetail>
-                  </LineCard>
-                  <LineCard
-                    style={{
-                      width: "729px",
-                      margin: "auto",
-                      border: "none",
-                      display: "flex",
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <ShareDetail style={{ textAlign: "end" }}>
-                      <Button
-                        type="submit"
-                        value="ยืนยันหลักฐาน"
-                        onClick={handleSubmit}
-                        style={{
-                          backgroundColor: shamrock,
-                          color: white,
-                          width: "100%",
-                          fontSize: "17px",
-                          padding: "0 20px",
-                          marginBottom: "20px",
-                          marginTop: "20px",
-                        }}
-                      />
-                    </ShareDetail>
-                  </LineCard>
-                </>
-              );
             }
           })()}
         </FlexContainer>
