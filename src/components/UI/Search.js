@@ -10,6 +10,11 @@ const Container = styled.div`
   height: 40px;
   /* min-height: fit-content; */
 
+  input: focus {
+    border: 2px solid #1D3AB1;
+    border-radius: 10px;
+  }
+
   input {
     -webkit-appearance: none;
     -moz-appearance: none;
