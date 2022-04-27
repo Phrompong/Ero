@@ -24,10 +24,10 @@ export const ModalStyled = styled.div`
   }
 `;
 
-export const Modal = ({ show, modalClosed, children, coord }) => (
+export const Modal = ({ show, modalClosed, children, coord, style }) => (
   <>
     <Backdrop show={show} clicked={modalClosed} />
-    <ModalStyled show={show} coord={coord}>
+    <ModalStyled show={show} coord={coord} style={style}>
       {children}
     </ModalStyled>
   </>

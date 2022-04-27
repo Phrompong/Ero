@@ -11,6 +11,7 @@ import { LineCard } from "../components/UI/Card";
 import { FieldInput } from "../components/UI/Search";
 import { ModalAlert } from "../components/ModalAlert/ModalAlert";
 import { showAlert } from "../utils/showAlert";
+import { Modal } from "../components/UI/Modal"
 
 import { balihai, ivory, persianblue, shamrock, white } from "../utils/color";
 import {
@@ -23,21 +24,22 @@ import { useSelector } from "react-redux";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
 
 const Buy = () => {
   const { user } = useSelector((state) => state);
   const [page, setPage] = useState(1);
   const [alertMessage, setAlertMessage] = useState();
   const [show, setShow] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [status, setStatus] = useState();
 
   const [currentStockVolume, setCurrentStockVolume] = useState(0);
   const [currentPrice, setCurrentPrice] = useState(0);
 
   const [isOpenDropdown, setIsOpenDropdown] = useState(false)
-
-  const [errorMsg, setErrorMsg] = useState(null)
-  const [showError, setShowError] = useState(false)
+  const [validateAccept, setValidateAccept] = useState(false)
+  const [showAlertModal, setShowAlertModal] = useState(false)
 
   // step 1
   const [shareName, setShareName] = useState(null);
@@ -48,6 +50,12 @@ const Buy = () => {
   const [shareOption, setShareOption] = useState([]);
   const [dropdownSelect, setDropdownSelect] = useState(null)
   const [isReadMore, setIsReadMore] = useState(false)
+  const [tradingAccountNo, setTradingAccountNo] = useState(null)
+
+  // modal
+  const [fullnameModal, setFullnameModal] = useState(null);
+  const [shareIdModal, setShareIdModal] = useState(null);
+  const [phoneNoModal, setPhoneNoModal] = useState(null);
 
   // step 2
   const [rightStockName, setRightStockName] = useState(null);
@@ -95,6 +103,10 @@ const Buy = () => {
       setFullname(`${payload.name} ${payload.lastname}`);
       setShareId(payload.id);
       setPhoneNo(payload.telephone);
+
+      setFullnameModal(`${payload.name} ${payload.lastname}`);
+      setShareIdModal(payload.id);
+      setPhoneNoModal(payload.telephone);
     }
   }
 
@@ -181,38 +193,41 @@ const Buy = () => {
   }
 
   const handlerOnSubmited = async () => {
-    setPage(3);
+    // setPage(3);
+    setValidateAccept(true)
 
-    const [res, status] = await httpFetch(
-      "POST",
-      {
-        customerId: user.customerId,
-        rightStockName,
-        stockVolume,
-        rightSpecialName,
-        paidRightVolume: Number(currentStockVolume),
-        paidSpecialVolume: 0,
-        paymentAmount: Number(currentPrice),
-        returnAmount: 0,
-        excessVolume,
-      },
-      "orders"
-    );
+    // const [res, status] = await httpFetch(
+    //   "POST",
+    //   {
+    //     customerId: user.customerId,
+    //     rightStockName,
+    //     stockVolume,
+    //     rightSpecialName,
+    //     paidRightVolume: Number(currentStockVolume),
+    //     paidSpecialVolume: 0,
+    //     paymentAmount: Number(currentPrice),
+    //     returnAmount: 0,
+    //     excessVolume,
+    //   },
+    //   "orders"
+    // );
 
-    setOrderId(res.data._id);
+    // setOrderId(res.data._id);
   };
 
   const handleSelectedFile = (e) => {
     const [file] = e.target.files;
-    const maxAllowedSize = 5 * 1024 * 1024;
+    const maxAllowedSize = 0 * 1024 * 1024;
     const { name: fileName, size } = file;
     if (size > maxAllowedSize) {
-      setErrorMsg('ขนาดไฟล์รูปภาพใหญ่เกินไป');
-      setShowError(true)
+      setAlertMessage('ขนาดไฟล์รูปภาพใหญ่เกินไป');
+      setShow(true)
     } else {
       setFile(file);
-      setShowError(false)
     }
+    setTimeout(() => {
+      setShow(false)
+    }, 2000)
   };
 
   const handleSubmit = async () => {
@@ -231,6 +246,63 @@ const Buy = () => {
     showAlert(setShow, 2000);
     setFile();
   };
+
+  const hanlderOnBack = () => {
+    setValidateAccept(false)
+    setPage(2)
+  }
+
+  const handlerOnAccept = async () => {
+    setValidateAccept(false)
+
+    const [res, status] = await httpFetch(
+      "POST",
+      {
+        customerId: user.customerId,
+        rightStockName,
+        stockVolume,
+        rightSpecialName,
+        paidRightVolume: Number(currentStockVolume),
+        paidSpecialVolume: 0,
+        paymentAmount: Number(currentPrice),
+        returnAmount: 0,
+        excessVolume,
+      },
+      "orders"
+    );
+
+    setOrderId(res.data._id);
+    setPage(3)
+  }
+
+  const handlerOnEdit = () => {
+    setShowModal(true)
+
+    setFullnameModal(fullname);
+    setShareIdModal(shareId);
+    setPhoneNoModal(phoneNo);
+  }
+
+  const handlerOnCloseModal = () => {
+    setShowModal(false)
+
+    setFullnameModal(fullname);
+    setShareIdModal(shareId);
+    setPhoneNoModal(phoneNo);
+  }
+
+  const handlerOnAcceptModal = (page) => {
+    if (page === 1) {
+      setShowModal(false)
+      setShowAlertModal(true)
+
+      setFullname(fullnameModal);
+      setShareId(shareIdModal);
+      setPhoneNo(phoneNoModal);
+    } else if (page === 2) {
+      setShowAlertModal(false)
+    }
+  }
 
   const handlerOnReadMore = () => {
     if (!isReadMore) {
@@ -285,184 +357,395 @@ const Buy = () => {
 
   return (
     <Card>
+      <Modal show={showAlertModal} style={{ marginLeft: '10%', width: '100%' }}>
+        <Card style={{ width: '600px' }}>
+          <ContainerCard >
+            <Header style={{ textAlign: 'center' }}>
+              <FontAwesomeIcon icon={faCheck} style={{ fontSize: '60px', color: '#1D3AB1', border: '8px solid #1D3AB1', padding: '10px', width: '60px', borderRadius: '100%' }} />
+            </Header>
+            <Header style={{ textAlign: 'center' }}>
+              <h3 style={{ fontSize: '24px', color: '#1D3AB1', fontWeight: 'bold' }}>เปลี่ยนแปลงข้อมูลเรียบร้อยแล้ว</h3>
+            </Header>
+            <Header style={{ textAlign: 'center' }}>
+              <h3 style={{ fontSize: '20px', color: '#000000', fontWeight: 'normal' }}>ระบบได้ทำการเปลี่ยนแปลงข้อมูลที่ท่านแก้ไขแล้ว</h3>
+            </Header>
+            <Header style={{ textAlign: 'center' }}>
+              <Button
+                type="submit"
+                value={'ตกลง'}
+                onClick={() => handlerOnAcceptModal(2)}
+                style={{ fontSize: '16px', height: "35px", width: '50%', marginTop: '20px' }}
+              />
+            </Header>
+          </ContainerCard>
+        </Card>
+      </Modal>
+      <Modal show={showModal} style={{ marginLeft: '10%', width: '100%' }}>
+        <Card style={{ width: '60%' }}>
+          <ContainerCard >
+            {/* <div className="text-info">
+              <p><FontAwesomeIcon icon={faCircleInfo} style={{ margin: '0 10px' }} />กรณีที่ท่านไม่มีบัญชีธนาคารดังรายการ ดังนี้</p>
+            </div> */}
+            <Header style={{ margin: '20px' }}>
+              <h3 style={{ fontSize: '24px', color: '#1D3AB1', fontWeight: 'bold' }}>ข้อมูลการจองสิทธิ์</h3>
+            </Header>
+            <LineCard style={{ padding: '40px' }}>
+              <div style={{ display: 'flex', width: '100%', margin: '10px 0' }}>
+                <p style={{ width: '30%', paddingTop: '8px', fontSize: '14px', marginRight: '10px' }}>ชื่อ - นามสกุล*</p>
+                <FieldInput value={fullnameModal} onChange={(e) => setFullnameModal(e.target.value)} placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"} />
+              </div>
+              <div style={{ display: 'flex', width: '100%', margin: '10px 0' }}>
+                <p style={{ width: '30%', paddingTop: '8px', fontSize: '14px', marginRight: '10px' }}> เลขทะเบียนผู้ถือหุ้น*</p>
+                <FieldInput value={shareIdModal} onChange={(e) => setShareIdModal(e.target.value)} placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"} />
+              </div>
+              <div style={{ display: 'flex', width: '100%', margin: '10px 0' }}>
+                <p style={{ width: '30%', paddingTop: '8px', fontSize: '14px', marginRight: '10px' }}>เบอร์โทรศัพท์*</p>
+                <FieldInput value={phoneNoModal} onChange={(e) => setPhoneNoModal(e.target.value)} placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"} />
+              </div>
+            </LineCard>
+            <div className="btn-accept-buy" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+              <Button
+                type="submit"
+                value={'ปิดหน้าต่าง'}
+                onClick={() => handlerOnCloseModal()}
+                style={{ fontSize: '16px', height: "35px", margin: '0 20px 20px 20px', backgroundColor: '#809FB8' }}
+              />
+              <Button
+                type="submit"
+                value={'ยืนยันการเปลี่ยนแปลงข้อมูล'}
+                onClick={() => handlerOnAcceptModal(1)}
+                style={{ fontSize: '16px', height: "35px", margin: '0 20px 20px 20px' }}
+              />
+            </div>
+          </ContainerCard>
+        </Card>
+      </Modal>
       <Container>
         <ModalAlert show={show} msg={alertMessage} status={status} />
-        <FlexContainer>
-          <StepDiv>
-            <div style={{ display: "block", margin: "0 20px" }}>
-              <Step isActive={page === 1} onClick={() => setPage(1)}>
-                <b>1</b>
-                <Line />
-              </Step>
-              <StepDetail>ขั้นตอนที่ 1 - ลงทะเบียนจองสิทธิ์</StepDetail>
-            </div>
-            <div style={{ display: "block", margin: "0 20px" }}>
-              <Step isActive={page === 2} onClick={() => setPage(2)}>
-                <b>2</b>
-                <Line />
-              </Step>
-              <StepDetail>ขั้นตอนที่ 2 - จัดการคำสั่งซื้อ</StepDetail>
-            </div>
-            <div style={{ display: "block", margin: "0 20px" }}>
-              <Step isActive={page === 3} onClick={() => setPage(3)}>
-                <b>3</b>
-              </Step>
-              <StepDetail>ขั้นตอนที่ 3 - ชำระเงิน</StepDetail>
-            </div>
-          </StepDiv>
-        </FlexContainer>
-        <FlexContainer
-          style={{ display: "block", justifyContent: "flex-start" }}
-        >
-          {(() => {
-            if (page === 1) {
-              return (
-                <>
-                  <LineCard
-                    style={{
-                      width: "100%",
-                      marginBottom: "20px",
-                      paddingBottom: "60px",
-                    }}
-                  >
-                    <Header>
-                      <h3>ข้อมูลการเสนอขายหุ้นเพิ่มทุน</h3>
-                      <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
-                        {shareName}
-                      </h3>
-                    </Header>
-                    <Content>
-                      <p
-                        style={{
-                          color: "#1D3AB1",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        ข้อมูลโดยสรุป
-                      </p>
-                      <div className="desc">
-                        {/* <p style={{ height: "157.4px" }}>{shareDescription}</p> */}
-                        <p>{shareDescription}</p>
+        {
+          validateAccept ? (
+            <>
+              <FlexContainer>
+                <div className="msg-header" style={{ marginLeft: '20px', fontSize: '24px', color: persianblue }}>
+                  <b>รายละเอียดข้อมูลคำสั่งซื้อการจองสิทธิ</b>
+                </div>
+              </FlexContainer>
+              <FlexContainer>
+                <div className="content-detail" style={{ width: '100%', fontSize: '20px' }}>
+                  <div className="content-header" style={{ paddingLeft: '50px', backgroundColor: '#F1F7FB', color: persianblue, margin: '10px 0' }}>
+                    <b>ข้อมูลทั่วไปของสมาชิก</b>
+                  </div>
+                  <div className="content-member" style={{ marginLeft: '20px', marginTop: '10px' }}>
+                    <div className="content-detail-member" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <div className="content-detail-text">
+                        <p>ชื่อ-นามสกุล :</p>
+                        <p className="text-black">{fullname}</p>
                       </div>
-                      <div className="btn-read-more">
-                        <Button
-                          type="submit"
-                          value={!isReadMore ? "อ่านต่อ" : "ย่อ"}
-                          onClick={() => handlerOnReadMore()}
-                          style={{ height: "35px" }}
-                        />
+                      <div className="content-detail-text">
+                        <p>เลขทะเบียนผู้ถือหุ้น :</p>
+                        <p className="text-black">{shareId}</p>
                       </div>
-                    </Content>
-                  </LineCard>
-                  <LineCard style={{ width: "100%", paddingBottom: "20px" }}>
-                    <Header>
-                      <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
-                        กรอกข้อมูลจองสิทธิ์
-                      </h3>
-                    </Header>
-                    <ContentSpace>
-                      <InputDiv>
-                        <div className="inputField">
-                          <p>ชื่อ-นามสกุล</p>
-                          <p>{fullname}</p>
+                    </div>
+                    <div className="content-detail-member" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <div className="content-detail-text">
+                        <p>เบอร์โทรศัพท์ :</p>
+                        <p className="text-black">{phoneNo}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="content-header" style={{ paddingLeft: '50px', backgroundColor: '#F1F7FB', color: persianblue }}>
+                    <b>รายละเอียดการจัดสรรหุ้น</b>
+                  </div>
+                  <div className="content-member" style={{ marginLeft: '20px', marginTop: '10px' }}>
+                    <div className="content-detail-member" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <div className="content-detail-text">
+                        <p>ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก :</p>
+                        <p className="text-black">{dropdownSelect.code} {dropdownSelect.name}</p>
+                      </div>
+                    </div>
+                    <div className="content-detail-member" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <div className="content-detail-text">
+                        <p>เลขที่บัญชีซื้อขาย :</p>
+                        <p className="text-black">{tradingAccountNo}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="content-header" style={{ paddingLeft: '50px', backgroundColor: '#F1F7FB', color: persianblue }}>
+                    <b>รายละเอียดการสั่งซื้อ</b>
+                  </div>
+                  <div className="content-member" style={{ marginLeft: '20px', marginTop: '10px' }}>
+                    <div className="content-detail-member">
+                      <div className="content-detail-share">
+                        <div className="text-title">
+                          <p>หุ้มเดิมของท่าน</p>
+                          <p className="text-black">{rightStockName}</p>
                         </div>
-                      </InputDiv>
-                      <InputDiv>
-                        <div className="inputField">
-                          <p>เลขทะเบียนผู้ถือหุ้น</p>
-                          <p>{shareId}</p>
+                        <div className="text-amount">
+                          <p>จำนวน</p>
+                          <b className="text-black" style={{ marginLeft: "-20px" }}>{stockVolume}</b>
+                          <p>หุ้น</p>
                         </div>
-                      </InputDiv>
-                    </ContentSpace>
-                    <Content>
-                      <InputDiv>
-                        <div className="inputField">
-                          <p>เบอร์โทรศัพท์ที่สามารถติดต่อได้ <span>{phoneNo}</span></p>
+                      </div>
+                      <div className="content-detail-share">
+                        <div className="text-title">
+                          <p>เสนอขายหุ้นละ</p>
+                          <p className="text-black">{offerPrice} บาท</p>
                         </div>
-                      </InputDiv>
-                    </Content>
-                    <Header>
-                      <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
-                        รายละเอียดการจัดสรรหุ้น
-                      </h3>
-                    </Header>
-                    <Content>
-                      <InputDiv>
-                        <Dot />
-                        <p>ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก</p>
-                      </InputDiv>
-                      <InputDiv
-                        style={{ marginTop: "20px", marginLeft: "50px" }}
-                      >
-                        <DropdownSelect
-                          options={shareOption}
-                          searchFrom={"fullname"}
-                          isOpen={isOpenDropdown}
-                          onClick={() => setIsOpenDropdown(!isOpenDropdown)}
-                          onBlur={() => setIsOpenDropdown(false)}
-                          setSelected={setDropdownSelect}
-                        />
-                      </InputDiv>
-                      <InputDiv style={{ marginLeft: "50px" }}>
-                        <p>เลขที่บัญชีซื้อขาย</p>
-                      </InputDiv>
-                      <InputDiv style={{ marginLeft: "50px" }}>
-                        <FieldInput placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"} />
-                      </InputDiv>
-                    </Content>
-                  </LineCard>
-                </>
-              );
-            }
-
-            if (page === 2) {
-              return (
-                <>
-                  <div className="card-tag">
-                    <LineCard
-                      style={{
-                        width: "100%",
-                        marginBottom: "20px",
-                        paddingBottom: "30px",
-                      }}
-                    >
-                      <Header>
-                        <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
-                          จำนวนหุ้นเดิมของท่าน
-                        </h3>
-                      </Header>
-                      <ShareDetail>
-                        <p>{rightStockName}</p>
-                        <b>{stockVolume}</b>
-                        <p>หุ้น</p>
-                      </ShareDetail>
-                    </LineCard>
-                    <LineCard
-                      style={{
-                        width: "100%",
-                        marginBottom: "20px",
-                        paddingBottom: "30px",
-                      }}
-                    >
-                      <ShareDetail
-                        style={{
-                          display: "flex",
-                          top: "15px",
-                          position: "relative",
-                        }}
-                      >
-                        <p
+                        <div className="text-amount">
+                        </div>
+                      </div>
+                      <div className="content-detail-share">
+                        <div className="text-title">
+                          <p>สิทธิ์ในการซื้อหุ้นเพิ่มทุนของท่าน</p>
+                          <p className="text-black">{rightStockName}</p>
+                        </div>
+                        <div className="text-amount">
+                          <p>จำนวน</p>
+                          <b className="text-black" style={{ marginLeft: "-20px" }}>{rightStockVolume}</b>
+                          <p>หุ้น</p>
+                        </div>
+                      </div>
+                      <div className="content-detail-share">
+                        <div className="text-title">
+                          <p>สิทธิเพิ่มเติม</p>
+                          <p className="text-black">{rightSpecialName}</p>
+                        </div>
+                        <div className="text-amount">
+                          <p>จำนวน</p>
+                          <b className="text-black" style={{ marginLeft: "-20px" }}>{rightSpecialVolume}</b>
+                          <p>หุ้น</p>
+                        </div>
+                      </div>
+                      <div className="content-detail-share">
+                        <div className="text-title">
+                          <p>หุ้นที่ท่านซื้อเกินสิทธิ์</p>
+                          <p className="text-black">{rightStockName}</p>
+                        </div>
+                        <div className="text-amount">
+                          <p>จำนวน</p>
+                          <b className="text-black" style={{ marginLeft: "-20px" }}>{excessVolume}</b>
+                          <p>หุ้น</p>
+                        </div>
+                      </div>
+                      <div className="content-detail-share" style={{ marginTop: "10px" }}>
+                        <div className="text-title">
+                          <p>รวมเป็นเงินทั้งสิ้น</p>
+                          <b className="text-black" style={{ fontSize: "28px" }}>{currentPrice} บาท</b>
+                        </div>
+                        <div className="text-amount">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </FlexContainer>
+              <div className="line-space" style={{ padding: '0 20px' }}>
+                <hr style={{ border: '0.75px solid #D9E1E7' }} />
+              </div>
+              <div className="message-info" style={{ margin: '10px 10px 10px 10px', color: '#809FB8' }}>
+                <p><FontAwesomeIcon icon={faCircleInfo} style={{ margin: '0 10px' }} />กรุณาตรวจสอบรายละเอียดข้อมูลเพื่อความถูกต้อง ก่อนการดำเนินการยืนยันการจอง</p>
+              </div>
+              <div className="btn-accept-buy" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Button
+                  type="submit"
+                  value={'ย้อนกลับ'}
+                  onClick={() => hanlderOnBack()}
+                  style={{ fontSize: '16px', height: "35px", margin: '0 20px 20px 20px', backgroundColor: '#809FB8' }}
+                />
+                <Button
+                  type="submit"
+                  value={'ยืนยันการจอง'}
+                  onClick={() => handlerOnAccept()}
+                  style={{ fontSize: '16px', height: "35px", margin: '0 20px 20px 20px' }}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <FlexContainer>
+                <StepDiv>
+                  <div style={{ display: "block", margin: "0 20px" }}>
+                    <Step isActive={page === 1} onClick={() => setPage(1)}>
+                      <b>1</b>
+                      <Line />
+                    </Step>
+                    <StepDetail isActive={page === 1} >ขั้นตอนที่ 1 - ลงทะเบียนจองสิทธิ์</StepDetail>
+                  </div>
+                  <div style={{ display: "block", margin: "0 20px" }}>
+                    <Step isActive={page === 2} onClick={() => setPage(2)}>
+                      <b>2</b>
+                      <Line />
+                    </Step>
+                    <StepDetail isActive={page === 2} >ขั้นตอนที่ 2 - จัดการคำสั่งซื้อ</StepDetail>
+                  </div>
+                  <div style={{ display: "block", margin: "0 20px" }}>
+                    <Step isActive={page === 3} onClick={() => setPage(3)}>
+                      <b>3</b>
+                    </Step>
+                    <StepDetail isActive={page === 3} >ขั้นตอนที่ 3 - ชำระเงิน</StepDetail>
+                  </div>
+                </StepDiv>
+              </FlexContainer>
+              <FlexContainer
+                style={{ display: "block", justifyContent: "flex-start" }}
+              >
+                {(() => {
+                  if (page === 1) {
+                    return (
+                      <>
+                        <LineCard
                           style={{
-                            color: "#1D3AB1",
-                            fontWeight: "bold",
-                            fontSize: "18.72px",
+                            width: "100%",
+                            marginBottom: "20px",
+                            paddingBottom: "60px",
                           }}
                         >
-                          ราคาเสนอขายหุ้นละ
-                        </p>
-                        <p style={{ fontSize: "18.72px" }}>{offerPrice}</p>
-                        <p style={{ fontSize: "18.72px" }}>บาท</p>
-                        {/* <Header>
+                          <Header>
+                            <h3>ข้อมูลการเสนอขายหุ้นเพิ่มทุน</h3>
+                            <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
+                              {shareName}
+                            </h3>
+                          </Header>
+                          <Content>
+                            <p
+                              style={{
+                                color: "#1D3AB1",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              ข้อมูลโดยสรุป
+                            </p>
+                            <div className="desc">
+                              {/* <p style={{ height: "157.4px" }}>{shareDescription}</p> */}
+                              <p>{shareDescription}</p>
+                            </div>
+                            <div className="btn-read-more">
+                              <Button
+                                type="submit"
+                                value={!isReadMore ? "อ่านต่อ" : "ย่อ"}
+                                onClick={() => handlerOnReadMore()}
+                                style={{ height: "35px" }}
+                              />
+                            </div>
+                          </Content>
+                        </LineCard>
+                        <LineCard style={{ width: "100%", paddingBottom: "20px" }}>
+                          <Header style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <h3 style={{ color: "#1D3AB1", marginTop: '10px', fontWeight: "bold" }}>
+                              กรอกข้อมูลจองสิทธิ์
+                            </h3>
+                            <div>
+                              <Button
+                                type="submit"
+                                value="แก้ไข"
+                                onClick={() => handlerOnEdit()}
+                                style={{ fontSize: '16px', backgroundColor: '#EDB52D', fontWeight: 'normal', height: '40px', color: '#000000', padding: '0 20px' }}
+                              />
+                            </div>
+                          </Header>
+                          <ContentSpace>
+                            <InputDiv>
+                              <div className="inputField">
+                                <p>ชื่อ-นามสกุล</p>
+                                <p>{fullname}</p>
+                              </div>
+                            </InputDiv>
+                            <InputDiv>
+                              <div className="inputField">
+                                <p>เลขทะเบียนผู้ถือหุ้น</p>
+                                <p>{shareId}</p>
+                              </div>
+                            </InputDiv>
+                          </ContentSpace>
+                          <Content>
+                            <InputDiv>
+                              <div className="inputField">
+                                <p>เบอร์โทรศัพท์ที่สามารถติดต่อได้ <span>{phoneNo}</span></p>
+                              </div>
+                            </InputDiv>
+                          </Content>
+                          <Header>
+                            <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
+                              รายละเอียดการจัดสรรหุ้น
+                            </h3>
+                          </Header>
+                          <Content>
+                            <InputDiv>
+                              <Dot />
+                              <p>ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก</p>
+                            </InputDiv>
+                            <InputDiv
+                              style={{ marginTop: "20px", marginLeft: "50px" }}
+                            >
+                              <DropdownSelect
+                                options={shareOption}
+                                searchFrom={"fullname"}
+                                isOpen={isOpenDropdown}
+                                onClick={() => setIsOpenDropdown(!isOpenDropdown)}
+                                onBlur={() => setIsOpenDropdown(false)}
+                                setSelected={setDropdownSelect}
+                              />
+                            </InputDiv>
+                            <InputDiv style={{ marginLeft: "50px" }}>
+                              <p>เลขที่บัญชีซื้อขาย</p>
+                            </InputDiv>
+                            <InputDiv style={{ marginLeft: "50px" }}>
+                              <FieldInput value={tradingAccountNo} onChange={(e) => setTradingAccountNo(e.target.value)} placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"} />
+                            </InputDiv>
+                          </Content>
+                        </LineCard>
+                      </>
+                    );
+                  }
+
+                  if (page === 2) {
+                    return (
+                      <>
+                        <div className="card-tag">
+                          <LineCard
+                            style={{
+                              width: "100%",
+                              marginBottom: "20px",
+                              paddingBottom: "30px",
+                            }}
+                          >
+                            <Header>
+                              <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
+                                จำนวนหุ้นเดิมของท่าน
+                              </h3>
+                            </Header>
+                            <ShareDetail>
+                              <p>{rightStockName}</p>
+                              <b>{stockVolume}</b>
+                              <p>หุ้น</p>
+                            </ShareDetail>
+                          </LineCard>
+                          <LineCard
+                            style={{
+                              width: "100%",
+                              marginBottom: "20px",
+                              paddingBottom: "30px",
+                            }}
+                          >
+                            <ShareDetail
+                              style={{
+                                display: "flex",
+                                top: "15px",
+                                position: "relative",
+                              }}
+                            >
+                              <p
+                                style={{
+                                  color: "#1D3AB1",
+                                  fontWeight: "bold",
+                                  fontSize: "18.72px",
+                                }}
+                              >
+                                ราคาเสนอขายหุ้นละ
+                              </p>
+                              <p style={{ fontSize: "18.72px" }}>{offerPrice}</p>
+                              <p style={{ fontSize: "18.72px" }}>บาท</p>
+                              {/* <Header>
                             <h3 style={{ color: '#1D3AB1', fontWeight: 'bold' }}>ราคาเสนอขายหุ้นละ</h3>
                           </Header>
                           <Header>
@@ -471,310 +754,309 @@ const Buy = () => {
                           <Header>
                             <h3>บาท</h3>
                           </Header> */}
-                      </ShareDetail>
-                    </LineCard>
-                  </div>
-                  <div className="card-tag">
-                    <LineCard
-                      style={{
-                        width: "100%",
-                        marginBottom: "20px",
-                        paddingBottom: "30px",
-                      }}
-                    >
-                      <Header>
-                        <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
-                          สิทธิในการซื้อหุ้นเพิ่มทุนของท่าน
-                        </h3>
-                      </Header>
-                      <ShareDetail>
-                        <p>{rightStockName}</p>
-                        <b>{rightStockVolume}</b>
-                        <p>หุ้น</p>
-                      </ShareDetail>
-                      <ShareDetail
-                        style={{
-                          fontSize: "14px",
-                          color: "#1D3AB1",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        <p>เป็นจำนวนเงิน</p>
-                        <b>{Number(rightStockVolume) * Number(offerPrice)}</b>
-                        <p>บาท</p>
-                      </ShareDetail>
-                      <ShareDetail style={{ fontSize: "14px" }}>
-                        <p style={{ width: "100%" }}>
-                          (การคำนวนจากราคาเสนอขาย {offerPrice} บาท ต่อ หุ้น)
-                        </p>
-                      </ShareDetail>
-                    </LineCard>
-                    <LineCard
-                      style={{
-                        width: "100%",
-                        marginBottom: "20px",
-                        paddingBottom: "30px",
-                      }}
-                    >
-                      <Header>
-                        <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
-                          สิทธิเพิ่มเติม
-                        </h3>
-                      </Header>
-                      <ShareDetail>
-                        <p>{rightSpecialName}</p>
-                        <b>{rightSpecialVolume}</b>
-                        <p>หุ้น</p>
-                      </ShareDetail>
-                    </LineCard>
-                  </div>
-                  <div className="card-tag">
-                    <LineCard
-                      style={{
-                        width: "100%",
-                        marginBottom: "20px",
-                        paddingBottom: "30px",
-                        border: "5px solid #1D3AB1",
-                        boxSizing: "border-box",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      <Header>
-                        <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
-                          การสั่งซื้อหุ้นเพิ่มทุนของท่าน
-                        </h3>
-                      </Header>
-                      <ShareDetail style={{ marginBottom: "-10px" }}>
-                        <p>{rightStockName}</p>
-                        <Input
-                          type={"text"}
-                          value={currentStockVolume}
-                          onChange={(e) =>
-                            setCurrentStockVolume(
-                              e.target.value.replace(/[^0-9.]/, "")
-                            )
-                          }
-                        />
-                        <p>หุ้น</p>
-                      </ShareDetail>
-                      <ShareDetail>
-                        <p></p>
-                        <div className="num-box-hidden">
-                          <Icon />
+                            </ShareDetail>
+                          </LineCard>
                         </div>
-                        <p>
-                          <img
-                            src={change}
-                            className="icon-change"
-                            onClick={() => setCurrentStockVolume(0)}
-                          />
-                        </p>
-                      </ShareDetail>
-                      <ShareDetail>
-                        <p>จำนวนเงิน</p>
-                        <Input type={"text"} value={currentPrice} disabled />
-                        <p>บาท</p>
-                      </ShareDetail>
-                      <Header>
-                        <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
-                          สิทธิเพิ่มเติมที่ท่านได้รับ
-                        </h3>
-                      </Header>
-                      <ShareDetail>
-                        <p>{rightSpecialName}</p>
-                        <b>{rightSpecialVolume}</b>
-                        <p>หุ้น</p>
-                      </ShareDetail>
-                    </LineCard>
-                    <div style={{ width: "100%" }}>
-                      <LineCard
-                        style={{
-                          width: "100%",
-                          marginBottom: "20px",
-                          paddingBottom: "30px",
-                          border: "1px solid #1D3AB1",
-                          boxSizing: "border-box",
-                          borderRadius: "10px",
-                        }}
-                      >
-                        <Header>
-                          <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
-                            จำนวนหุ้นที่ท่านซื้อเกินสิทธิ์
-                          </h3>
-                        </Header>
-                        <ShareDetail>
-                          <p>{rightStockName}</p>
-                          <b>{excessVolume}</b>
-                          <p>หุ้น</p>
-                        </ShareDetail>
-                      </LineCard>
-                      <LineCard
-                        style={{
-                          width: "100%",
-                          marginBottom: "20px",
-                          paddingBottom: "30px",
-                          border: "1px solid #1D3AB1",
-                          boxSizing: "border-box",
-                          borderRadius: "10px",
-                        }}
-                      >
-                        <Header>
-                          <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
-                            กรณีไม่ได้จัดสรรหุ้นส่วนที่เกินสิทธิ์
-                            ขอให้โอนเงินเข้าบัญชี
-                          </h3>
-                        </Header>
-                        <ShareDetail style={{ display: "block" }}>
-                          <div className="input-div">
-                            <InputDiv style={{ width: "100%" }}>
-                              <p>ฝากเงินเข้าบัญชีธนาคาร</p>
-                            </InputDiv>
-                            <InputDiv
-                              style={{ marginTop: "20px", width: "100%" }}
-                            >
-                              <FieldInput
-                                placeholder={"ฝากเงินเข้าบัญชีธนาคาร"}
-                                value={depositBank}
-                                onChange={(e) => setDepositBank(e.target.value)}
-                              />
-                            </InputDiv>
-                          </div>
-                          <div className="input-div">
-                            <InputDiv style={{ width: "100%" }}>
-                              <p style={{ width: "200px", textAlign: "start" }}>
-                                หมายเลขบัญชีธนาคาร
-                              </p>
-                            </InputDiv>
-                            <InputDiv
-                              style={{ marginTop: "20px", width: "100%" }}
-                            >
-                              <FieldInput
-                                placeholder={"หมายเลขบัญชีธนาคาร"}
-                                value={bank}
-                                onChange={(e) => setBank(e.target.value.replace(/[^0-9.]/, ""))}
-                              />
-                            </InputDiv>
-                          </div>
-                        </ShareDetail>
-                      </LineCard>
-                      <LineCard style={{ width: "100%" }}>
-                        <Button
-                          type="submit"
-                          value="ยืนยันคำสั่งซื้อ"
-                          onClick={() => handlerOnSubmited()}
-                        // onClick={handleSubmited}
-                        />
-                      </LineCard>
-                    </div>
-                  </div>
-                </>
-              );
-            }
-
-            if (page === 3) {
-              return (
-                <>
-                  <LineCard style={{ borderColor: persianblue }}>
-                    <ShareDetail style={{ fontSize: '20px', padding: '20px' }}>
-                      <b style={{ whiteSpace: 'pre' }}>ยอดที่ท่านต้องการทำรายการ</b>
-                      <b>{currentPrice}</b>
-                      <b>บาท</b>
-                    </ShareDetail>
-                  </LineCard>
-                  <div className="text-message" style={{ margin: '10px 30px' }}>
-                    <p>ท่านสามารถดำเนินการชำระเงินในการซื้อหุ้นเพิ่มทุนของท่านได้ที่</p>
-                  </div>
-                  <LineCard>
-                    <Header>
-                      <ShareDetail>
-                        <h3 style={{ color: '#1D3AB1', fontSize: '24px', whiteSpace: 'pre' }}>ส่งหลักฐานการชำระเงิน</h3>
-                        <div className="btn-payment-tool">
-                          <Button
-                            type="submit"
-                            value="ดูวิธีการชำระเงิน"
+                        <div className="card-tag">
+                          <LineCard
                             style={{
                               width: "100%",
-                              fontSize: "17px",
-                              color: "#000000",
-                              backgroundColor: "#EDB52D",
-                              height: "42px",
+                              marginBottom: "20px",
+                              paddingBottom: "30px",
                             }}
-                          />
+                          >
+                            <Header>
+                              <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
+                                สิทธิในการซื้อหุ้นเพิ่มทุนของท่าน
+                              </h3>
+                            </Header>
+                            <ShareDetail>
+                              <p>{rightStockName}</p>
+                              <b>{rightStockVolume}</b>
+                              <p>หุ้น</p>
+                            </ShareDetail>
+                            <ShareDetail
+                              style={{
+                                fontSize: "14px",
+                                color: "#1D3AB1",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              <p>เป็นจำนวนเงิน</p>
+                              <b>{Number(rightStockVolume) * Number(offerPrice)}</b>
+                              <p>บาท</p>
+                            </ShareDetail>
+                            <ShareDetail style={{ fontSize: "14px" }}>
+                              <p style={{ width: "100%" }}>
+                                (การคำนวนจากราคาเสนอขาย {offerPrice} บาท ต่อ หุ้น)
+                              </p>
+                            </ShareDetail>
+                          </LineCard>
+                          <LineCard
+                            style={{
+                              width: "100%",
+                              marginBottom: "20px",
+                              paddingBottom: "30px",
+                            }}
+                          >
+                            <Header>
+                              <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
+                                สิทธิเพิ่มเติม
+                              </h3>
+                            </Header>
+                            <ShareDetail>
+                              <p>{rightSpecialName}</p>
+                              <b>{rightSpecialVolume}</b>
+                              <p>หุ้น</p>
+                            </ShareDetail>
+                          </LineCard>
                         </div>
-                      </ShareDetail>
-                    </Header>
-                    <div className="line-space" style={{ padding: '0 20px' }}>
-                      <hr style={{ border: '0.75px solid #D9E1E7' }} />
-                    </div>
-                    <div className="payment-method" style={{ padding: '10px 20px', display: "flex" }}>
-                      <b style={{ width: '20%', margin: '10px' }}>เลือกวิธีการชำระเงิน</b>
-                      <div className="bank-name" style={{ width: '80%' }} onClick={() => setRadioCheckPayment(!radioCheckedPayment)}>
-                        <LineCard style={{ padding: '10px' }}>
-                          <div style={{ display: 'inline-flex', position: "relative", width: "100%" }}>
-                            <input type="radio" style={{ margin: '5px 20px 5px 30px' }} checked={radioCheckedPayment} />
-                            <b>ชำระเงินผ่านเลขบัญชีธนาคาร</b>
-                            <div className="btn-arrow" style={{ position: 'absolute', right: '0', margin: '5px 20px 0 0' }}>
-                              {
-                                radioCheckedPayment ? <OpenArrow /> : <CloseArrow />
-                              }
+                        <div className="card-tag">
+                          <LineCard
+                            style={{
+                              width: "100%",
+                              marginBottom: "20px",
+                              paddingBottom: "30px",
+                              border: "5px solid #1D3AB1",
+                              boxSizing: "border-box",
+                              borderRadius: "10px",
+                            }}
+                          >
+                            <Header>
+                              <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
+                                การสั่งซื้อหุ้นเพิ่มทุนของท่าน
+                              </h3>
+                            </Header>
+                            <ShareDetail style={{ marginBottom: "-10px" }}>
+                              <p>{rightStockName}</p>
+                              <Input
+                                type={"text"}
+                                value={currentStockVolume}
+                                onChange={(e) =>
+                                  setCurrentStockVolume(
+                                    e.target.value.replace(/[^0-9.]/, "")
+                                  )
+                                }
+                              />
+                              <p>หุ้น</p>
+                            </ShareDetail>
+                            <ShareDetail>
+                              <p></p>
+                              <div className="num-box-hidden">
+                                <Icon />
+                              </div>
+                              <p>
+                                <img
+                                  src={change}
+                                  className="icon-change"
+                                  onClick={() => setCurrentStockVolume(0)}
+                                />
+                              </p>
+                            </ShareDetail>
+                            <ShareDetail>
+                              <p>จำนวนเงิน</p>
+                              <Input type={"text"} value={currentPrice} disabled />
+                              <p>บาท</p>
+                            </ShareDetail>
+                            <Header>
+                              <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
+                                สิทธิเพิ่มเติมที่ท่านได้รับ
+                              </h3>
+                            </Header>
+                            <ShareDetail>
+                              <p>{rightSpecialName}</p>
+                              <b>{rightSpecialVolume}</b>
+                              <p>หุ้น</p>
+                            </ShareDetail>
+                          </LineCard>
+                          <div style={{ width: "100%" }}>
+                            <LineCard
+                              style={{
+                                width: "100%",
+                                marginBottom: "20px",
+                                paddingBottom: "30px",
+                                border: "1px solid #1D3AB1",
+                                boxSizing: "border-box",
+                                borderRadius: "10px",
+                              }}
+                            >
+                              <Header>
+                                <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
+                                  จำนวนหุ้นที่ท่านซื้อเกินสิทธิ์
+                                </h3>
+                              </Header>
+                              <ShareDetail>
+                                <p>{rightStockName}</p>
+                                <b>{excessVolume}</b>
+                                <p>หุ้น</p>
+                              </ShareDetail>
+                            </LineCard>
+                            <LineCard
+                              style={{
+                                width: "100%",
+                                marginBottom: "20px",
+                                paddingBottom: "30px",
+                                border: "1px solid #1D3AB1",
+                                boxSizing: "border-box",
+                                borderRadius: "10px",
+                              }}
+                            >
+                              <Header>
+                                <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
+                                  กรณีไม่ได้จัดสรรหุ้นส่วนที่เกินสิทธิ์
+                                  ขอให้โอนเงินเข้าบัญชี
+                                </h3>
+                              </Header>
+                              <ShareDetail style={{ display: "block" }}>
+                                <div className="input-div">
+                                  <InputDiv style={{ width: "100%" }}>
+                                    <p>ฝากเงินเข้าบัญชีธนาคาร</p>
+                                  </InputDiv>
+                                  <InputDiv
+                                    style={{ marginTop: "20px", width: "100%" }}
+                                  >
+                                    <FieldInput
+                                      placeholder={"ฝากเงินเข้าบัญชีธนาคาร"}
+                                      value={depositBank}
+                                      onChange={(e) => setDepositBank(e.target.value)}
+                                    />
+                                  </InputDiv>
+                                </div>
+                                <div className="input-div">
+                                  <InputDiv style={{ width: "100%" }}>
+                                    <p style={{ width: "200px", textAlign: "start" }}>
+                                      หมายเลขบัญชีธนาคาร
+                                    </p>
+                                  </InputDiv>
+                                  <InputDiv
+                                    style={{ marginTop: "20px", width: "100%" }}
+                                  >
+                                    <FieldInput
+                                      placeholder={"หมายเลขบัญชีธนาคาร"}
+                                      value={bank}
+                                      onChange={(e) => setBank(e.target.value.replace(/[^0-9.]/, ""))}
+                                    />
+                                  </InputDiv>
+                                </div>
+                              </ShareDetail>
+                            </LineCard>
+                            <LineCard style={{ width: "100%" }}>
+                              <Button
+                                type="submit"
+                                value="ยืนยันคำสั่งซื้อ"
+                                onClick={() => handlerOnSubmited()}
+                              // onClick={handleSubmited}
+                              />
+                            </LineCard>
+                          </div>
+                        </div>
+                      </>
+                    );
+                  }
+
+                  if (page === 3) {
+                    return (
+                      <>
+                        <LineCard style={{ borderColor: persianblue }}>
+                          <ShareDetail style={{ fontSize: '20px', padding: '20px' }}>
+                            <b style={{ whiteSpace: 'pre' }}>ยอดที่ท่านต้องการทำรายการ</b>
+                            <b>{currentPrice}</b>
+                            <b>บาท</b>
+                          </ShareDetail>
+                        </LineCard>
+                        <div className="text-message" style={{ margin: '10px 30px' }}>
+                          <p>ท่านสามารถดำเนินการชำระเงินในการซื้อหุ้นเพิ่มทุนของท่านได้ที่</p>
+                        </div>
+                        <LineCard>
+                          <Header>
+                            <ShareDetail>
+                              <h3 style={{ color: '#1D3AB1', fontSize: '24px', whiteSpace: 'pre' }}>ส่งหลักฐานการชำระเงิน</h3>
+                              <div className="btn-payment-tool">
+                                <Button
+                                  type="submit"
+                                  value="ดูวิธีการชำระเงิน"
+                                  style={{
+                                    width: "100%",
+                                    fontSize: "17px",
+                                    color: "#000000",
+                                    backgroundColor: "#EDB52D",
+                                    height: "42px",
+                                  }}
+                                />
+                              </div>
+                            </ShareDetail>
+                          </Header>
+                          <div className="line-space" style={{ padding: '0 20px' }}>
+                            <hr style={{ border: '0.75px solid #D9E1E7' }} />
+                          </div>
+                          <div className="payment-method" style={{ padding: '10px 20px', display: "flex" }}>
+                            <b style={{ width: '20%', margin: '10px' }}>เลือกวิธีการชำระเงิน</b>
+                            <div className="bank-name" style={{ width: '80%' }} onClick={() => setRadioCheckPayment(!radioCheckedPayment)}>
+                              <LineCard style={{ padding: '10px' }}>
+                                <div style={{ display: 'inline-flex', position: "relative", width: "100%" }}>
+                                  <input type="radio" style={{ margin: '5px 20px 5px 30px' }} checked={radioCheckedPayment} />
+                                  <b>ชำระเงินผ่านเลขบัญชีธนาคาร</b>
+                                  <div className="btn-arrow" style={{ position: 'absolute', right: '0', margin: '5px 20px 0 0' }}>
+                                    {
+                                      radioCheckedPayment ? <OpenArrow /> : <CloseArrow />
+                                    }
+                                  </div>
+                                </div>
+                                {
+                                  radioCheckedPayment && <>
+                                    <div className="bank-name-card" style={{ margin: '20px' }}>
+                                      <BankCard>
+                                        <div className="bank-img" style={{ marginLeft: '40px' }}>
+                                          <img src="https://bit.ly/3OCube2" height={'33px'} width={'32px'} />
+                                        </div>
+                                        <div className="bank-detail" style={{ margin: '10px 0px 10px 20px' }}>
+                                          <b>BANK NAME</b>
+                                          <p>เลขบัญชี<b style={{ marginLeft: '20px' }}>XXXXX</b></p>
+                                          <p>ชื่อบัญชี<b style={{ margin: '0 20px' }}>XXXXX</b>สาขา<b style={{ margin: '0 20px' }}>ชื่อสาขา</b></p>
+                                        </div>
+                                      </BankCard>
+                                    </div>
+                                  </>
+                                }
+                              </LineCard>
                             </div>
                           </div>
-                          {
-                            radioCheckedPayment && <>
-                              <div className="bank-name-card" style={{ margin: '20px' }}>
-                                <BankCard>
-                                  <div className="bank-img" style={{ marginLeft: '40px' }}>
-                                    <img src="https://bit.ly/3OCube2" height={'33px'} width={'32px'} />
-                                  </div>
-                                  <div className="bank-detail" style={{ margin: '10px 0px 10px 20px' }}>
-                                    <b>BANK NAME</b>
-                                    <p>เลขบัญชี<b style={{ marginLeft: '20px' }}>XXXXX</b></p>
-                                    <p>ชื่อบัญชี<b style={{ margin: '0 20px' }}>XXXXX</b>สาขา<b style={{ margin: '0 20px' }}>ชื่อสาขา</b></p>
-                                  </div>
-                                </BankCard>
-                              </div>
-                            </>
-                          }
+                          <div className="payment-method" style={{ padding: '10px 20px 30px 20px', display: "flex" }}>
+                            <b style={{ width: '20%', margin: '20px 10px 10px 10px' }}>หลักฐานการชำระเงิน</b>
+                            <UploadButton style={{ width: '30%', margin: '0' }}>
+                              <p
+                                style={{
+                                  width: "100%",
+                                  fontSize: "17px",
+                                  margin: "auto",
+                                  marginBottom: "20px",
+                                  marginTop: "20px",
+                                }}
+                              >
+                                แนบหลักฐานการชำระเงิน
+                              </p>
+                              <input
+                                type="file"
+                                style={{ display: "none" }}
+                                accept="image/png, image/jpeg"
+                                onChange={handleSelectedFile}
+                              />
+                            </UploadButton>
+                            <div className="warning-text"
+                              style={{ width: '50%', margin: '20px 10px 10px 10px', color: '#575656' }}>
+                              <p>
+                                <FontAwesomeIcon icon={faCircleInfo} style={{ margin: '0 10px' }} />กรุณาอัพโหลดไฟล์ .PNG และ JPEG ขนาดไม่เกิน 5 MB</p>
+                            </div>
+                          </div>
                         </LineCard>
-                      </div>
-                    </div>
-                    <div className="payment-method" style={{ padding: '10px 20px 30px 20px', display: "flex" }}>
-                      <b style={{ width: '20%', margin: '20px 10px 10px 10px' }}>หลักฐานการชำระเงิน</b>
-                      <UploadButton style={{ width: '30%', margin: '0' }}>
-                        <p
-                          style={{
-                            width: "100%",
-                            fontSize: "17px",
-                            margin: "auto",
-                            marginBottom: "20px",
-                            marginTop: "20px",
-                          }}
-                        >
-                          แนบหลักฐานการชำระเงิน
-                        </p>
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          accept="image/png, image/jpeg"
-                          onChange={handleSelectedFile}
-                        />
-                      </UploadButton>
-                      <div className="warning-text"
-                        style={{ width: '50%', margin: '20px 10px 10px 10px', color: '#575656' }}>
-                        {
-                          showError ? (
-                            <p style={{ color: '#b20600', margin: '0 10px' }}>{errorMsg}</p>
-                          ) : <p>
-                            <FontAwesomeIcon icon={faCircleInfo} style={{ margin: '0 10px' }} />กรุณาอัพโหลดไฟล์ .PNG และ JPEG ขนาดไม่เกิน 5 MB</p>
-                        }
-                      </div>
-                    </div>
-                  </LineCard>
-                </>
-              )
-            }
-          })()}
-        </FlexContainer>
+                      </>
+                    )
+                  }
+                })()}
+              </FlexContainer>
+            </>
+          )
+        }
       </Container>
     </Card>
   );
@@ -809,6 +1091,42 @@ const Container = styled.div`
   .card-tag {
     display: flex;
     justify-content: space-between;
+  }
+
+  .content-member {
+    color: #809FB8;
+
+    .content-detail-text {
+      margin: 10px 0;
+      display: flex;
+      align-items: baseline;
+    }
+
+    .content-detail-share {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+
+      .text-title {
+        width: 50%;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+      }
+    }
+    
+    .text-black {
+      margin-left: 20px;
+      color: #000000;
+    }
+
+    .text-amount {
+      display: flex;
+      justify-content: space-between;
+      width: 40%;
+      align-items: baseline;
+    }
   }
 
   /* For Mobile */
@@ -863,6 +1181,7 @@ const InputDiv = styled.div`
     flex-wrap: wrap;
     width: 100%;
     justify-content: space-between;
+    align-items: baseline;
 
     p {
       position: relative;
@@ -875,6 +1194,7 @@ const InputDiv = styled.div`
     .inputField {
       display: block;
       width: 100%;
+      align-items: baseline;
 
       p {
         position: static;
@@ -910,7 +1230,7 @@ const StepDetail = styled.p`
   width: 300px;
 
   text-align: center;
-  color: #000000;
+  color: ${({ isActive }) => (isActive ? "#1D3AB1" : "#000000")};
 `;
 
 const Button = styled.input`
@@ -1195,5 +1515,14 @@ const BankCard = styled.div`
   display: flex;
   margin: auto;
 `
+
+const ContainerCard = styled.div`
+  padding: 20px;
+  position: relative;
+  width: 100%;
+  p {
+    font-size: 1rem;
+  }
+`;
 
 export default Buy;

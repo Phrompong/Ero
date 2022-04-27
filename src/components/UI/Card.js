@@ -25,7 +25,7 @@ export const StyledLineCard = styled.div`
   }
 `;
 
-export const Card = ({ children, isScroll }) => <StyledCard isScroll={isScroll}>{children}</StyledCard>;
+export const Card = ({ children, isScroll, style }) => <StyledCard isScroll={isScroll} style={style}>{children}</StyledCard>;
 
 export const LineCard = ({ children, style }) => (
   <StyledLineCard style={style}>{children}</StyledLineCard>
