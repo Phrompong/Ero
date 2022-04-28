@@ -40,10 +40,11 @@ const Buy = () => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false)
   const [validateAccept, setValidateAccept] = useState(false)
   const [showAlertModal, setShowAlertModal] = useState(false)
+  const [registrationNo, setRegistrationNo] = useState(false)
 
   // step 1
-  const [shareName, setShareName] = useState(null);
-  const [shareDescription, setShareDescription] = useState(null);
+  const [shareName, setShareName] = useState('-');
+  const [shareDescription, setShareDescription] = useState('-');
   const [fullname, setFullname] = useState(null);
   const [shareId, setShareId] = useState(null);
   const [phoneNo, setPhoneNo] = useState(null);
@@ -58,11 +59,12 @@ const Buy = () => {
   const [phoneNoModal, setPhoneNoModal] = useState(null);
 
   // step 2
-  const [rightStockName, setRightStockName] = useState(null);
+  const [customerStockId, setCustomerStockId] = useState(null)
+  const [rightStockName, setRightStockName] = useState('-');
   const [stockVolume, setStockVolume] = useState(null);
   const [offerPrice, setOfferPrice] = useState(null);
   const [rightStockVolume, setRightStockVolume] = useState(null);
-  const [rightSpecialName, setRightSpecialName] = useState(null);
+  const [rightSpecialName, setRightSpecialName] = useState('-');
   const [rightSpecialVolume, setRightSpecialVolume] = useState(null);
   const [excessVolume, setExcessVolume] = useState(null);
 
@@ -74,9 +76,19 @@ const Buy = () => {
   const [qrCode, setQRCode] = useState(null);
   const [radioCheckedPayment, setRadioCheckPayment] = useState(false)
 
+  // addres modal 
+  const [addressModal, setAddressModal] = useState(false)
+  const [addressName, setAddressName] = useState(null)
+  const [addressHouseNo, setAddressHouseNo] = useState(null)
+  const [addressDistrict, setAddressDistrict] = useState(null)
+  const [addressProvince, setAddressProvince] = useState(null)
+  const [addressZipcode, setAddressZipcode] = useState(null)
+  const [addressTel, setAddressTel] = useState(null)
+
   const [file, setFile] = useState();
   const [orderId, setOrderId] = useState(null);
 
+  const [masterBank, setMasterBank] = useState([])
   const [bank, setBank] = useState(null)
   const [depositBank, setDepositBank] = useState(null)
 
@@ -87,6 +99,7 @@ const Buy = () => {
 
   const fetchStep2 = () => {
     getCustomerStock()
+    getMasterBank()
   };
 
   const fetchStep3 = () => {
@@ -95,18 +108,19 @@ const Buy = () => {
 
   const getCustomerProfile = async () => {
     const [res, status] = await httpGetRequest(
-      `masterCustomers/${user.customerId}`
+      `customerStocks?customerId=${user.customerId}`
     );
 
     if (status === 200) {
-      const payload = res.data;
-      setFullname(`${payload.name} ${payload.lastname}`);
-      setShareId(payload.id);
-      setPhoneNo(payload.telephone);
-
-      setFullnameModal(`${payload.name} ${payload.lastname}`);
-      setShareIdModal(payload.id);
-      setPhoneNoModal(payload.telephone);
+      const payload = res.data[0];
+      console.log(payload)
+      setFullname(`${payload.customerId.name} ${payload.customerId.lastname}`);
+      setShareId(payload.registrationNo);
+      setPhoneNo(payload.customerId.telephone);
+      setRegistrationNo(payload.registrationNo)
+      setFullnameModal(`${payload.customerId.name} ${payload.customerId.lastname}`);
+      setShareIdModal(payload.registrationNo);
+      setPhoneNoModal(payload.customerId.telephone);
     }
   }
 
@@ -117,40 +131,7 @@ const Buy = () => {
 
     if (status === 200) {
       const payload = res.data;
-      const fakeData = [
-        {
-          _id: "62601de7c1fa7362f2bc8cd4",
-          code: "001",
-          name: "บริษัทหลักทรัพย์ แลนด์ แอนด์ เฮ้าส์ จํากัด (มหาชน)",
-          status: true
-        },
-        {
-          _id: "62601de7c1fa7362f2bc8cd4",
-          code: "002",
-          name: "บริษัทหลักทรัพย์ แลนด์ แอนด์ เฮ้าส์ จํากัด (มหาชน)",
-          status: true
-        },
-        {
-          _id: "62601de7c1fa7362f2bc8cd4",
-          code: "003",
-          name: "บริษัทหลักทรัพย์ แลนด์ แอนด์ เฮ้าส์ จํากัด (มหาชน)",
-          status: true
-        },
-        {
-          _id: "62601de7c1fa7362f2bc8cd4",
-          code: "004",
-          name: "บริษัทหลักทรัพย์ แลนด์ แอนด์ เฮ้าส์ จํากัด (มหาชน)",
-          status: true
-        },
-        {
-          _id: "62601de7c1fa7362f2bc8cd4",
-          code: "005",
-          name: "บริษัทหลักทรัพย์ แลนด์ แอนด์ เฮ้าส์ จํากัด (มหาชน)",
-          status: true
-        }
-      ]
-      // setShareOption(payload);
-      const _options = fakeData.map((data) => {
+      const _options = payload.map((data) => {
         return {
           ...data,
           fullname: `${data.code} ${data.name}`
@@ -162,11 +143,12 @@ const Buy = () => {
 
   const getCustomerStock = async () => {
     const [res, status] = await httpGetRequest(
-      `customerStocks?customerId=${user.customerId}`
+      `customerStocks?customerId=${user.customerId}&registrationNo=${registrationNo}`
     );
 
     if (status === 200) {
       const payload = res.data;
+      setCustomerStockId(payload._id)
       setRightStockName(payload.rightStockName);
       setStockVolume(payload.stockVolume);
       setOfferPrice(payload.offerPrice);
@@ -183,41 +165,23 @@ const Buy = () => {
     );
 
     if (status === 200) {
-      const payload = res.data[0];
-      setLogo(payload.logo);
-      setNameTH(payload.nameTH);
-      setRef1(payload.ref1);
-      setRef2(payload.ref2);
-      setQRCode(payload.qrCode);
+      const payload = res.data
+      setMasterBank(payload)
+      // setLogo(payload.logo);
+      // setNameTH(payload.nameTH);
+      // setRef1(payload.ref1);
+      // setRef2(payload.ref2);
+      // setQRCode(payload.qrCode);
     }
   }
 
   const handlerOnSubmited = async () => {
-    // setPage(3);
     setValidateAccept(true)
-
-    // const [res, status] = await httpFetch(
-    //   "POST",
-    //   {
-    //     customerId: user.customerId,
-    //     rightStockName,
-    //     stockVolume,
-    //     rightSpecialName,
-    //     paidRightVolume: Number(currentStockVolume),
-    //     paidSpecialVolume: 0,
-    //     paymentAmount: Number(currentPrice),
-    //     returnAmount: 0,
-    //     excessVolume,
-    //   },
-    //   "orders"
-    // );
-
-    // setOrderId(res.data._id);
   };
 
   const handleSelectedFile = (e) => {
     const [file] = e.target.files;
-    const maxAllowedSize = 0 * 1024 * 1024;
+    const maxAllowedSize = 5 * 1024 * 1024;
     const { name: fileName, size } = file;
     if (size > maxAllowedSize) {
       setAlertMessage('ขนาดไฟล์รูปภาพใหญ่เกินไป');
@@ -233,6 +197,7 @@ const Buy = () => {
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append("File", file);
+    console.log(orderId)
     const endpoint = `uploads/image?orderId=${orderId}`;
 
     const [res, status] = await httpPostRequestUploadFile(formData, endpoint);
@@ -252,6 +217,24 @@ const Buy = () => {
     setPage(2)
   }
 
+  const handlerOnClickPage = (page) => {
+    if (!dropdownSelect) {
+      setShow(true)
+      setAlertMessage("กรุณาเลือกข้อมูล ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก")
+      setTimeout(() => {
+        setShow(false)
+      }, 5000)
+    } else if (!tradingAccountNo) {
+      setShow(true)
+      setAlertMessage("กรุณากรอกข้อมูล เลขที่บัญชีซื้อขาย")
+      setTimeout(() => {
+        setShow(false)
+      }, 5000)
+    } else {
+      setPage(page)
+    }
+  }
+
   const handlerOnAccept = async () => {
     setValidateAccept(false)
 
@@ -262,17 +245,34 @@ const Buy = () => {
         rightStockName,
         stockVolume,
         rightSpecialName,
+        rightSpecialVolume,
         paidRightVolume: Number(currentStockVolume),
         paidSpecialVolume: 0,
         paymentAmount: Number(currentPrice),
         returnAmount: 0,
+        customerName: fullname,
+        customerTel: phoneNo,
+        brokerId: dropdownSelect._id,
+        accountNo: tradingAccountNo,
+        customerStockId: customerStockId,
         excessVolume,
+        address: {
+          name: addressName,
+          houseNo: addressHouseNo,
+          district: addressDistrict,
+          province: addressProvince,
+          zipcode: addressZipcode,
+          tel: addressTel
+        },
+        registrationNo: shareId
       },
       "orders"
     );
 
-    setOrderId(res.data._id);
-    setPage(3)
+    if (status === 200) {
+      setOrderId(res.data._id);
+      setPage(3)
+    }
   }
 
   const handlerOnEdit = () => {
@@ -420,6 +420,60 @@ const Buy = () => {
           </ContainerCard>
         </Card>
       </Modal>
+      <Modal show={addressModal} style={{ marginLeft: '10%', width: '100%' }}>
+        <Card style={{ width: '50%' }}>
+          <ContainerCard >
+            <Header style={{ margin: '20px', color: '#1D3AB1', fontWeight: 'bold' }}>
+              <h3><FontAwesomeIcon icon={faCircleInfo} style={{ margin: '0 10px' }} />กรณีที่ท่านไม่มีบัญชีธนาคารดังรายการ ดังนี้</h3>
+            </Header>
+            <LineCard style={{ padding: '1rem 2rem', marginBottom: '1rem' }}>
+              {
+                masterBank.length > 0 && masterBank.map((bank, index) => (
+                  <LineCard style={{ margin: '10px', display: "flex" }}>
+                    <img src={bank.logo} width={50} height={50} style={{ marginLeft: '3rem' }} />
+                    <p style={{ marginTop: 'auto', marginBottom: 'auto', marginLeft: '2rem' }}>{bank.nameTH}</p>
+                  </LineCard>
+                ))
+              }
+              <Header style={{ margin: '20px', fontWeight: 'bold' }}>
+                <h3>ทางบริษัทฯ ขอจัดคืนเงินให้ท่านผ่านเช็คธนาคาร</h3>
+              </Header>
+            </LineCard>
+            <LineCard style={{ padding: '1rem 2rem', marginBottom: '1rem', color: '#1D3AB1' }}>
+              <Header style={{ margin: '0 0 20px 0', fontWeight: 'bold' }}>
+                <h3>กรุณากรอกรายละเอียดที่อยู่ของท่าน</h3>
+              </Header>
+              <div style={{ marginBottom: '1rem' }}>
+                <FieldInput value={addressName} onChange={(e) => setAddressName(e.target.value)} placeholder={"ชื่อ - นามสกุล*"} />
+              </div>
+              <div style={{ marginBottom: '1rem' }}>
+                <FieldInput value={addressHouseNo} onChange={(e) => setAddressHouseNo(e.target.value)} placeholder={"บ้านเลขที่ / หมู่ที่*"} />
+              </div>
+              <div style={{ marginBottom: '1rem' }}>
+                <FieldInput value={addressDistrict} onChange={(e) => setAddressDistrict(e.target.value)} placeholder={"แขวง (ตำบล) / เขต (อำเภอ)"} />
+              </div>
+              <div style={{ marginBottom: '1rem', display: 'flex' }}>
+                <div style={{ marginRight: '0.5rem', width: '100%' }}>
+                  <FieldInput value={addressProvince} onChange={(e) => setAddressProvince(e.target.value)} placeholder={"จังหวัด"} />
+                </div>
+                <div style={{ marginLeft: '0.5rem', width: '100%' }}>
+                  <FieldInput value={addressZipcode} onChange={(e) => setAddressZipcode(e.target.value)} placeholder={"รหัสไปรษณีย์"} />
+                </div>
+              </div>
+              <div style={{ marginBottom: '1rem' }}>
+                <FieldInput value={addressTel} onChange={(e) => setAddressTel(e.target.value)} placeholder={"เบอรโทรศัพท์"} />
+              </div>
+            </LineCard>
+            <div style={{ margin: 'auto', width: '400px' }}>
+              <Button
+                type="submit"
+                value={"ฉันรับทราบแล้ว"}
+                onClick={() => setAddressModal(false)}
+              />
+            </div>
+          </ContainerCard>
+        </Card>
+      </Modal>
       <Container>
         <ModalAlert show={show} msg={alertMessage} status={status} />
         {
@@ -482,7 +536,7 @@ const Buy = () => {
                         </div>
                         <div className="text-amount">
                           <p>จำนวน</p>
-                          <b className="text-black" style={{ marginLeft: "-20px" }}>{stockVolume}</b>
+                          <b className="text-black" style={{ marginLeft: "-20px" }}>{rightStockVolume}</b>
                           <p>หุ้น</p>
                         </div>
                       </div>
@@ -565,21 +619,21 @@ const Buy = () => {
               <FlexContainer>
                 <StepDiv>
                   <div style={{ display: "block", margin: "0 20px" }}>
-                    <Step isActive={page === 1} onClick={() => setPage(1)}>
+                    <Step isActive={page === 1} onClick={() => handlerOnClickPage(1)}>
                       <b>1</b>
                       <Line />
                     </Step>
                     <StepDetail isActive={page === 1} >ขั้นตอนที่ 1 - ลงทะเบียนจองสิทธิ์</StepDetail>
                   </div>
                   <div style={{ display: "block", margin: "0 20px" }}>
-                    <Step isActive={page === 2} onClick={() => setPage(2)}>
+                    <Step isActive={page === 2} onClick={() => handlerOnClickPage(2)}>
                       <b>2</b>
                       <Line />
                     </Step>
                     <StepDetail isActive={page === 2} >ขั้นตอนที่ 2 - จัดการคำสั่งซื้อ</StepDetail>
                   </div>
                   <div style={{ display: "block", margin: "0 20px" }}>
-                    <Step isActive={page === 3} onClick={() => setPage(3)}>
+                    <Step isActive={page === 3} onClick={() => handlerOnClickPage(3)}>
                       <b>3</b>
                     </Step>
                     <StepDetail isActive={page === 3} >ขั้นตอนที่ 3 - ชำระเงิน</StepDetail>
@@ -684,6 +738,7 @@ const Buy = () => {
                                 onClick={() => setIsOpenDropdown(!isOpenDropdown)}
                                 onBlur={() => setIsOpenDropdown(false)}
                                 setSelected={setDropdownSelect}
+                                selected={dropdownSelect}
                               />
                             </InputDiv>
                             <InputDiv style={{ marginLeft: "50px" }}>
@@ -895,7 +950,6 @@ const Buy = () => {
                               style={{
                                 width: "100%",
                                 marginBottom: "20px",
-                                paddingBottom: "30px",
                                 border: "1px solid #1D3AB1",
                                 boxSizing: "border-box",
                                 borderRadius: "10px",
@@ -938,17 +992,30 @@ const Buy = () => {
                                     />
                                   </InputDiv>
                                 </div>
+                                <div className="input-div">
+                                  <InputDiv style={{ width: "100%" }}>
+                                    <p></p>
+                                  </InputDiv>
+                                  <InputDiv
+                                    style={{ marginTop: "10px", width: "100%", textAlign: "start" }}
+                                  >
+                                    <Button
+                                      type="submit"
+                                      value="ตรวจสอบข้อมูล"
+                                      onClick={() => setAddressModal(true)}
+                                    />
+                                  </InputDiv>
+                                </div>
                               </ShareDetail>
                             </LineCard>
-                            <LineCard style={{ width: "100%" }}>
-                              <Button
-                                type="submit"
-                                value="ยืนยันคำสั่งซื้อ"
-                                onClick={() => handlerOnSubmited()}
-                              // onClick={handleSubmited}
-                              />
-                            </LineCard>
                           </div>
+                        </div>
+                        <div style={{ margin: 'auto', width: '400px' }}>
+                          <Button
+                            type="submit"
+                            value="ยืนยันคำสั่งซื้อ"
+                            onClick={() => handlerOnSubmited()}
+                          />
                         </div>
                       </>
                     );
@@ -1006,14 +1073,20 @@ const Buy = () => {
                                   radioCheckedPayment && <>
                                     <div className="bank-name-card" style={{ margin: '20px' }}>
                                       <BankCard>
-                                        <div className="bank-img" style={{ marginLeft: '40px' }}>
-                                          <img src="https://bit.ly/3OCube2" height={'33px'} width={'32px'} />
-                                        </div>
-                                        <div className="bank-detail" style={{ margin: '10px 0px 10px 20px' }}>
-                                          <b>BANK NAME</b>
-                                          <p>เลขบัญชี<b style={{ marginLeft: '20px' }}>XXXXX</b></p>
-                                          <p>ชื่อบัญชี<b style={{ margin: '0 20px' }}>XXXXX</b>สาขา<b style={{ margin: '0 20px' }}>ชื่อสาขา</b></p>
-                                        </div>
+                                        {
+                                          masterBank.length > 0 && masterBank.map((bank, index) => (
+                                            <div style={{ display: 'flex' }}>
+                                              <div className="bank-img" style={{ marginLeft: '40px', marginTop: 'auto', marginBottom: 'auto' }}>
+                                                <img src={bank.logo} height={'33px'} width={'32px'} />
+                                              </div>
+                                              <div className="bank-detail" style={{ margin: '10px 0px 10px 20px' }}>
+                                                <b>{bank.nameTH}</b>
+                                                <p>เลขบัญชี<b style={{ marginLeft: '20px' }}>{bank.accountNumber}</b></p>
+                                                <p>ชื่อบัญชี<b style={{ margin: '0 20px' }}>{bank.accountName}</b>สาขา<b style={{ margin: '0 20px' }}>{bank.branch}</b></p>
+                                              </div>
+                                            </div>
+                                          ))
+                                        }
                                       </BankCard>
                                     </div>
                                   </>
@@ -1049,6 +1122,12 @@ const Buy = () => {
                             </div>
                           </div>
                         </LineCard>
+                        <Button
+                          type="submit"
+                          value={'ยืนยันการส่ง'}
+                          style={{ marginTop: '1rem' }}
+                          onClick={handleSubmit}
+                        />
                       </>
                     )
                   }
@@ -1058,7 +1137,7 @@ const Buy = () => {
           )
         }
       </Container>
-    </Card>
+    </Card >
   );
 };
 
@@ -1245,6 +1324,11 @@ const Button = styled.input`
   border-radius: 10px;
   text-transform: capitalize;
   cursor: pointer;
+
+  &:hover  {
+    background: #EDB52D;
+    color: #000000;
+  }
 `;
 
 const Dot = styled.div`
@@ -1512,7 +1596,7 @@ const CloseArrow = styled.i`
 `;
 
 const BankCard = styled.div`
-  display: flex;
+  display: block;
   margin: auto;
 `
 
