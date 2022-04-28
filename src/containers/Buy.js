@@ -195,6 +195,10 @@ const Buy = () => {
   };
 
   const handleSubmit = async () => {
+    if (!file) {
+      setAlertMessage('ไม่พบไฟล์ภาพ')
+      setShowAlertModal(true)
+    }
     const formData = new FormData();
     formData.append("File", file);
     console.log(orderId)
@@ -271,6 +275,9 @@ const Buy = () => {
 
     if (status === 200) {
       setOrderId(res.data._id);
+      const msg = "ยืนยันคำสั่งซื้อสำเร็จ"
+      setAlertMessage(msg);
+      showAlert(setShow, 2000);
       setPage(3)
     }
   }
