@@ -93,7 +93,8 @@ const WrapperOption = styled.div`
   z-index: 998;
   border: 2px solid #d9e1e7;
   & ${OptionSelect}:hover {
-    background: #90A0DA;
+    background: ${(props) => (props.isEmtry ? "#FFFFFF" : "#90A0DA")};
+    color: "#FFFFFF";
   }
 `
 
@@ -125,7 +126,7 @@ export const Dropdown = ({ options, setSelected, selected }) => (
 export const DropdownSelect = ({ options, setSelected, selected, searchFrom, isOpen, onClick, onBlur }) => {
   const [filter, setFilter] = useState(null)
   const [optionsFiltered, setOptionsFiltered] = useState([])
-  const [optionSelect, setOptionSelect] = useState(null)
+  const [optionSelect, setOptionSelect] = useState(selected)
   useEffect(() => {
     setOptionsFiltered(options)
   }, [options])
@@ -149,13 +150,21 @@ export const DropdownSelect = ({ options, setSelected, selected, searchFrom, isO
     <Container onClick={onClick} onBlurCapture={onBlur}>
       <Wrapper>
         <Input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder={'กรุณาเลือก'} />
-        <WrapperOption isOpen={isOpen}>
-          {
-            optionsFiltered && optionsFiltered.map((option, index) => (
-              <OptionSelect onMouseDown={() => setOptionSelect(option)} key={index} value={option.code}>{option.code} {option.name}</OptionSelect>
-            ))
-          }
-        </WrapperOption>
+        {
+          options.length === 0 ? <>
+            <WrapperOption isOpen={isOpen} isEmtry={true}>
+              <OptionSelect>ไม่มีข้อมูล</OptionSelect>
+            </WrapperOption>
+          </> : <>
+            <WrapperOption isOpen={isOpen}>
+              {
+                optionsFiltered && optionsFiltered.map((option, index) => (
+                  <OptionSelect onMouseDown={() => setOptionSelect(option)} key={index} value={option.code}>{option.code} {option.name}</OptionSelect>
+                ))
+              }
+            </WrapperOption>
+          </>
+        }
       </Wrapper>
     </Container >
   );
