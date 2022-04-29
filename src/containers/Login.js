@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import Parser from 'html-react-parser';
 
 import styled from "styled-components";
 import bg from "../assets/bg.jpg";
@@ -9,6 +10,7 @@ import Cookies from 'js-cookie'
 
 import { Logo } from "../components/Logo/Logo";
 import { Card } from "../components/UI/Card";
+import { LineCard } from "../components/UI/Card";
 import { Input } from "../components/UI/Input";
 import { persianblue } from "../utils/color";
 import { httpFetch } from "../utils/fetch";
@@ -21,7 +23,18 @@ const Login = () => {
   const usernameInputRef = useRef("4654499830700");
   const passwordInputRef = useRef("1234");
 
+  const [isConfirmModal, setIsConfirmModal] = useState(false)
+
   const endpoint = "auth/signIn?type=customer";
+
+  const handlerOnAccept = () => {
+    navigate(`/buy`);
+  }
+  
+  const handlerOnCancel = () => {
+    Cookies.remove('token')
+    setIsConfirmModal(false)
+  }
 
   const handleSubmited = async (event) => {
     event.preventDefault();
@@ -36,6 +49,7 @@ const Login = () => {
     );
 
     if (status === 200) {
+      setIsConfirmModal(true)
       const payload = {
         username,
         customerId: res.data.customerId,
@@ -49,7 +63,6 @@ const Login = () => {
       Cookies.set('token', JSON.stringify({
         user: payload
       }));
-      navigate(`/buy`);
     } else {
       setShowError(true);
       setErrorMsg(res.message);
@@ -59,50 +72,120 @@ const Login = () => {
   const link = (text) => <Link>{text}</Link>;
 
   return (
-    <Container>
-      <Card>
-        <div className="inner">
-          <Form>
-            <Logo />
-            <div className="field">
-              <div className="input">
-                <Input
-                  elementType="input"
-                  elementConfig={{ type: "text" }}
-                  label="National-ID"
-                  required
-                  width="100%"
-                  ref={usernameInputRef}
-                />
-                {/* <Input
-                  elementType="input"
-                  elementConfig={{ type: "password" }}
-                  label="Password"
-                  required
-                  width="100%"
-                  ref={passwordInputRef}
-                /> */}
-                <ErrorText show={showError}>{errorMsg}</ErrorText>
-              </div>
+    <>
+      {
+        (() => {
+          if (isConfirmModal) {
+            return <>
+              <Container size={"full"}>
+                <Card>
+                  <div className="inner">
+                    <Form size={"full"}>
+                      <div>
+                        <img src={logo} />
+                      </div>
+                      <div className="title">การยินยอมเปิดเผยข้อมูล และข้อตกลงการให้บริการ</div>
+                      <div style={{ paddingLeft: '0', width: '100%', padding: '0 5rem' }}>
+                        <LineCard style={{ width: '100%' }}>
+                          <div>
+                            <pre style={{ padding: '0 2rem', whiteSpace: 'break-spaces', marginBottom: '0' }}>
+                              <input type="checkbox" />
+                              {
+                                Parser(` เพื่อให้บริษัทปฎิบัติตามกฏหมายคุ้มครองข้อมูลส่วนบุคคลและกฎหมายว่าด้วยการป้องกันและปราบปรามการสนับสนุน
+ทางการเงินแก่การก่อการร้ายและแพร่ขยายอาวุธที่มีอานุภาพทำลายล้างสูง บริษัทหลักทรัพย์ เอเชีย เวลท์ จำกัด (บริษัท) ประสงค์จะเก็บ รวบรวม ใช้ ส่งต่อข้อมูลส่วนบุคคลของท่านซึ่งได้บันทึกไว้ในระบบเพื่อการทำธุรกรรมกับบริษัท (เช่น คำนำหน้าชื่อ ชื่อ นามสกุล หมายเลขบัตรประชาชน/หมายเลขหนังสือเดินทาง เบอร์โทรศัพท์ อีเมล์ เลขที่บัญชีซื้อขายฯ เลขที่บัญชีธนาคาร สิทธิประโยชน์ต่างๆ เป็นต้น) เพื่อประโยชน์ในการทำธุรกรรมกับบริษัท โดยต้องขอความยินยอมจากท่าน ทั้งนี้บริษัทจะเก็บข้อมูลของท่านสูงสุด 10 ปี ตามกฏหมาย    นับแต่วันที่ท่านได้ให้ความยินยอม (หรือแล้วแต่กรณี) โดยจะมีการเปิดเผย ส่งต่อข้อมูลของท่านแก่บริษัท สถาบันการเงิน หรือองค์กรต่างๆ ที่ท่านประสงค์จะทำธุรกรรมในการนี้ด้วย ซึ่งบริษัทจะใช้ข้อมูลดังกล่าวให้สอดคล้องกับวัตถุประสงค์ตามหลักเกณฑ์และนโยบายที่บริษัทกำหนด และกฏหมายที่เกี่ยวข้องบัญญัติให้สามารถกระทำได้
 
-              <div className="submit">
-                <Button
-                  type="submit"
-                  value="Sign in"
-                  onClick={handleSubmited}
-                />
-                {link("problem to sign in ?")}
-                {link("มีปัญหาในการเข้าใช้งานกรุณาคลิกที่นี่")}
-              </div>
-            </div>
+  ทั้งนี้ท่านสามารถตรวจสอบนโยบายของบริษัทได้ผ่านช่องทาง <b>www.asiawealth.co.th</b> กรณีท่านไม่ยินยอมให้บริษัทดำเนินการ จะมีผลทำให้ท่านไม่สามารถทำธุรกรรมในครั้งนี้ได้
+                                `)
+                              }
+                            </pre>
+                          </div>
+                        </LineCard>
+                      </div>
+                      <div style={{ width: '100%', padding: '0 7rem', marginTop: '-2rem' }}>
+                        <div style={{ display: 'flex' }}>
+                          <input type="checkbox" style={{ marginTop: '1rem' }} />
+                          <pre style={{ margin: '0', marginLeft: '1rem' }}>
+                            {
+                              `
+ข้าพเจ้าขอรับรอง และตกลงว่าจะรับหุ้นสามัญเพิ่มทุนจำนวนดังกล่าว หรือในจำนวนที่บริษัทฯ จัดสรรให้ และจะไม่ยกเลิกการจองซื้อ
+หุ้นสามัญเพิ่มทุนนี้ รวมทั้งยินยอมรับคืนเงินในกรณีที่บริษัทฯ ปฏิเสธการจองซื้อหรือ หากข้าพเจ้าส่งรายละเอียดไม่ครบถ้วนถูกต้อง 
+และ/หรือ หลักฐานการชำระเงินภายในระยะเวลาการจองซื้อ
 
-            <div>
-              <img src={logo} />
-            </div>
-          </Form>
-        </div>
-      </Card>
-    </Container>
+ข้าพเจ้ายินยอมผูกพันตนเองตามเงื่อนไขข้อกำหนดและข้อความใดๆ ในหนังสือแจ้งการจัดสรรหุ้นสามัญเพิ่มทุน รวมทั้งในหนังสือ
+บริคณฑ์สนธิ และข้อบังคับของบริษัทที่มีอยู่แล้วขณะนี้ และ/หรือ ซึ่งจะแก้ไขเพิ่มเติมต่อไปในภายหน้าด้วย ข้าพเจ้าขอรับรองว่า
+ข้าพเจ้าในฐานะผู้ถือหุ้นเดิมและได้รับการจัดสรรหุ้นสามัญออกใหม่เป็นผู้รับผลประโยชน์ที่แท้จริง
+                              `
+                            }
+                          </pre>
+                        </div>
+                        <div>
+                          <pre style={{ color: "#1D3AB1" }}>** รายการจองซื้อหุ้นของท่าน จะสำเร็จเมื่อบริษัทตรวจสอบผลการชำระเงินค่าจองซื้อหุ้นเข้าบัญชีบริษัทเรียบร้อยแล้ว **</pre>
+                        </div>
+                      </div>
+                      <div style={{ display: "flex", width: "100%", justifyContent: "space-around" }}>
+                        <Button
+                          type="submit"
+                          value="ไม่ยินยอม"
+                          onClick={handlerOnCancel}
+                          style={{ width: "292px", fontSize: "20px", background: "#809FB8" }}
+                        />
+                        <Button
+                          type="submit"
+                          value="ยินยอม"
+                          onClick={handlerOnAccept}
+                          style={{ width: "292px", fontSize: "20px" }}
+                        />
+                      </div>
+                    </Form>
+                  </div>
+                </Card>
+              </Container>
+            </>
+          }
+
+          else if (!isConfirmModal) {
+            return <>
+              <Container>
+                <Card>
+                  <div className="inner">
+                    <Form>
+                      <Logo />
+                      <div className="field">
+                        <div className="input">
+                          <Input
+                            elementType="input"
+                            elementConfig={{ type: "text" }}
+                            label="National-ID"
+                            required
+                            width="100%"
+                            ref={usernameInputRef}
+                          />
+                          <ErrorText show={showError}>{errorMsg}</ErrorText>
+                        </div>
+
+                        <div className="submit">
+                          <Button
+                            type="submit"
+                            value="Sign in"
+                            onClick={handleSubmited}
+                          />
+                          {link("problem to sign in ?")}
+                          {link("มีปัญหาในการเข้าใช้งานกรุณาคลิกที่นี่")}
+                        </div>
+                      </div>
+
+                      <div>
+                        <img src={logo} />
+                      </div>
+                    </Form>
+                  </div>
+                </Card>
+              </Container>
+            </>
+          }
+        })()
+      }
+    </>
   );
 };
 
@@ -124,8 +207,15 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 510px;
+    width: ${(props) => (props.size === "full" ? "914px" : "510px")};
     height: 740px;
+
+    .title {
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 24px;
+      color: #1D3AB1;
+    }
   }
 `;
 
@@ -134,9 +224,9 @@ const Form = styled.form`
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
-  width: 271px;
-  height: 80%;
-  // overflow: scroll;
+  width: ${(props) => (props.size === "full" ? "100%" : "271px")};
+  height: ${(props) => (props.size === "full" ? "90%" : "80%")};
+  // overflow: ${(props) => (props.size === "full" ? "scroll" : "visible")};
   .field {
     width: 100%;
     flex-grow: 2;
