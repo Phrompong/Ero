@@ -90,6 +90,13 @@ const NavigationItems = () => {
                   <NavigationItem link="/import" img={account}>
                     import data
                   </NavigationItem>
+                  <NavigationItem
+                    link="/login/customer"
+                    exact="true"
+                    img={traffic}
+                  >
+                    Go to customer
+                  </NavigationItem>
                 </>
               );
             } else if (user.role === "client") {
@@ -103,6 +110,13 @@ const NavigationItems = () => {
                   </NavigationItem>
                   <NavigationItem link="/profile" img={profile}>
                     Profile / ข้อมูลของฉัน
+                  </NavigationItem>
+                  <NavigationItem
+                    link="/login/admin"
+                    exact="true"
+                    img={traffic}
+                  >
+                    Go to admin
                   </NavigationItem>
                 </>
               );
