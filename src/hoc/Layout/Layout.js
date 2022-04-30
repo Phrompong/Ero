@@ -6,6 +6,8 @@ import DrawerToggle from "../../components/Navigation/SideDrawer/DrawerToggle/Dr
 import SideDrawer from "../../components/Navigation/SideDrawer/SideDrawer";
 import { ivory } from "../../utils/color";
 import { useSelector } from "react-redux";
+import Notfound from "../../assets/notfound.png";
+import UnAuth from "../../assets/unAuth.png";
 
 const Container = styled.div`
   overflow: hidden;
@@ -61,7 +63,7 @@ const Layout = ({ children }) => {
   if (!isPage) {
     return (
       <>
-        <h1>Notfound</h1>
+        <DisplayNotfound></DisplayNotfound>
       </>
     );
   }
@@ -78,7 +80,7 @@ const Layout = ({ children }) => {
   if (isPage && user.length === 0) {
     return (
       <>
-        <h1>Please login</h1>
+        <DisplayUnAuth></DisplayUnAuth>
       </>
     );
   }
@@ -97,7 +99,7 @@ const Layout = ({ children }) => {
         if (!isPageAllow) {
           return (
             <>
-              <h1>Please login for customer</h1>
+              <DisplayUnAuth></DisplayUnAuth>
             </>
           );
         }
@@ -113,7 +115,7 @@ const Layout = ({ children }) => {
         if (!isPageAllow) {
           return (
             <>
-              <h1>Please login for admin</h1>
+              <DisplayUnAuth></DisplayUnAuth>
             </>
           );
         }
@@ -139,5 +141,47 @@ const Layout = ({ children }) => {
     );
   }
 };
+
+const DisplayNotfound = styled.div`
+  width: 100vw;
+  height: 100vh;
+  min-width: 600px;
+  min-height: 740px;
+  background-image: url(${Notfound});
+  background-position: center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  .inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 510px;
+    height: 740px;
+  }
+`;
+
+const DisplayUnAuth = styled.div`
+  width: 100vw;
+  height: 100vh;
+  min-width: 600px;
+  min-height: 740px;
+  background-image: url(${UnAuth});
+  background-position: center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  .inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 510px;
+    height: 740px;
+  }
+`;
 
 export default Layout;

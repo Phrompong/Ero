@@ -5,6 +5,8 @@ import traffic from "../../../assets/icon_traffic.png";
 import account from "../../../assets/icon_account.png";
 import profile from "../../../assets/icon_profile.png";
 import Vector from "../../../assets/vector.png";
+import Logout from "../../../assets/logout.png";
+import Notfound from "../../../assets/notfound.png";
 
 import { Logo } from "../../Logo/Logo";
 import { balihai, ivory } from "../../../utils/color";
@@ -82,6 +84,10 @@ const NavigationItems = () => {
                   <NavigationItem link="/checkRightAdmin" img={Vector}>
                     ตรวจสอบสิทธิ์
                   </NavigationItem>
+                  <NavigationItem link="/login/admin" exact="true" img={Logout}>
+                    Logout
+                  </NavigationItem>
+
                   <NavigationItem
                     link="/login/customer"
                     exact="true"
@@ -94,9 +100,6 @@ const NavigationItems = () => {
             } else if (user.role === "client") {
               return (
                 <>
-                  {/* <NavigationItem link="/" exact="true" img={traffic}>
-                      News / ข่าวสาร
-                    </NavigationItem> */}
                   <NavigationItem link="/buy" img={traffic}>
                     จองซื้อ / Book
                   </NavigationItem>
@@ -106,6 +109,14 @@ const NavigationItems = () => {
                   <NavigationItem link="/profile" img={profile}>
                     ข้อมูลของฉัน / Profile
                   </NavigationItem>
+                  <NavigationItem
+                    link="/login/customer"
+                    exact="true"
+                    img={Logout}
+                  >
+                    Logout
+                  </NavigationItem>
+
                   <NavigationItem
                     link="/login/admin"
                     exact="true"
