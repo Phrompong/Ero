@@ -9,7 +9,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 15px;
-  width: 1141px;
+  width: 1200px;
+  justify-content: flext-start;
   h2 {
     margin-bottom: 10px;
     font-size: 3rem;
@@ -81,7 +82,7 @@ const Datagrid = styled(Div)`
   }
 `;
 
-const ViewProfile = ({ header, profile }) => {
+const CheckRight = ({ header, profile }) => {
   if (!profile) return;
 
   const { name, telephone, email, atsBankNo, atsBank, color } = profile;
@@ -89,18 +90,17 @@ const ViewProfile = ({ header, profile }) => {
     <FlexContainer>
       <p style={{ flex: 1 }}>{label}</p>
       <p style={{ flex: 1 }}> {value}</p>
-      <p>{link}</p>
     </FlexContainer>
   );
   return (
     <Container color={color}>
       <Header>{header}</Header>
       <br />
-      {info("ชื่อ-นามสกุล / Name-Lastname   :", name)}
-      {info("โทรศัพท์ / Telephone  :", telephone)}
-      {info("ที่อยู่ / Address  :", "")}
+      {info("ชื่อ-นามสกุล / Name-Lastname:", name)}
+      {info("โทรศัพท์ / Telephone:", telephone)}
+      {info("ที่อยู่ / Address:", "")}
     </Container>
   );
 };
 
-export default ViewProfile;
+export default CheckRight;

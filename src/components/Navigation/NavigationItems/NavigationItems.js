@@ -4,6 +4,7 @@ import styled from "styled-components";
 import traffic from "../../../assets/icon_traffic.png";
 import account from "../../../assets/icon_account.png";
 import profile from "../../../assets/icon_profile.png";
+import Vector from "../../../assets/vector.png";
 
 import { Logo } from "../../Logo/Logo";
 import { balihai, ivory } from "../../../utils/color";
@@ -58,7 +59,6 @@ const Footer = styled.div`
 const Nav = styled.nav`
   padding-top: 2rem;
   position: relative;
-  width: 85%;
 `;
 
 // const NavigationItems = () => (
@@ -90,6 +90,9 @@ const NavigationItems = () => {
                   <NavigationItem link="/import" img={account}>
                     import data
                   </NavigationItem>
+                  <NavigationItem link="/checkRightAdmin" img={Vector}>
+                    ตรวจสอบสิทธิ์
+                  </NavigationItem>
                   <NavigationItem
                     link="/login/customer"
                     exact="true"
@@ -106,10 +109,13 @@ const NavigationItems = () => {
                       News / ข่าวสาร
                     </NavigationItem> */}
                   <NavigationItem link="/buy" img={traffic}>
-                    Buy / สั่งซื้อ
+                    จองซื้อ / Book
+                  </NavigationItem>
+                  <NavigationItem link="/checkRightCustomer" img={Vector}>
+                    ตรวจสอบสิทธิ์ / Check rights
                   </NavigationItem>
                   <NavigationItem link="/profile" img={profile}>
-                    Profile / ข้อมูลของฉัน
+                    ข้อมูลของฉัน / Profile
                   </NavigationItem>
                   <NavigationItem
                     link="/login/admin"
