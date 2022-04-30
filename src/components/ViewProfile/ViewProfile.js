@@ -95,7 +95,6 @@ const ViewProfile = ({ header, profile }) => {
   return (
     <Container color={color}>
       <Header>{header}</Header>
-      <br />
       {info("ชื่อ-นามสกุล / Name-Lastname   :", name)}
       {info("โทรศัพท์ / Telephone  :", telephone)}
       {info("ที่อยู่ / Address  :", "")}

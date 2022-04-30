@@ -51,13 +51,14 @@ const CheckRightAdmin = () => {
   const searchInputRef = useRef("");
 
   async function fetchDataTable() {
-    let endpoint = `orders?customerId=${user.customerId}`;
+    let endpoint = `orders`;
 
     const [res, status] = await httpGetRequest(endpoint);
     const { totalPages } = res["_metadata"];
 
     setTotalPages(totalPages);
     setData(res["data"]);
+    console.log(res["data"]);
   }
 
   async function fetchDataProfile() {
@@ -68,19 +69,9 @@ const CheckRightAdmin = () => {
     setProfile(res["data"]);
   }
 
-  async function fetchDataNews() {
-    let endpoint = `news`;
-
-    const [res, status] = await httpGetRequest(endpoint);
-    console.log(res["data"][0]);
-    setNews(res["data"][0]);
-    console.log(news);
-  }
-
   useEffect(() => {
     fetchDataTable();
     fetchDataProfile();
-    fetchDataNews();
   }, []);
 
   return (
@@ -98,8 +89,8 @@ const CheckRightAdmin = () => {
           <DataTableCheckRight
             header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
             theaders={theaders}
-            data={fakedata}
-            // refreshData={fetchDataTable}
+            data={data}
+            refreshData={fetchDataTable}
           />
         </TableSection>
       </Container>

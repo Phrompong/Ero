@@ -87,11 +87,10 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
                   {new Date(x["createdOn"]).toLocaleDateString()}
                 </TD>
                 <TD>{x["rightStockName"]}</TD>
-                <TD>{x["paidRightVolume"]}</TD>
-                <TD>{`${x["rightSpacialName"] || ""}  ${
-                  x["rightSpacialVolume"] || ""
-                }`}</TD>
-                <TD>{x["paymentAmount"]}</TD>
+                <TD>{x["registrationNo"]}</TD>
+                <TD>{`${x["customerName"] || ""}`}</TD>
+                <TD>{x["stockVolume"]}</TD>
+                <TD>{x["customerStock"].rightStockName}</TD>
                 <Status className="left" color={color[x["status"]["value"]]}>
                   {x["status"]["status"]}
                 </Status>
