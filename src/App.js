@@ -1,4 +1,4 @@
-import { Routes, Route, Redirect } from "react-router-dom";
+import { Routes, Route, useHistory, useLocation } from "react-router-dom";
 
 import Layout from "./hoc/Layout/Layout";
 import Auth from "./containers/Auth";
@@ -9,10 +9,13 @@ import ImportData from "./containers/ImportData";
 import Buy from "./containers/Buy";
 import CheckRightAdmin from "./containers/CheckRights/Admin";
 import CheckRightCustomer from "./containers/CheckRights/Customer";
+import { useSelector } from "react-redux";
 
 import "./App.css";
 
 const App = (props) => {
+  const { user } = useSelector((state) => state);
+
   const routes = (
     <Routes>
       <Route path="/login/admin" element={<Auth {...props} />} />

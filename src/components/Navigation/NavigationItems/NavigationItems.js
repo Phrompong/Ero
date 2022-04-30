@@ -61,17 +61,6 @@ const Nav = styled.nav`
   position: relative;
 `;
 
-// const NavigationItems = () => (
-//   <Items>
-//     <NavigationItem link="/" exact="true" img={traffic}>
-//       dashboard
-//     </NavigationItem>
-//     <NavigationItem link="/import" img={account}>
-//       import data
-//     </NavigationItem>
-//   </Items>
-// );
-
 const NavigationItems = () => {
   const { user } = useSelector((state) => state);
   return (
