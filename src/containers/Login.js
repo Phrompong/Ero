@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Parser from 'html-react-parser';
@@ -6,7 +6,7 @@ import Parser from 'html-react-parser';
 import styled from "styled-components";
 import bg from "../assets/bg.jpg";
 import logo from "../assets/logo_awsc.jpg";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 
 import { Logo } from "../components/Logo/Logo";
 import { Card } from "../components/UI/Card";
@@ -21,16 +21,23 @@ const Login = () => {
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const usernameInputRef = useRef("4654499830700");
-  const passwordInputRef = useRef("1234");
+  const [isButtonChecked, setIsButtonChecked] = useState(false)
+  const [isCheckedFirst, setIsCheckedFirst] = useState(false)
+  const [isCheckedSecond, setIsCheckedSecond] = useState(false)
 
   const [isConfirmModal, setIsConfirmModal] = useState(false)
 
   const endpoint = "auth/signIn?type=customer";
 
-  const handlerOnAccept = () => {
-    navigate(`/buy`);
+  const handlerOnAcceptForm = () => {
+    const payload = JSON.parse(Cookies.get("token")).user
+    dispatch({
+      type: "SET",
+      payload,
+    });
+    navigate(`/buy`)
   }
-  
+
   const handlerOnCancel = () => {
     Cookies.remove('token')
     setIsConfirmModal(false)
@@ -38,7 +45,7 @@ const Login = () => {
 
   const handleSubmited = async (event) => {
     event.preventDefault();
-    Cookies.remove('token')
+    Cookies.remove("token");
 
     const username = usernameInputRef.current.value;
 
@@ -54,20 +61,31 @@ const Login = () => {
         username,
         customerId: res.data.customerId,
         role: "client",
-      }
-      dispatch({
-        type: "SET",
-        payload
-      });
+      };
       console.log(payload)
-      Cookies.set('token', JSON.stringify({
-        user: payload
-      }));
+      // dispatch({
+      //   type: "SET",
+      //   payload,
+      // });
+      Cookies.set(
+        "token",
+        JSON.stringify({
+          user: payload,
+        })
+      );
     } else {
       setShowError(true);
       setErrorMsg(res.message);
     }
   };
+
+  useEffect(() => {
+    if (isCheckedFirst && isCheckedSecond) {
+      setIsButtonChecked(true)
+    } else {
+      setIsButtonChecked(false)
+    }
+  }, [isCheckedFirst, isCheckedSecond])
 
   const link = (text) => <Link>{text}</Link>;
 
@@ -85,11 +103,11 @@ const Login = () => {
                         <img src={logo} />
                       </div>
                       <div className="title">การยินยอมเปิดเผยข้อมูล และข้อตกลงการให้บริการ</div>
-                      <div style={{ paddingLeft: '0', width: '100%', padding: '0 5rem' }}>
+                      <div style={{ paddingLeft: '0', width: '100%', padding: '0 5rem', marginBottom: '0' }}>
                         <LineCard style={{ width: '100%' }}>
                           <div>
                             <pre style={{ padding: '0 2rem', whiteSpace: 'break-spaces', marginBottom: '0' }}>
-                              <input type="checkbox" />
+                              <input type="checkbox" checked={isCheckedFirst} onChange={() => setIsCheckedFirst(!isCheckedFirst)} />
                               {
                                 Parser(` เพื่อให้บริษัทปฎิบัติตามกฏหมายคุ้มครองข้อมูลส่วนบุคคลและกฎหมายว่าด้วยการป้องกันและปราบปรามการสนับสนุน
 ทางการเงินแก่การก่อการร้ายและแพร่ขยายอาวุธที่มีอานุภาพทำลายล้างสูง บริษัทหลักทรัพย์ เอเชีย เวลท์ จำกัด (บริษัท) ประสงค์จะเก็บ รวบรวม ใช้ ส่งต่อข้อมูลส่วนบุคคลของท่านซึ่งได้บันทึกไว้ในระบบเพื่อการทำธุรกรรมกับบริษัท (เช่น คำนำหน้าชื่อ ชื่อ นามสกุล หมายเลขบัตรประชาชน/หมายเลขหนังสือเดินทาง เบอร์โทรศัพท์ อีเมล์ เลขที่บัญชีซื้อขายฯ เลขที่บัญชีธนาคาร สิทธิประโยชน์ต่างๆ เป็นต้น) เพื่อประโยชน์ในการทำธุรกรรมกับบริษัท โดยต้องขอความยินยอมจากท่าน ทั้งนี้บริษัทจะเก็บข้อมูลของท่านสูงสุด 10 ปี ตามกฏหมาย    นับแต่วันที่ท่านได้ให้ความยินยอม (หรือแล้วแต่กรณี) โดยจะมีการเปิดเผย ส่งต่อข้อมูลของท่านแก่บริษัท สถาบันการเงิน หรือองค์กรต่างๆ ที่ท่านประสงค์จะทำธุรกรรมในการนี้ด้วย ซึ่งบริษัทจะใช้ข้อมูลดังกล่าวให้สอดคล้องกับวัตถุประสงค์ตามหลักเกณฑ์และนโยบายที่บริษัทกำหนด และกฏหมายที่เกี่ยวข้องบัญญัติให้สามารถกระทำได้
@@ -101,10 +119,10 @@ const Login = () => {
                           </div>
                         </LineCard>
                       </div>
-                      <div style={{ width: '100%', padding: '0 7rem', marginTop: '-2rem' }}>
-                        <div style={{ display: 'flex' }}>
-                          <input type="checkbox" style={{ marginTop: '1rem' }} />
-                          <pre style={{ margin: '0', marginLeft: '1rem' }}>
+                      <div style={{ margin: '0 4rem  0 5rem', width: '100%', padding: '0 5rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                          <input type="checkbox" checked={isCheckedSecond} onChange={() => setIsCheckedSecond(!isCheckedSecond)} style={{ marginTop: '1.25rem' }} />
+                          <pre style={{ margin: '0' }} >
                             {
                               `
 ข้าพเจ้าขอรับรอง และตกลงว่าจะรับหุ้นสามัญเพิ่มทุนจำนวนดังกล่าว หรือในจำนวนที่บริษัทฯ จัดสรรให้ และจะไม่ยกเลิกการจองซื้อ
@@ -119,20 +137,21 @@ const Login = () => {
                           </pre>
                         </div>
                         <div>
-                          <pre style={{ color: "#1D3AB1" }}>** รายการจองซื้อหุ้นของท่าน จะสำเร็จเมื่อบริษัทตรวจสอบผลการชำระเงินค่าจองซื้อหุ้นเข้าบัญชีบริษัทเรียบร้อยแล้ว **</pre>
+                          <pre style={{ color: "#1D3AB1", textAlign: 'center' }}>** รายการจองซื้อหุ้นของท่าน จะสำเร็จเมื่อบริษัทตรวจสอบผลการชำระเงินค่าจองซื้อหุ้นเข้าบัญชีบริษัทเรียบร้อยแล้ว **</pre>
                         </div>
                       </div>
                       <div style={{ display: "flex", width: "100%", justifyContent: "space-around" }}>
                         <Button
-                          type="submit"
+                          type="button"
                           value="ไม่ยินยอม"
                           onClick={handlerOnCancel}
                           style={{ width: "292px", fontSize: "20px", background: "#809FB8" }}
                         />
                         <Button
-                          type="submit"
+                          type="button"
                           value="ยินยอม"
-                          onClick={handlerOnAccept}
+                          onClick={handlerOnAcceptForm}
+                          disabled={!isButtonChecked}
                           style={{ width: "292px", fontSize: "20px" }}
                         />
                       </div>
@@ -263,6 +282,10 @@ const Button = styled.input`
   border-radius: 10px;
   text-transform: capitalize;
   cursor: pointer;
+
+  :disabled {
+    background: #809FB8;
+  }
 `;
 
 const Link = styled.a`
