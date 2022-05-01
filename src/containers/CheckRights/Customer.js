@@ -4,6 +4,7 @@ import DataTable from "../../components/DataTable/DataTable";
 import DataTableCheckRight from "../../components/DataTable/DataTableCheckRight";
 import ViewProfile from "../../components/ViewProfile/ViewProfile";
 import News from "../../components/News/News";
+import Paginate from "../../components/Paginate/Paginate";
 
 import { Card, LineCard } from "../../components/UI/Card";
 import { Dropdown } from "../../components/UI/Dropdown";
@@ -16,12 +17,14 @@ import { Search } from "@styled-icons/bootstrap/Search";
 import { Button } from "../../components/UI/Button";
 
 const CheckRightCustomer = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [data, setData] = useState(null);
   const [profile, setProfile] = useState(null);
+  const searchInputRef = useRef("");
   const [news, setNews] = useState(null);
 
   const { user } = useSelector((state) => state);
-  const [totalPages, setTotalPages] = useState(1);
 
   // nowDate = `${nowDate.getHours()}:${nowDate.getMinutes()} at ${nowDate.getDate()}th ${nowDate.getMonth()}`;
   const fakedata = [
@@ -49,10 +52,16 @@ const CheckRightCustomer = () => {
     "สถานะการจอง",
   ];
 
-  const searchInputRef = useRef("");
+  const handleSearchButtonClicked = async () => {
+    setCurrentPage(1);
+    fetchDataTable();
+  };
 
   async function fetchDataTable() {
-    let endpoint = `orders?customerId=${user.customerId}`;
+    const inputValue = searchInputRef.current.value;
+    let endpoint = `customerStocks/search/value?customerId=${
+      user.customerId
+    }&page=${currentPage}${inputValue ? "&key=" + inputValue : ""}`;
 
     const [res, status] = await httpGetRequest(endpoint);
     const { totalPages } = res["_metadata"];
@@ -92,16 +101,19 @@ const CheckRightCustomer = () => {
             placeholder="ค้นหาหมายเลขประจำตัวประชาชน / เลขที่หนังสือเดินทาง / เลขทะเบียนนิติบุคคล"
             ref={searchInputRef}
           />
-          <Button>ค้นหา</Button>
+          <Button onClick={handleSearchButtonClicked}>ค้นหา</Button>
         </SearchDiv>
 
         <TableSection>
-          <DataTableCheckRight
-            header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
-            theaders={theaders}
-            data={fakedata}
-            // refreshData={fetchDataTable}
-          />
+          <LineCard>
+            <DataTableCheckRight
+              header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
+              theaders={theaders}
+              data={data}
+              refreshData={fetchDataTable}
+            />
+            <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
+          </LineCard>
         </TableSection>
       </Container>
     </Card>
@@ -111,12 +123,23 @@ export default CheckRightCustomer;
 
 const Container = styled.div`
   padding: 20px 20px;
-  height: 90vh;
-  min-width: 60vw;
   display: flex;
+  justify-content: center;
   flex-direction: column;
-  section {
+  overflow: scroll;
+
+  > * {
     margin: 10px 0;
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    justify-content: flex-start;
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    justify-content: flex-start;
   }
 `;
 

@@ -8,6 +8,7 @@ import {
   persianblue,
   shamrock,
   gold,
+  red,
 } from "../../utils/color";
 
 import Details from "./Details";
@@ -38,6 +39,7 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
   };
 
   const color = {
+    0: red,
     1: shamrock,
     2: gold,
     3: persianblue,
@@ -83,17 +85,29 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
           <TBody>
             {data.map((x, index) => (
               <TR key={index}>
-                <TD className="left">
-                  {new Date(x["createdOn"]).toLocaleDateString()}
+                <TD style={{ width: "100px" }} className="left">
+                  จองซื้อ / Book
                 </TD>
                 <TD>{x["rightStockName"]}</TD>
                 <TD>{x["registrationNo"]}</TD>
-                <TD>{`${x["customerName"] || ""}`}</TD>
+                <TD>{`${
+                  x["customers"].name + " " + x["customers"].lastname
+                }`}</TD>
                 <TD>{x["stockVolume"]}</TD>
-                <TD>{x["customerStock"].rightStockName}</TD>
-                <Status className="left" color={color[x["status"]["value"]]}>
-                  {x["status"]["status"]}
-                </Status>
+                <TD>{x["rightStockVolume"]}</TD>
+                <TD style={{ width: "300px" }}>
+                  {x["status"].length > 0 ? (
+                    x["status"].map((obj) => (
+                      <Status className="left" color={color[obj["value"]]}>
+                        {obj["status"]}
+                      </Status>
+                    ))
+                  ) : (
+                    <Status className="left" color={color[0]}>
+                      ยังไม่ได้ดำเนินการ
+                    </Status>
+                  )}
+                </TD>
               </TR>
             ))}
           </TBody>

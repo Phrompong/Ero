@@ -4,6 +4,7 @@ import DataTable from "../../components/DataTable/DataTable";
 import DataTableCheckRight from "../../components/DataTable/DataTableCheckRight";
 import ViewProfile from "../../components/ViewProfile/ViewProfile";
 import News from "../../components/News/News";
+import Paginate from "../../components/Paginate/Paginate";
 
 import { Card, LineCard } from "../../components/UI/Card";
 import { SearchableInput } from "../../components/UI/Search";
@@ -15,12 +16,13 @@ import { Search } from "@styled-icons/bootstrap/Search";
 import { Button } from "../../components/UI/Button";
 
 const CheckRightAdmin = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [data, setData] = useState(null);
   const [profile, setProfile] = useState(null);
   const [news, setNews] = useState(null);
-
+  const searchInputRef = useRef("");
   const { user } = useSelector((state) => state);
-  const [totalPages, setTotalPages] = useState(1);
 
   // nowDate = `${nowDate.getHours()}:${nowDate.getMinutes()} at ${nowDate.getDate()}th ${nowDate.getMonth()}`;
   const fakedata = [
@@ -48,31 +50,32 @@ const CheckRightAdmin = () => {
     "สถานะการจอง",
   ];
 
-  const searchInputRef = useRef("");
-
   async function fetchDataTable() {
-    let endpoint = `orders`;
+    const inputValue = searchInputRef.current.value;
+    console.log(currentPage);
+    let endpoint = `customerStocks/search/value?page=${currentPage}${
+      inputValue ? "&key=" + inputValue : ""
+    }`;
 
     const [res, status] = await httpGetRequest(endpoint);
     const { totalPages } = res["_metadata"];
 
     setTotalPages(totalPages);
     setData(res["data"]);
-    console.log(res["data"]);
-  }
-
-  async function fetchDataProfile() {
-    let endpoint = `masterCustomers/${user.customerId}`;
-
-    const [res, status] = await httpGetRequest(endpoint);
-    console.log(res["data"]);
-    setProfile(res["data"]);
   }
 
   useEffect(() => {
     fetchDataTable();
-    fetchDataProfile();
   }, []);
+
+  useEffect(() => {
+    fetchDataTable();
+  }, [currentPage]);
+
+  const handleSearchButtonClicked = async () => {
+    setCurrentPage(1);
+    fetchDataTable();
+  };
 
   return (
     <Card>
@@ -82,31 +85,46 @@ const CheckRightAdmin = () => {
             placeholder="ค้นหาหมายเลขประจำตัวประชาชน / เลขที่หนังสือเดินทาง / เลขทะเบียนนิติบุคคล"
             ref={searchInputRef}
           />
-          <Button>ค้นหา</Button>
+          <Button onClick={handleSearchButtonClicked}>ค้นหา</Button>
         </SearchDiv>
 
         <TableSection>
-          <DataTableCheckRight
-            header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
-            theaders={theaders}
-            data={data}
-            refreshData={fetchDataTable}
-          />
+          <LineCard>
+            <DataTableCheckRight
+              header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
+              theaders={theaders}
+              data={data}
+              refreshData={fetchDataTable}
+            />
+            <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
+          </LineCard>
         </TableSection>
       </Container>
     </Card>
   );
 };
+
 export default CheckRightAdmin;
 
 const Container = styled.div`
   padding: 20px 20px;
-  height: 90vh;
-  min-width: 60vw;
   display: flex;
+  justify-content: center;
   flex-direction: column;
-  section {
+  overflow: scroll;
+
+  > * {
     margin: 10px 0;
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    justify-content: flex-start;
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    justify-content: flex-start;
   }
 `;
 

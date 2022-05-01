@@ -1,4 +1,5 @@
-const BASE_URL = "http://203.151.211.133:3002/api/v1/";
+// const BASE_URL = "http://203.151.211.133:3002/api/v1/";
+const BASE_URL = "http://localhost:3002/api/v1/";
 
 class JSONRPCError extends Error {
   constructor(errData) {
@@ -30,6 +31,7 @@ export async function httpPostRequest(body, endpoint) {
 export async function httpGetRequest(endpoint) {
   const url = `${BASE_URL}${endpoint}`;
 
+  console.log(url);
   const res = await fetch(url, {
     method: "GET",
   });
