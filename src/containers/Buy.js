@@ -91,6 +91,7 @@ const Buy = () => {
   const [addressTel, setAddressTel] = useState(null);
 
   const [file, setFile] = useState();
+  const [filename, setFilename] = useState();
   const [orderId, setOrderId] = useState(null);
 
   const [masterBankRefund, setMasterBankRefund] = useState([]);
@@ -190,7 +191,9 @@ const Buy = () => {
     const [file] = e.target.files;
     const maxAllowedSize = 5 * 1024 * 1024;
     const { name: fileName, size } = file;
+    console.log([file]);
     if (size > maxAllowedSize) {
+      console.log("no ok");
       setStatus(999);
       setAlertMessage("ขนาดไฟล์รูปภาพใหญ่เกินไป");
       setShow(true);
@@ -198,6 +201,8 @@ const Buy = () => {
         setShow(false);
       }, 2000);
     } else {
+      console.log("ok");
+      setFilename(fileName);
       setFile(file);
     }
   };
@@ -1602,7 +1607,7 @@ const Buy = () => {
                         <div
                           className="payment-method"
                           style={{
-                            padding: "10px 20px 30px 20px",
+                            padding: "10px 20px 0px 20px",
                             display: "flex",
                           }}
                         >
@@ -1629,7 +1634,6 @@ const Buy = () => {
                             <input
                               type="file"
                               style={{ display: "none" }}
-                              accept="image/png, image/jpeg"
                               onChange={handleSelectedFile}
                             />
                           </UploadButton>
@@ -1647,7 +1651,34 @@ const Buy = () => {
                                 style={{ margin: "0 10px" }}
                               />
                               กรุณาอัพโหลดไฟล์ .PNG และ JPEG ขนาดไม่เกิน 5 MB
+                              file
                             </p>
+                          </div>
+                        </div>
+                        <div
+                          className="payment-method"
+                          style={{
+                            padding: "10px 20px 30px 20px",
+                            display: "flex",
+                          }}
+                        >
+                          <b
+                            style={{
+                              width: "20%",
+                              margin: "20px 10px 10px 10px",
+                            }}
+                          ></b>
+                          <div>
+                            <p
+                              style={{
+                                width: "100%",
+                                fontSize: "17px",
+                                margin: "auto",
+                                marginBottom: "20px",
+                                marginTop: "20px",
+                              }}
+                            ></p>
+                            {filename}
                           </div>
                         </div>
                       </LineCard>
