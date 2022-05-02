@@ -70,7 +70,7 @@ const Buy = () => {
   const [rightSpecialName, setRightSpecialName] = useState("-");
   const [rightSpecialVolume, setRightSpecialVolume] = useState(null);
   const [excessVolume, setExcessVolume] = useState(null);
-  const [isAcceptVerify, setIsAcceptVerify] = useState(false)
+  const [isAcceptVerify, setIsAcceptVerify] = useState(false);
 
   // step 3
   const [logo, setLogo] = useState(null);
@@ -181,16 +181,16 @@ const Buy = () => {
   };
 
   const handlerOnAcceptVerify = () => {
-    setAddressModal(false)
-    setIsAcceptVerify(true)
-  }
+    setAddressModal(false);
+    setIsAcceptVerify(true);
+  };
 
   const handleSelectedFile = (e) => {
     const [file] = e.target.files;
     const maxAllowedSize = 5 * 1024 * 1024;
     const { name: fileName, size } = file;
     if (size > maxAllowedSize) {
-      setStatus(999)
+      setStatus(999);
       setAlertMessage("ขนาดไฟล์รูปภาพใหญ่เกินไป");
       setShow(true);
       setTimeout(() => {
@@ -203,7 +203,7 @@ const Buy = () => {
 
   const handleSubmit = async () => {
     if (!file) {
-      setStatus(999)
+      setStatus(999);
       setAlertMessage("ไม่พบไฟล์ภาพ");
       setShowAlertModal(true);
     }
@@ -232,7 +232,7 @@ const Buy = () => {
   const handlerOnClickPage = (page) => {
     if (!dropdownSelect) {
       setShow(true);
-      setStatus(999)
+      setStatus(999);
       setAlertMessage(
         "กรุณาเลือกข้อมูล ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก"
       );
@@ -241,7 +241,7 @@ const Buy = () => {
       }, 5000);
     } else if (!tradingAccountNo) {
       setShow(true);
-      setStatus(999)
+      setStatus(999);
       setAlertMessage("กรุณากรอกข้อมูล เลขที่บัญชีซื้อขาย");
       setTimeout(() => {
         setShow(false);
@@ -296,7 +296,7 @@ const Buy = () => {
     if (status === 200) {
       setOrderId(res.data._id);
       const msg = "ยืนยันคำสั่งซื้อสำเร็จ";
-      setStatus(200)
+      setStatus(200);
       setAlertMessage(msg);
       showAlert(setShow, 2000);
       setPage(3);
@@ -457,28 +457,40 @@ const Buy = () => {
               </h3>
             </Header>
             <LineCard style={{ padding: "40px" }}>
-              <div style={{ display: "flex", width: "100%", margin: "10px 0", alignItems: 'baseline' }}>
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  margin: "10px 0",
+                  alignItems: "baseline",
+                }}
+              >
                 <p
                   style={{
                     width: "30%",
                     paddingTop: "8px",
                     fontSize: "14px",
-                    marginRight: "2rem"
+                    marginRight: "2rem",
                   }}
                 >
                   ชื่อ - นามสกุล*
                 </p>
-                <p>
-                  {fullnameModal}
-                </p>
+                <p>{fullnameModal}</p>
               </div>
-              <div style={{ display: "flex", width: "100%", margin: "10px 0", alignItems: 'baseline' }}>
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  margin: "10px 0",
+                  alignItems: "baseline",
+                }}
+              >
                 <p
                   style={{
                     width: "30%",
                     paddingTop: "8px",
                     fontSize: "14px",
-                    marginRight: "2rem"
+                    marginRight: "2rem",
                   }}
                 >
                   เลขทะเบียนผู้ถือหุ้น*
@@ -537,14 +549,23 @@ const Buy = () => {
         </Card>
       </Modal>
       <Modal show={addressModal}>
-        <Card style={{ height: 'auto', width: '70%' }}>
+        <Card style={{ height: "auto", width: "70%" }}>
           <ContainerCard>
             <Header
-              style={{ margin: "20px", color: "#1D3AB1", fontWeight: "bold", display: 'flex' }}
+              style={{
+                margin: "20px",
+                color: "#1D3AB1",
+                fontWeight: "bold",
+                display: "flex",
+              }}
             >
               <FontAwesomeIcon
                 icon={faCircleInfo}
-                style={{ margin: "10px 10px 0px 10px", color: "#FB0303", fontSize: "20px" }}
+                style={{
+                  margin: "10px 10px 0px 10px",
+                  color: "#FB0303",
+                  fontSize: "20px",
+                }}
               />
               <h3>
                 กรณีที่ท่านแจ้งบัญชีธนาคารนอกเหนือจาก 9
@@ -553,51 +574,68 @@ const Buy = () => {
               </h3>
             </Header>
             <LineCard style={{ padding: "1rem 2rem", marginBottom: "1rem" }}>
-
-              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                {
-                  masterBankRefund.length > 0 && masterBankRefund.map((bank, index) => {
-                    return <>
-                      <LineCard style={{ width: '100%', flexBasis: '46%', margin: "10px", display: "flex", padding: "5px" }}>
-                        <img
-                          src={bank.logo}
-                          width={25}
-                          height={25}
-                          style={{ margin: 'auto', marginLeft: '1rem' }}
-                        />
-                        <p
+              <div style={{ display: "flex", flexWrap: "wrap" }}>
+                {masterBankRefund.length > 0 &&
+                  masterBankRefund.map((bank, index) => {
+                    return (
+                      <>
+                        <LineCard
                           style={{
-                            marginTop: "auto",
-                            marginBottom: "auto",
-                            marginLeft: "2rem",
+                            width: "100%",
+                            flexBasis: "46%",
+                            margin: "10px",
+                            display: "flex",
+                            padding: "5px",
                           }}
                         >
-                          {bank.nameTH}
-                        </p>
-                      </LineCard>
-                    </>
-                  })
-                }
+                          <img
+                            src={bank.logo}
+                            width={25}
+                            height={25}
+                            style={{ margin: "auto", marginLeft: "1rem" }}
+                          />
+                          <p
+                            style={{
+                              marginTop: "auto",
+                              marginBottom: "auto",
+                              marginLeft: "2rem",
+                            }}
+                          >
+                            {bank.nameTH}
+                          </p>
+                        </LineCard>
+                      </>
+                    );
+                  })}
               </div>
             </LineCard>
-            <LineCard style={{ marginBottom: '1rem' }}>
-              <Header style={{ color: "#1D3AB1", fontWeight: "bold", marginLeft: '2rem' }}>
-                <h3>
-                  รายละเอียดที่อยู่ของท่าน
-                </h3>
+            <LineCard style={{ marginBottom: "1rem" }}>
+              <Header
+                style={{
+                  color: "#1D3AB1",
+                  fontWeight: "bold",
+                  marginLeft: "2rem",
+                }}
+              >
+                <h3>รายละเอียดที่อยู่ของท่าน</h3>
               </Header>
-              <div class="profile-detail" style={{ padding: '1rem 2rem' }}>
-                <div style={{ display: 'flex' }}>
-                  <p style={{ width: '30%' }}>ชื่อ-นามสกุล :</p>
-                  <p style={{ width: '70%' }}>{profile ? profile.name : '-'} {profile ? profile.lastname : '-'}</p>
+              <div class="profile-detail" style={{ padding: "1rem 2rem" }}>
+                <div style={{ display: "flex" }}>
+                  <p style={{ width: "30%" }}>ชื่อ-นามสกุล :</p>
+                  <p style={{ width: "70%" }}>
+                    {profile ? profile.name : "-"}{" "}
+                    {profile ? profile.lastname : "-"}
+                  </p>
                 </div>
-                <div style={{ display: 'flex' }}>
-                  <p style={{ width: '30%' }}>ที่อยู่ :</p>
-                  <p style={{ width: '70%' }}>address</p>
+                <div style={{ display: "flex" }}>
+                  <p style={{ width: "30%" }}>ที่อยู่ :</p>
+                  <p style={{ width: "70%" }}>
+                    {profile ? profile.address : ""}
+                  </p>
                 </div>
-                <div style={{ display: 'flex' }}>
-                  <p style={{ width: '30%' }}>เบอร์โทรศัพท์ :</p>
-                  <p style={{ width: '70%' }}>{phoneNo}</p>
+                <div style={{ display: "flex" }}>
+                  <p style={{ width: "30%" }}>เบอร์โทรศัพท์ :</p>
+                  <p style={{ width: "70%" }}>{phoneNo}</p>
                 </div>
               </div>
             </LineCard>
@@ -611,8 +649,8 @@ const Buy = () => {
           </ContainerCard>
         </Card>
       </Modal>
-      <Modal show={false} style={{ padding: '50px' }}>
-        <Card style={{ height: 'auto', width: '60%' }}>
+      <Modal show={false} style={{ padding: "50px" }}>
+        <Card style={{ height: "auto", width: "60%" }}>
           <ContainerCard>
             <Header
               style={{ margin: "20px", color: "#1D3AB1", fontWeight: "bold" }}
@@ -886,7 +924,8 @@ const Buy = () => {
                   icon={faCircleInfo}
                   style={{ margin: "0 10px", color: "#FB0303" }}
                 />
-                โปรดตรวจสอบข้อมูลของท่านให้เรียบร้อย หากท่านกดปุ่ม <b>ถัดไป</b> จะไม่สามารถกลับมาแก้ไขข้อมูลได้อีก
+                โปรดตรวจสอบข้อมูลของท่านให้เรียบร้อย หากท่านกดปุ่ม <b>ถัดไป</b>{" "}
+                จะไม่สามารถกลับมาแก้ไขข้อมูลได้อีก
               </p>
             </div>
             <div
@@ -1280,7 +1319,7 @@ const Buy = () => {
                               border: "1px solid #1D3AB1",
                               boxSizing: "border-box",
                               borderRadius: "10px",
-                              width: '100%'
+                              width: "100%",
                             }}
                           >
                             <Header>
@@ -1302,7 +1341,7 @@ const Buy = () => {
                               border: "1px solid #1D3AB1",
                               boxSizing: "border-box",
                               borderRadius: "10px",
-                              width: '100%'
+                              width: "100%",
                             }}
                           >
                             <Header>
@@ -1816,7 +1855,7 @@ const Button = styled.input`
   }
 
   &:disabled {
-    background: #809FB8;
+    background: #809fb8;
   }
 `;
 
