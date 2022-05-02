@@ -31,7 +31,7 @@ import ViewProfile from "../components/ViewProfile/ViewProfile";
 const Buy = () => {
   const { user } = useSelector((state) => state);
   const navigate = useNavigate();
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(1);
   const [alertMessage, setAlertMessage] = useState();
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
