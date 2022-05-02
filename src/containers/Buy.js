@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { DownArrow } from "@styled-icons/boxicons-solid/DownArrow";
 
 import change from "../assets/icon_change.png";
@@ -29,6 +30,7 @@ import ViewProfile from "../components/ViewProfile/ViewProfile";
 
 const Buy = () => {
   const { user } = useSelector((state) => state);
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [alertMessage, setAlertMessage] = useState();
   const [show, setShow] = useState(false);
@@ -68,6 +70,7 @@ const Buy = () => {
   const [rightSpecialName, setRightSpecialName] = useState("-");
   const [rightSpecialVolume, setRightSpecialVolume] = useState(null);
   const [excessVolume, setExcessVolume] = useState(null);
+  const [isAcceptVerify, setIsAcceptVerify] = useState(false)
 
   // step 3
   const [logo, setLogo] = useState(null);
@@ -118,7 +121,6 @@ const Buy = () => {
 
     if (status === 200) {
       const payload = res.data[0];
-      console.log(payload);
       setFullname(`${payload.customerId.name} ${payload.customerId.lastname}`);
       setShareId(payload.registrationNo);
       setPhoneNo(payload.customerId.telephone);
@@ -171,11 +173,6 @@ const Buy = () => {
       const payload = res.data;
       setMasterBankPayment(payload.filter((o) => o.type === "payment"));
       setMasterBankRefund(payload.filter((o) => o.type === "refund"));
-      // setLogo(payload.logo);
-      // setNameTH(payload.nameTH);
-      // setRef1(payload.ref1);
-      // setRef2(payload.ref2);
-      // setQRCode(payload.qrCode);
     }
   };
 
@@ -183,29 +180,35 @@ const Buy = () => {
     setValidateAccept(true);
   };
 
+  const handlerOnAcceptVerify = () => {
+    setAddressModal(false)
+    setIsAcceptVerify(true)
+  }
+
   const handleSelectedFile = (e) => {
     const [file] = e.target.files;
     const maxAllowedSize = 5 * 1024 * 1024;
     const { name: fileName, size } = file;
     if (size > maxAllowedSize) {
+      setStatus(999)
       setAlertMessage("ขนาดไฟล์รูปภาพใหญ่เกินไป");
       setShow(true);
+      setTimeout(() => {
+        setShow(false);
+      }, 2000);
     } else {
       setFile(file);
     }
-    setTimeout(() => {
-      setShow(false);
-    }, 2000);
   };
 
   const handleSubmit = async () => {
     if (!file) {
+      setStatus(999)
       setAlertMessage("ไม่พบไฟล์ภาพ");
       setShowAlertModal(true);
     }
     const formData = new FormData();
     formData.append("File", file);
-    console.log(orderId);
     const endpoint = `uploads/image?orderId=${orderId}`;
 
     const [res, status] = await httpPostRequestUploadFile(formData, endpoint);
@@ -214,10 +217,11 @@ const Buy = () => {
     if (status === 200) {
       msg = "Upload Completed";
       console.log(msg);
+      setAlertMessage(msg);
+      showAlert(setShow, 2000);
+      setFile();
+      // navigate(`/somewhere`)
     }
-    setAlertMessage(msg);
-    showAlert(setShow, 2000);
-    setFile();
   };
 
   const hanlderOnBack = () => {
@@ -228,6 +232,7 @@ const Buy = () => {
   const handlerOnClickPage = (page) => {
     if (!dropdownSelect) {
       setShow(true);
+      setStatus(999)
       setAlertMessage(
         "กรุณาเลือกข้อมูล ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก"
       );
@@ -236,6 +241,7 @@ const Buy = () => {
       }, 5000);
     } else if (!tradingAccountNo) {
       setShow(true);
+      setStatus(999)
       setAlertMessage("กรุณากรอกข้อมูล เลขที่บัญชีซื้อขาย");
       setTimeout(() => {
         setShow(false);
@@ -290,6 +296,7 @@ const Buy = () => {
     if (status === 200) {
       setOrderId(res.data._id);
       const msg = "ยืนยันคำสั่งซื้อสำเร็จ";
+      setStatus(200)
       setAlertMessage(msg);
       showAlert(setShow, 2000);
       setPage(3);
@@ -379,7 +386,7 @@ const Buy = () => {
   return (
     <Card>
       <Modal show={showAlertModal} style={{ marginLeft: "10%", width: "100%" }}>
-        <Card style={{ width: "600px" }}>
+        <Card style={{ width: "1200px" }}>
           <ContainerCard>
             <Header style={{ textAlign: "center" }}>
               <FontAwesomeIcon
@@ -450,40 +457,33 @@ const Buy = () => {
               </h3>
             </Header>
             <LineCard style={{ padding: "40px" }}>
-              <div style={{ display: "flex", width: "100%", margin: "10px 0" }}>
+              <div style={{ display: "flex", width: "100%", margin: "10px 0", alignItems: 'baseline' }}>
                 <p
                   style={{
                     width: "30%",
                     paddingTop: "8px",
                     fontSize: "14px",
-                    marginRight: "10px",
+                    marginRight: "2rem"
                   }}
                 >
                   ชื่อ - นามสกุล*
                 </p>
-                <FieldInput
-                  value={fullnameModal}
-                  onChange={(e) => setFullnameModal(e.target.value)}
-                  placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"}
-                />
+                <p>
+                  {fullnameModal}
+                </p>
               </div>
-              <div style={{ display: "flex", width: "100%", margin: "10px 0" }}>
+              <div style={{ display: "flex", width: "100%", margin: "10px 0", alignItems: 'baseline' }}>
                 <p
                   style={{
                     width: "30%",
                     paddingTop: "8px",
                     fontSize: "14px",
-                    marginRight: "10px",
+                    marginRight: "2rem"
                   }}
                 >
-                  {" "}
                   เลขทะเบียนผู้ถือหุ้น*
                 </p>
-                <FieldInput
-                  value={shareIdModal}
-                  onChange={(e) => setShareIdModal(e.target.value)}
-                  placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"}
-                />
+                <p>{shareIdModal}</p>
               </div>
               <div style={{ display: "flex", width: "100%", margin: "10px 0" }}>
                 <p
@@ -491,7 +491,7 @@ const Buy = () => {
                     width: "30%",
                     paddingTop: "8px",
                     fontSize: "14px",
-                    marginRight: "10px",
+                    marginRight: "3rem",
                   }}
                 >
                   เบอร์โทรศัพท์*
@@ -536,8 +536,83 @@ const Buy = () => {
           </ContainerCard>
         </Card>
       </Modal>
-      <Modal show={addressModal} style={{ marginLeft: "10%", width: "100%" }}>
-        <Card style={{ width: "50%" }}>
+      <Modal show={addressModal}>
+        <Card style={{ height: 'auto', width: '70%' }}>
+          <ContainerCard>
+            <Header
+              style={{ margin: "20px", color: "#1D3AB1", fontWeight: "bold", display: 'flex' }}
+            >
+              <FontAwesomeIcon
+                icon={faCircleInfo}
+                style={{ margin: "10px 10px 0px 10px", color: "#FB0303", fontSize: "20px" }}
+              />
+              <h3>
+                กรณีที่ท่านแจ้งบัญชีธนาคารนอกเหนือจาก 9
+                ธนาคารทางบริษัทขอคืนเงินให้ท่านเป็นเช็ค
+                โดยส่งไปตามที่อยู่ด้านล่าง
+              </h3>
+            </Header>
+            <LineCard style={{ padding: "1rem 2rem", marginBottom: "1rem" }}>
+
+              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                {
+                  masterBankRefund.length > 0 && masterBankRefund.map((bank, index) => {
+                    return <>
+                      <LineCard style={{ width: '100%', flexBasis: '46%', margin: "10px", display: "flex", padding: "5px" }}>
+                        <img
+                          src={bank.logo}
+                          width={25}
+                          height={25}
+                          style={{ margin: 'auto', marginLeft: '1rem' }}
+                        />
+                        <p
+                          style={{
+                            marginTop: "auto",
+                            marginBottom: "auto",
+                            marginLeft: "2rem",
+                          }}
+                        >
+                          {bank.nameTH}
+                        </p>
+                      </LineCard>
+                    </>
+                  })
+                }
+              </div>
+            </LineCard>
+            <LineCard style={{ marginBottom: '1rem' }}>
+              <Header style={{ color: "#1D3AB1", fontWeight: "bold", marginLeft: '2rem' }}>
+                <h3>
+                  รายละเอียดที่อยู่ของท่าน
+                </h3>
+              </Header>
+              <div class="profile-detail" style={{ padding: '1rem 2rem' }}>
+                <div style={{ display: 'flex' }}>
+                  <p style={{ width: '30%' }}>ชื่อ-นามสกุล :</p>
+                  <p style={{ width: '70%' }}>{profile ? profile.name : '-'} {profile ? profile.lastname : '-'}</p>
+                </div>
+                <div style={{ display: 'flex' }}>
+                  <p style={{ width: '30%' }}>ที่อยู่ :</p>
+                  <p style={{ width: '70%' }}>address</p>
+                </div>
+                <div style={{ display: 'flex' }}>
+                  <p style={{ width: '30%' }}>เบอร์โทรศัพท์ :</p>
+                  <p style={{ width: '70%' }}>{phoneNo}</p>
+                </div>
+              </div>
+            </LineCard>
+            <div style={{ margin: "auto", width: "400px" }}>
+              <Button
+                type="submit"
+                value={"ฉันรับทราบแล้ว"}
+                onClick={handlerOnAcceptVerify}
+              />
+            </div>
+          </ContainerCard>
+        </Card>
+      </Modal>
+      <Modal show={false} style={{ padding: '50px' }}>
+        <Card style={{ height: 'auto', width: '60%' }}>
           <ContainerCard>
             <Header
               style={{ margin: "20px", color: "#1D3AB1", fontWeight: "bold" }}
@@ -545,7 +620,7 @@ const Buy = () => {
               <h3>
                 <FontAwesomeIcon
                   icon={faCircleInfo}
-                  style={{ margin: "0 10px" }}
+                  style={{ margin: "0 10px", color: "#FB0303" }}
                 />
                 กรณีที่ท่านแจ้งบัญชีธนาคารนอกเหนือจาก 9
                 ธนาคารทางบริษัทขอคืนเงินให้ท่านเป็นเช็ค
@@ -560,8 +635,8 @@ const Buy = () => {
                   >
                     <img
                       src={bank.logo}
-                      width={50}
-                      height={50}
+                      width={25}
+                      height={25}
                       style={{ marginLeft: "3rem" }}
                     />
                     <p
@@ -714,7 +789,7 @@ const Buy = () => {
                   <div className="content-detail-member">
                     <div className="content-detail-share">
                       <div className="text-title">
-                        <p>หุ้มเดิมของท่าน</p>
+                        <p>หุ้นเดิม</p>
                         <p className="text-black">{rightStockName}</p>
                       </div>
                       <div className="text-amount">
@@ -730,14 +805,14 @@ const Buy = () => {
                     </div>
                     <div className="content-detail-share">
                       <div className="text-title">
-                        <p>เสนอขายหุ้นละ</p>
+                        <p>ราคาเสนอขายหุ้นละ</p>
                         <p className="text-black">{offerPrice} บาท</p>
                       </div>
                       <div className="text-amount"></div>
                     </div>
                     <div className="content-detail-share">
                       <div className="text-title">
-                        <p>สิทธิ์ในการซื้อหุ้นเพิ่มทุนของท่าน</p>
+                        <p>สิทธิ์ในการจองซื้อหุ้นเพิ่มทุน</p>
                         <p className="text-black">{rightStockName}</p>
                       </div>
                       <div className="text-amount">
@@ -769,7 +844,7 @@ const Buy = () => {
                     </div>
                     <div className="content-detail-share">
                       <div className="text-title">
-                        <p>หุ้นที่ท่านซื้อเกินสิทธิ์</p>
+                        <p>หุ้นจองซื้อเกินสิทธิ์</p>
                         <p className="text-black">{rightStockName}</p>
                       </div>
                       <div className="text-amount">
@@ -804,15 +879,14 @@ const Buy = () => {
             </div>
             <div
               className="message-info"
-              style={{ margin: "10px 10px 10px 10px", color: "#809FB8" }}
+              style={{ margin: "10px 10px 10px 10px", color: "#1234B0" }}
             >
               <p>
                 <FontAwesomeIcon
                   icon={faCircleInfo}
-                  style={{ margin: "0 10px" }}
+                  style={{ margin: "0 10px", color: "#FB0303" }}
                 />
-                กรุณาตรวจสอบรายละเอียดข้อมูลเพื่อความถูกต้อง
-                ก่อนการดำเนินการยืนยันการจอง
+                โปรดตรวจสอบข้อมูลของท่านให้เรียบร้อย หากท่านกดปุ่ม <b>ถัดไป</b> จะไม่สามารถกลับมาแก้ไขข้อมูลได้อีก
               </p>
             </div>
             <div
@@ -1029,9 +1103,8 @@ const Buy = () => {
                   return (
                     <>
                       <div className="card-tag">
-                        <LineCard
+                        <StyledLineCard
                           style={{
-                            width: "100%",
                             marginBottom: "20px",
                             paddingBottom: "30px",
                           }}
@@ -1048,10 +1121,9 @@ const Buy = () => {
                             <b>{stockVolume}</b>
                             <p>หุ้น</p>
                           </ShareDetail>
-                        </LineCard>
-                        <LineCard
+                        </StyledLineCard>
+                        <StyledLineCard
                           style={{
-                            width: "100%",
                             marginBottom: "20px",
                             paddingBottom: "30px",
                           }}
@@ -1074,22 +1146,12 @@ const Buy = () => {
                             </p>
                             <p style={{ fontSize: "18.72px" }}>{offerPrice}</p>
                             <p style={{ fontSize: "18.72px" }}>บาท</p>
-                            {/* <Header>
-                            <h3 style={{ color: '#1D3AB1', fontWeight: 'bold' }}>ราคาเสนอขายหุ้นละ</h3>
-                          </Header>
-                          <Header>
-                            <h3>{offerPrice}</h3>
-                          </Header>
-                          <Header>
-                            <h3>บาท</h3>
-                          </Header> */}
                           </ShareDetail>
-                        </LineCard>
+                        </StyledLineCard>
                       </div>
                       <div className="card-tag">
-                        <LineCard
+                        <StyledLineCard
                           style={{
-                            width: "100%",
                             marginBottom: "20px",
                             paddingBottom: "30px",
                           }}
@@ -1124,10 +1186,9 @@ const Buy = () => {
                               (การคำนวนจากราคาเสนอขาย {offerPrice} บาท ต่อ หุ้น)
                             </p>
                           </ShareDetail>
-                        </LineCard>
-                        <LineCard
+                        </StyledLineCard>
+                        <StyledLineCard
                           style={{
-                            width: "100%",
                             marginBottom: "20px",
                             paddingBottom: "30px",
                           }}
@@ -1144,12 +1205,11 @@ const Buy = () => {
                             <b>{rightSpecialVolume}</b>
                             <p>หุ้น</p>
                           </ShareDetail>
-                        </LineCard>
+                        </StyledLineCard>
                       </div>
                       <div className="card-tag">
-                        <LineCard
+                        <StyledLineCard
                           style={{
-                            width: "100%",
                             marginBottom: "20px",
                             paddingBottom: "30px",
                             border: "5px solid #1D3AB1",
@@ -1211,16 +1271,16 @@ const Buy = () => {
                             <b>{rightSpecialVolume}</b>
                             <p>หุ้น</p>
                           </ShareDetail>
-                        </LineCard>
-                        <div style={{ width: "100%" }}>
-                          <LineCard
+                        </StyledLineCard>
+                        <div className="buy-flex">
+                          <StyledLineCard
                             style={{
-                              width: "100%",
                               marginBottom: "20px",
                               paddingBottom: "30px",
                               border: "1px solid #1D3AB1",
                               boxSizing: "border-box",
                               borderRadius: "10px",
+                              width: '100%'
                             }}
                           >
                             <Header>
@@ -1235,14 +1295,14 @@ const Buy = () => {
                               <b>{excessVolume}</b>
                               <p>หุ้น</p>
                             </ShareDetail>
-                          </LineCard>
-                          <LineCard
+                          </StyledLineCard>
+                          <StyledLineCard
                             style={{
-                              width: "100%",
                               marginBottom: "20px",
                               border: "1px solid #1D3AB1",
                               boxSizing: "border-box",
                               borderRadius: "10px",
+                              width: '100%'
                             }}
                           >
                             <Header>
@@ -1314,13 +1374,14 @@ const Buy = () => {
                                 </InputDiv>
                               </div>
                             </ShareDetail>
-                          </LineCard>
+                          </StyledLineCard>
                         </div>
                       </div>
                       <div style={{ margin: "auto", width: "400px" }}>
                         <Button
                           type="submit"
                           value="ยืนยันคำสั่งซื้อ"
+                          disabled={!isAcceptVerify}
                           onClick={() => handlerOnSubmited()}
                         />
                       </div>
@@ -1622,12 +1683,19 @@ const Container = styled.div`
     }
   }
 
+  .buy-flex {
+    width: 50%;
+  }
+
   /* For Mobile */
   @media screen and (max-width: 540px) {
     width: 90vw;
 
     .card-tag {
       display: inline;
+    }
+    .buy-flex {
+      width: 100%;
     }
   }
 
@@ -1637,6 +1705,9 @@ const Container = styled.div`
 
     .card-tag {
       display: inline;
+    }
+    .buy-flex {
+      width: 100%;
     }
   }
 `;
@@ -1742,6 +1813,10 @@ const Button = styled.input`
   &:hover {
     background: #edb52d;
     color: #000000;
+  }
+
+  &:disabled {
+    background: #809FB8;
   }
 `;
 
@@ -2020,6 +2095,22 @@ const ContainerCard = styled.div`
   width: 100%;
   p {
     font-size: 1rem;
+  }
+`;
+
+const StyledLineCard = styled.div`
+  border-radius: 10px;
+  border: 1px solid #d9e1e7;
+  margin: 0 10px;
+  width: 50%;
+
+  @media screen and (max-width: 540px) {
+    width: 100%;
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    width: 100%;
   }
 `;
 

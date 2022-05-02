@@ -12,7 +12,7 @@ const Container = styled.div`
 
   input: focus {
     border: 2px solid #1D3AB1;
-    border-radius: 10px;
+    border-radius: 8px;
   }
 
   input {
