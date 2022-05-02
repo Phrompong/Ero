@@ -7,7 +7,10 @@ import change from "../assets/icon_change.png";
 
 import { Card } from "../components/UI/Card";
 import { FlexContainer } from "../components/UI/FlexContainer";
-import { DropdownSelect } from "../components/UI/Dropdown";
+import {
+  DropdownSelect,
+  DropdownSelectMasterBank,
+} from "../components/UI/Dropdown";
 import { LineCard } from "../components/UI/Card";
 import { FieldInput } from "../components/UI/Search";
 import { ModalAlert } from "../components/ModalAlert/ModalAlert";
@@ -52,7 +55,10 @@ const Buy = () => {
   const [shareId, setShareId] = useState(null);
   const [phoneNo, setPhoneNo] = useState(null);
   const [shareOption, setShareOption] = useState([]);
+  const [shareBankRefundOption, setShareBankRefundOption] = useState([]);
   const [dropdownSelect, setDropdownSelect] = useState(null);
+  const [dropdownBankRefundSelect, setDropdownBankRefundSelect] =
+    useState(null);
   const [isReadMore, setIsReadMore] = useState(false);
   const [tradingAccountNo, setTradingAccountNo] = useState(null);
 
@@ -173,8 +179,12 @@ const Buy = () => {
 
     if (status === 200) {
       const payload = res.data;
+
+      const bankRefund = payload.filter((o) => o.type === "refund");
+
       setMasterBankPayment(payload.filter((o) => o.type === "payment"));
-      setMasterBankRefund(payload.filter((o) => o.type === "refund"));
+      setMasterBankRefund(bankRefund);
+      setShareBankRefundOption(bankRefund);
     }
   };
 
@@ -291,7 +301,7 @@ const Buy = () => {
 
   const handlerOnAccept = async () => {
     setValidateAccept(false);
-
+    console.log(dropdownBankRefundSelect);
     const [res, status] = await httpFetch(
       "POST",
       {
@@ -319,6 +329,7 @@ const Buy = () => {
           tel: addressTel,
         },
         registrationNo: shareId,
+        bankRefund: dropdownBankRefundSelect._id,
       },
       "orders"
     );
@@ -1389,15 +1400,29 @@ const Buy = () => {
                                   <p>ฝากเงินเข้าบัญชีธนาคาร</p>
                                 </InputDiv>
                                 <InputDiv
-                                  style={{ marginTop: "20px", width: "100%" }}
+                                  style={{
+                                    marginTop: "20px",
+                                    width: "100%",
+                                  }}
                                 >
-                                  <FieldInput
+                                  <DropdownSelectMasterBank
+                                    options={shareBankRefundOption}
+                                    searchFrom={"nameTH"}
+                                    isOpen={isOpenDropdown}
+                                    onClick={() =>
+                                      setIsOpenDropdown(!isOpenDropdown)
+                                    }
+                                    onBlur={() => setIsOpenDropdown(false)}
+                                    setSelected={setDropdownBankRefundSelect}
+                                    selected={dropdownBankRefundSelect}
+                                  />
+                                  {/* <FieldInput
                                     placeholder={"ฝากเงินเข้าบัญชีธนาคาร"}
                                     value={depositBank}
                                     onChange={(e) =>
                                       setDepositBank(e.target.value)
                                     }
-                                  />
+                                  /> */}
                                 </InputDiv>
                               </div>
                               <div className="input-div">

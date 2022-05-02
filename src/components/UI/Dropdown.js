@@ -72,7 +72,7 @@ const Input = styled.input`
   font-size: 16px;
   padding: 8px 15px 8px 15px;
   border-radius: 10px;
-`
+`;
 
 const OptionSelect = styled.a`
   color: black;
@@ -80,7 +80,7 @@ const OptionSelect = styled.a`
   // text-decoration: none;
   display: block;
   z-index: 999;
-`
+`;
 
 const WrapperOption = styled.div`
   display: ${(props) => (props.isOpen ? "block" : "none")};
@@ -96,7 +96,7 @@ const WrapperOption = styled.div`
     background: ${(props) => (props.isEmtry ? "#FFFFFF" : "#90A0DA")};
     color: "#FFFFFF";
   }
-`
+`;
 
 const Wrapper = styled.div`
   width: 100%;
@@ -107,7 +107,7 @@ const Wrapper = styled.div`
   // & ${Input}:focus-within + ${WrapperOption} {
   //   display: block;
   // }
-`
+`;
 
 export const Dropdown = ({ options, setSelected, selected }) => (
   <Container>
@@ -123,49 +123,147 @@ export const Dropdown = ({ options, setSelected, selected }) => (
   </Container>
 );
 
-export const DropdownSelect = ({ options, setSelected, selected, searchFrom, isOpen, onClick, onBlur }) => {
-  const [filter, setFilter] = useState(null)
-  const [optionsFiltered, setOptionsFiltered] = useState([])
-  const [optionSelect, setOptionSelect] = useState(selected)
+export const DropdownSelect = ({
+  options,
+  setSelected,
+  selected,
+  searchFrom,
+  isOpen,
+  onClick,
+  onBlur,
+}) => {
+  const [filter, setFilter] = useState(null);
+  const [optionsFiltered, setOptionsFiltered] = useState([]);
+  const [optionSelect, setOptionSelect] = useState(selected);
   useEffect(() => {
-    setOptionsFiltered(options)
-  }, [options])
+    setOptionsFiltered(options);
+  }, [options]);
 
   useEffect(() => {
     if (optionSelect) {
-      setFilter(optionSelect.fullname)
-      setSelected(optionSelect)
+      setFilter(optionSelect.fullname);
+      setSelected(optionSelect);
     }
-  }, [optionSelect])
+  }, [optionSelect]);
 
   useEffect(() => {
     if (filter) {
-      setOptionsFiltered(options.filter((option) => option[searchFrom].includes(filter)))
+      setOptionsFiltered(
+        options.filter((option) => option[searchFrom].includes(filter))
+      );
     }
-    if (filter === '') {
-      setOptionsFiltered(options)
+    if (filter === "") {
+      setOptionsFiltered(options);
     }
-  }, [filter])
+  }, [filter]);
   return (
     <Container onClick={onClick} onBlurCapture={onBlur}>
       <Wrapper>
-        <Input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder={'กรุณาเลือก'} />
-        {
-          options.length === 0 ? <>
+        <Input
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          placeholder={"กรุณาเลือก"}
+        />
+        {options.length === 0 ? (
+          <>
             <WrapperOption isOpen={isOpen} isEmtry={true}>
               <OptionSelect>ไม่มีข้อมูล</OptionSelect>
             </WrapperOption>
-          </> : <>
+          </>
+        ) : (
+          <>
             <WrapperOption isOpen={isOpen}>
-              {
-                optionsFiltered && optionsFiltered.map((option, index) => (
-                  <OptionSelect onMouseDown={() => setOptionSelect(option)} key={index} value={option.code}>{option.code} {option.name}</OptionSelect>
-                ))
-              }
+              {optionsFiltered &&
+                optionsFiltered.map((option, index) => (
+                  <OptionSelect
+                    onMouseDown={() => setOptionSelect(option)}
+                    key={index}
+                    value={option.code}
+                  >
+                    {option.code} {option.name}
+                  </OptionSelect>
+                ))}
             </WrapperOption>
           </>
-        }
+        )}
       </Wrapper>
-    </Container >
+    </Container>
+  );
+};
+
+export const DropdownSelectMasterBank = ({
+  options,
+  setSelected,
+  selected,
+  searchFrom,
+  isOpen,
+  onClick,
+  onBlur,
+}) => {
+  const [filter, setFilter] = useState(null);
+  const [optionsFiltered, setOptionsFiltered] = useState([]);
+  const [optionSelect, setOptionSelect] = useState(selected);
+  useEffect(() => {
+    setOptionsFiltered(options);
+  }, [options]);
+
+  useEffect(() => {
+    if (optionSelect) {
+      setFilter(optionSelect.nameTH);
+      setSelected(optionSelect);
+    }
+  }, [optionSelect]);
+
+  useEffect(() => {
+    if (filter) {
+      setOptionsFiltered(
+        options.filter((option) => option[searchFrom].includes(filter))
+      );
+    }
+    if (filter === "") {
+      setOptionsFiltered(options);
+    }
+  }, [filter]);
+  return (
+    <Container
+      onClick={onClick}
+      onBlurCapture={onBlur}
+      style={{ width: "100%", textAlign: "left" }}
+    >
+      <Wrapper style={{ width: "100%", textAlign: "left" }}>
+        <Input
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          placeholder={"กรุณาเลือก"}
+          style={{ width: "100%", textAlign: "left" }}
+        />
+        {options.length === 0 ? (
+          <>
+            <WrapperOption isOpen={isOpen} isEmtry={true}>
+              <OptionSelect>ไม่มีข้อมูล</OptionSelect>
+            </WrapperOption>
+          </>
+        ) : (
+          <>
+            <WrapperOption
+              isOpen={isOpen}
+              style={{ width: "100%", textAlign: "center" }}
+            >
+              {optionsFiltered &&
+                optionsFiltered.map((option, index) => (
+                  <OptionSelect
+                    onMouseDown={() => setOptionSelect(option)}
+                    key={index}
+                    value={option._id}
+                    style={{ width: "100%", textAlign: "left" }}
+                  >
+                    {option.nameTH}
+                  </OptionSelect>
+                ))}
+            </WrapperOption>
+          </>
+        )}
+      </Wrapper>
+    </Container>
   );
 };
