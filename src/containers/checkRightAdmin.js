@@ -1,8 +1,7 @@
 import styled from "styled-components";
-
 import Overview from "../components/Overview/Overview";
 import DataTable from "../components/DataTable/DataTable";
-import DataTableProfile from "../components/DataTable/DataTableProfile";
+import DataTableCheckRight from "../components/DataTable/DataTableCheckRight";
 import ViewProfile from "../components/ViewProfile/ViewProfile";
 import News from "../components/News/News";
 
@@ -11,10 +10,12 @@ import { Dropdown } from "../components/UI/Dropdown";
 import { SearchableInput } from "../components/UI/Search";
 import { balihai, shamrock } from "../utils/color";
 import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
 import { httpGetRequest } from "../utils/fetch";
+import { Search } from "@styled-icons/bootstrap/Search";
+import { Button } from "../components/UI/Button";
 
-const Dashboard = () => {
+const CheckRightAdmin = () => {
   const [data, setData] = useState(null);
   const [profile, setProfile] = useState(null);
   const [news, setNews] = useState(null);
@@ -25,7 +26,6 @@ const Dashboard = () => {
   // nowDate = `${nowDate.getHours()}:${nowDate.getMinutes()} at ${nowDate.getDate()}th ${nowDate.getMonth()}`;
   const fakedata = [
     {
-      date: "20/4/2022",
       name: "รชดี ชื่นภักดี",
       phone: "0890389311",
       email: "rachadeec@gmail.com",
@@ -37,55 +37,19 @@ const Dashboard = () => {
       totalPrice: "2,200,000",
       status: { status: 1, text: "ยืนยันการชำระเงิน" },
     },
-    {
-      date: "20/8/2022",
-      name: "รชดี ชื่นภักดี",
-      phone: "0890389311",
-      email: "rachadeec@gmail.com",
-      ats: "00877755656",
-      bank: "SCB",
-      details: "หุ้นเพิ่มทุน MFEC 2022",
-      amount: "170,000",
-      extraOffer: "-",
-      totalPrice: "2,100,000",
-      status: { status: 2, text: "รอหลักฐานการโอนเงิน" },
-    },
-    {
-      date: "20/4/2022",
-      name: "รชดี ชื่นภักดี",
-      phone: "0890389311",
-      email: "rachadeec@gmail.com",
-      ats: "00877755656",
-      bank: "SCB",
-      details: "หุ้นเพิ่มทุน MFEC 2022",
-      amount: "170,000",
-      extraOffer: "-",
-      totalPrice: "2,100,000",
-      status: { status: 3, text: "ยืนยันการชำระเงินเกินสิทธิ" },
-    },
-    {
-      date: "20/4/2022",
-      name: "รชดี ชื่นภักดี",
-      phone: "0890389311",
-      email: "rachadeec@gmail.com",
-      ats: "00877755656",
-      bank: "SCB",
-      details: "หุ้นเพิ่มทุน MFEC 2022",
-      amount: "170,000",
-      extraOffer: "-",
-      totalPrice: "2,100,000",
-      status: { status: 4, text: "รอดำเนินการโอนเงินคืน" },
-    },
   ];
 
   const theaders = [
-    "วันที่",
-    "รายละเอียด",
-    "จำนวนการสั่งซื้อหุ้นเพิ่มทุน",
-    "สิทธิเพิ่มเติม",
-    "มูลค่าการสั่งซื้อ",
-    "สถานะรายการ",
+    "รายการ",
+    "ถือหุ้น",
+    "เลขทะเบียนผู้ถือหุ้น",
+    "ชื่อผู้ถือหุ้น",
+    "จำนวนหุ้นสามัญเดิม",
+    "จำนวนสิทธิที่ได้จัดสรร",
+    "สถานะการจอง",
   ];
+
+  const searchInputRef = useRef("");
 
   async function fetchDataTable() {
     let endpoint = `orders?customerId=${user.customerId}`;
@@ -123,27 +87,27 @@ const Dashboard = () => {
   return (
     <Card>
       <Container>
-        <OverviewSection>
-          <LineCard>
-            <ViewProfile header="ข้อมูลทั่วไปของท่าน" profile={profile} />
-          </LineCard>
-        </OverviewSection>
+        <SearchDiv>
+          <InputSeacrh
+            placeholder="ค้นหาหมายเลขประจำตัวประชาชน / เลขที่หนังสือเดินทาง / เลขทะเบียนนิติบุคคล"
+            ref={searchInputRef}
+          />
+          <Button>ค้นหา</Button>
+        </SearchDiv>
 
         <TableSection>
-          <LineCard>
-            <DataTableProfile
-              header="รายการสั่งซื้อของท่าน"
-              theaders={theaders}
-              data={data}
-              refreshData={fetchDataTable}
-            />
-          </LineCard>
+          <DataTableCheckRight
+            header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
+            theaders={theaders}
+            data={fakedata}
+            // refreshData={fetchDataTable}
+          />
         </TableSection>
       </Container>
     </Card>
   );
 };
-export default Dashboard;
+export default CheckRightAdmin;
 
 const Container = styled.div`
   padding: 20px 20px;
@@ -153,6 +117,28 @@ const Container = styled.div`
   flex-direction: column;
   section {
     margin: 10px 0;
+  }
+`;
+
+const InputSeacrh = styled.input`
+  border: 2px solid #d9e1e7;
+  border-radius: 10px;
+  background: #fff;
+  position: relative;
+  font-size: 16px;
+  padding: 10px;
+  width: 100%;
+  :focus {
+    outline: none;
+  }
+`;
+
+const SearchDiv = styled.div`
+  display: flex;
+  /* justify-content: center; */
+
+  > :not(:first-child) {
+    margin-left: 10px;
   }
 `;
 

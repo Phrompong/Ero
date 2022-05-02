@@ -5,6 +5,10 @@ import Sidebar from "../../components/Navigation/Sidebar/Sidebar";
 import DrawerToggle from "../../components/Navigation/SideDrawer/DrawerToggle/DrawerToggle";
 import SideDrawer from "../../components/Navigation/SideDrawer/SideDrawer";
 import { ivory } from "../../utils/color";
+import { useSelector } from "react-redux";
+import Notfound from "../../assets/notfound.png";
+import UnAuth from "../../assets/unAuth.png";
+
 const Container = styled.div`
   overflow: hidden;
 `;
@@ -29,31 +33,155 @@ const Main = styled.main`
 `;
 
 const Layout = ({ children }) => {
+  const { user } = useSelector((state) => state);
+
   const [showSideDrawer, setShowSideDrawer] = useState(false);
 
+  const pagesAdmin = [
+    "/login/admin",
+    "/dashboard",
+    "/checkRightAdmin",
+    "/import",
+  ];
+
+  const pagesCustomer = [
+    "/login/customer",
+    "/buy",
+    "/checkRightCustomer",
+    "/profile",
+  ];
+
+  const pagesAll = pagesAdmin.concat(pagesCustomer);
   const location = useLocation();
   const path = location.pathname;
+
+  const isPage = pagesAll.includes(path);
+
   const isLogin = path !== "/login/admin" && path !== "/login/customer";
-  const sidebar = isLogin ? (
-    <>
-      <Sidebar />
-      <SideDrawer
-        open={showSideDrawer}
-        clicked={() => setShowSideDrawer(!showSideDrawer)}
-      />
-      <DrawerToggle clicked={() => setShowSideDrawer(true)} />
-    </>
-  ) : null;
-  return (
-    <Container>
-      {!isLogin || sidebar}
-      <Main isLogin={isLogin}>
-        {/* <DrawerToggle clicked={showSideDrawer} /> */}
-        {children}
-        {/* <Card>{children}</Card> */}
-      </Main>
-    </Container>
-  );
+
+  // * Case path is not pages allow
+  if (!isPage) {
+    return (
+      <>
+        <DisplayNotfound></DisplayNotfound>
+      </>
+    );
+  }
+
+  // * Case normally login
+  if (
+    (path === "/login/admin" || path === "/login/customer") &&
+    (!user || user.length === 0)
+  ) {
+    return <>{children}</>;
+  }
+
+  // * Case no authentication
+  if (isPage && user.length === 0) {
+    return (
+      <>
+        <DisplayUnAuth></DisplayUnAuth>
+      </>
+    );
+  }
+
+  // * Case path allow and authentication
+  if (isPage && (user || user.length > 0)) {
+    const { role } = user;
+
+    let isPageAllow = false;
+    switch (role) {
+      case "admin":
+        pagesAdmin.push("/login/customer");
+        isPageAllow =
+          pagesAdmin.filter((o) => o.includes(path)).length > 0 ? true : false;
+
+        if (!isPageAllow) {
+          return (
+            <>
+              <DisplayUnAuth></DisplayUnAuth>
+            </>
+          );
+        }
+
+        break;
+      case "client":
+        pagesCustomer.push("/login/admin");
+        isPageAllow =
+          pagesCustomer.filter((o) => o.includes(path)).length > 0
+            ? true
+            : false;
+
+        if (!isPageAllow) {
+          return (
+            <>
+              <DisplayUnAuth></DisplayUnAuth>
+            </>
+          );
+        }
+        break;
+    }
+
+    const sidebar = (
+      <>
+        <Sidebar />
+        <SideDrawer
+          open={showSideDrawer}
+          clicked={() => setShowSideDrawer(!showSideDrawer)}
+        />
+        <DrawerToggle clicked={() => setShowSideDrawer(true)} />
+      </>
+    );
+
+    return (
+      <Container>
+        {sidebar}
+        <Main isLogin={isLogin}>{children}</Main>
+      </Container>
+    );
+  }
 };
+
+const DisplayNotfound = styled.div`
+  width: 100vw;
+  height: 100vh;
+  min-width: 600px;
+  min-height: 740px;
+  background-image: url(${Notfound});
+  background-position: center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  .inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 510px;
+    height: 740px;
+  }
+`;
+
+const DisplayUnAuth = styled.div`
+  width: 100vw;
+  height: 100vh;
+  min-width: 600px;
+  min-height: 740px;
+  background-image: url(${UnAuth});
+  background-position: center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  .inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 510px;
+    height: 740px;
+  }
+`;
 
 export default Layout;
