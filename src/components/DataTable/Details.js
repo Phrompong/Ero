@@ -41,6 +41,8 @@ const Details = ({ show, details, closed, options }) => {
 
   const customer = details["customerId"];
 
+  console.log(details);
+
   const formatDate = (date) => {
     return date ? new Date(date).toLocaleDateString() : "-";
   };
@@ -59,7 +61,7 @@ const Details = ({ show, details, closed, options }) => {
                     "ชื่อ-นามสกุล / Name-Lastname   :",
                     `${customer["name"]} ${customer["lastname"]} `
                   )}
-                  {info("โทรศัพท์ / Telephone  :", customer["telephone"])}
+                  {info("โทรศัพท์ / Telephone  :", details["customerTel"])}
                   {info("อีเมล์ / Email  :", customer["email"])}
                   {info("หมายเลขบัญชี ATS :", customer["atsBankNo"])}
                   {info("BANK ATS :", customer["atsBank"])}

@@ -59,6 +59,20 @@ const Login = () => {
     setIsConfirmModal(false);
   };
 
+  const createAuth = async (payload) => {
+    dispatch({
+      type: "SET",
+      payload,
+    });
+
+    const setCookie = await Cookies.set(
+      "token",
+      JSON.stringify({
+        user: payload,
+      })
+    );
+  };
+
   const handleSubmited = async (event) => {
     event.preventDefault();
     Cookies.remove("token");
@@ -76,20 +90,14 @@ const Login = () => {
       const { customerId, isAccept } = res.data;
       console.log(isAccept);
       setIsConfirmModal(!isAccept);
-      const payload = {
+
+      await createAuth({
         username,
         customerId,
         role: "client",
-      };
+      });
 
-      const setCookie = Cookies.set(
-        "token",
-        JSON.stringify({
-          user: payload,
-        })
-      );
-
-      if (setCookie && isAccept) navigate("/buy");
+      if (isAccept) await navigate("/buy");
     } else {
       setShowError(true);
       setErrorMsg(res.message);
@@ -97,6 +105,7 @@ const Login = () => {
   };
 
   useEffect(() => {
+    Cookies.remove("token");
     if (isCheckedFirst && isCheckedSecond) {
       setIsButtonChecked(true);
     } else {

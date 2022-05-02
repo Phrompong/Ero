@@ -8,6 +8,7 @@ import { ivory } from "../../utils/color";
 import { useSelector } from "react-redux";
 import Notfound from "../../assets/notfound.png";
 import UnAuth from "../../assets/unAuth.png";
+import Cookies from "js-cookie";
 
 const Container = styled.div`
   overflow: hidden;
@@ -59,6 +60,8 @@ const Layout = ({ children }) => {
 
   const isLogin = path !== "/login/admin" && path !== "/login/customer";
 
+  console.log(user);
+
   // * Case path is not pages allow
   if (!isPage) {
     return (
@@ -92,6 +95,7 @@ const Layout = ({ children }) => {
     let isPageAllow = false;
     switch (role) {
       case "admin":
+        console.log("admin");
         pagesAdmin.push("/login/customer");
         isPageAllow =
           pagesAdmin.filter((o) => o.includes(path)).length > 0 ? true : false;
@@ -106,6 +110,7 @@ const Layout = ({ children }) => {
 
         break;
       case "client":
+        console.log("client");
         pagesCustomer.push("/login/admin");
         isPageAllow =
           pagesCustomer.filter((o) => o.includes(path)).length > 0
