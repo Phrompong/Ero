@@ -247,9 +247,17 @@ const Buy = () => {
       setTimeout(() => {
         setShow(false);
       }, 5000);
+    } else if (!isAcceptVerify && page === 3) {
+      setShow(true);
+      setStatus(999)
+      setAlertMessage("กรุณาตรวจสอบข้อมูลในขั้นตอนที่ 2");
+      setTimeout(() => {
+        setShow(false);
+      }, 5000);
     } else {
       setPage(page);
     }
+
   };
 
   async function fetchDataProfile() {
