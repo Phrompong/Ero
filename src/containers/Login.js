@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import Parser from 'html-react-parser';
+import { useDispatch, useSelector } from "react-redux";
+import Parser from "html-react-parser";
 
 import styled from "styled-components";
 import bg from "../assets/bg.jpg";
@@ -21,32 +21,49 @@ const Login = () => {
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const usernameInputRef = useRef("4654499830700");
-  const [isButtonChecked, setIsButtonChecked] = useState(false)
-  const [isCheckedFirst, setIsCheckedFirst] = useState(false)
-  const [isCheckedSecond, setIsCheckedSecond] = useState(false)
+  const [isButtonChecked, setIsButtonChecked] = useState(false);
+  const [isCheckedFirst, setIsCheckedFirst] = useState(false);
+  const [isCheckedSecond, setIsCheckedSecond] = useState(false);
 
-  const [isConfirmModal, setIsConfirmModal] = useState(false)
+  const [isConfirmModal, setIsConfirmModal] = useState(false);
 
   const endpoint = "auth/signIn?type=customer";
 
   const handlerOnAcceptForm = () => {
-    const payload = JSON.parse(Cookies.get("token")).user
+    const payload = JSON.parse(Cookies.get("token")).user;
     dispatch({
       type: "SET",
       payload,
     });
-    navigate(`/buy`)
-  }
+    const { customerId } = payload;
+
+    consentSubmited(customerId);
+  };
+
+  const consentSubmited = async (customerId) => {
+    const endpoint = "consentHistory";
+    console.log(`consentSubmited : ${customerId}`);
+
+    const [res, status] = await httpFetch("POST", { customerId }, endpoint);
+
+    if (status === 200) {
+      navigate(`/buy`);
+    } else {
+      setShowError(true);
+      setErrorMsg(res.message);
+    }
+  };
 
   const handlerOnCancel = () => {
-    Cookies.remove('token')
-    setIsConfirmModal(false)
-  }
+    Cookies.remove("token");
+    setIsConfirmModal(false);
+  };
 
   const handleSubmited = async (event) => {
     event.preventDefault();
     Cookies.remove("token");
 
+    const endpoint = "auth/signIn?type=customer";
     const username = usernameInputRef.current.value;
 
     const [res, status] = await httpFetch(
@@ -56,17 +73,17 @@ const Login = () => {
     );
 
     if (status === 200) {
-      setIsConfirmModal(true)
+      const { customerId, isAccept } = res.data;
+      console.log(isAccept);
+      setIsConfirmModal(!isAccept);
       const payload = {
         username,
-        customerId: res.data.customerId,
+        customerId,
         role: "client",
       };
-      console.log(payload)
-      // dispatch({
-      //   type: "SET",
-      //   payload,
-      // });
+
+      if (isAccept) navigate("/buy");
+
       Cookies.set(
         "token",
         JSON.stringify({
@@ -81,20 +98,20 @@ const Login = () => {
 
   useEffect(() => {
     if (isCheckedFirst && isCheckedSecond) {
-      setIsButtonChecked(true)
+      setIsButtonChecked(true);
     } else {
-      setIsButtonChecked(false)
+      setIsButtonChecked(false);
     }
-  }, [isCheckedFirst, isCheckedSecond])
+  }, [isCheckedFirst, isCheckedSecond]);
 
   const link = (text) => <Link>{text}</Link>;
 
   return (
     <>
-      {
-        (() => {
-          if (isConfirmModal) {
-            return <>
+      {(() => {
+        if (isConfirmModal) {
+          return (
+            <>
               <Container size={"full"}>
                 <Card>
                   <div className="inner">
@@ -102,29 +119,66 @@ const Login = () => {
                       <div>
                         <img src={logo} />
                       </div>
-                      <div className="title">การยินยอมเปิดเผยข้อมูล และข้อตกลงการให้บริการ</div>
-                      <div style={{ paddingLeft: '0', width: '100%', padding: '0 5rem', marginBottom: '0' }}>
-                        <LineCard style={{ width: '100%' }}>
+                      <div className="title">
+                        การยินยอมเปิดเผยข้อมูล และข้อตกลงการให้บริการ
+                      </div>
+                      <div
+                        style={{
+                          paddingLeft: "0",
+                          width: "100%",
+                          padding: "0 5rem",
+                          marginBottom: "0",
+                        }}
+                      >
+                        <LineCard style={{ width: "100%" }}>
                           <div>
-                            <pre style={{ padding: '0 2rem', whiteSpace: 'break-spaces', marginBottom: '0' }}>
-                              <input type="checkbox" checked={isCheckedFirst} onChange={() => setIsCheckedFirst(!isCheckedFirst)} />
-                              {
-                                Parser(` เพื่อให้บริษัทปฎิบัติตามกฏหมายคุ้มครองข้อมูลส่วนบุคคลและกฎหมายว่าด้วยการป้องกันและปราบปรามการสนับสนุน
+                            <pre
+                              style={{
+                                padding: "0 2rem",
+                                whiteSpace: "break-spaces",
+                                marginBottom: "0",
+                              }}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={isCheckedFirst}
+                                onChange={() =>
+                                  setIsCheckedFirst(!isCheckedFirst)
+                                }
+                              />
+                              {Parser(` เพื่อให้บริษัทปฎิบัติตามกฏหมายคุ้มครองข้อมูลส่วนบุคคลและกฎหมายว่าด้วยการป้องกันและปราบปรามการสนับสนุน
 ทางการเงินแก่การก่อการร้ายและแพร่ขยายอาวุธที่มีอานุภาพทำลายล้างสูง บริษัทหลักทรัพย์ เอเชีย เวลท์ จำกัด (บริษัท) ประสงค์จะเก็บ รวบรวม ใช้ ส่งต่อข้อมูลส่วนบุคคลของท่านซึ่งได้บันทึกไว้ในระบบเพื่อการทำธุรกรรมกับบริษัท (เช่น คำนำหน้าชื่อ ชื่อ นามสกุล หมายเลขบัตรประชาชน/หมายเลขหนังสือเดินทาง เบอร์โทรศัพท์ อีเมล์ เลขที่บัญชีซื้อขายฯ เลขที่บัญชีธนาคาร สิทธิประโยชน์ต่างๆ เป็นต้น) เพื่อประโยชน์ในการทำธุรกรรมกับบริษัท โดยต้องขอความยินยอมจากท่าน ทั้งนี้บริษัทจะเก็บข้อมูลของท่านสูงสุด 10 ปี ตามกฏหมาย    นับแต่วันที่ท่านได้ให้ความยินยอม (หรือแล้วแต่กรณี) โดยจะมีการเปิดเผย ส่งต่อข้อมูลของท่านแก่บริษัท สถาบันการเงิน หรือองค์กรต่างๆ ที่ท่านประสงค์จะทำธุรกรรมในการนี้ด้วย ซึ่งบริษัทจะใช้ข้อมูลดังกล่าวให้สอดคล้องกับวัตถุประสงค์ตามหลักเกณฑ์และนโยบายที่บริษัทกำหนด และกฏหมายที่เกี่ยวข้องบัญญัติให้สามารถกระทำได้
 
   ทั้งนี้ท่านสามารถตรวจสอบนโยบายของบริษัทได้ผ่านช่องทาง <b>www.asiawealth.co.th</b> กรณีท่านไม่ยินยอมให้บริษัทดำเนินการ จะมีผลทำให้ท่านไม่สามารถทำธุรกรรมในครั้งนี้ได้
-                                `)
-                              }
+                                `)}
                             </pre>
                           </div>
                         </LineCard>
                       </div>
-                      <div style={{ margin: '0 4rem  0 5rem', width: '100%', padding: '0 5rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                          <input type="checkbox" checked={isCheckedSecond} onChange={() => setIsCheckedSecond(!isCheckedSecond)} style={{ marginTop: '1.25rem' }} />
-                          <pre style={{ margin: '0' }} >
-                            {
-                              `
+                      <div
+                        style={{
+                          margin: "0 4rem  0 5rem",
+                          width: "100%",
+                          padding: "0 5rem",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            width: "100%",
+                          }}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isCheckedSecond}
+                            onChange={() =>
+                              setIsCheckedSecond(!isCheckedSecond)
+                            }
+                            style={{ marginTop: "1.25rem" }}
+                          />
+                          <pre style={{ margin: "0" }}>
+                            {`
 ข้าพเจ้าขอรับรอง และตกลงว่าจะรับหุ้นสามัญเพิ่มทุนจำนวนดังกล่าว หรือในจำนวนที่บริษัทฯ จัดสรรให้ และจะไม่ยกเลิกการจองซื้อ
 หุ้นสามัญเพิ่มทุนนี้ รวมทั้งยินยอมรับคืนเงินในกรณีที่บริษัทฯ ปฏิเสธการจองซื้อหรือ หากข้าพเจ้าส่งรายละเอียดไม่ครบถ้วนถูกต้อง 
 และ/หรือ หลักฐานการชำระเงินภายในระยะเวลาการจองซื้อ
@@ -132,20 +186,35 @@ const Login = () => {
 ข้าพเจ้ายินยอมผูกพันตนเองตามเงื่อนไขข้อกำหนดและข้อความใดๆ ในหนังสือแจ้งการจัดสรรหุ้นสามัญเพิ่มทุน รวมทั้งในหนังสือ
 บริคณฑ์สนธิ และข้อบังคับของบริษัทที่มีอยู่แล้วขณะนี้ และ/หรือ ซึ่งจะแก้ไขเพิ่มเติมต่อไปในภายหน้าด้วย ข้าพเจ้าขอรับรองว่า
 ข้าพเจ้าในฐานะผู้ถือหุ้นเดิมและได้รับการจัดสรรหุ้นสามัญออกใหม่เป็นผู้รับผลประโยชน์ที่แท้จริง
-                              `
-                            }
+                              `}
                           </pre>
                         </div>
                         <div>
-                          <pre style={{ color: "#1D3AB1", textAlign: 'center' }}>** รายการจองซื้อหุ้นของท่าน จะสำเร็จเมื่อบริษัทตรวจสอบผลการชำระเงินค่าจองซื้อหุ้นเข้าบัญชีบริษัทเรียบร้อยแล้ว **</pre>
+                          <pre
+                            style={{ color: "#1D3AB1", textAlign: "center" }}
+                          >
+                            ** รายการจองซื้อหุ้นของท่าน
+                            จะสำเร็จเมื่อบริษัทตรวจสอบผลการชำระเงินค่าจองซื้อหุ้นเข้าบัญชีบริษัทเรียบร้อยแล้ว
+                            **
+                          </pre>
                         </div>
                       </div>
-                      <div style={{ display: "flex", width: "100%", justifyContent: "space-around" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          width: "100%",
+                          justifyContent: "space-around",
+                        }}
+                      >
                         <Button
                           type="button"
                           value="ไม่ยินยอม"
                           onClick={handlerOnCancel}
-                          style={{ width: "292px", fontSize: "20px", background: "#809FB8" }}
+                          style={{
+                            width: "292px",
+                            fontSize: "20px",
+                            background: "#809FB8",
+                          }}
                         />
                         <Button
                           type="button"
@@ -160,10 +229,10 @@ const Login = () => {
                 </Card>
               </Container>
             </>
-          }
-
-          else if (!isConfirmModal) {
-            return <>
+          );
+        } else if (!isConfirmModal) {
+          return (
+            <>
               <Container>
                 <Card>
                   <div className="inner">
@@ -201,9 +270,9 @@ const Login = () => {
                 </Card>
               </Container>
             </>
-          }
-        })()
-      }
+          );
+        }
+      })()}
     </>
   );
 };
@@ -233,7 +302,7 @@ const Container = styled.div`
       font-weight: 700;
       font-size: 20px;
       line-height: 24px;
-      color: #1D3AB1;
+      color: #1d3ab1;
     }
   }
 `;
@@ -284,7 +353,7 @@ const Button = styled.input`
   cursor: pointer;
 
   :disabled {
-    background: #809FB8;
+    background: #809fb8;
   }
 `;
 
