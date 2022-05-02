@@ -45,7 +45,10 @@ const ImportData = () => {
     setAlertMessage(msg);
     showAlert(setShow, 2000);
     setFile();
-    window.location.reload(false);
+
+    setTimeout(() => {
+      window.location.reload(false);
+    }, 1000);
   };
 
   return (
