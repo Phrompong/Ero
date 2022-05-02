@@ -188,12 +188,24 @@ const Buy = () => {
   };
 
   const handleSelectedFile = (e) => {
+    const allowTypeFile = ["image/jpeg", "image/png"];
     const [file] = e.target.files;
     const maxAllowedSize = 5 * 1024 * 1024;
-    const { name: fileName, size } = file;
-    console.log([file]);
+    const { name: fileName, size, type } = file;
+    console.log(type);
+
+    if (!allowTypeFile.includes(type)) {
+      setStatus(999);
+      setAlertMessage("ประเภทไฟล์ไม่ถูกต้อง");
+      setShow(true);
+      setTimeout(() => {
+        setShow(false);
+      }, 2000);
+
+      return;
+    }
+
     if (size > maxAllowedSize) {
-      console.log("no ok");
       setStatus(999);
       setAlertMessage("ขนาดไฟล์รูปภาพใหญ่เกินไป");
       setShow(true);
