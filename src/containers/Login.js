@@ -82,14 +82,14 @@ const Login = () => {
         role: "client",
       };
 
-      if (isAccept) navigate("/buy");
-
       Cookies.set(
         "token",
         JSON.stringify({
           user: payload,
         })
       );
+
+      if (isAccept) navigate("/buy");
     } else {
       setShowError(true);
       setErrorMsg(res.message);
