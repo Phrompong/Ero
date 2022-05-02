@@ -84,8 +84,17 @@ const Datagrid = styled(Div)`
 const ViewProfile = ({ header, profile }) => {
   if (!profile) return;
 
-  const { name, telephone, email, atsBankNo, atsBank, color, address } =
-    profile;
+  const {
+    name,
+    lastname,
+    telephone,
+    email,
+    atsBankNo,
+    atsBank,
+    color,
+    address,
+    zipcode,
+  } = profile;
   const info = (label, value, link) => (
     <FlexContainer>
       <p style={{ flex: 1 }}>{label}</p>
@@ -96,9 +105,9 @@ const ViewProfile = ({ header, profile }) => {
   return (
     <Container color={color}>
       <Header>{header}</Header>
-      {info("ชื่อ-นามสกุล / Name-Lastname   :", name)}
+      {info("ชื่อ-นามสกุล / Name-Lastname   :", name + " " + lastname)}
       {info("โทรศัพท์ / Telephone  :", telephone)}
-      {info("ที่อยู่ / Address  :", address)}
+      {info("ที่อยู่ / Address  :", address + " " + zipcode)}
     </Container>
   );
 };

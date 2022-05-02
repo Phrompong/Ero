@@ -630,7 +630,7 @@ const Buy = () => {
                 <div style={{ display: "flex" }}>
                   <p style={{ width: "30%" }}>ที่อยู่ :</p>
                   <p style={{ width: "70%" }}>
-                    {profile ? profile.address : ""}
+                    {profile ? profile.address + " " + profile.zipcode : ""}
                   </p>
                 </div>
                 <div style={{ display: "flex" }}>
