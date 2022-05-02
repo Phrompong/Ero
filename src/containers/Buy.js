@@ -71,6 +71,7 @@ const Buy = () => {
   const [rightSpecialVolume, setRightSpecialVolume] = useState(null);
   const [excessVolume, setExcessVolume] = useState(null);
   const [isAcceptVerify, setIsAcceptVerify] = useState(false);
+  const [isConfirmBooking, setIsConfirmBooking] = useState(false);
 
   // step 3
   const [logo, setLogo] = useState(null);
@@ -230,6 +231,8 @@ const Buy = () => {
   };
 
   const handlerOnClickPage = (page) => {
+    console.log(page);
+    console.log(isConfirmBooking);
     if (!dropdownSelect) {
       setShow(true);
       setStatus(999);
@@ -247,7 +250,17 @@ const Buy = () => {
         setShow(false);
       }, 5000);
     } else {
-      setPage(page);
+      if (page === 3 && !isConfirmBooking) {
+        setShow(true);
+        setStatus(999);
+        setAlertMessage("กรุณายืนยันการจอง");
+        setTimeout(() => {
+          setShow(false);
+        }, 5000);
+      } else {
+        console.log("Change page");
+        setPage(page);
+      }
     }
   };
 
@@ -294,6 +307,7 @@ const Buy = () => {
     );
 
     if (status === 200) {
+      setIsConfirmBooking(true);
       setOrderId(res.data._id);
       const msg = "ยืนยันคำสั่งซื้อสำเร็จ";
       setStatus(200);
@@ -836,7 +850,7 @@ const Buy = () => {
                           className="text-black"
                           style={{ marginLeft: "-20px" }}
                         >
-                          {rightStockVolume}
+                          {stockVolume}
                         </b>
                         <p>หุ้น</p>
                       </div>

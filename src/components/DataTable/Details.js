@@ -14,9 +14,9 @@ import transaction from "../../assets/transaction.png";
 import { httpGetRequest, httpPutRequest } from "../../utils/fetch";
 
 const Details = ({ show, details, closed, options }) => {
-  console.log(show)
-  console.log(details)
-  console.log(options)
+  console.log(show);
+  console.log(details);
+  console.log(options);
   const [selectedStatus, setSelectedStatus] = useState(
     details["status"]["_id"]
   );
@@ -96,8 +96,10 @@ const Details = ({ show, details, closed, options }) => {
                   </div>
                   <SubHeader>สิทธิเพิ่มเติมที่ท่านได้รับ</SubHeader>
                   <div className="row">
-                    <p>{details["rightSpacialName"]}</p>
-                    <BoldText>{details["rightSpacialVolume"]}</BoldText>
+                    <p>{details["customerStock"]["rightSpecialName"]}</p>
+                    <BoldText>
+                      {details["customerStock"]["rightSpecialVolume"]}
+                    </BoldText>
                     <p className="unit">หุ้น</p>
                   </div>
                   <BoldText style={{ margin: "20px 0 5px 0" }}>
