@@ -122,7 +122,7 @@ const Details = ({ show, details, closed, options }) => {
               </LineCard>
               <LineCard style={{ flex: 1 }}>
                 <TransactionPhoto>
-                  <img src={details["attachedFile"]} />
+                  <img src={details["attachedFile"]} height="400px" />
                 </TransactionPhoto>
               </LineCard>
             </FlexContainer>

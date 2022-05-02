@@ -32,8 +32,8 @@ const ImportData = () => {
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append("File", file);
-    console.log(file)
-    console.log(formData)
+    console.log(file);
+    console.log(formData);
     const endpoint = "uploads";
 
     const [res, status] = await httpPostRequestUploadFile(formData, endpoint);
@@ -45,6 +45,7 @@ const ImportData = () => {
     setAlertMessage(msg);
     showAlert(setShow, 2000);
     setFile();
+    window.location.reload(false);
   };
 
   return (

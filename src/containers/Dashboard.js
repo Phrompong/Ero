@@ -45,10 +45,29 @@ const Dashboard = () => {
 
   async function fetchDataProgress(path, key, type, func) {
     let endpoint = `orders/progressPie/${path}?type=${type}`;
-    if (key) endpoint = `${endpoint}&&key=${key}`;
+
+    if (key) endpoint = `${endpoint}&key=${key}`;
+
+    console.log(`data progress : ${endpoint}`);
 
     const [res, status] = await httpGetRequest(endpoint);
     func(res["data"]);
+  }
+
+  async function refreshData() {
+    fetchDataTable();
+    fetchDataProgress(
+      "currentOrderAmount",
+      null,
+      selectedType,
+      handleFetchCurrentOrderAmount
+    );
+    fetchDataProgress(
+      "orderCompareSales",
+      null,
+      selectedType,
+      handleFetchOrderAmount
+    );
   }
 
   useEffect(() => {
@@ -178,7 +197,7 @@ const Dashboard = () => {
               header="รายการสั่งซื้อทั้งหมดในระบบ"
               theaders={theaders}
               data={data}
-              refreshData={fetchDataTable}
+              refreshData={refreshData}
             />
             <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
           </LineCard>
