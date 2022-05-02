@@ -7,7 +7,7 @@ import change from "../assets/icon_change.png";
 
 import { Card } from "../components/UI/Card";
 import { FlexContainer } from "../components/UI/FlexContainer";
-import { DropdownSelect } from "../components/UI/Dropdown";
+import { DropdownSelect, DropdownArrow } from "../components/UI/Dropdown";
 import { LineCard } from "../components/UI/Card";
 import { FieldInput } from "../components/UI/Search";
 import { ModalAlert } from "../components/ModalAlert/ModalAlert";
@@ -31,7 +31,7 @@ import ViewProfile from "../components/ViewProfile/ViewProfile";
 const Buy = () => {
   const { user } = useSelector((state) => state);
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(2);
   const [alertMessage, setAlertMessage] = useState();
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -41,6 +41,7 @@ const Buy = () => {
   const [currentPrice, setCurrentPrice] = useState(0);
 
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
+  const [isOpenDropdownArrow, setIsOpenDropdownArrow] = useState(false);
   const [validateAccept, setValidateAccept] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [registrationNo, setRegistrationNo] = useState(false);
@@ -1319,14 +1320,15 @@ const Buy = () => {
                                   <p>ฝากเงินเข้าบัญชีธนาคาร</p>
                                 </InputDiv>
                                 <InputDiv
-                                  style={{ marginTop: "20px", width: "100%" }}
+                                  style={{ width: "100%", marginTop: "20px", border: '2px solid #d9e1e7;' }}
                                 >
-                                  <FieldInput
-                                    placeholder={"ฝากเงินเข้าบัญชีธนาคาร"}
-                                    value={depositBank}
-                                    onChange={(e) =>
-                                      setDepositBank(e.target.value)
-                                    }
+                                  <DropdownArrow
+                                    options={masterBankRefund}
+                                    isOpen={isOpenDropdownArrow}
+                                    onClick={() => setIsOpenDropdownArrow(!isOpenDropdownArrow)}
+                                    onBlur={() => setIsOpenDropdownArrow(false)}
+                                    setSelected={setDepositBank}
+                                    selected={depositBank}
                                   />
                                 </InputDiv>
                               </div>
@@ -1930,6 +1932,12 @@ const ShareDetail = styled.div`
 
   * {
     width: 200px;
+  }
+
+  .input-select {
+    i {
+      width: 10px;
+    }
   }
 
   .payment-detail {
