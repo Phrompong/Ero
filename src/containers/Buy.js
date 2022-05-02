@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { DownArrow } from "@styled-icons/boxicons-solid/DownArrow";
 
 import change from "../assets/icon_change.png";
@@ -29,6 +30,7 @@ import ViewProfile from "../components/ViewProfile/ViewProfile";
 
 const Buy = () => {
   const { user } = useSelector((state) => state);
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [alertMessage, setAlertMessage] = useState();
   const [show, setShow] = useState(false);
@@ -68,6 +70,7 @@ const Buy = () => {
   const [rightSpecialName, setRightSpecialName] = useState("-");
   const [rightSpecialVolume, setRightSpecialVolume] = useState(null);
   const [excessVolume, setExcessVolume] = useState(null);
+  const [isAcceptVerify, setIsAcceptVerify] = useState(false)
 
   // step 3
   const [logo, setLogo] = useState(null);
@@ -170,12 +173,6 @@ const Buy = () => {
       const payload = res.data;
       setMasterBankPayment(payload.filter((o) => o.type === "payment"));
       setMasterBankRefund(payload.filter((o) => o.type === "refund"));
-      console.log(payload.filter((o) => o.type === "refund"))
-      // setLogo(payload.logo);
-      // setNameTH(payload.nameTH);
-      // setRef1(payload.ref1);
-      // setRef2(payload.ref2);
-      // setQRCode(payload.qrCode);
     }
   };
 
@@ -183,23 +180,30 @@ const Buy = () => {
     setValidateAccept(true);
   };
 
+  const handlerOnAcceptVerify = () => {
+    setAddressModal(false)
+    setIsAcceptVerify(true)
+  }
+
   const handleSelectedFile = (e) => {
     const [file] = e.target.files;
     const maxAllowedSize = 5 * 1024 * 1024;
     const { name: fileName, size } = file;
     if (size > maxAllowedSize) {
+      setStatus(999)
       setAlertMessage("ขนาดไฟล์รูปภาพใหญ่เกินไป");
       setShow(true);
+      setTimeout(() => {
+        setShow(false);
+      }, 2000);
     } else {
       setFile(file);
     }
-    setTimeout(() => {
-      setShow(false);
-    }, 2000);
   };
 
   const handleSubmit = async () => {
     if (!file) {
+      setStatus(999)
       setAlertMessage("ไม่พบไฟล์ภาพ");
       setShowAlertModal(true);
     }
@@ -213,10 +217,11 @@ const Buy = () => {
     if (status === 200) {
       msg = "Upload Completed";
       console.log(msg);
+      setAlertMessage(msg);
+      showAlert(setShow, 2000);
+      setFile();
+      // navigate(`/somewhere`)
     }
-    setAlertMessage(msg);
-    showAlert(setShow, 2000);
-    setFile();
   };
 
   const hanlderOnBack = () => {
@@ -227,6 +232,7 @@ const Buy = () => {
   const handlerOnClickPage = (page) => {
     if (!dropdownSelect) {
       setShow(true);
+      setStatus(999)
       setAlertMessage(
         "กรุณาเลือกข้อมูล ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก"
       );
@@ -235,6 +241,7 @@ const Buy = () => {
       }, 5000);
     } else if (!tradingAccountNo) {
       setShow(true);
+      setStatus(999)
       setAlertMessage("กรุณากรอกข้อมูล เลขที่บัญชีซื้อขาย");
       setTimeout(() => {
         setShow(false);
@@ -289,6 +296,7 @@ const Buy = () => {
     if (status === 200) {
       setOrderId(res.data._id);
       const msg = "ยืนยันคำสั่งซื้อสำเร็จ";
+      setStatus(200)
       setAlertMessage(msg);
       showAlert(setShow, 2000);
       setPage(3);
@@ -572,7 +580,7 @@ const Buy = () => {
                 }
               </div>
             </LineCard>
-            <LineCard style={{ marginBottom: '1rem'}}>
+            <LineCard style={{ marginBottom: '1rem' }}>
               <Header style={{ color: "#1D3AB1", fontWeight: "bold", marginLeft: '2rem' }}>
                 <h3>
                   รายละเอียดที่อยู่ของท่าน
@@ -581,7 +589,7 @@ const Buy = () => {
               <div class="profile-detail" style={{ padding: '1rem 2rem' }}>
                 <div style={{ display: 'flex' }}>
                   <p style={{ width: '30%' }}>ชื่อ-นามสกุล :</p>
-                  <p style={{ width: '70%' }}>{profile ? profile.name : '-'} {profile ? profile.lastname: '-'}</p>
+                  <p style={{ width: '70%' }}>{profile ? profile.name : '-'} {profile ? profile.lastname : '-'}</p>
                 </div>
                 <div style={{ display: 'flex' }}>
                   <p style={{ width: '30%' }}>ที่อยู่ :</p>
@@ -597,7 +605,7 @@ const Buy = () => {
               <Button
                 type="submit"
                 value={"ฉันรับทราบแล้ว"}
-                onClick={() => setAddressModal(false)}
+                onClick={handlerOnAcceptVerify}
               />
             </div>
           </ContainerCard>
@@ -1373,6 +1381,7 @@ const Buy = () => {
                         <Button
                           type="submit"
                           value="ยืนยันคำสั่งซื้อ"
+                          disabled={!isAcceptVerify}
                           onClick={() => handlerOnSubmited()}
                         />
                       </div>
@@ -1804,6 +1813,10 @@ const Button = styled.input`
   &:hover {
     background: #edb52d;
     color: #000000;
+  }
+
+  &:disabled {
+    background: #809FB8;
   }
 `;
 
