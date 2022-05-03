@@ -11,6 +11,9 @@ import { faCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { persianblue } from "../utils/color";
 import { httpGetRequest } from "../utils/fetch";
+import { httpFetch } from "../utils/fetch";
+import { ModalAlert } from "../components/ModalAlert/ModalAlert";
+import { showAlert } from "../utils/showAlert";
 
 const CustomerService = () => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
@@ -18,7 +21,10 @@ const CustomerService = () => {
   const [masterIssue, setMasterIssue] = useState([]);
   const [email, setEmail] = useState(null);
   const [subject, setSubject] = useState(null);
-  const [detail, setDetail] = useState(null);
+  const [specifyIssue, setSpecifyIssue] = useState(null);
+  const [show, setShow] = useState(false);
+  const [alertMessage, setAlertMessage] = useState();
+  const [status, setStatus] = useState();
 
   useEffect(() => {
     getMasterIssue();
@@ -35,11 +41,27 @@ const CustomerService = () => {
   };
 
   const handlerOnSubmited = async () => {
-    alert(subject);
+    console.log(masterIssue);
+    const [res, status] = await httpFetch(
+      "POST",
+      {
+        email,
+        subject,
+        issue: selectedIssue._id,
+        specifyIssue,
+      },
+      "customerService"
+    );
+    if (status === 200) {
+      setStatus(200);
+      setAlertMessage("แจ้งปัญหาสำเร็จ");
+      showAlert(setShow, 2000);
+    }
   };
 
   return (
     <Container>
+      <ModalAlert show={show} msg={alertMessage} status={status} />
       <div className="bg-img">
         <div className="bg-text">
           <p>Customer Service</p>
