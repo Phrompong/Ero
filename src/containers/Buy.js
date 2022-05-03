@@ -309,6 +309,7 @@ const Buy = () => {
   }
 
   const handlerOnAccept = async () => {
+    alert(JSON.stringify(depositBank));
     setValidateAccept(false);
     console.log(dropdownBankRefundSelect);
     const [res, status] = await httpFetch(

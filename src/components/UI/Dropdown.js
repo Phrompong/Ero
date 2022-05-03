@@ -203,6 +203,7 @@ export const DropdownArrow = ({
               {options &&
                 options.map((option, index) => (
                   <OptionSelect
+                    key={index}
                     onMouseDown={() => setSelected(option)}
                     style={{ width: "100%" }}
                   >
