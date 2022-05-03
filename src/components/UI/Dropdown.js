@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
+import { persianblue } from "../../utils/color";
+
 const Container = styled.div`
   position: relative;
   border: 2px solid #d9e1e7;
@@ -104,9 +106,46 @@ const Wrapper = styled.div`
   $ :focus {
     background: black;
   }
-  // & ${Input}:focus-within + ${WrapperOption} {
-  //   display: block;
-  // }
+
+  .input-select {
+    display: inline-flex;
+    position: relative;
+    width: 100%;
+
+    .btn-arrow {
+      position: absolute;
+      right: 0;
+      left: 100px;
+    }
+  }
+`;
+
+const OpenArrow = styled.i`
+  position: absolute;
+
+  width: 0;
+  height: 0;
+  right: 0;
+  margin-top: 0.6rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 15px solid ${persianblue};
+`;
+
+const CloseArrow = styled.i`
+  position: absolute;
+
+  width: 0;
+  height: 0;
+  right: 0;
+  margin-top: 0.6rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 15px solid ${persianblue};
 `;
 
 export const Dropdown = ({ options, setSelected, selected }) => (
@@ -122,6 +161,61 @@ export const Dropdown = ({ options, setSelected, selected }) => (
     <Arrow />
   </Container>
 );
+
+export const DropdownArrow = ({
+  options,
+  setSelected,
+  selected,
+  isOpen,
+  onClick,
+  onBlur,
+  display,
+}) => {
+  return (
+    <Container
+      onClick={onClick}
+      onBlurCapture={onBlur}
+      style={{ width: "100%" }}
+    >
+      <Wrapper style={{ width: "100%" }}>
+        <div className="input-select">
+          <Input
+            type={"text"}
+            placeholder={"กรุณาเลือก"}
+            value={selected ? selected.nameTH : ""}
+            style={{ width: "100%" }}
+          />
+          {isOpen ? <OpenArrow /> : <CloseArrow />}
+        </div>
+        {options.length === 0 ? (
+          <>
+            <WrapperOption
+              isOpen={isOpen}
+              isEmtry={true}
+              style={{ width: "100%" }}
+            >
+              <OptionSelect>ไม่มีข้อมูล</OptionSelect>
+            </WrapperOption>
+          </>
+        ) : (
+          <>
+            <WrapperOption isOpen={isOpen} style={{ width: "100%" }}>
+              {options &&
+                options.map((option, index) => (
+                  <OptionSelect
+                    onMouseDown={() => setSelected(option)}
+                    style={{ width: "100%" }}
+                  >
+                    {option[display]}
+                  </OptionSelect>
+                ))}
+            </WrapperOption>
+          </>
+        )}
+      </Wrapper>
+    </Container>
+  );
+};
 
 export const DropdownSelect = ({
   options,
@@ -159,11 +253,13 @@ export const DropdownSelect = ({
   return (
     <Container onClick={onClick} onBlurCapture={onBlur}>
       <Wrapper>
-        <Input
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          placeholder={"กรุณาเลือก"}
-        />
+        {searchFrom && (
+          <Input
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder={"กรุณาเลือก"}
+          />
+        )}
         {options.length === 0 ? (
           <>
             <WrapperOption isOpen={isOpen} isEmtry={true}>

@@ -10,6 +10,7 @@ import { FlexContainer } from "../components/UI/FlexContainer";
 import {
   DropdownSelect,
   DropdownSelectMasterBank,
+  DropdownArrow,
 } from "../components/UI/Dropdown";
 import { LineCard } from "../components/UI/Card";
 import { FieldInput } from "../components/UI/Search";
@@ -44,6 +45,7 @@ const Buy = () => {
   const [currentPrice, setCurrentPrice] = useState(0);
 
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
+  const [isOpenDropdownArrow, setIsOpenDropdownArrow] = useState(false);
   const [validateAccept, setValidateAccept] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [registrationNo, setRegistrationNo] = useState(false);
@@ -276,6 +278,13 @@ const Buy = () => {
       setTimeout(() => {
         setShow(false);
       }, 5000);
+    } else if (!isAcceptVerify && page === 3) {
+      setShow(true);
+      setStatus(999);
+      setAlertMessage("กรุณาตรวจสอบข้อมูลในขั้นตอนที่ 2");
+      setTimeout(() => {
+        setShow(false);
+      }, 5000);
     } else {
       if (page === 3 && !isConfirmBooking) {
         setShow(true);
@@ -329,7 +338,7 @@ const Buy = () => {
           tel: addressTel,
         },
         registrationNo: shareId,
-        bankRefund: dropdownBankRefundSelect._id,
+        bankRefund: depositBank._id,
       },
       "orders"
     );
@@ -1401,28 +1410,24 @@ const Buy = () => {
                                 </InputDiv>
                                 <InputDiv
                                   style={{
-                                    marginTop: "20px",
                                     width: "100%",
+                                    marginTop: "20px",
+                                    border: "2px solid #d9e1e7;",
                                   }}
                                 >
-                                  <DropdownSelectMasterBank
-                                    options={shareBankRefundOption}
-                                    searchFrom={"nameTH"}
-                                    isOpen={isOpenDropdown}
+                                  <DropdownArrow
+                                    options={masterBankRefund}
+                                    isOpen={isOpenDropdownArrow}
                                     onClick={() =>
-                                      setIsOpenDropdown(!isOpenDropdown)
+                                      setIsOpenDropdownArrow(
+                                        !isOpenDropdownArrow
+                                      )
                                     }
-                                    onBlur={() => setIsOpenDropdown(false)}
-                                    setSelected={setDropdownBankRefundSelect}
-                                    selected={dropdownBankRefundSelect}
+                                    onBlur={() => setIsOpenDropdownArrow(false)}
+                                    setSelected={setDepositBank}
+                                    selected={depositBank}
+                                    display={"nameTH"}
                                   />
-                                  {/* <FieldInput
-                                    placeholder={"ฝากเงินเข้าบัญชีธนาคาร"}
-                                    value={depositBank}
-                                    onChange={(e) =>
-                                      setDepositBank(e.target.value)
-                                    }
-                                  /> */}
                                 </InputDiv>
                               </div>
                               <div className="input-div">
@@ -2051,6 +2056,12 @@ const ShareDetail = styled.div`
 
   * {
     width: 200px;
+  }
+
+  .input-select {
+    i {
+      width: 10px;
+    }
   }
 
   .payment-detail {
