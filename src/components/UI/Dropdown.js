@@ -163,7 +163,7 @@ export const Dropdown = ({ options, setSelected, selected }) => (
   </Container>
 );
 
-export const DropdownArrow = ({ options, setSelected, selected, isOpen, onClick, onBlur }) => {
+export const DropdownArrow = ({ options, setSelected, selected, isOpen, onClick, onBlur, display }) => {
   return (
     <Container onClick={onClick} onBlurCapture={onBlur} style={{ width: '100%' }}>
       <Wrapper style={{ width: '100%' }}>
@@ -180,7 +180,7 @@ export const DropdownArrow = ({ options, setSelected, selected, isOpen, onClick,
             <WrapperOption isOpen={isOpen} style={{ width: '100%' }} >
               {
                 options && options.map((option, index) => (
-                  <OptionSelect onMouseDown={() => setSelected(option)} style={{ width: '100%' }}>{option.nameTH}</OptionSelect>
+                  <OptionSelect onMouseDown={() => setSelected(option)} style={{ width: '100%' }}>{option[display]}</OptionSelect>
                 ))
               }
             </WrapperOption>

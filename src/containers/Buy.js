@@ -1337,6 +1337,7 @@ const Buy = () => {
                                     onBlur={() => setIsOpenDropdownArrow(false)}
                                     setSelected={setDepositBank}
                                     selected={depositBank}
+                                    display={"nameTH"}
                                   />
                                 </InputDiv>
                               </div>
