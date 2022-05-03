@@ -42,6 +42,7 @@ const Layout = ({ children }) => {
     "/dashboard",
     "/checkRightAdmin",
     "/import",
+    "/customer/service"
   ];
 
   const pagesCustomer = [
@@ -49,6 +50,7 @@ const Layout = ({ children }) => {
     "/buy",
     "/checkRightCustomer",
     "/profile",
+    "/customer/service"
   ];
 
   const pagesAll = pagesAdmin.concat(pagesCustomer);
@@ -57,7 +59,7 @@ const Layout = ({ children }) => {
 
   const isPage = pagesAll.includes(path);
 
-  const isLogin = path !== "/login/admin" && path !== "/login/customer";
+  const isLogin = path !== "/login/admin" && path !== "/login/customer" && path !== "/customer/service";
 
   // * Case path is not pages allow
   if (!isPage) {
@@ -66,11 +68,11 @@ const Layout = ({ children }) => {
         <DisplayNotfound></DisplayNotfound>
       </>
     );
-  }
+  } 
 
   // * Case normally login
   if (
-    (path === "/login/admin" || path === "/login/customer") &&
+    (path === "/login/admin" || path === "/login/customer" || path === "/customer/service") &&
     (!user || user.length === 0)
   ) {
     return <>{children}</>;

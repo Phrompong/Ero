@@ -9,6 +9,7 @@ import ImportData from "./containers/ImportData";
 import Buy from "./containers/Buy";
 import CheckRightAdmin from "./containers/CheckRights/Admin";
 import CheckRightCustomer from "./containers/CheckRights/Customer";
+import CustomerService from "./containers/customerService";
 import { useSelector } from "react-redux";
 
 import "./App.css";
@@ -20,6 +21,7 @@ const App = (props) => {
     <Routes>
       <Route path="/login/admin" element={<Auth {...props} />} />
       <Route path="/import" element={<ImportData {...props} />} />
+      <Route path="/customer/service" element={<CustomerService />} />
       <Route path="/checkRightAdmin" element={<CheckRightAdmin {...props} />} />
 
       <Route path="/login/customer" element={<Login {...props} />} />
