@@ -39,6 +39,7 @@ const Buy = () => {
   const [alertMessage, setAlertMessage] = useState();
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showRegistrationModal, setShowRegistrationModal] = useState(true)
   const [status, setStatus] = useState();
 
   const [currentStockVolume, setCurrentStockVolume] = useState(0);
@@ -50,6 +51,12 @@ const Buy = () => {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [registrationNo, setRegistrationNo] = useState(false);
 
+  // modal registration
+  const [nationalId, setNationalId] = useState(null)
+  const [allRegistrations, setAllRegistrations] = useState([])
+  const [isRegistrationChecked, setIsRegistrationChecked] = useState(false)
+  const [isDisableRegistration, setIsDisableRegistration] = useState(true)
+
   // step 1
   const [shareName, setShareName] = useState("-");
   const [shareDescription, setShareDescription] = useState("-");
@@ -59,10 +66,11 @@ const Buy = () => {
   const [shareOption, setShareOption] = useState([]);
   const [shareBankRefundOption, setShareBankRefundOption] = useState([]);
   const [dropdownSelect, setDropdownSelect] = useState(null);
-  const [dropdownBankRefundSelect, setDropdownBankRefundSelect] =
-    useState(null);
+  const [dropdownBankRefundSelect, setDropdownBankRefundSelect] = useState(null);
   const [isReadMore, setIsReadMore] = useState(false);
   const [tradingAccountNo, setTradingAccountNo] = useState(null);
+
+  const [isOpenDropdownArrowStep1, setIsOpenDropdownArrowStep1] = useState(false);
 
   // modal
   const [fullnameModal, setFullnameModal] = useState(null);
@@ -81,12 +89,9 @@ const Buy = () => {
   const [isAcceptVerify, setIsAcceptVerify] = useState(false);
   const [isConfirmBooking, setIsConfirmBooking] = useState(false);
 
+  const [bankDisableButton, setBankDisableButton] = useState(true)
+
   // step 3
-  const [logo, setLogo] = useState(null);
-  const [nameTH, setNameTH] = useState(null);
-  const [ref1, setRef1] = useState(null);
-  const [ref2, setRef2] = useState(null);
-  const [qrCode, setQRCode] = useState(null);
   const [radioCheckedPayment, setRadioCheckPayment] = useState(false);
 
   // addres modal
@@ -112,6 +117,7 @@ const Buy = () => {
   const fetchStep1 = () => {
     getCustomerProfile();
     getBrokers();
+    fetchDataProfile();
   };
 
   const fetchStep2 = () => {
@@ -131,8 +137,13 @@ const Buy = () => {
 
     if (status === 200) {
       const payload = res.data[0];
+      const registrations = res.data.map((data) => {
+        return { registraionNo: data.registrationNo }
+      })
+      setAllRegistrations(registrations)
+      setNationalId(payload.customerId.nationalId)
       setFullname(`${payload.customerId.name} ${payload.customerId.lastname}`);
-      setShareId(payload.registrationNo);
+      // setShareId(payload.registrationNo);
       setPhoneNo(payload.customerId.telephone);
       setRegistrationNo(payload.registrationNo);
       setFullnameModal(
@@ -235,33 +246,44 @@ const Buy = () => {
     if (!file) {
       setStatus(999);
       setAlertMessage("ไม่พบไฟล์ภาพ");
-      setShowAlertModal(true);
-    }
-    const formData = new FormData();
-    formData.append("File", file);
-    const endpoint = `uploads/image?orderId=${orderId}`;
-
-    const [res, status] = await httpPostRequestUploadFile(formData, endpoint);
-    let msg = res.message;
-    setStatus(status);
-    if (status === 200) {
-      msg = "Upload Completed";
-      console.log(msg);
-      setAlertMessage(msg);
       showAlert(setShow, 2000);
-      setFile();
-      // navigate(`/somewhere`)
     }
+    // const formData = new FormData();
+    // formData.append("File", file);
+    // const endpoint = `uploads/image?orderId=${orderId}`;
+
+    // const [res, status] = await httpPostRequestUploadFile(formData, endpoint);
+    // let msg = res.message;
+    // setStatus(status);
+    // if (status === 200) {
+    //   msg = "Upload Completed";
+    //   console.log(msg);
+    //   setAlertMessage(msg);
+    //   showAlert(setShow, 2000);
+    //   setFile();
+    //   // navigate(`/somewhere`)
+    // }
+    setPage(3);
+    setValidateAccept(true);
   };
 
+  useEffect(() => {
+    if (shareId && isRegistrationChecked) {
+      setIsDisableRegistration(false)
+    }
+  }, [shareId, isRegistrationChecked])
+
   const hanlderOnBack = () => {
-    setValidateAccept(false);
-    setPage(2);
+    if (page === 2) {
+      setValidateAccept(false);
+      setPage(2);
+    } else if (page === 3) {
+      setValidateAccept(false);
+      setPage(3);
+    }
   };
 
   const handlerOnClickPage = (page) => {
-    console.log(page);
-    console.log(isConfirmBooking);
     if (!dropdownSelect) {
       setShow(true);
       setStatus(999);
@@ -294,7 +316,6 @@ const Buy = () => {
           setShow(false);
         }, 5000);
       } else {
-        console.log("Change page");
         setPage(page);
       }
     }
@@ -357,17 +378,11 @@ const Buy = () => {
 
   const handlerOnEdit = () => {
     setShowModal(true);
-
-    setFullnameModal(fullname);
-    setShareIdModal(shareId);
     setPhoneNoModal(phoneNo);
   };
 
   const handlerOnCloseModal = () => {
     setShowModal(false);
-
-    setFullnameModal(fullname);
-    setShareIdModal(shareId);
     setPhoneNoModal(phoneNo);
   };
 
@@ -418,6 +433,12 @@ const Buy = () => {
   }, [page]);
 
   useEffect(() => {
+    if (depositBank && bank) {
+      setBankDisableButton(false)
+    }
+  }, [depositBank, bank])
+
+  useEffect(() => {
     setCurrentPrice(Number(currentStockVolume) * Number(offerPrice));
     setExcessVolume(
       Number(currentStockVolume) > Number(rightStockVolume)
@@ -437,8 +458,165 @@ const Buy = () => {
 
   return (
     <Card>
+      <Modal show={showRegistrationModal} style={{ marginLeft: "10%", width: "100%", overflow: "visible" }}>
+        <Card style={{ width: "873px" }}>
+          <ContainerCard>
+            <Header
+              style={{
+                margin: "20px",
+                color: "#1D3AB1",
+                fontWeight: "bold",
+                display: "flex",
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faCircleInfo}
+                style={{
+                  margin: "10px 10px 0px 10px",
+                  color: "#FB0303",
+                  fontSize: "30px",
+                }}
+              />
+              <h3 style={{ marginTop: "auto" }}>
+                โปรดตรวจสอบข้อมูลของท่านก่อนการลงทะเบียนจองสิทธิ์
+              </h3>
+            </Header>
+            <LineCard style={{ padding: "10px 40px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  margin: "10px 0",
+                  alignItems: "baseline",
+                }}
+              >
+                <p
+                  style={{
+                    width: "30%",
+                    paddingTop: "8px",
+                    fontSize: "14px",
+                    marginRight: "2rem",
+                  }}
+                >
+                  หมายเลขบัตรประชาชน
+                </p>
+                <p>{nationalId}</p>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  margin: "10px 0",
+                  alignItems: "baseline",
+                }}
+              >
+                <p
+                  style={{
+                    width: "30%",
+                    paddingTop: "8px",
+                    fontSize: "14px",
+                    marginRight: "2rem",
+                  }}
+                >
+                  เบอร์โทรศัพท์
+                </p>
+                <p>{phoneNo}</p>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  margin: "10px 0",
+                  alignItems: "baseline",
+                }}
+              >
+                <p
+                  style={{
+                    width: "30%",
+                    paddingTop: "8px",
+                    fontSize: "14px",
+                    marginRight: "2rem",
+                  }}
+                >
+                  ชื่อ - นามสกุล
+                </p>
+                <p>{fullname}</p>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  margin: "10px 0",
+                  alignItems: "baseline",
+                }}
+              >
+                <p
+                  style={{
+                    width: "30%",
+                    paddingTop: "8px",
+                    fontSize: "14px",
+                    marginRight: "2rem",
+                  }}
+                >
+                  ที่อยู่
+                </p>
+                <p style={{ padding: "0 0.6rem" }}>
+                  {profile ? `${profile.address} ${profile.zipcode}` : '-'}
+                </p>
+              </div>
+              <div style={{ display: "flex", width: "100%", margin: "10px 0" }}>
+                <p
+                  style={{
+                    width: "30%",
+                    paddingTop: "8px",
+                    fontSize: "14px",
+                    marginRight: "3rem",
+                  }}
+                >
+                  หมายเลขทะเบียนผู้ถือหุ้น
+                </p>
+                <div style={{ padding: '0 2rem', width: "100%" }}>
+                  <DropdownArrow
+                    options={allRegistrations}
+                    isOpen={isOpenDropdownArrow}
+                    onClick={() =>
+                      setIsOpenDropdownArrow(
+                        !isOpenDropdownArrow
+                      )
+                    }
+                    onBlur={() => setIsOpenDropdownArrow(false)}
+                    setSelected={(e) => setShareId(e.registraionNo)}
+                    selected={{ registraionNo: shareId }}
+                    display={"registraionNo"}
+                  />
+                </div>
+              </div>
+            </LineCard>
+            <div style={{ margin: "auto", display: "table", marginTop: "1rem" }}>
+              <input type={"checkbox"} value={isRegistrationChecked} style={{ transform: "scale(1.5)", marginRight: "1rem" }} onChange={() => setIsRegistrationChecked(!isRegistrationChecked)} />
+              <label>ข้าพเจ้าขอรับรองว่า ข้าพเจ้าได้ทำการตรวจสอบข้อมูลข้างต้นนี้เป็นที่เรียบร้อยแล้ว</label>
+            </div>
+            <Header style={{ textAlign: "center" }}>
+              {
+                <Button
+                  type="button"
+                  value={"ยืนยันว่าตรวจสอบแล้ว"}
+                  onClick={() => setShowRegistrationModal(false)}
+                  disabled={isDisableRegistration}
+                  style={{
+                    fontSize: "16px",
+                    height: "40px",
+                    width: "50%",
+                    marginTop: "20px",
+                  }}
+                />
+              }
+            </Header>
+          </ContainerCard>
+        </Card>
+      </Modal >
       <Modal show={showAlertModal} style={{ marginLeft: "10%", width: "100%" }}>
-        <Card style={{ width: "1200px" }}>
+        <Card style={{ width: "873px" }}>
           <ContainerCard>
             <Header style={{ textAlign: "center" }}>
               <FontAwesomeIcon
@@ -601,7 +779,7 @@ const Buy = () => {
         </Card>
       </Modal>
       <Modal show={addressModal}>
-        <Card style={{ height: "auto", width: "70%" }}>
+        <Card style={{ height: "auto", width: "80%" }}>
           <ContainerCard>
             <Header
               style={{
@@ -616,12 +794,12 @@ const Buy = () => {
                 style={{
                   margin: "10px 10px 0px 10px",
                   color: "#FB0303",
-                  fontSize: "20px",
+                  fontSize: "30px",
                 }}
               />
-              <h3>
-                กรณีที่ท่านแจ้งบัญชีธนาคารนอกเหนือจาก 9
-                ธนาคารทางบริษัทขอคืนเงินให้ท่านเป็นเช็ค
+              <h3 style={{ color: "#FB0303" }}>
+                กรณีที่ท่านแจ้งบัญชีธนาคารนอกเหนือจาก 9 ธนาคาร<br />
+                ทางบริษัทขอคืนเงินให้ท่านเป็นเช็ค
                 โดยส่งไปตามที่อยู่ด้านล่าง
               </h3>
             </Header>
@@ -644,15 +822,9 @@ const Buy = () => {
                             src={bank.logo}
                             width={25}
                             height={25}
-                            style={{ margin: "auto", marginLeft: "1rem" }}
+                            style={{ marginLeft: "1rem", marginRight: "1rem" }}
                           />
-                          <p
-                            style={{
-                              marginTop: "auto",
-                              marginBottom: "auto",
-                              marginLeft: "2rem",
-                            }}
-                          >
+                          <p>
                             {bank.nameTH}
                           </p>
                         </LineCard>
@@ -672,20 +844,20 @@ const Buy = () => {
                 <h3>รายละเอียดที่อยู่ของท่าน</h3>
               </Header>
               <div class="profile-detail" style={{ padding: "1rem 2rem" }}>
-                <div style={{ display: "flex" }}>
+                <div style={{ display: "flex", margin: "1rem 0" }}>
                   <p style={{ width: "30%" }}>ชื่อ-นามสกุล :</p>
                   <p style={{ width: "70%" }}>
                     {profile ? profile.name : "-"}{" "}
                     {profile ? profile.lastname : "-"}
                   </p>
                 </div>
-                <div style={{ display: "flex" }}>
+                <div style={{ display: "flex", margin: "1rem 0" }}>
                   <p style={{ width: "30%" }}>ที่อยู่ :</p>
                   <p style={{ width: "70%" }}>
                     {profile ? profile.address + " " + profile.zipcode : ""}
                   </p>
                 </div>
-                <div style={{ display: "flex" }}>
+                <div style={{ display: "flex", margin: "1rem 0" }}>
                   <p style={{ width: "30%" }}>เบอร์โทรศัพท์ :</p>
                   <p style={{ width: "70%" }}>{phoneNo}</p>
                 </div>
@@ -771,242 +943,525 @@ const Buy = () => {
       <Container>
         <ModalAlert show={show} msg={alertMessage} status={status} />
         {validateAccept ? (
-          <>
-            <FlexContainer>
-              <div
-                className="msg-header"
-                style={{
-                  marginLeft: "20px",
-                  fontSize: "24px",
-                  color: persianblue,
-                }}
-              >
-                <b>รายละเอียดข้อมูลคำสั่งซื้อการจองสิทธิ</b>
-              </div>
-            </FlexContainer>
-            <FlexContainer>
-              <div
-                className="content-detail"
-                style={{ width: "100%", fontSize: "20px" }}
-              >
-                <div
-                  className="content-header"
-                  style={{
-                    paddingLeft: "50px",
-                    backgroundColor: "#F1F7FB",
-                    color: persianblue,
-                    margin: "10px 0",
-                  }}
-                >
-                  <b>ข้อมูลทั่วไปของสมาชิก</b>
-                </div>
-                <div
-                  className="content-member"
-                  style={{ marginLeft: "20px", marginTop: "10px" }}
-                >
-                  <div
-                    className="content-detail-member"
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <div className="content-detail-text">
-                      <p>ชื่อ-นามสกุล :</p>
-                      <p className="text-black">{fullname}</p>
-                    </div>
-                    <div className="content-detail-text">
-                      <p>เลขทะเบียนผู้ถือหุ้น :</p>
-                      <p className="text-black">{shareId}</p>
-                    </div>
-                  </div>
-                  <div
-                    className="content-detail-member"
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <div className="content-detail-text">
-                      <p>เบอร์โทรศัพท์ :</p>
-                      <p className="text-black">{phoneNo}</p>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="content-header"
-                  style={{
-                    paddingLeft: "50px",
-                    backgroundColor: "#F1F7FB",
-                    color: persianblue,
-                  }}
-                >
-                  <b>รายละเอียดการจัดสรรหุ้น</b>
-                </div>
-                <div
-                  className="content-member"
-                  style={{ marginLeft: "20px", marginTop: "10px" }}
-                >
-                  <div
-                    className="content-detail-member"
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <div className="content-detail-text">
-                      <p>ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก :</p>
-                      <p className="text-black">
-                        {dropdownSelect.code} {dropdownSelect.name}
-                      </p>
-                    </div>
-                  </div>
-                  <div
-                    className="content-detail-member"
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <div className="content-detail-text">
-                      <p>เลขที่บัญชีซื้อขาย :</p>
-                      <p className="text-black">{tradingAccountNo}</p>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="content-header"
-                  style={{
-                    paddingLeft: "50px",
-                    backgroundColor: "#F1F7FB",
-                    color: persianblue,
-                  }}
-                >
-                  <b>รายละเอียดการสั่งซื้อ</b>
-                </div>
-                <div
-                  className="content-member"
-                  style={{ marginLeft: "20px", marginTop: "10px" }}
-                >
-                  <div className="content-detail-member">
-                    <div className="content-detail-share">
-                      <div className="text-title">
-                        <p>หุ้นเดิม</p>
-                        <p className="text-black">{rightStockName}</p>
-                      </div>
-                      <div className="text-amount">
-                        <p>จำนวน</p>
-                        <b
-                          className="text-black"
-                          style={{ marginLeft: "-20px" }}
-                        >
-                          {stockVolume}
-                        </b>
-                        <p>หุ้น</p>
-                      </div>
-                    </div>
-                    <div className="content-detail-share">
-                      <div className="text-title">
-                        <p>ราคาเสนอขายหุ้นละ</p>
-                        <p className="text-black">{offerPrice} บาท</p>
-                      </div>
-                      <div className="text-amount"></div>
-                    </div>
-                    <div className="content-detail-share">
-                      <div className="text-title">
-                        <p>สิทธิ์ในการจองซื้อหุ้นเพิ่มทุน</p>
-                        <p className="text-black">{rightStockName}</p>
-                      </div>
-                      <div className="text-amount">
-                        <p>จำนวน</p>
-                        <b
-                          className="text-black"
-                          style={{ marginLeft: "-20px" }}
-                        >
-                          {rightStockVolume}
-                        </b>
-                        <p>หุ้น</p>
-                      </div>
-                    </div>
-                    <div className="content-detail-share">
-                      <div className="text-title">
-                        <p>สิทธิเพิ่มเติม</p>
-                        <p className="text-black">{rightSpecialName}</p>
-                      </div>
-                      <div className="text-amount">
-                        <p>จำนวน</p>
-                        <b
-                          className="text-black"
-                          style={{ marginLeft: "-20px" }}
-                        >
-                          {rightSpecialVolume}
-                        </b>
-                        <p>หุ้น</p>
-                      </div>
-                    </div>
-                    <div className="content-detail-share">
-                      <div className="text-title">
-                        <p>หุ้นจองซื้อเกินสิทธิ์</p>
-                        <p className="text-black">{rightStockName}</p>
-                      </div>
-                      <div className="text-amount">
-                        <p>จำนวน</p>
-                        <b
-                          className="text-black"
-                          style={{ marginLeft: "-20px" }}
-                        >
-                          {excessVolume}
-                        </b>
-                        <p>หุ้น</p>
-                      </div>
-                    </div>
+          (() => {
+            if (page === 2) {
+              return (
+                <>
+                  <FlexContainer>
                     <div
-                      className="content-detail-share"
-                      style={{ marginTop: "10px" }}
+                      className="msg-header"
+                      style={{
+                        marginLeft: "20px",
+                        fontSize: "24px",
+                        color: persianblue,
+                      }}
                     >
-                      <div className="text-title">
-                        <p>รวมเป็นเงินทั้งสิ้น</p>
-                        <b className="text-black" style={{ fontSize: "28px" }}>
-                          {currentPrice} บาท
-                        </b>
+                      <b>รายละเอียดข้อมูลคำสั่งซื้อการจองสิทธิ</b>
+                    </div>
+                  </FlexContainer>
+                  <FlexContainer>
+                    <div
+                      className="content-detail"
+                      style={{ width: "100%", fontSize: "20px" }}
+                    >
+                      <div
+                        className="content-header"
+                        style={{
+                          paddingLeft: "50px",
+                          backgroundColor: "#F1F7FB",
+                          color: persianblue,
+                          margin: "10px 0",
+                        }}
+                      >
+                        <b>ข้อมูลทั่วไปของสมาชิก</b>
                       </div>
-                      <div className="text-amount"></div>
+                      <div
+                        className="content-member"
+                        style={{ marginLeft: "20px", marginTop: "10px" }}
+                      >
+                        <div
+                          className="content-detail-member"
+                          style={{ display: "flex", justifyContent: "space-between" }}
+                        >
+                          <div className="content-detail-text">
+                            <p>ชื่อ-นามสกุล :</p>
+                            <p className="text-black">{fullname}</p>
+                          </div>
+                          <div className="content-detail-text">
+                            <p>เลขทะเบียนผู้ถือหุ้น :</p>
+                            <p className="text-black">{shareId}</p>
+                          </div>
+                        </div>
+                        <div
+                          className="content-detail-member"
+                          style={{ display: "flex", justifyContent: "space-between" }}
+                        >
+                          <div className="content-detail-text">
+                            <p>เบอร์โทรศัพท์ :</p>
+                            <p className="text-black">{phoneNo}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className="content-header"
+                        style={{
+                          paddingLeft: "50px",
+                          backgroundColor: "#F1F7FB",
+                          color: persianblue,
+                        }}
+                      >
+                        <b>รายละเอียดการจัดสรรหุ้น</b>
+                      </div>
+                      <div
+                        className="content-member"
+                        style={{ marginLeft: "20px", marginTop: "10px" }}
+                      >
+                        <div
+                          className="content-detail-member"
+                          style={{ display: "flex", justifyContent: "space-between" }}
+                        >
+                          <div className="content-detail-text">
+                            <p>ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก :</p>
+                            <p className="text-black">
+                              {dropdownSelect.code} {dropdownSelect.name}
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          className="content-detail-member"
+                          style={{ display: "flex", justifyContent: "space-between" }}
+                        >
+                          <div className="content-detail-text">
+                            <p>เลขที่บัญชีซื้อขาย :</p>
+                            <p className="text-black">{tradingAccountNo}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className="content-header"
+                        style={{
+                          paddingLeft: "50px",
+                          backgroundColor: "#F1F7FB",
+                          color: persianblue,
+                        }}
+                      >
+                        <b>รายละเอียดการสั่งซื้อ</b>
+                      </div>
+                      <div
+                        className="content-member"
+                        style={{ marginLeft: "20px", marginTop: "10px" }}
+                      >
+                        <div className="content-detail-member">
+                          <div className="content-detail-share">
+                            <div className="text-title">
+                              <p>หุ้นเดิม</p>
+                              <p className="text-black">{rightStockName}</p>
+                            </div>
+                            <div className="text-amount">
+                              <p>จำนวน</p>
+                              <b
+                                className="text-black"
+                                style={{ marginLeft: "-20px" }}
+                              >
+                                {stockVolume}
+                              </b>
+                              <p>หุ้น</p>
+                            </div>
+                          </div>
+                          <div className="content-detail-share">
+                            <div className="text-title">
+                              <p>ราคาเสนอขายหุ้นละ</p>
+                              <p className="text-black">{offerPrice} บาท</p>
+                            </div>
+                            <div className="text-amount"></div>
+                          </div>
+                          <div className="content-detail-share">
+                            <div className="text-title">
+                              <p>สิทธิ์ในการจองซื้อหุ้นเพิ่มทุน</p>
+                              <p className="text-black">{rightStockName}</p>
+                            </div>
+                            <div className="text-amount">
+                              <p>จำนวน</p>
+                              <b
+                                className="text-black"
+                                style={{ marginLeft: "-20px" }}
+                              >
+                                {rightStockVolume}
+                              </b>
+                              <p>หุ้น</p>
+                            </div>
+                          </div>
+                          <div className="content-detail-share">
+                            <div className="text-title">
+                              <p>สิทธิเพิ่มเติม</p>
+                              <p className="text-black">{rightSpecialName}</p>
+                            </div>
+                            <div className="text-amount">
+                              <p>จำนวน</p>
+                              <b
+                                className="text-black"
+                                style={{ marginLeft: "-20px" }}
+                              >
+                                {rightSpecialVolume}
+                              </b>
+                              <p>หุ้น</p>
+                            </div>
+                          </div>
+                          <div className="content-detail-share">
+                            <div className="text-title">
+                              <p>หุ้นจองซื้อเกินสิทธิ์</p>
+                              <p className="text-black">{rightStockName}</p>
+                            </div>
+                            <div className="text-amount">
+                              <p>จำนวน</p>
+                              <b
+                                className="text-black"
+                                style={{ marginLeft: "-20px" }}
+                              >
+                                {excessVolume}
+                              </b>
+                              <p>หุ้น</p>
+                            </div>
+                          </div>
+                          <div
+                            className="content-detail-share"
+                            style={{ marginTop: "10px" }}
+                          >
+                            <div className="text-title">
+                              <p>รวมเป็นเงินทั้งสิ้น</p>
+                              <b className="text-black" style={{ fontSize: "28px" }}>
+                                {currentPrice} บาท
+                              </b>
+                            </div>
+                            <div className="text-amount"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </FlexContainer>
+                  <div className="line-space" style={{ padding: "0 20px" }}>
+                    <hr style={{ border: "0.75px solid #D9E1E7" }} />
+                  </div>
+                  <div
+                    className="message-info"
+                    style={{ margin: "10px 10px 10px 10px", color: "#1234B0" }}
+                  >
+                    <p>
+                      <FontAwesomeIcon
+                        icon={faCircleInfo}
+                        style={{ margin: "0 10px", color: "#FB0303" }}
+                      />
+                      โปรดตรวจสอบข้อมูลของท่านให้เรียบร้อย หากท่านกดปุ่ม{" "}
+                      <b>ถัดไป</b> จะไม่สามารถกลับมาแก้ไขข้อมูลได้อีก
+                    </p>
+                  </div>
+                  <div
+                    className="btn-accept-buy"
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Button
+                      type="submit"
+                      value={"ย้อนกลับ"}
+                      onClick={() => hanlderOnBack()}
+                      style={{
+                        fontSize: "16px",
+                        height: "35px",
+                        margin: "0 20px 20px 20px",
+                        backgroundColor: "#809FB8",
+                      }}
+                    />
+                    <Button
+                      type="submit"
+                      value={"ถัดไป"}
+                      onClick={() => handlerOnAccept()}
+                      style={{
+                        fontSize: "16px",
+                        height: "35px",
+                        margin: "0 20px 20px 20px",
+                      }}
+                    />
+                  </div>
+                </>
+              )
+            } else if (page === 3) {
+              return (
+                <>
+                  <FlexContainer>
+                    <div
+                      className="msg-header"
+                      style={{
+                        marginLeft: "20px",
+                        fontSize: "24px",
+                        color: persianblue,
+                      }}
+                    >
+                      <b>รายละเอียดข้อมูลคำสั่งซื้อการจองสิทธิ</b>
+                    </div>
+                  </FlexContainer>
+                  <FlexContainer>
+                    <div
+                      className="content-detail"
+                      style={{ width: "100%", fontSize: "20px" }}
+                    >
+                      <div
+                        className="content-header"
+                        style={{
+                          paddingLeft: "50px",
+                          backgroundColor: "#F1F7FB",
+                          color: persianblue,
+                          margin: "10px 0",
+                        }}
+                      >
+                        <b>ข้อมูลทั่วไปของสมาชิก</b>
+                      </div>
+                      <div
+                        className="content-member"
+                        style={{ marginLeft: "20px", marginTop: "10px" }}
+                      >
+                        <div
+                          className="content-detail-member"
+                          style={{ display: "flex", justifyContent: "space-between" }}
+                        >
+                          <div className="content-detail-text">
+                            <p>ชื่อ-นามสกุล :</p>
+                            <p className="text-black">{fullname}</p>
+                          </div>
+                          <div className="content-detail-text">
+                            <p>เลขทะเบียนผู้ถือหุ้น :</p>
+                            <p className="text-black">{shareId}</p>
+                          </div>
+                        </div>
+                        <div
+                          className="content-detail-member"
+                          style={{ display: "flex", justifyContent: "space-between" }}
+                        >
+                          <div className="content-detail-text">
+                            <p>เบอร์โทรศัพท์ :</p>
+                            <p className="text-black">{phoneNo}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className="content-header"
+                        style={{
+                          paddingLeft: "50px",
+                          backgroundColor: "#F1F7FB",
+                          color: persianblue,
+                        }}
+                      >
+                        <b>รายละเอียดการจัดสรรหุ้น</b>
+                      </div>
+                      <div
+                        className="content-member"
+                        style={{ marginLeft: "20px", marginTop: "10px" }}
+                      >
+                        <div
+                          className="content-detail-member"
+                          style={{ display: "flex", justifyContent: "space-between" }}
+                        >
+                          <div className="content-detail-text">
+                            <p>ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก :</p>
+                            <p className="text-black">
+                              {dropdownSelect.code} {dropdownSelect.name}
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          className="content-detail-member"
+                          style={{ display: "flex", justifyContent: "space-between" }}
+                        >
+                          <div className="content-detail-text">
+                            <p>เลขที่บัญชีซื้อขาย :</p>
+                            <p className="text-black">{tradingAccountNo}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className="content-header"
+                        style={{
+                          paddingLeft: "50px",
+                          backgroundColor: "#F1F7FB",
+                          color: persianblue,
+                        }}
+                      >
+                        <b>รายละเอียดการสั่งซื้อ</b>
+                      </div>
+                      <div
+                        className="content-member"
+                        style={{ marginLeft: "20px", marginTop: "10px" }}
+                      >
+                        <div className="content-detail-member">
+                          <div className="content-detail-share">
+                            <div className="text-title">
+                              <p>หุ้นเดิม</p>
+                              <p className="text-black">{rightStockName}</p>
+                            </div>
+                            <div className="text-amount">
+                              <p>จำนวน</p>
+                              <b
+                                className="text-black"
+                                style={{ marginLeft: "-20px" }}
+                              >
+                                {stockVolume}
+                              </b>
+                              <p>หุ้น</p>
+                            </div>
+                          </div>
+                          <div className="content-detail-share">
+                            <div className="text-title">
+                              <p>ราคาเสนอขายหุ้นละ</p>
+                              <p className="text-black">{offerPrice} บาท</p>
+                            </div>
+                            <div className="text-amount"></div>
+                          </div>
+                          <div className="content-detail-share">
+                            <div className="text-title">
+                              <p>สิทธิ์ในการจองซื้อหุ้นเพิ่มทุน</p>
+                              <p className="text-black">{rightStockName}</p>
+                            </div>
+                            <div className="text-amount">
+                              <p>จำนวน</p>
+                              <b
+                                className="text-black"
+                                style={{ marginLeft: "-20px" }}
+                              >
+                                {rightStockVolume}
+                              </b>
+                              <p>หุ้น</p>
+                            </div>
+                          </div>
+                          <div className="content-detail-share">
+                            <div className="text-title">
+                              <p>สิทธิเพิ่มเติม</p>
+                              <p className="text-black">{rightSpecialName}</p>
+                            </div>
+                            <div className="text-amount">
+                              <p>จำนวน</p>
+                              <b
+                                className="text-black"
+                                style={{ marginLeft: "-20px" }}
+                              >
+                                {rightSpecialVolume}
+                              </b>
+                              <p>หุ้น</p>
+                            </div>
+                          </div>
+                          <div className="content-detail-share">
+                            <div className="text-title">
+                              <p>หุ้นจองซื้อเกินสิทธิ์</p>
+                              <p className="text-black">{rightStockName}</p>
+                            </div>
+                            <div className="text-amount">
+                              <p>จำนวน</p>
+                              <b
+                                className="text-black"
+                                style={{ marginLeft: "-20px" }}
+                              >
+                                {excessVolume}
+                              </b>
+                              <p>หุ้น</p>
+                            </div>
+                          </div>
+                          <div
+                            className="content-detail-share"
+                            style={{ marginTop: "10px" }}
+                          >
+                            <div className="text-title">
+                              <p>รวมเป็นเงินทั้งสิ้น</p>
+                              <b className="text-black" style={{ fontSize: "28px" }}>
+                                {currentPrice} บาท
+                              </b>
+                            </div>
+                            <div className="text-amount"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className="content-header"
+                        style={{
+                          paddingLeft: "50px",
+                          backgroundColor: "#F1F7FB",
+                          color: persianblue,
+                          marginTop: "10px"
+                        }}
+                      >
+                        <b>กรณีหุ้นที่ไม่ได้รับการจัดสรรขอให้โอนเงินคืนเข้าผ่านบัญชีธนาคาร</b>
+                      </div>
+                      <div
+                        className="content-member"
+                        style={{ marginLeft: "20px", marginTop: "10px" }}
+                      >
+                        <div
+                          className="content-detail-member"
+                          style={{ display: "flex", justifyContent: "space-between" }}
+                        >
+                          <div className="content-detail-text">
+                            <p>ฝากเข้าผ่านธนาคาร :</p>
+                            <img src={depositBank.logo} height={"33px"} width={"32px"} style={{ margin: "auto", marginLeft: "1rem" }} />
+                            <p className="text-black">{depositBank.nameTH}</p>
+                          </div>
+                          <div className="content-detail-text">
+                            <p>เลขที่บัญชี :</p>
+                            <p className="text-black">{bank}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </FlexContainer>
+                  <div className="line-space" style={{ padding: "0 20px" }}>
+                    <hr style={{ border: "0.75px solid #D9E1E7" }} />
+                  </div>
+                  <div
+                    className="content-member"
+                    style={{ marginLeft: "20px", marginTop: "10px", fontSize: "24px" }}
+                  >
+                    <div
+                      className="content-detail-member"
+                      style={{ display: "flex", justifyContent: "space-between" }}
+                    >
+                      <div className="content-detail-text" style={{ width: "100%" }}>
+                        <p style={{ width: "20%" }}>
+                          ข้อตกลง :
+                        </p>
+                        <input type={"checkbox"} style={{ transform: "scale(1.5)" }} /> 
+                        {/* binding parameter */}
+                        <p className="text-black" style={{ fontSize: "20px", textAlign: "center" }}>ข้าพเจ้าขอรับรองว่า ข้าพเจ้าในฐานะผู้ถือหุ้นได้รับการจัดสรรหุ้นสามัญออกใหม่ เป็นผู้รับประโยชน์ที่แท้จริง</p>
+                      </div>
+                    </div>
+                    <div className="text-black" style={{ fontSize: "20px", textAlign: "center" }}>
+                      **รายการจะสมบูรณ์ เมื่อท่านยืนยันรายการและบริษัทตรวจสอบผลการชำระเงินครบถ้วนสมบรูณ์
                     </div>
                   </div>
-                </div>
-              </div>
-            </FlexContainer>
-            <div className="line-space" style={{ padding: "0 20px" }}>
-              <hr style={{ border: "0.75px solid #D9E1E7" }} />
-            </div>
-            <div
-              className="message-info"
-              style={{ margin: "10px 10px 10px 10px", color: "#1234B0" }}
-            >
-              <p>
-                <FontAwesomeIcon
-                  icon={faCircleInfo}
-                  style={{ margin: "0 10px", color: "#FB0303" }}
-                />
-                โปรดตรวจสอบข้อมูลของท่านให้เรียบร้อย หากท่านกดปุ่ม{" "}
-                <b>ยืนยันการจอง</b> จะไม่สามารถกลับมาแก้ไขข้อมูลได้อีก
-              </p>
-            </div>
-            <div
-              className="btn-accept-buy"
-              style={{ display: "flex", justifyContent: "space-between" }}
-            >
-              <Button
-                type="submit"
-                value={"ย้อนกลับ"}
-                onClick={() => hanlderOnBack()}
-                style={{
-                  fontSize: "16px",
-                  height: "35px",
-                  margin: "0 20px 20px 20px",
-                  backgroundColor: "#809FB8",
-                }}
-              />
-              <Button
-                type="submit"
-                value={"ยืนยันการจอง"}
-                onClick={() => handlerOnAccept()}
-                style={{
-                  fontSize: "16px",
-                  height: "35px",
-                  margin: "0 20px 20px 20px",
-                }}
-              />
-            </div>
-          </>
+                  <div
+                    className="btn-accept-buy"
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Button
+                      type="submit"
+                      value={"ย้อนกลับ"}
+                      onClick={() => hanlderOnBack()}
+                      style={{
+                        fontSize: "16px",
+                        height: "35px",
+                        margin: "0 20px 20px 20px",
+                        backgroundColor: "#809FB8",
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      value={"ถัดไป"}
+                      onClick={handlerOnSubmited}
+                      style={{
+                        fontSize: "16px",
+                        height: "35px",
+                        margin: "0 20px 20px 20px",
+                      }}
+                    />
+                  </div>
+                </>
+              )
+            }
+          })()
         ) : (
           <>
             <FlexContainer>
@@ -1079,7 +1534,7 @@ const Buy = () => {
                           </p>
                           <div className="desc">
                             {/* <p style={{ height: "157.4px" }}>{shareDescription}</p> */}
-                            <p>{shareDescription}</p>
+                            <p style={{ maxHeight: "300px" }}>{shareDescription}</p>
                           </div>
                           <div className="btn-read-more">
                             <Button
@@ -1134,18 +1589,38 @@ const Buy = () => {
                           </InputDiv>
                           <InputDiv>
                             <div className="inputField">
+                              <p>เบอร์โทรศัพท์ที่สามารถติดต่อได้</p>
+                              <p>{phoneNo}</p>
+                            </div>
+                          </InputDiv>
+                          {/* <InputDiv>
+                            <div className="inputField">
                               <p>เลขทะเบียนผู้ถือหุ้น</p>
                               <p>{shareId}</p>
                             </div>
-                          </InputDiv>
+                          </InputDiv> */}
                         </ContentSpace>
                         <Content>
                           <InputDiv>
-                            <div className="inputField">
-                              <p>
-                                เบอร์โทรศัพท์ที่สามารถติดต่อได้{" "}
-                                <span>{phoneNo}</span>
-                              </p>
+                            <div className="inputField" style={{ justifyContent: "start" }}>
+                              <div style={{ width: "100%", display: "flex" }}>
+                                <p style={{ width: "20%", marginTop: "auto", marginBottom: "auto" }}>
+                                  เลขทะเบียนผู้ถือหุ้น
+                                </p>
+                                <DropdownArrow
+                                  options={allRegistrations}
+                                  isOpen={isOpenDropdownArrowStep1}
+                                  onClick={() =>
+                                    setIsOpenDropdownArrowStep1(
+                                      !isOpenDropdownArrowStep1
+                                    )
+                                  }
+                                  onBlur={() => setIsOpenDropdownArrowStep1(false)}
+                                  setSelected={(e) => setShareId(e.registraionNo)}
+                                  selected={{ registraionNo: shareId }}
+                                  display={"registraionNo"}
+                                />
+                              </div>
                             </div>
                           </InputDiv>
                         </Content>
@@ -1406,7 +1881,7 @@ const Buy = () => {
                             </Header>
                             <ShareDetail style={{ display: "block" }}>
                               <div className="input-div">
-                                <InputDiv style={{ width: "100%" }}>
+                                <InputDiv style={{ width: "100%", margin: "auto" }}>
                                   <p>ฝากเงินเข้าบัญชีธนาคาร</p>
                                 </InputDiv>
                                 <InputDiv
@@ -1428,11 +1903,12 @@ const Buy = () => {
                                     setSelected={setDepositBank}
                                     selected={depositBank}
                                     display={"nameTH"}
+                                    otherOption={true}
                                   />
                                 </InputDiv>
                               </div>
                               <div className="input-div">
-                                <InputDiv style={{ width: "100%" }}>
+                                <InputDiv style={{ width: "100%", margin: "auto" }}>
                                   <p
                                     style={{
                                       width: "200px",
@@ -1471,6 +1947,8 @@ const Buy = () => {
                                     type="submit"
                                     value="ตรวจสอบข้อมูล"
                                     onClick={() => setAddressModal(true)}
+                                    disabled={bankDisableButton}
+                                    style={{ width: "100%" }}
                                   />
                                 </InputDiv>
                               </div>
@@ -1524,19 +2002,6 @@ const Buy = () => {
                             >
                               ส่งหลักฐานการชำระเงิน
                             </h3>
-                            <div className="btn-payment-tool">
-                              <Button
-                                type="submit"
-                                value="ดูวิธีการชำระเงิน"
-                                style={{
-                                  width: "100%",
-                                  fontSize: "17px",
-                                  color: "#000000",
-                                  backgroundColor: "#EDB52D",
-                                  height: "42px",
-                                }}
-                              />
-                            </div>
                           </ShareDetail>
                         </Header>
                         <div
@@ -1725,12 +2190,41 @@ const Buy = () => {
                           </div>
                         </div>
                       </LineCard>
-                      <Button
-                        type="submit"
-                        value={"ยืนยันการส่ง"}
-                        style={{ marginTop: "1rem" }}
-                        onClick={handleSubmit}
-                      />
+                      <div
+                        className="message-info"
+                        style={{ margin: "10px 10px 10px 10px", color: "#1234B0" }}
+                      >
+                        <p>
+                          <FontAwesomeIcon
+                            icon={faCircleInfo}
+                            style={{ margin: "0 10px", color: "#FB0303" }}
+                          />
+                          โปรดตรวจสอบข้อมูลของท่านให้เรียบร้อย หากท่านกดปุ่ม{" "}
+                          <b>ถัดไป</b> จะไม่สามารถกลับมาแก้ไขข้อมูลได้อีก
+                        </p>
+                      </div>
+                      <div
+                        className="btn-accept-buy"
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          marginTop: "20px",
+                        }}
+                      >
+                        <Button
+                          type="button"
+                          value={"ย้อนกลับ"}
+                          style={{ marginTop: "1rem", margin: "0 2rem", backgroundColor: "#809FB8", }}
+                          onClick={hanlderOnBack}
+                        />
+
+                        <Button
+                          type="button"
+                          value={"ถัดไป"}
+                          style={{ marginTop: "1rem", margin: "0 2rem" }}
+                          onClick={handleSubmit}
+                        />
+                      </div>
                     </>
                   );
                 }
@@ -1739,7 +2233,7 @@ const Buy = () => {
           </>
         )}
       </Container>
-    </Card>
+    </Card >
   );
 };
 
@@ -1747,8 +2241,7 @@ const UploadButton = styled.label`
   margin: auto;
   width: 100%;
   text-align: center;
-  color: ${ivory};
-  background: ${persianblue};
+  background: #EDB52D;
   border: none;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -1948,8 +2441,8 @@ const Button = styled.input`
 `;
 
 const Dot = styled.div`
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   background: #1d3ab1;
   border: 5px solid #b8b8b8;
   box-sizing: border-box;

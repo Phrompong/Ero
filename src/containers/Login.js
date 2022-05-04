@@ -112,7 +112,7 @@ const Login = () => {
     }
   }, [isCheckedFirst, isCheckedSecond]);
 
-  const link = (text) => <Link>{text}</Link>;
+  const link = (text, url) => <Link href={url}>{text}</Link>;
 
   return (
     <>
@@ -265,8 +265,8 @@ const Login = () => {
                             value="Sign in"
                             onClick={handleSubmited}
                           />
-                          {link("problem to sign in ?")}
-                          {link("มีปัญหาในการเข้าใช้งานกรุณาคลิกที่นี่")}
+                          {link("problem to sign in ?", "/customer/service")}
+                          {link("มีปัญหาในการเข้าใช้งานกรุณาคลิกที่นี่", "/customer/service")}
                         </div>
                       </div>
 

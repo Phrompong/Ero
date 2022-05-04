@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import bgCustomerService from "../assets/bgCustomerService.png";
 import logo from "../assets/logo_awsc2.jpeg";
 import customerServiceLeft from "../assets/customerServiceLeft.png";
 import { DropdownArrow } from "../components/UI/Dropdown";
@@ -179,7 +178,6 @@ const Container = styled.div`
   .bg-img {
     position: absolute;
     top: 0;
-    background-image: url(${bgCustomerService});
     background-position: center center;
     background-size: cover;
     height: 40%;
