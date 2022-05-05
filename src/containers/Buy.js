@@ -54,7 +54,7 @@ const Buy = () => {
   // modal registration
   const [nationalId, setNationalId] = useState(null);
   const [allRegistrations, setAllRegistrations] = useState([]);
-  const [isRegistrationChecked, setIsRegistrationChecked] = useState(false);
+  const [isRegistrationChecked, setIsRegistrationChecked] = useState(true);
   const [isDisableRegistration, setIsDisableRegistration] = useState(true);
 
   // step 1
@@ -115,6 +115,7 @@ const Buy = () => {
   const [depositBank, setDepositBank] = useState(null);
 
   const [profile, setProfile] = useState(null);
+  const [isConfirmOrder, setIsConfirmOrder] = useState(true);
 
   const fetchStep1 = () => {
     getCustomerProfile();
@@ -143,6 +144,9 @@ const Buy = () => {
         return { registraionNo: data.registrationNo };
       });
       setAllRegistrations(registrations);
+      setShareId(
+        registrations.length > 0 ? registrations[0].registraionNo : null
+      );
       setNationalId(payload.customerId.nationalId);
       setFullname(`${payload.customerId.name} ${payload.customerId.lastname}`);
       // setShareId(payload.registrationNo);
@@ -209,7 +213,12 @@ const Buy = () => {
 
   const handlerOnAcceptVerify = () => {
     setAddressModal(false);
+
     setIsAcceptVerify(true);
+
+    if (currentStockVolume > 0) {
+      setIsConfirmOrder(false);
+    }
   };
 
   const handleSelectedFile = (e) => {
@@ -587,7 +596,12 @@ const Buy = () => {
                     onClick={() => setIsOpenDropdownArrow(!isOpenDropdownArrow)}
                     onBlur={() => setIsOpenDropdownArrow(false)}
                     setSelected={(e) => setShareId(e.registraionNo)}
-                    selected={{ registraionNo: shareId }}
+                    selected={{
+                      registraionNo:
+                        allRegistrations.length > 0 && !shareId
+                          ? allRegistrations[0].registraionNo
+                          : shareId,
+                    }}
                     display={"registraionNo"}
                   />
                 </div>
@@ -600,9 +614,9 @@ const Buy = () => {
                 type={"checkbox"}
                 value={isRegistrationChecked}
                 style={{ transform: "scale(1.5)", marginRight: "1rem" }}
-                onChange={() =>
-                  setIsRegistrationChecked(!isRegistrationChecked)
-                }
+                onChange={() => {
+                  setIsRegistrationChecked(!isRegistrationChecked);
+                }}
               />
               <label>
                 ข้าพเจ้าขอรับรองว่า
@@ -615,7 +629,7 @@ const Buy = () => {
                   type="button"
                   value={"ยืนยันว่าตรวจสอบแล้ว"}
                   onClick={() => setShowRegistrationModal(false)}
-                  disabled={isDisableRegistration}
+                  disabled={isRegistrationChecked}
                   style={{
                     fontSize: "16px",
                     height: "40px",
@@ -1888,11 +1902,18 @@ const Buy = () => {
                             <Input
                               type={"text"}
                               value={currentStockVolume}
-                              onChange={(e) =>
+                              onChange={(e) => {
                                 setCurrentStockVolume(
                                   e.target.value.replace(/[^0-9.]/, "")
-                                )
-                              }
+                                );
+
+                                if (
+                                  e.target.value.replace(/[^0-9.]/, "") > 0 &&
+                                  isAcceptVerify === true
+                                ) {
+                                  setIsConfirmOrder(false);
+                                }
+                              }}
                             />
                             <p>หุ้น</p>
                           </ShareDetail>
@@ -2057,7 +2078,7 @@ const Buy = () => {
                         <Button
                           type="submit"
                           value="ยืนยันคำสั่งซื้อ"
-                          disabled={!isAcceptVerify}
+                          disabled={isConfirmOrder}
                           onClick={() => handlerOnSubmited()}
                         />
                       </div>
