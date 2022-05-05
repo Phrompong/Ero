@@ -248,21 +248,6 @@ const Buy = () => {
       setAlertMessage("ไม่พบไฟล์ภาพ");
       showAlert(setShow, 2000);
     }
-    // const formData = new FormData();
-    // formData.append("File", file);
-    // const endpoint = `uploads/image?orderId=${orderId}`;
-
-    // const [res, status] = await httpPostRequestUploadFile(formData, endpoint);
-    // let msg = res.message;
-    // setStatus(status);
-    // if (status === 200) {
-    //   msg = "Upload Completed";
-    //   console.log(msg);
-    //   setAlertMessage(msg);
-    //   showAlert(setShow, 2000);
-    //   setFile();
-    //   // navigate(`/somewhere`)
-    // }
     setPage(3);
     setValidateAccept(true);
   };
@@ -330,50 +315,8 @@ const Buy = () => {
   }
 
   const handlerOnAccept = async () => {
-    alert(JSON.stringify(depositBank));
     setValidateAccept(false);
-    console.log(dropdownBankRefundSelect);
-    const [res, status] = await httpFetch(
-      "POST",
-      {
-        customerId: user.customerId,
-        rightStockName,
-        stockVolume,
-        rightSpecialName,
-        rightSpecialVolume,
-        paidRightVolume: Number(currentStockVolume),
-        paidSpecialVolume: 0,
-        paymentAmount: Number(currentPrice),
-        returnAmount: 0,
-        customerName: fullname,
-        customerTel: phoneNo,
-        brokerId: dropdownSelect._id,
-        accountNo: tradingAccountNo,
-        customerStockId: customerStockId,
-        excessVolume,
-        address: {
-          name: addressName,
-          houseNo: addressHouseNo,
-          district: addressDistrict,
-          province: addressProvince,
-          zipcode: addressZipcode,
-          tel: addressTel,
-        },
-        registrationNo: shareId,
-        bankRefund: depositBank._id,
-      },
-      "orders"
-    );
-
-    if (status === 200) {
-      setIsConfirmBooking(true);
-      setOrderId(res.data._id);
-      const msg = "ยืนยันคำสั่งซื้อสำเร็จ";
-      setStatus(200);
-      setAlertMessage(msg);
-      showAlert(setShow, 2000);
-      setPage(3);
-    }
+    setPage(3);
   };
 
   const handlerOnEdit = () => {
@@ -398,6 +341,61 @@ const Buy = () => {
       setShowAlertModal(false);
     }
   };
+
+  const handlerOnSubmitedOrder = async () => {
+    const [res, status] = await httpFetch(
+      "POST",
+      {
+        customerId: user.customerId,
+        rightStockName,
+        stockVolume,
+        rightSpecialName,
+        rightSpecialVolume,
+        paidRightVolume: Number(currentStockVolume),
+        paidSpecialVolume: 0,
+        paymentAmount: Number(currentPrice),
+        returnAmount: 0,
+        customerName: fullname,
+        customerTel: phoneNo,
+        brokerId: dropdownSelect._id,
+        accountNo: tradingAccountNo,
+        customerStockId: customerStockId,
+        excessVolume,
+        address: `${profile.address} ${profile.zipcode}`,
+        registrationNo: shareId,
+        bankRefund: depositBank._id,
+        bankRefundNo: bank
+      },
+      "orders"
+    );
+
+    if (status === 200) {
+      setIsConfirmBooking(true);
+      setOrderId(res.data._id);
+      setStatus(200);
+      setAlertMessage("ยืนยันคำสั่งซื้อสำเร็จ");
+      showAlert(setShow, 2000);
+
+
+      const formData = new FormData();
+      formData.append("File", file);
+      const endpoint = `uploads/image?orderId=${res.data._id}`;
+
+      const [_res, _status] = await httpPostRequestUploadFile(formData, endpoint);
+      console.log(_res)
+      console.log(_status)
+      let msg = _res.message;
+      setStatus(_status);
+      if (status === 200) {
+        msg = "Upload Completed";
+        console.log(msg);
+        setAlertMessage(msg);
+        showAlert(setShow, 2000);
+        setFile();
+        // navigate(`/somewhere`)
+      }
+    }
+  }
 
   const handlerOnReadMore = () => {
     if (!isReadMore) {
@@ -1423,13 +1421,13 @@ const Buy = () => {
                         <p style={{ width: "20%" }}>
                           ข้อตกลง :
                         </p>
-                        <input type={"checkbox"} style={{ transform: "scale(1.5)" }} /> 
+                        <input type={"checkbox"} style={{ transform: "scale(1.5)" }} />
                         {/* binding parameter */}
                         <p className="text-black" style={{ fontSize: "20px", textAlign: "center" }}>ข้าพเจ้าขอรับรองว่า ข้าพเจ้าในฐานะผู้ถือหุ้นได้รับการจัดสรรหุ้นสามัญออกใหม่ เป็นผู้รับประโยชน์ที่แท้จริง</p>
                       </div>
                     </div>
                     <div className="text-black" style={{ fontSize: "20px", textAlign: "center" }}>
-                      **รายการจะสมบูรณ์ เมื่อท่านยืนยันรายการและบริษัทตรวจสอบผลการชำระเงินครบถ้วนสมบรูณ์
+                      **รายการจะสมบูรณ์ เมื่อท่านยืนยันรายการและบริษัทตรวจสอบผลการชำระเงินครบถ้วนสมบูรณ์
                     </div>
                   </div>
                   <div
@@ -1450,7 +1448,7 @@ const Buy = () => {
                     <Button
                       type="button"
                       value={"ถัดไป"}
-                      onClick={handlerOnSubmited}
+                      onClick={handlerOnSubmitedOrder}
                       style={{
                         fontSize: "16px",
                         height: "35px",
