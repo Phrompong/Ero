@@ -85,10 +85,6 @@ export async function httpPostRequestUploadFile(body, endpoint) {
     redirect: "follow",
   });
 
-  if (!res.ok) {
-    throw new Error("Could not fetch data", endpoint);
-  }
-
   const data = await res.json();
   return [data, res.status];
 }

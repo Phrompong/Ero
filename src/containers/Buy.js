@@ -1524,19 +1524,6 @@ const Buy = () => {
                             >
                               ส่งหลักฐานการชำระเงิน
                             </h3>
-                            <div className="btn-payment-tool">
-                              <Button
-                                type="submit"
-                                value="ดูวิธีการชำระเงิน"
-                                style={{
-                                  width: "100%",
-                                  fontSize: "17px",
-                                  color: "#000000",
-                                  backgroundColor: "#EDB52D",
-                                  height: "42px",
-                                }}
-                              />
-                            </div>
                           </ShareDetail>
                         </Header>
                         <div
@@ -1677,6 +1664,7 @@ const Buy = () => {
                             <input
                               type="file"
                               style={{ display: "none" }}
+                              accept="image/jpeg, image/png"
                               onChange={handleSelectedFile}
                             />
                           </UploadButton>

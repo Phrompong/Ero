@@ -66,9 +66,6 @@ const Details = ({ show, details, closed, options }) => {
                   {info("หมายเลขบัญชี ATS :", customer["atsBankNo"])}
                   {info("BANK ATS :", customer["atsBank"])}
                 </div>
-                <Link>
-                  <a href="">หากข้อมูลไม่ถูกต้องกรุณาคลิก</a>
-                </Link>
               </UserInfo>
             </LineCard>
             <FlexContainer>
