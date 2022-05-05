@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import logo from "../assets/logo_awsc2.jpeg";
+import bgCustomerService from "../assets/bgCustomerService.png";
 import customerServiceLeft from "../assets/customerServiceLeft.png";
 import { DropdownArrow } from "../components/UI/Dropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -178,6 +179,7 @@ const Container = styled.div`
   .bg-img {
     position: absolute;
     top: 0;
+    background-image: url(${bgCustomerService});
     background-position: center center;
     background-size: cover;
     height: 40%;
