@@ -95,7 +95,7 @@ const WrapperOption = styled.div`
   z-index: 998;
   border: 2px solid #d9e1e7;
   & ${OptionSelect}:hover {
-    background: ${(props) => (props.isEmtry ? "#FFFFFF" : "#90A0DA")};
+    background: ${(props) => (props.isEmtry ? "#FFFFFF" : "#f9f9f9")};
     color: "#FFFFFF";
   }
 `;
@@ -103,20 +103,9 @@ const WrapperOption = styled.div`
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
-  $ :focus {
-    background: black;
-  }
 
   .input-select {
-    display: inline-flex;
-    position: relative;
     width: 100%;
-
-    .btn-arrow {
-      position: absolute;
-      right: 0;
-      left: 100px;
-    }
   }
 `;
 
@@ -170,6 +159,7 @@ export const DropdownArrow = ({
   onClick,
   onBlur,
   display,
+  otherOption = false
 }) => {
   return (
     <Container
@@ -182,8 +172,9 @@ export const DropdownArrow = ({
           <Input
             type={"text"}
             placeholder={"กรุณาเลือก"}
-            value={selected ? selected.nameTH : ""}
+            value={selected ? selected[display] : ""}
             style={{ width: "100%" }}
+          // disabled={!searchable}
           />
           {isOpen ? <OpenArrow /> : <CloseArrow />}
         </div>
@@ -210,6 +201,14 @@ export const DropdownArrow = ({
                     {option[display]}
                   </OptionSelect>
                 ))}
+              {otherOption &&
+                <OptionSelect
+                  onMouseDown={() => setSelected({ nameTH: "อื่นๆ" })}
+                  style={{ width: "100%" }}
+                >
+                  อื่นๆ
+                </OptionSelect>
+              }
             </WrapperOption>
           </>
         )}
@@ -246,8 +245,7 @@ export const DropdownSelect = ({
       setOptionsFiltered(
         options.filter((option) => option[searchFrom].includes(filter))
       );
-    }
-    if (filter === "") {
+    } else {
       setOptionsFiltered(options);
     }
   }, [filter]);
@@ -255,13 +253,16 @@ export const DropdownSelect = ({
     <Container onClick={onClick} onBlurCapture={onBlur}>
       <Wrapper>
         {searchFrom && (
-          <Input
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            placeholder={"กรุณาเลือก"}
-          />
+          <div className="input-select">
+            <Input
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              placeholder={"กรุณาเลือก"}
+            />
+            {isOpen ? <OpenArrow /> : <CloseArrow />}
+          </div>
         )}
-        {options.length === 0 ? (
+        {options.length === 0 || optionsFiltered.length === 0 ? (
           <>
             <WrapperOption isOpen={isOpen} isEmtry={true}>
               <OptionSelect>ไม่มีข้อมูล</OptionSelect>
