@@ -456,8 +456,8 @@ const Buy = () => {
 
   return (
     <Card>
-      <Modal show={showRegistrationModal} style={{ marginLeft: "10%", width: "100%", overflow: "visible" }}>
-        <Card style={{ width: "873px" }}>
+      <Modal show={showRegistrationModal} style={{ width: "100%", overflow: "visible" }}>
+        <Card>
           <ContainerCard>
             <Header
               style={{
@@ -479,101 +479,38 @@ const Buy = () => {
                 โปรดตรวจสอบข้อมูลของท่านก่อนการลงทะเบียนจองสิทธิ์
               </h3>
             </Header>
-            <LineCard style={{ padding: "10px 40px" }}>
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  margin: "10px 0",
-                  alignItems: "baseline",
-                }}
-              >
-                <p
-                  style={{
-                    width: "30%",
-                    paddingTop: "8px",
-                    fontSize: "14px",
-                    marginRight: "2rem",
-                  }}
-                >
+            <LineCard style={{ padding: "10px 20px" }}>
+              <div className="modal-flex">
+                <p className="modal-flex-label" >
                   หมายเลขบัตรประชาชน
                 </p>
-                <p>{nationalId}</p>
+                <p className="modal-flex-label-info">{nationalId}</p>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  margin: "10px 0",
-                  alignItems: "baseline",
-                }}
-              >
-                <p
-                  style={{
-                    width: "30%",
-                    paddingTop: "8px",
-                    fontSize: "14px",
-                    marginRight: "2rem",
-                  }}
-                >
+              <div className="modal-flex">
+                <p className="modal-flex-label">
                   เบอร์โทรศัพท์
                 </p>
-                <p>{phoneNo}</p>
+                <p className="modal-flex-label-info">{phoneNo}</p>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  margin: "10px 0",
-                  alignItems: "baseline",
-                }}
-              >
-                <p
-                  style={{
-                    width: "30%",
-                    paddingTop: "8px",
-                    fontSize: "14px",
-                    marginRight: "2rem",
-                  }}
-                >
+              <div className="modal-flex">
+                <p className="modal-flex-label">
                   ชื่อ - นามสกุล
                 </p>
-                <p>{fullname}</p>
+                <p className="modal-flex-label-info">{fullname}</p>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  margin: "10px 0",
-                  alignItems: "baseline",
-                }}
-              >
-                <p
-                  style={{
-                    width: "30%",
-                    paddingTop: "8px",
-                    fontSize: "14px",
-                    marginRight: "2rem",
-                  }}
-                >
+              <div className="modal-flex">
+                <p className="modal-flex-label">
                   ที่อยู่
                 </p>
-                <p style={{ padding: "0 0.6rem" }}>
+                <p className="modal-flex-pre">
                   {profile ? `${profile.address} ${profile.zipcode}` : '-'}
                 </p>
               </div>
-              <div style={{ display: "flex", width: "100%", margin: "10px 0" }}>
-                <p
-                  style={{
-                    width: "30%",
-                    paddingTop: "8px",
-                    fontSize: "14px",
-                    marginRight: "3rem",
-                  }}
-                >
+              <div className="modal-block">
+                <p className="modal-block-label">
                   หมายเลขทะเบียนผู้ถือหุ้น
                 </p>
-                <div style={{ padding: '0 2rem', width: "100%" }}>
+                <div className="modal-block-label">
                   <DropdownArrow
                     options={allRegistrations}
                     isOpen={isOpenDropdownArrow}
@@ -590,10 +527,10 @@ const Buy = () => {
                 </div>
               </div>
             </LineCard>
-            <div style={{ margin: "auto", display: "table", marginTop: "1rem" }}>
+            <SubTitleDescription>
               <input type={"checkbox"} value={isRegistrationChecked} style={{ transform: "scale(1.5)", marginRight: "1rem" }} onChange={() => setIsRegistrationChecked(!isRegistrationChecked)} />
               <label>ข้าพเจ้าขอรับรองว่า ข้าพเจ้าได้ทำการตรวจสอบข้อมูลข้างต้นนี้เป็นที่เรียบร้อยแล้ว</label>
-            </div>
+            </SubTitleDescription>
             <Header style={{ textAlign: "center" }}>
               {
                 <Button
@@ -613,8 +550,8 @@ const Buy = () => {
           </ContainerCard>
         </Card>
       </Modal >
-      <Modal show={showAlertModal} style={{ marginLeft: "10%", width: "100%" }}>
-        <Card style={{ width: "873px" }}>
+      <Modal show={showAlertModal} style={{ width: "100%" }}>
+        <Card style={{ width: "100%" }}>
           <ContainerCard>
             <Header style={{ textAlign: "center" }}>
               <FontAwesomeIcon
@@ -632,7 +569,7 @@ const Buy = () => {
             <Header style={{ textAlign: "center" }}>
               <h3
                 style={{
-                  fontSize: "24px",
+                  fontSize: "20px",
                   color: "#1D3AB1",
                   fontWeight: "bold",
                 }}
@@ -643,7 +580,7 @@ const Buy = () => {
             <Header style={{ textAlign: "center" }}>
               <h3
                 style={{
-                  fontSize: "20px",
+                  fontSize: "17px",
                   color: "#000000",
                   fontWeight: "normal",
                 }}
@@ -667,12 +604,9 @@ const Buy = () => {
           </ContainerCard>
         </Card>
       </Modal>
-      <Modal show={showModal} style={{ marginLeft: "10%", width: "100%" }}>
-        <Card style={{ width: "60%" }}>
+      <Modal show={showModal} style={{ width: "100%" }}>
+        <Card style={{ width: "100%" }}>
           <ContainerCard>
-            {/* <div className="text-info">
-              <p><FontAwesomeIcon icon={faCircleInfo} style={{ margin: '0 10px' }} />กรณีที่ท่านไม่มีบัญชีธนาคารดังรายการ ดังนี้</p>
-            </div> */}
             <Header style={{ margin: "20px" }}>
               <h3
                 style={{
@@ -684,56 +618,21 @@ const Buy = () => {
                 ข้อมูลการจองสิทธิ์
               </h3>
             </Header>
-            <LineCard style={{ padding: "40px" }}>
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  margin: "10px 0",
-                  alignItems: "baseline",
-                }}
-              >
-                <p
-                  style={{
-                    width: "30%",
-                    paddingTop: "8px",
-                    fontSize: "14px",
-                    marginRight: "2rem",
-                  }}
-                >
+            <LineCard style={{ padding: "20px", fontSize: "17px" }}>
+              <div className="modal-flex"  >
+                <p className="modal-flex-label" >
                   ชื่อ - นามสกุล*
                 </p>
                 <p>{fullnameModal}</p>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  margin: "10px 0",
-                  alignItems: "baseline",
-                }}
-              >
-                <p
-                  style={{
-                    width: "30%",
-                    paddingTop: "8px",
-                    fontSize: "14px",
-                    marginRight: "2rem",
-                  }}
-                >
+              <div className="modal-flex" >
+                <p className="modal-flex-label" >
                   เลขทะเบียนผู้ถือหุ้น*
                 </p>
                 <p>{shareIdModal}</p>
               </div>
-              <div style={{ display: "flex", width: "100%", margin: "10px 0" }}>
-                <p
-                  style={{
-                    width: "30%",
-                    paddingTop: "8px",
-                    fontSize: "14px",
-                    marginRight: "3rem",
-                  }}
-                >
+              <div className="modal-block">
+                <p className="modal-block-label" >
                   เบอร์โทรศัพท์*
                 </p>
                 <FieldInput
@@ -756,9 +655,9 @@ const Buy = () => {
                 value={"ปิดหน้าต่าง"}
                 onClick={() => handlerOnCloseModal()}
                 style={{
-                  fontSize: "16px",
-                  height: "35px",
-                  margin: "0 20px 20px 20px",
+                  fontSize: "17px",
+                  height: "45px",
+                  margin: "0 10px 0 0",
                   backgroundColor: "#809FB8",
                 }}
               />
@@ -767,9 +666,9 @@ const Buy = () => {
                 value={"ยืนยันการเปลี่ยนแปลงข้อมูล"}
                 onClick={() => handlerOnAcceptModal(1)}
                 style={{
-                  fontSize: "16px",
-                  height: "35px",
-                  margin: "0 20px 20px 20px",
+                  fontSize: "17px",
+                  height: "45px",
+                  margin: "0 0 0 10px"
                 }}
               />
             </div>
@@ -1581,28 +1480,22 @@ const Buy = () => {
                         <ContentSpace>
                           <InputDiv>
                             <div className="inputField">
-                              <p>ชื่อ-นามสกุล</p>
-                              <p>{fullname}</p>
+                              <p className="label-input">ชื่อ-นามสกุล</p>
+                              <p className="label-input">{fullname}</p>
                             </div>
                           </InputDiv>
                           <InputDiv>
                             <div className="inputField">
-                              <p>เบอร์โทรศัพท์ที่สามารถติดต่อได้</p>
-                              <p>{phoneNo}</p>
+                              <p className="label-input">เบอร์โทรศัพท์ที่สามารถติดต่อได้</p>
+                              <p className="label-input">{phoneNo}</p>
                             </div>
                           </InputDiv>
-                          {/* <InputDiv>
-                            <div className="inputField">
-                              <p>เลขทะเบียนผู้ถือหุ้น</p>
-                              <p>{shareId}</p>
-                            </div>
-                          </InputDiv> */}
                         </ContentSpace>
                         <Content>
                           <InputDiv>
                             <div className="inputField" style={{ justifyContent: "start" }}>
-                              <div style={{ width: "100%", display: "flex" }}>
-                                <p style={{ width: "20%", marginTop: "auto", marginBottom: "auto" }}>
+                              <div className="div-dropdown">
+                                <p className="label-input-flex">
                                   เลขทะเบียนผู้ถือหุ้น
                                 </p>
                                 <DropdownArrow
@@ -2369,6 +2262,17 @@ const InputDiv = styled.div`
       position: relative;
       margin: 0 10px;
     }
+
+    .label-input-flex {
+      width: 20%;
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+
+    .div-dropdown {
+      width: 100%;
+      display: flex;
+    }
   }
 
   /* For Mobile */
@@ -2386,13 +2290,25 @@ const InputDiv = styled.div`
         }
       }
     }
+    
+    .inputField > .label-input {
+      margin: 0 0 0.5rem 0;
+    }
+
+    .inputField > .div-dropdown {
+      width: 100%;
+      display: block;
+
+      .label-input-flex {
+        width: 100%;
+        margin: 0 0 0.5rem 0;
+      }
+    }
   }
 
   /* For Tablets */
   @media screen and (min-width: 540px) and (max-width: 880px) {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    background-color: black;
   }
 `;
 
@@ -2419,10 +2335,10 @@ const Button = styled.input`
   width: 100%;
   height: 54px;
   background-color: ${persianblue};
-  color: #fff;
+  color: #ffffff;
   border: none;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  font-size: 1.25em;
+  font-size: 17px;
   font-weight: 700;
   border-radius: 10px;
   text-transform: capitalize;
@@ -2737,5 +2653,11 @@ const StyledLineCard = styled.div`
     width: 100%;
   }
 `;
+
+const SubTitleDescription = styled.div`
+  margin: auto;
+  display: flex;
+  margin-top: 1rem;
+`
 
 export default Buy;
