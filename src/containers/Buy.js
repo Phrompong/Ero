@@ -1187,36 +1187,17 @@ const Buy = () => {
                   <div
                     className="message-info"
                     style={{ margin: "10px 10px 10px 10px", color: "#1234B0" }}
-                  >
-                    <p>
-                      <FontAwesomeIcon
-                        icon={faCircleInfo}
-                        style={{ margin: "0 10px", color: "#FB0303" }}
-                      />
-                      โปรดตรวจสอบข้อมูลของท่านให้เรียบร้อย หากท่านกดปุ่ม{" "}
-                      <b>ถัดไป</b> จะไม่สามารถกลับมาแก้ไขข้อมูลได้อีก
-                    </p>
-                  </div>
+                  ></div>
                   <div
                     className="btn-accept-buy"
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={{ display: "flex", justifyContent: "center" }}
                   >
-                    <Button
-                      type="submit"
-                      value={"ย้อนกลับ"}
-                      onClick={() => hanlderOnBack()}
-                      style={{
-                        fontSize: "16px",
-                        height: "35px",
-                        margin: "0 20px 20px 20px",
-                        backgroundColor: "#809FB8",
-                      }}
-                    />
                     <Button
                       type="submit"
                       value={"ถัดไป"}
                       onClick={() => handlerOnAccept()}
                       style={{
+                        width: "50%",
                         fontSize: "16px",
                         height: "35px",
                         margin: "0 20px 20px 20px",
@@ -2277,8 +2258,8 @@ const Buy = () => {
                                 icon={faCircleInfo}
                                 style={{ margin: "0 10px" }}
                               />
-                              กรุณาอัพโหลดไฟล์ .PNG และ JPEG ขนาดไม่เกิน 5 MB
-                              file
+                              กรุณาอัพโหลดไฟล์ .PNG .JPG และ JPEG ขนาดไม่เกิน 5
+                              MB file
                             </p>
                           </div>
                         </div>
@@ -2341,7 +2322,11 @@ const Buy = () => {
                             margin: "0 2rem",
                             backgroundColor: "#809FB8",
                           }}
-                          onClick={hanlderOnBack}
+                          onClick={() => {
+                            setValidateAccept(false);
+
+                            setPage(2);
+                          }}
                         />
 
                         <Button
