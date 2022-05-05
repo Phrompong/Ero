@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import bg from "../assets/bg.jpg";
 import logo from "../assets/logo_awsc.jpg";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 
 import { Logo } from "../components/Logo/Logo";
 import { Card } from "../components/UI/Card";
@@ -23,7 +23,7 @@ const Auth = () => {
 
   const handleSubmited = async (event) => {
     event.preventDefault();
-    Cookies.remove('token')
+    Cookies.remove("token");
 
     const username = usernameInputRef.current.value;
     const password = passwordInputRef.current.value;
@@ -38,15 +38,18 @@ const Auth = () => {
     if (status === 200) {
       const payload = {
         username,
-        role: "admin"
-      }
+        role: "admin",
+      };
       dispatch({
         type: "SET",
-        payload
+        payload,
       });
-      Cookies.set('token', JSON.stringify({
-        user: payload
-      }));
+      Cookies.set(
+        "token",
+        JSON.stringify({
+          user: payload,
+        })
+      );
       navigate(`/dashboard`);
     } else {
       setShowError(true);
@@ -54,7 +57,7 @@ const Auth = () => {
     }
   };
 
-  const link = (text) => <Link>{text}</Link>;
+  const link = (text, url) => <Link href={url}>{text}</Link>;
 
   return (
     <Container>
@@ -89,8 +92,11 @@ const Auth = () => {
                   value="Sign in"
                   onClick={handleSubmited}
                 />
-                {link("problem to sign in ?")}
-                {link("มีปัญหาในการเข้าใช้งานกรุณาคลิกที่นี้")}
+                {link("problem to sign in ?", "/customer/service")}
+                {link(
+                  "มีปัญหาในการเข้าใช้งานกรุณาคลิกที่นี้",
+                  "/customer/service"
+                )}
               </div>
             </div>
 
