@@ -3,7 +3,9 @@ import styled from "styled-components";
 import { Backdrop } from "./Backdrop";
 
 export const ModalStyled = styled.div`
-  position: absolute;
+  position: fixed;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   z-index: 300;
   width: 90%;
   box-sizing: border-box;

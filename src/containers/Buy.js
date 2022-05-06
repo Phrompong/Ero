@@ -551,13 +551,13 @@ const Buy = () => {
         </Card>
       </Modal >
       <Modal show={showAlertModal} style={{ width: "100%" }}>
-        <Card style={{ width: "100%" }}>
+        <Card>
           <ContainerCard>
             <Header style={{ textAlign: "center" }}>
               <FontAwesomeIcon
                 icon={faCheck}
                 style={{
-                  fontSize: "60px",
+                  fontSize: "55px",
                   color: "#1D3AB1",
                   border: "8px solid #1D3AB1",
                   padding: "10px",
@@ -605,7 +605,7 @@ const Buy = () => {
         </Card>
       </Modal>
       <Modal show={showModal} style={{ width: "100%" }}>
-        <Card style={{ width: "100%" }}>
+        <Card style={{ width: "100%", maxWidth: "700px" }}>
           <ContainerCard>
             <Header style={{ margin: "20px" }}>
               <h3
@@ -623,23 +623,25 @@ const Buy = () => {
                 <p className="modal-flex-label" >
                   ชื่อ - นามสกุล*
                 </p>
-                <p>{fullnameModal}</p>
+                <p className="modal-flex-label-info">{fullnameModal}</p>
               </div>
               <div className="modal-flex" >
                 <p className="modal-flex-label" >
                   เลขทะเบียนผู้ถือหุ้น*
                 </p>
-                <p>{shareIdModal}</p>
+                <p className="modal-flex-label-info">{shareIdModal}</p>
               </div>
               <div className="modal-block">
                 <p className="modal-block-label" >
                   เบอร์โทรศัพท์*
                 </p>
-                <FieldInput
-                  value={phoneNoModal}
-                  onChange={(e) => setPhoneNoModal(e.target.value)}
-                  placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"}
-                />
+                <div className="modal-block-label">
+                  <FieldInput
+                    value={phoneNoModal}
+                    onChange={(e) => setPhoneNoModal(e.target.value.replace(/[^0-9.]/, ""))}
+                    placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"}
+                  />
+                </div>
               </div>
             </LineCard>
             <div
@@ -656,7 +658,7 @@ const Buy = () => {
                 onClick={() => handlerOnCloseModal()}
                 style={{
                   fontSize: "17px",
-                  height: "45px",
+                  height: "35px",
                   margin: "0 10px 0 0",
                   backgroundColor: "#809FB8",
                 }}
@@ -667,7 +669,7 @@ const Buy = () => {
                 onClick={() => handlerOnAcceptModal(1)}
                 style={{
                   fontSize: "17px",
-                  height: "45px",
+                  height: "35px",
                   margin: "0 0 0 10px"
                 }}
               />
@@ -2307,8 +2309,13 @@ const InputDiv = styled.div`
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 880px) {
-    background-color: black;
+  @media screen and (min-width: 540px) and (max-width: 1024px) {
+    .inputField > .div-dropdown {
+
+      .label-input-flex {
+        width: 100%;
+      }
+    }
   }
 `;
 

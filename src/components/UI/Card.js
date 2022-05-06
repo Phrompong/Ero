@@ -6,7 +6,8 @@ export const StyledCard = styled.div`
   /* padding: 1rem; */
   /* width: 100%; */
   width: fit-content;
-  margin: 1rem;
+  margin: auto;
+  margin: 1rem auto 1rem auto;
   border-radius: 15px;
   background: ${white};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -57,6 +58,7 @@ export const StyledLineCard = styled.div`
     justify-content: space-between;
 
     .modal-block-label {
+      margin-top: auto;
       margin-bottom: 0.5rem;
     }
   }
