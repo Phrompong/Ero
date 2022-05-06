@@ -17,7 +17,8 @@ const Container = styled.div`
 const Main = styled.main`
   position: relative;
   background-color: ${ivory};
-  height: 100%;
+  height: 100vh;
+  /* height: 100%; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,15 +44,16 @@ const Layout = ({ children }) => {
     "/dashboard",
     "/checkRightAdmin",
     "/import",
-    "/customer/service"
+    "/customer/service",
   ];
 
   const pagesCustomer = [
     "/login/customer",
     "/buy",
     "/checkRightCustomer",
+    "/checkRightCustomer/info",
     "/profile",
-    "/customer/service"
+    "/customer/service",
   ];
 
   const pagesAll = pagesAdmin.concat(pagesCustomer);
@@ -60,7 +62,10 @@ const Layout = ({ children }) => {
 
   const isPage = pagesAll.includes(path);
 
-  const isLogin = path !== "/login/admin" && path !== "/login/customer" && path !== "/customer/service";
+  const isLogin =
+    path !== "/login/admin" &&
+    path !== "/login/customer" &&
+    path !== "/customer/service";
 
   console.log(user);
 
@@ -71,11 +76,13 @@ const Layout = ({ children }) => {
         <DisplayNotfound></DisplayNotfound>
       </>
     );
-  } 
+  }
 
   // * Case normally login
   if (
-    (path === "/login/admin" || path === "/login/customer" || path === "/customer/service") &&
+    (path === "/login/admin" ||
+      path === "/login/customer" ||
+      path === "/customer/service") &&
     (!user || user.length === 0)
   ) {
     return <>{children}</>;
