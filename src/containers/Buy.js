@@ -1751,6 +1751,14 @@ const Buy = () => {
                           </InputDiv>
                         </Content>
                       </LineCard>
+                      <br />
+                      <div style={{ margin: "auto", width: "400px" }}>
+                        <Button
+                          type="submit"
+                          value="ถัดไป"
+                          onClick={() => handlerOnClickPage(2)}
+                        />
+                      </div>
                     </>
                   );
                 }

@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import logo from "../assets/logo_awsc2.jpeg";
-import bgCustomerService from "../assets/bgCustomerService.png";
-import customerServiceLeft from "../assets/customerServiceLeft.png";
-import { DropdownArrow } from "../components/UI/Dropdown";
+import logo from "../../assets/logo_awsc2.jpeg";
+import bgCustomerService from "../../assets/bgCustomerService.png";
+import customerServiceLeft from "../../assets/customerServiceLeft.png";
+import { DropdownArrow } from "../../components/UI/Dropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { faCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { persianblue } from "../utils/color";
-import { httpGetRequest } from "../utils/fetch";
-import { httpFetch } from "../utils/fetch";
-import { ModalAlert } from "../components/ModalAlert/ModalAlert";
-import { showAlert } from "../utils/showAlert";
+import { persianblue } from "../../utils/color";
+import { httpGetRequest } from "../../utils/fetch";
+import { httpFetch } from "../../utils/fetch";
+import { ModalAlert } from "../../components/ModalAlert/ModalAlert";
+import { showAlert } from "../../utils/showAlert";
+import { useNavigate } from "react-router-dom";
 
 const CustomerService = () => {
+  const navigate = useNavigate();
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [masterIssue, setMasterIssue] = useState([]);
@@ -56,10 +58,16 @@ const CustomerService = () => {
       setStatus(200);
       setAlertMessage("แจ้งปัญหาสำเร็จ");
       showAlert(setShow, 2000);
+
       setTimeout(() => {
-        window.location.reload(false);
+        redirectPage();
       }, 2000);
+      //navigate("/login/admin");
     }
+  };
+
+  const redirectPage = () => {
+    navigate("/login/customer");
   };
 
   return (
@@ -68,7 +76,7 @@ const CustomerService = () => {
       <div className="bg-img">
         <div className="bg-text">
           <p>Customer Service</p>
-          <Button>
+          <Button onClick={redirectPage}>
             <FontAwesomeIcon
               icon={faCircleLeft}
               style={{ marginRight: "0.25rem" }}

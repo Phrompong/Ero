@@ -43,7 +43,7 @@ const Layout = ({ children }) => {
     "/dashboard",
     "/checkRightAdmin",
     "/import",
-    "/customer/service"
+    "/admin/service",
   ];
 
   const pagesCustomer = [
@@ -51,7 +51,7 @@ const Layout = ({ children }) => {
     "/buy",
     "/checkRightCustomer",
     "/profile",
-    "/customer/service"
+    "/customer/service",
   ];
 
   const pagesAll = pagesAdmin.concat(pagesCustomer);
@@ -60,7 +60,11 @@ const Layout = ({ children }) => {
 
   const isPage = pagesAll.includes(path);
 
-  const isLogin = path !== "/login/admin" && path !== "/login/customer" && path !== "/customer/service";
+  const isLogin =
+    path !== "/login/admin" &&
+    path !== "/login/customer" &&
+    path !== "/admin/service" &&
+    path !== "/customer/service";
 
   console.log(user);
 
@@ -71,11 +75,14 @@ const Layout = ({ children }) => {
         <DisplayNotfound></DisplayNotfound>
       </>
     );
-  } 
+  }
 
   // * Case normally login
   if (
-    (path === "/login/admin" || path === "/login/customer" || path === "/customer/service") &&
+    (path === "/login/admin" ||
+      path === "/login/customer" ||
+      path === "/admin/service" ||
+      path === "/customer/service") &&
     (!user || user.length === 0)
   ) {
     return <>{children}</>;
@@ -97,7 +104,6 @@ const Layout = ({ children }) => {
     let isPageAllow = false;
     switch (role) {
       case "admin":
-        console.log("admin");
         pagesAdmin.push("/login/customer");
         isPageAllow =
           pagesAdmin.filter((o) => o.includes(path)).length > 0 ? true : false;

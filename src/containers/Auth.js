@@ -92,10 +92,10 @@ const Auth = () => {
                   value="Sign in"
                   onClick={handleSubmited}
                 />
-                {link("problem to sign in ?", "/customer/service")}
+                {link("problem to sign in ?", "/admin/service")}
                 {link(
                   "มีปัญหาในการเข้าใช้งานกรุณาคลิกที่นี้",
-                  "/customer/service"
+                  "/admin/service"
                 )}
               </div>
             </div>

@@ -87,14 +87,6 @@ const NavigationItems = () => {
                   <NavigationItem link="/login/admin" exact="true" img={Logout}>
                     Logout
                   </NavigationItem>
-
-                  <NavigationItem
-                    link="/login/customer"
-                    exact="true"
-                    img={traffic}
-                  >
-                    Go to customer
-                  </NavigationItem>
                 </>
               );
             } else if (user.role === "client") {
@@ -115,14 +107,6 @@ const NavigationItems = () => {
                     img={Logout}
                   >
                     Logout
-                  </NavigationItem>
-
-                  <NavigationItem
-                    link="/login/admin"
-                    exact="true"
-                    img={traffic}
-                  >
-                    Go to admin
                   </NavigationItem>
                 </>
               );

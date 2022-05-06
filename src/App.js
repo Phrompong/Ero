@@ -9,7 +9,8 @@ import ImportData from "./containers/ImportData";
 import Buy from "./containers/Buy";
 import CheckRightAdmin from "./containers/CheckRights/Admin";
 import CheckRightCustomer from "./containers/CheckRights/Customer";
-import CustomerService from "./containers/customerService";
+import CustomerServiceAdmin from "./containers/CustomerService/Admin";
+import CustomerService from "./containers/CustomerService/Customer";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 
@@ -20,7 +21,14 @@ const App = (props) => {
     <Routes>
       <Route path="/login/admin" element={<Auth {...props} />} />
       <Route path="/import" element={<ImportData {...props} />} />
-      <Route path="/customer/service" element={<CustomerService />} />
+      <Route
+        path="/admin/service"
+        element={<CustomerServiceAdmin {...props} />}
+      />
+      <Route
+        path="/customer/service"
+        element={<CustomerService {...props} />}
+      />
       <Route path="/checkRightAdmin" element={<CheckRightAdmin {...props} />} />
 
       <Route path="/login/customer" element={<Login {...props} />} />
