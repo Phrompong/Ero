@@ -12,7 +12,7 @@ import {
   DropdownSelectMasterBank,
   DropdownArrow,
 } from "../components/UI/Dropdown";
-import { LineCard } from "../components/UI/Card";
+import { LineCard, LineCardBank } from "../components/UI/Card";
 import { FieldInput } from "../components/UI/Search";
 import { ModalAlert } from "../components/ModalAlert/ModalAlert";
 import { showAlert } from "../utils/showAlert";
@@ -50,6 +50,8 @@ const Buy = () => {
   const [validateAccept, setValidateAccept] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [registrationNo, setRegistrationNo] = useState(false);
+
+  const [isDisableToPage2, setIsDisableToPage2] = useState(true)
 
   // modal registration
   const [nationalId, setNationalId] = useState(null)
@@ -93,6 +95,7 @@ const Buy = () => {
 
   // step 3
   const [radioCheckedPayment, setRadioCheckPayment] = useState(false);
+  const [lastVerifyChecked, setLastVerifyChecked] = useState(false)
 
   // addres modal
   const [addressModal, setAddressModal] = useState(false);
@@ -258,13 +261,19 @@ const Buy = () => {
     }
   }, [shareId, isRegistrationChecked])
 
+  useEffect(() => {
+    if (dropdownSelect && tradingAccountNo) {
+      setIsDisableToPage2(false)
+    }
+  }, [dropdownSelect, tradingAccountNo])
+
   const hanlderOnBack = () => {
     if (page === 2) {
       setValidateAccept(false);
       setPage(2);
     } else if (page === 3) {
       setValidateAccept(false);
-      setPage(3);
+      setPage(2);
     }
   };
 
@@ -677,8 +686,10 @@ const Buy = () => {
           </ContainerCard>
         </Card>
       </Modal>
-      <Modal show={addressModal}>
-        <Card style={{ height: "auto", width: "80%" }}>
+      <Modal show={addressModal} style={{ width: "100%", height: "100%", maxHeight: "800px", padding: "1rem" }}>
+        {/* addressModal */}
+        {/* เหลือ responsive mobile */}
+        <Card style={{ width: "100%" }}>
           <ContainerCard>
             <Header
               style={{
@@ -708,15 +719,7 @@ const Buy = () => {
                   masterBankRefund.map((bank, index) => {
                     return (
                       <>
-                        <LineCard
-                          style={{
-                            width: "100%",
-                            flexBasis: "46%",
-                            margin: "10px",
-                            display: "flex",
-                            padding: "5px",
-                          }}
-                        >
+                        <LineCardBank>
                           <img
                             src={bank.logo}
                             width={25}
@@ -726,7 +729,7 @@ const Buy = () => {
                           <p>
                             {bank.nameTH}
                           </p>
-                        </LineCard>
+                        </LineCardBank>
                       </>
                     );
                   })}
@@ -743,26 +746,27 @@ const Buy = () => {
                 <h3>รายละเอียดที่อยู่ของท่าน</h3>
               </Header>
               <div class="profile-detail" style={{ padding: "1rem 2rem" }}>
-                <div style={{ display: "flex", margin: "1rem 0" }}>
-                  <p style={{ width: "30%" }}>ชื่อ-นามสกุล :</p>
-                  <p style={{ width: "70%" }}>
-                    {profile ? profile.name : "-"}{" "}
-                    {profile ? profile.lastname : "-"}
-                  </p>
-                </div>
-                <div style={{ display: "flex", margin: "1rem 0" }}>
-                  <p style={{ width: "30%" }}>ที่อยู่ :</p>
-                  <p style={{ width: "70%" }}>
-                    {profile ? profile.address + " " + profile.zipcode : ""}
-                  </p>
-                </div>
-                <div style={{ display: "flex", margin: "1rem 0" }}>
-                  <p style={{ width: "30%" }}>เบอร์โทรศัพท์ :</p>
-                  <p style={{ width: "70%" }}>{phoneNo}</p>
-                </div>
+                <InputDiv>
+                  <div className="inputField">
+                    <p className="label-input">ชื่อ-นามสกุล :</p>
+                    <p className="label-input">{profile ? `${profile.name} ${profile.lastname}` : "-"}</p>
+                  </div>
+                </InputDiv>
+                <InputDiv>
+                  <div className="inputField">
+                    <p className="label-input">ที่อยู่ :</p>
+                    <p className="label-input">{profile ? profile.address + " " + profile.zipcode : ""}</p>
+                  </div>
+                </InputDiv>
+                <InputDiv>
+                  <div className="inputField">
+                    <p className="label-input">เบอร์โทรศัพท์ :</p>
+                    <p className="label-input">{phoneNo}</p>
+                  </div>
+                </InputDiv>
               </div>
             </LineCard>
-            <div style={{ margin: "auto", width: "400px" }}>
+            <div style={{ margin: "auto", marginTop: "1rem", maxWidth: "400px" }}>
               <Button
                 type="submit"
                 value={"ฉันรับทราบแล้ว"}
@@ -771,7 +775,7 @@ const Buy = () => {
             </div>
           </ContainerCard>
         </Card>
-      </Modal>
+      </Modal >
       <Modal show={false} style={{ padding: "50px" }}>
         <Card style={{ height: "auto", width: "60%" }}>
           <ContainerCard>
@@ -866,29 +870,26 @@ const Buy = () => {
                       <div
                         className="content-header"
                         style={{
-                          paddingLeft: "50px",
+                          paddingLeft: "2rem",
                           backgroundColor: "#F1F7FB",
                           color: persianblue,
-                          margin: "10px 0",
                         }}
                       >
                         <b>ข้อมูลทั่วไปของสมาชิก</b>
                       </div>
                       <div
                         className="content-member"
-                        style={{ marginLeft: "20px", marginTop: "10px" }}
                       >
                         <div
                           className="content-detail-member"
-                          style={{ display: "flex", justifyContent: "space-between" }}
                         >
                           <div className="content-detail-text">
                             <p>ชื่อ-นามสกุล :</p>
-                            <p className="text-black">{fullname}</p>
+                            <p className="detail-text-label">{fullname}</p>
                           </div>
                           <div className="content-detail-text">
                             <p>เลขทะเบียนผู้ถือหุ้น :</p>
-                            <p className="text-black">{shareId}</p>
+                            <p className="detail-text-label">{shareId}</p>
                           </div>
                         </div>
                         <div
@@ -897,14 +898,14 @@ const Buy = () => {
                         >
                           <div className="content-detail-text">
                             <p>เบอร์โทรศัพท์ :</p>
-                            <p className="text-black">{phoneNo}</p>
+                            <p className="detail-text-label">{phoneNo}</p>
                           </div>
                         </div>
                       </div>
                       <div
                         className="content-header"
                         style={{
-                          paddingLeft: "50px",
+                          paddingLeft: "2rem",
                           backgroundColor: "#F1F7FB",
                           color: persianblue,
                         }}
@@ -913,33 +914,30 @@ const Buy = () => {
                       </div>
                       <div
                         className="content-member"
-                        style={{ marginLeft: "20px", marginTop: "10px" }}
                       >
                         <div
                           className="content-detail-member"
-                          style={{ display: "flex", justifyContent: "space-between" }}
                         >
                           <div className="content-detail-text">
                             <p>ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก :</p>
-                            <p className="text-black">
+                            <p className="detail-text-label">
                               {dropdownSelect.code} {dropdownSelect.name}
                             </p>
                           </div>
                         </div>
                         <div
                           className="content-detail-member"
-                          style={{ display: "flex", justifyContent: "space-between" }}
                         >
                           <div className="content-detail-text">
                             <p>เลขที่บัญชีซื้อขาย :</p>
-                            <p className="text-black">{tradingAccountNo}</p>
+                            <p className="detail-text-label">{tradingAccountNo}</p>
                           </div>
                         </div>
                       </div>
                       <div
                         className="content-header"
                         style={{
-                          paddingLeft: "50px",
+                          paddingLeft: "2rem",
                           backgroundColor: "#F1F7FB",
                           color: persianblue,
                         }}
@@ -948,9 +946,8 @@ const Buy = () => {
                       </div>
                       <div
                         className="content-member"
-                        style={{ marginLeft: "20px", marginTop: "10px" }}
                       >
-                        <div className="content-detail-member">
+                        <div className="content-detail-member" style={{ display: "block" }}>
                           <div className="content-detail-share">
                             <div className="text-title">
                               <p>หุ้นเดิม</p>
@@ -960,7 +957,6 @@ const Buy = () => {
                               <p>จำนวน</p>
                               <b
                                 className="text-black"
-                                style={{ marginLeft: "-20px" }}
                               >
                                 {stockVolume}
                               </b>
@@ -1063,9 +1059,8 @@ const Buy = () => {
                       value={"ย้อนกลับ"}
                       onClick={() => hanlderOnBack()}
                       style={{
-                        fontSize: "16px",
-                        height: "35px",
-                        margin: "0 20px 20px 20px",
+                        height: "40px",
+                        margin: "0 10px 10px 10px",
                         backgroundColor: "#809FB8",
                       }}
                     />
@@ -1074,9 +1069,8 @@ const Buy = () => {
                       value={"ถัดไป"}
                       onClick={() => handlerOnAccept()}
                       style={{
-                        fontSize: "16px",
-                        height: "35px",
-                        margin: "0 20px 20px 20px",
+                        height: "40px",
+                        margin: "0 10px 10px 10px",
                       }}
                     />
                   </div>
@@ -1105,29 +1099,26 @@ const Buy = () => {
                       <div
                         className="content-header"
                         style={{
-                          paddingLeft: "50px",
+                          paddingLeft: "2rem",
                           backgroundColor: "#F1F7FB",
                           color: persianblue,
-                          margin: "10px 0",
                         }}
                       >
                         <b>ข้อมูลทั่วไปของสมาชิก</b>
                       </div>
                       <div
                         className="content-member"
-                        style={{ marginLeft: "20px", marginTop: "10px" }}
                       >
                         <div
                           className="content-detail-member"
-                          style={{ display: "flex", justifyContent: "space-between" }}
                         >
                           <div className="content-detail-text">
                             <p>ชื่อ-นามสกุล :</p>
-                            <p className="text-black">{fullname}</p>
+                            <p className="detail-text-label">{fullname}</p>
                           </div>
                           <div className="content-detail-text">
                             <p>เลขทะเบียนผู้ถือหุ้น :</p>
-                            <p className="text-black">{shareId}</p>
+                            <p className="detail-text-label">{shareId}</p>
                           </div>
                         </div>
                         <div
@@ -1136,14 +1127,14 @@ const Buy = () => {
                         >
                           <div className="content-detail-text">
                             <p>เบอร์โทรศัพท์ :</p>
-                            <p className="text-black">{phoneNo}</p>
+                            <p className="detail-text-label">{phoneNo}</p>
                           </div>
                         </div>
                       </div>
                       <div
                         className="content-header"
                         style={{
-                          paddingLeft: "50px",
+                          paddingLeft: "2rem",
                           backgroundColor: "#F1F7FB",
                           color: persianblue,
                         }}
@@ -1152,33 +1143,30 @@ const Buy = () => {
                       </div>
                       <div
                         className="content-member"
-                        style={{ marginLeft: "20px", marginTop: "10px" }}
                       >
                         <div
                           className="content-detail-member"
-                          style={{ display: "flex", justifyContent: "space-between" }}
                         >
                           <div className="content-detail-text">
                             <p>ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก :</p>
-                            <p className="text-black">
+                            <p className="detail-text-label">
                               {dropdownSelect.code} {dropdownSelect.name}
                             </p>
                           </div>
                         </div>
                         <div
                           className="content-detail-member"
-                          style={{ display: "flex", justifyContent: "space-between" }}
                         >
                           <div className="content-detail-text">
                             <p>เลขที่บัญชีซื้อขาย :</p>
-                            <p className="text-black">{tradingAccountNo}</p>
+                            <p className="detail-text-label">{tradingAccountNo}</p>
                           </div>
                         </div>
                       </div>
                       <div
                         className="content-header"
                         style={{
-                          paddingLeft: "50px",
+                          paddingLeft: "2rem",
                           backgroundColor: "#F1F7FB",
                           color: persianblue,
                         }}
@@ -1187,9 +1175,8 @@ const Buy = () => {
                       </div>
                       <div
                         className="content-member"
-                        style={{ marginLeft: "20px", marginTop: "10px" }}
                       >
-                        <div className="content-detail-member">
+                        <div className="content-detail-member" style={{ display: "block" }}>
                           <div className="content-detail-share">
                             <div className="text-title">
                               <p>หุ้นเดิม</p>
@@ -1199,7 +1186,6 @@ const Buy = () => {
                               <p>จำนวน</p>
                               <b
                                 className="text-black"
-                                style={{ marginLeft: "-20px" }}
                               >
                                 {stockVolume}
                               </b>
@@ -1263,7 +1249,7 @@ const Buy = () => {
                           </div>
                           <div
                             className="content-detail-share"
-                            style={{ marginTop: "10px" }}
+                            style={{ marginTop: "10px", marginBottom: "10px" }}
                           >
                             <div className="text-title">
                               <p>รวมเป็นเงินทั้งสิ้น</p>
@@ -1278,30 +1264,29 @@ const Buy = () => {
                       <div
                         className="content-header"
                         style={{
-                          paddingLeft: "50px",
+                          paddingLeft: "2rem",
                           backgroundColor: "#F1F7FB",
                           color: persianblue,
-                          marginTop: "10px"
                         }}
                       >
                         <b>กรณีหุ้นที่ไม่ได้รับการจัดสรรขอให้โอนเงินคืนเข้าผ่านบัญชีธนาคาร</b>
                       </div>
                       <div
                         className="content-member"
-                        style={{ marginLeft: "20px", marginTop: "10px" }}
                       >
                         <div
                           className="content-detail-member"
-                          style={{ display: "flex", justifyContent: "space-between" }}
                         >
                           <div className="content-detail-text">
-                            <p>ฝากเข้าผ่านธนาคาร :</p>
-                            <img src={depositBank.logo} height={"33px"} width={"32px"} style={{ margin: "auto", marginLeft: "1rem" }} />
-                            <p className="text-black">{depositBank.nameTH}</p>
+                            <p className="bank-title">ฝากเข้าผ่านธนาคาร :</p>
+                            <div className="bank-logo-img">
+                              <img src={depositBank.logo} height={"33px"} width={"32px"} style={{ margin: "auto" }} />
+                              <p className="text-black" style={{ marginLeft: "1rem" }}>{depositBank.nameTH}</p>
+                            </div>
                           </div>
                           <div className="content-detail-text">
                             <p>เลขที่บัญชี :</p>
-                            <p className="text-black">{bank}</p>
+                            <p className="detail-text-label">{bank}</p>
                           </div>
                         </div>
                       </div>
@@ -1312,23 +1297,21 @@ const Buy = () => {
                   </div>
                   <div
                     className="content-member"
-                    style={{ marginLeft: "20px", marginTop: "10px", fontSize: "24px" }}
                   >
                     <div
                       className="content-detail-member"
-                      style={{ display: "flex", justifyContent: "space-between" }}
                     >
-                      <div className="content-detail-text" style={{ width: "100%" }}>
-                        <p style={{ width: "20%" }}>
-                          ข้อตกลง :
-                        </p>
-                        <input type={"checkbox"} style={{ transform: "scale(1.5)" }} />
-                        {/* binding parameter */}
-                        <p className="text-black" style={{ fontSize: "20px", textAlign: "center" }}>ข้าพเจ้าขอรับรองว่า ข้าพเจ้าในฐานะผู้ถือหุ้นได้รับการจัดสรรหุ้นสามัญออกใหม่ เป็นผู้รับประโยชน์ที่แท้จริง</p>
-                      </div>
-                    </div>
-                    <div className="text-black" style={{ fontSize: "20px", textAlign: "center" }}>
-                      **รายการจะสมบูรณ์ เมื่อท่านยืนยันรายการและบริษัทตรวจสอบผลการชำระเงินครบถ้วนสมบูรณ์
+                      <FlexContainer>
+                        <div
+                          style={{ width: "100%", fontSize: "20px" }}
+                        >
+                          <div className="content-detail-condition">
+                            <p className="text-title">ข้อตกลง :</p>
+                            <p className="text-black" style={{ fontSize: "20px", width: "100%", textAlign: "center" }}><input type={"checkbox"} value={lastVerifyChecked} onChange={() => setLastVerifyChecked(!lastVerifyChecked)} style={{ transform: "scale(1.5)", marginLeft: "1rem", marginRight: "1rem", textAlign: "center" }} /> ข้าพเจ้าขอรับรองว่า ข้าพเจ้าในฐานะผู้ถือหุ้นได้รับการจัดสรรหุ้นสามัญออกใหม่ เป็นผู้รับประโยชน์ที่แท้จริง<br />
+                              **รายการจะสมบูรณ์ เมื่อท่านยืนยันรายการและบริษัทตรวจสอบผลการชำระเงินครบถ้วนสมบูรณ์</p>
+                          </div>
+                        </div>
+                      </FlexContainer>
                     </div>
                   </div>
                   <div
@@ -1338,22 +1321,21 @@ const Buy = () => {
                     <Button
                       type="submit"
                       value={"ย้อนกลับ"}
-                      onClick={() => hanlderOnBack()}
+                      onClick={() => setValidateAccept(false)}
                       style={{
-                        fontSize: "16px",
-                        height: "35px",
-                        margin: "0 20px 20px 20px",
+                        height: "40px",
+                        margin: "0 10px 10px 10px",
                         backgroundColor: "#809FB8",
                       }}
                     />
                     <Button
-                      type="button"
+                      type="submit"
                       value={"ถัดไป"}
                       onClick={handlerOnSubmitedOrder}
+                      disabled={!lastVerifyChecked}
                       style={{
-                        fontSize: "16px",
-                        height: "35px",
-                        margin: "0 20px 20px 20px",
+                        height: "40px",
+                        margin: "0 10px 10px 10px",
                       }}
                     />
                   </div>
@@ -1554,6 +1536,14 @@ const Buy = () => {
                           </InputDiv>
                         </Content>
                       </LineCard>
+                      <div style={{ margin: "auto", marginTop: "1rem", maxWidth: "400px" }}>
+                        <Button
+                          type="submit"
+                          value="ถัดไป"
+                          disabled={isDisableToPage2}
+                          onClick={() => handlerOnClickPage(2)}
+                        />
+                      </div>
                     </>
                   );
                 }
@@ -1561,7 +1551,7 @@ const Buy = () => {
                 if (page === 2) {
                   return (
                     <>
-                      <div className="card-tag">
+                      <div className="card-div">
                         <StyledLineCard
                           style={{
                             marginBottom: "20px",
@@ -1608,7 +1598,7 @@ const Buy = () => {
                           </ShareDetail>
                         </StyledLineCard>
                       </div>
-                      <div className="card-tag">
+                      <div className="card-div">
                         <StyledLineCard
                           style={{
                             marginBottom: "20px",
@@ -1666,7 +1656,7 @@ const Buy = () => {
                           </ShareDetail>
                         </StyledLineCard>
                       </div>
-                      <div className="card-tag">
+                      <div className="card-div">
                         <StyledLineCard
                           style={{
                             marginBottom: "20px",
@@ -1849,7 +1839,7 @@ const Buy = () => {
                           </StyledLineCard>
                         </div>
                       </div>
-                      <div style={{ margin: "auto", width: "400px" }}>
+                      <div style={{ margin: "auto", marginTop: "1rem", maxWidth: "400px" }}>
                         <Button
                           type="submit"
                           value="ยืนยันคำสั่งซื้อ"
@@ -2114,6 +2104,7 @@ const Buy = () => {
                         <Button
                           type="button"
                           value={"ถัดไป"}
+                          disabled={!file}
                           style={{ marginTop: "1rem", margin: "0 2rem" }}
                           onClick={handleSubmit}
                         />
@@ -2169,6 +2160,15 @@ const Container = styled.div`
       align-items: baseline;
     }
 
+    .content-detail-condition {
+      display: flex;
+      text-align: center;
+
+      .text-title {
+        width: 100px;
+      }
+    }
+
     .content-detail-share {
       width: 100%;
       display: flex;
@@ -2184,7 +2184,6 @@ const Container = styled.div`
     }
 
     .text-black {
-      margin-left: 20px;
       color: #000000;
     }
 
@@ -2210,6 +2209,17 @@ const Container = styled.div`
     .buy-flex {
       width: 100%;
     }
+
+    .content-member {
+      .content-detail-condition {
+        display: block;
+        text-align: center;
+
+        .text-title {
+          width: 100%;
+        }
+      }
+    }
   }
 
   /* For Tablets */
@@ -2219,8 +2229,23 @@ const Container = styled.div`
     .card-tag {
       display: inline;
     }
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 880px) and (max-width: 1024px) {
     .buy-flex {
       width: 100%;
+    }
+
+    .content-member {
+      .content-detail-condition {
+        display: block;
+        text-align: center;
+
+        .text-title {
+          width: 100%;
+        }
+      }
     }
   }
 `;
@@ -2652,11 +2677,13 @@ const StyledLineCard = styled.div`
   width: 50%;
 
   @media screen and (max-width: 540px) {
+    margin: 0;
     width: 100%;
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 880px) {
+  @media screen and (min-width: 540px) and (max-width: 1024px) {
+    margin: 0;
     width: 100%;
   }
 `;

@@ -17,12 +17,19 @@ export const StyledCard = styled.div`
 
   /* For Mobile */
   @media screen and (max-width: 540px) {
-    margin: 1rem 0;
+    // margin: 1rem 0;
   }
 
   /* For Tablets */
   @media screen and (min-width: 540px) and (max-width: 880px) {
     margin: 0;
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 880px) and (max-width: 1024px) {
+    // max-height: 80%;
+    min-height: 80%;
+    overflow: scroll;
   }
 `;
 
@@ -116,8 +123,35 @@ export const StyledLineCard = styled.div`
   }
 `;
 
+export const StyledLineCardBank = styled.div`
+  border-radius: 10px;
+  border: 1px solid #d9e1e7;
+  margin: 0.5rem;
+  width: 100%;
+  flex-basis: 46%;
+  display: flex;
+  padding: 5px;
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    margin: 0;
+    flex-basis: 100%;
+    display: flex;
+    margin-top: 1rem;
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 1024px) {
+    margin: 0.5rem;
+  }
+`;
+
 export const Card = ({ children, isScroll, style }) => <StyledCard isScroll={isScroll} style={style}>{children}</StyledCard>;
 
 export const LineCard = ({ children, style }) => (
   <StyledLineCard style={style}>{children}</StyledLineCard>
+);
+
+export const LineCardBank = ({ children, style }) => (
+  <StyledLineCardBank style={style}>{children}</StyledLineCardBank>
 );

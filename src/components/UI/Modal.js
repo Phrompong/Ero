@@ -19,6 +19,7 @@ export const ModalStyled = styled.div`
   overflow: scroll;
   /* For Mobile */
   @media screen and (max-width: 540px) {
+    padding: ${props => props.isBuy && "10rem"};
   }
 
   /* For Tablets */
