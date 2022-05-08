@@ -116,51 +116,64 @@ const CheckRightInfo = () => {
 
   async function fetchCustomerStock() {
     const inputValue = searchInputRef.current.value;
-    const endpoint = `orders/search/value?type=year&customerId=${user.customerId}key=${inputValue}`;
+    const endpoint = `orders/search/value?type=year&customerId=${user.customerId}&key=${inputValue}`;
 
     const [res, status] = await httpGetRequest(endpoint);
 
-    const statusId = res["data"][0].status._id;
+    if (res["data"].length > 0) {
+      const statusId = res["data"][0].status._id;
+      if (
+        statusId === "62592501d017af7548e56f31" ||
+        statusId === "62592501d017af7548e56f33"
+      ) {
+        const { customerId, customerStock, excessAmount, paidRightVolume } =
+          res["data"][0];
 
-    console.log(statusId);
-    if (
-      statusId === "62592501d017af7548e56f31" ||
-      statusId === "62592501d017af7548e56f33"
-    ) {
-      const { customerId, customerStock, excessAmount, paidRightVolume } =
-        res["data"][0];
+        console.log("test");
+        const {
+          company,
+          rightStockName,
+          getRight,
+          ratio,
+          registrationNo,
+          offerPrice,
+        } = customerStock;
 
-      console.log("test");
-      const {
-        company,
-        rightStockName,
-        getRight,
-        ratio,
-        registrationNo,
-        offerPrice,
-      } = customerStock;
+        setCompany(company);
+        setRightStockName(rightStockName);
+        setGetRight(getRight);
+        setRatio(ratio);
+        setRegistrationNo(registrationNo);
 
-      setCompany(company);
-      setRightStockName(rightStockName);
-      setGetRight(getRight);
-      setRatio(ratio);
-      setRegistrationNo(registrationNo);
+        const tempBooking = excessAmount / offerPrice - paidRightVolume;
+        setBookingRight(tempBooking < 0 ? -1 * tempBooking : tempBooking);
 
-      const tempBooking = excessAmount / offerPrice - paidRightVolume;
-      setBookingRight(tempBooking < 0 ? -1 * tempBooking : tempBooking);
+        const tempBookingOver = excessAmount / offerPrice;
+        setBookingOverRight(tempBookingOver);
+        setPaidRightVolume(paidRightVolume);
 
-      const tempBookingOver = excessAmount / offerPrice;
-      setBookingOverRight(tempBookingOver);
-      setPaidRightVolume(paidRightVolume);
+        const tempNumCert = paidRightVolume / getRight;
+        setNumCert(tempNumCert);
 
-      const tempNumCert = paidRightVolume / getRight;
-      setNumCert(tempNumCert);
-
-      if (customerId) {
-        const { name, lastname } = customerId;
-        setName(name);
-        setLastname(lastname);
+        if (customerId) {
+          const { name, lastname } = customerId;
+          setName(name);
+          setLastname(lastname);
+        }
       }
+    } else {
+      setCompany("");
+      setRightStockName("");
+      setGetRight("");
+      setRatio("");
+      setRatio("");
+      setRegistrationNo("");
+      setName("");
+      setLastname("");
+      setBookingRight("");
+      setBookingOverRight("");
+      setPaidRightVolume("");
+      setNumCert("");
     }
   }
 
