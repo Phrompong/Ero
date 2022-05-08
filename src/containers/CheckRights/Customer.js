@@ -202,4 +202,9 @@ const TableSection = styled.section`
   /* background-color: lightblue; */
   height: 100%;
   display: flex;
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    overflow: scroll;
+  }
 `;

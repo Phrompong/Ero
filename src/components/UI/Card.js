@@ -18,6 +18,7 @@ export const StyledCard = styled.div`
   /* For Mobile */
   @media screen and (max-width: 540px) {
     // margin: 1rem 0;
+    overflow: scroll;
   }
 
   /* For Tablets */
