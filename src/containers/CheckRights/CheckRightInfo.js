@@ -4,6 +4,9 @@ import { Button } from "../../components/UI/Button";
 import { Card } from "../../components/UI/Card";
 import { InputSearch } from "../../components/UI/Input";
 import { persianblue } from "../../utils/color";
+import { useState, useEffect } from "react";
+import { httpGetRequest } from "../../utils/fetch";
+import { useDispatch, useSelector } from "react-redux";
 
 const Container = styled.div`
   padding: 30px 20px;
@@ -96,6 +99,18 @@ const Line = styled.div`
 `;
 
 const CheckRightInfo = () => {
+  const { user } = useSelector((state) => state);
+
+  async function fetchCustomerStock() {
+    const endpoint = `customerStocks?customerId=${user.customerId}`;
+
+    const [res, status] = await httpGetRequest(endpoint);
+    console.log(res["data"][0]);
+  }
+
+  useEffect(() => {
+    alert("test");
+  }, []);
   const header = (
     <Header>
       <span>

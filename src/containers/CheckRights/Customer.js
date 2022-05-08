@@ -118,6 +118,7 @@ const CheckRightCustomer = () => {
               data={data}
               refreshData={fetchDataTable}
             />
+
             <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
             <div className="button-section">
               <Button onClick={() => navigate(`${location.pathname}/info`)}>
