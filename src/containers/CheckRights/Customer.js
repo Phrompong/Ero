@@ -212,4 +212,9 @@ const TableSection = styled.section`
     width: 100%;
     text-align: center;
   }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    overflow: scroll;
+  }
 `;

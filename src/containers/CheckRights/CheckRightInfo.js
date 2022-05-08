@@ -4,7 +4,7 @@ import { Button } from "../../components/UI/Button";
 import { Card } from "../../components/UI/Card";
 import { InputSearch } from "../../components/UI/Input";
 import { persianblue } from "../../utils/color";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { httpGetRequest } from "../../utils/fetch";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -99,18 +99,75 @@ const Line = styled.div`
 `;
 
 const CheckRightInfo = () => {
+  const [company, setCompany] = useState("");
+  const [rightStockName, setRightStockName] = useState("");
+  const [getRight, setGetRight] = useState("");
+  const [ratio, setRatio] = useState("");
+  const [registrationNo, setRegistrationNo] = useState("");
+  const [name, setName] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [bookingRight, setBookingRight] = useState("");
+  const [bookingOverRight, setBookingOverRight] = useState("");
+  const [paidRightVolume, setPaidRightVolume] = useState("");
+  const [numCert, setNumCert] = useState("");
+  const searchInputRef = useRef("");
+
   const { user } = useSelector((state) => state);
 
   async function fetchCustomerStock() {
-    const endpoint = `customerStocks?customerId=${user.customerId}`;
+    const inputValue = searchInputRef.current.value;
+    const endpoint = `orders/search/value?type=year&customerId=${user.customerId}key=${inputValue}`;
 
     const [res, status] = await httpGetRequest(endpoint);
-    console.log(res["data"][0]);
+
+    const statusId = res["data"][0].status._id;
+
+    console.log(statusId);
+    if (
+      statusId === "62592501d017af7548e56f31" ||
+      statusId === "62592501d017af7548e56f33"
+    ) {
+      const { customerId, customerStock, excessAmount, paidRightVolume } =
+        res["data"][0];
+
+      console.log("test");
+      const {
+        company,
+        rightStockName,
+        getRight,
+        ratio,
+        registrationNo,
+        offerPrice,
+      } = customerStock;
+
+      setCompany(company);
+      setRightStockName(rightStockName);
+      setGetRight(getRight);
+      setRatio(ratio);
+      setRegistrationNo(registrationNo);
+
+      const tempBooking = excessAmount / offerPrice - paidRightVolume;
+      setBookingRight(tempBooking < 0 ? -1 * tempBooking : tempBooking);
+
+      const tempBookingOver = excessAmount / offerPrice;
+      setBookingOverRight(tempBookingOver);
+      setPaidRightVolume(paidRightVolume);
+
+      const tempNumCert = paidRightVolume / getRight;
+      setNumCert(tempNumCert);
+
+      if (customerId) {
+        const { name, lastname } = customerId;
+        setName(name);
+        setLastname(lastname);
+      }
+    }
   }
 
-  useEffect(() => {
-    alert("test");
-  }, []);
+  const handleSearchButtonClicked = async () => {
+    fetchCustomerStock();
+  };
+
   const header = (
     <Header>
       <span>
@@ -126,32 +183,37 @@ const CheckRightInfo = () => {
           {header}
           <p className="inner">
             <b>E-RO</b> ตรวจสอบสิทธิ์การจองซื้อหุ้นสามัญเพิ่มทุน
-            <b>บริษัท เน็คซ์ แคปปิตอล จำกัด(มหาชน)</b>
+            <b>{company}</b>
           </p>
           <div className="inner search">
             <p>เพื่อตรวจสอบสิทธิ์ของท่านแล้วกรอกข้อมูลให้ถูกต้อง</p>
             <Search>
-              <InputSearch placeholder="ค้นหาหมายเลชประจำตัวประชาชน / เลขที่หนังสือเดินทาง/เลขทะเบียนนิติบุคคล" />
-              <Button>ค้นหา</Button>
+              <InputSearch
+                placeholder="ค้นหาหมายเลชประจำตัวประชาชน / เลขที่หนังสือเดินทาง/เลขทะเบียนนิติบุคคล"
+                ref={searchInputRef}
+              />
+              <Button onClick={handleSearchButtonClicked}>ค้นหา</Button>
             </Search>
           </div>
           <HighLightText>
             <h3>
-              NCAP (อัตราส่วน 2 หุ้น สามัญเดิม : 1 หุ้นสามัญเพิ่มทุน)
-              จองเกินสิทธิ์ได้
+              {rightStockName} (อัตราส่วน {getRight} หุ้น สามัญเดิม : {ratio}
+              หุ้นสามัญเพิ่มทุน) จองเกินสิทธิ์ได้
             </h3>
             <p>
               ผู้จองซื้อหุ้นสามัญเพิ่มทุนที่จองซื้อและได้รับการจัดสรรหุ้นสามัญเพิ่มทุน
-              จะได้รับการจัดสรรใบสำคัญแสดงสิทธในอัตราส่วน 2 หุ้นสามัญเพิ่มทุน
-              ต่อ 1 หน่วยใบสำคัญแสดงสิทธิ
+              จะได้รับการจัดสรรใบสำคัญแสดงสิทธในอัตราส่วน {getRight}{" "}
+              หุ้นสามัญเพิ่มทุน ต่อ {ratio} หน่วยใบสำคัญแสดงสิทธิ
             </p>
           </HighLightText>
           <Info>
             <p style={{ color: persianblue, fontWeight: 600 }}>
               ตรวจสอบผลการจองซื้อ
             </p>
-            <p>4000000000021</p>
-            <p>มนัส ไพรวงศ์</p>
+            <p>{registrationNo}</p>
+            <p>
+              {name} {lastname}
+            </p>
           </Info>
         </Section>
         <Line />
@@ -169,28 +231,32 @@ const CheckRightInfo = () => {
           <p>จองตามสิทธิ์</p>
           <p>จำนวน</p>
           <p className="unit">
-            100,000<span>หุ้น</span>
+            {bookingRight}
+            <span>หุ้น</span>
           </p>
         </Details>
         <Details>
           <p>จองเกินสิทธิ์</p>
           <p>จำนวน</p>
           <p className="unit">
-            1,000<span>หุ้น</span>
+            {bookingOverRight}
+            <span>หุ้น</span>
           </p>
         </Details>
         <Details style={{ fontWeight: "bold" }}>
           <p>รวมจำนวนหุ้นที่ได้รับทั้งสิ้น</p>
           <p>จำนวน</p>
           <p className="unit">
-            1,101,000<span>หุ้น</span>
+            {paidRightVolume}
+            <span>หุ้น</span>
           </p>
         </Details>
         <Details style={{ fontWeight: "bold" }}>
           <p>รวมจำนวนใบสำคัญแสดงสิทธที่ได้รับทั้งสิ้น</p>
           <p>จำนวน</p>
           <p className="unit">
-            50,500<span>หน่วย</span>
+            {numCert}
+            <span>หน่วย</span>
           </p>
         </Details>
       </Container>
