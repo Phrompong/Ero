@@ -67,6 +67,7 @@ const CustomerService = () => {
   };
 
   const redirectPage = () => {
+    console.log("redirect");
     navigate("/login/customer");
   };
 

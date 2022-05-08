@@ -44,7 +44,7 @@ const Layout = ({ children }) => {
     "/dashboard",
     "/checkRightAdmin",
     "/import",
-    "/customer/service",
+    "/admin/service",
   ];
 
   const pagesCustomer = [
@@ -65,7 +65,8 @@ const Layout = ({ children }) => {
   const isLogin =
     path !== "/login/admin" &&
     path !== "/login/customer" &&
-    path !== "/customer/service";
+    path !== "/customer/service" &&
+    path !== "/admin/service";
 
   console.log(user);
 
@@ -82,7 +83,8 @@ const Layout = ({ children }) => {
   if (
     (path === "/login/admin" ||
       path === "/login/customer" ||
-      path === "/customer/service") &&
+      path === "/customer/service" ||
+      path === "/admin/service") &&
     (!user || user.length === 0)
   ) {
     return <>{children}</>;
@@ -118,7 +120,6 @@ const Layout = ({ children }) => {
 
         break;
       case "client":
-        console.log("client");
         pagesCustomer.push("/login/admin");
         isPageAllow =
           pagesCustomer.filter((o) => o.includes(path)).length > 0
