@@ -10,7 +10,9 @@ import Buy from "./containers/Buy";
 import CheckRightAdmin from "./containers/CheckRights/Admin";
 import CheckRightCustomer from "./containers/CheckRights/Customer";
 import CustomerServiceAdmin from "./containers/CustomerService/Admin";
-import CustomerService from "./containers/CustomerService/Customer";
+//import CustomerService from "./containers/CustomerService/Customer";
+import CustomerService from "./containers/customerService";
+import CheckRightInfo from "./containers/CheckRights/CheckRightInfo";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 
@@ -36,6 +38,10 @@ const App = (props) => {
       <Route
         path="/checkRightCustomer"
         element={<CheckRightCustomer {...props} />}
+      />
+      <Route
+        path="/checkRightCustomer/info"
+        element={<CheckRightInfo {...props} />}
       />
       <Route path="/dashboard" exact element={<Dashboard />} />
       <Route path="/profile" element={<ProfileView />} />

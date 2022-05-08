@@ -96,3 +96,16 @@ const StyledField = styled.input`
     outline: none;
   }
 `;
+
+export const InputSearch = styled.input`
+  border: 2px solid #d9e1e7;
+  border-radius: 10px;
+  background: #fff;
+  position: relative;
+  font-size: 16px;
+  padding: 12px;
+
+  :focus {
+    outline: none;
+  }
+`;

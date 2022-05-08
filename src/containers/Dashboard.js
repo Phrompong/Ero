@@ -6,6 +6,7 @@ import Overview from "../components/Overview/Overview";
 import Paginate from "../components/Paginate/Paginate";
 
 import { Button } from "../components/UI/Button";
+import { InputSearch } from "../components/UI/Input";
 import { Card, LineCard } from "../components/UI/Card";
 import { Dropdown } from "../components/UI/Dropdown";
 import { FlexContainer } from "../components/UI/FlexContainer";
@@ -47,8 +48,6 @@ const Dashboard = () => {
     let endpoint = `orders/progressPie/${path}?type=${type}`;
 
     if (key) endpoint = `${endpoint}&key=${key}`;
-
-    console.log(`data progress : ${endpoint}`);
 
     const [res, status] = await httpGetRequest(endpoint);
     func(res["data"]);
@@ -161,7 +160,7 @@ const Dashboard = () => {
               selected={selectedType}
               setSelected={setSelectedType}
             />
-            <InputSeacrh placeholder="Search..." ref={searchInputRef} />
+            <InputSearch placeholder="Search..." ref={searchInputRef} />
             <Button onClick={handleSearchButtonClicked}>
               <SearchIcon />
             </Button>
@@ -244,19 +243,6 @@ const SearchIcon = styled(Search)`
   vertical-align: text-top;
   color: darkgray;
   margin: 0 -10px;
-`;
-
-const InputSeacrh = styled.input`
-  border: 2px solid #d9e1e7;
-  border-radius: 10px;
-  background: #fff;
-  position: relative;
-  font-size: 16px;
-  padding: 10px;
-
-  :focus {
-    outline: none;
-  }
 `;
 
 const Header = styled.div`

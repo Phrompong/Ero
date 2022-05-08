@@ -17,7 +17,8 @@ const Container = styled.div`
 const Main = styled.main`
   position: relative;
   background-color: ${ivory};
-  height: 100%;
+  height: 100vh;
+  /* height: 100%; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,13 +44,14 @@ const Layout = ({ children }) => {
     "/dashboard",
     "/checkRightAdmin",
     "/import",
-    "/admin/service",
+    "/customer/service",
   ];
 
   const pagesCustomer = [
     "/login/customer",
     "/buy",
     "/checkRightCustomer",
+    "/checkRightCustomer/info",
     "/profile",
     "/customer/service",
   ];
@@ -63,7 +65,6 @@ const Layout = ({ children }) => {
   const isLogin =
     path !== "/login/admin" &&
     path !== "/login/customer" &&
-    path !== "/admin/service" &&
     path !== "/customer/service";
 
   console.log(user);
@@ -81,7 +82,6 @@ const Layout = ({ children }) => {
   if (
     (path === "/login/admin" ||
       path === "/login/customer" ||
-      path === "/admin/service" ||
       path === "/customer/service") &&
     (!user || user.length === 0)
   ) {
