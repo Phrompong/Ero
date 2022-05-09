@@ -47,7 +47,7 @@ export const StyledLineCard = styled.div`
     justify-content: space-between;
 
     .modal-flex-pre {
-      text-align: end;
+      text-align: start;
     }
 
     .modal-flex-label {
@@ -56,7 +56,7 @@ export const StyledLineCard = styled.div`
 
     .modal-flex-label-info {
       width: 100%;
-      text-align: end;
+      text-align: start;
     }
   }
 
@@ -74,7 +74,13 @@ export const StyledLineCard = styled.div`
   /* For Mobile */
   @media screen and (max-width: 540px) {
     margin: 0;
-
+    overflow: scroll;
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    ::-webkit-scrollbar {
+      display: none; /* for Chrome, Safari, and Opera */
+    }
+    
     .modal-flex {
       display: flex;
       width: 100%;
@@ -83,7 +89,7 @@ export const StyledLineCard = styled.div`
       justify-content: space-between;
 
       .modal-flex-pre {
-        text-align: end;
+        text-align: start;
       }
     }
 
@@ -109,7 +115,7 @@ export const StyledLineCard = styled.div`
       justify-content: space-between;
 
       .modal-flex-pre {
-        text-align: end;
+        text-align: start;
       }
     }
 

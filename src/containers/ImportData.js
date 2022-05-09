@@ -15,6 +15,21 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    display: block;
+    text-align: center;
+
+    .input-btn {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 1024px) {
+  }
 `;
 
 const ImportData = () => {
@@ -55,7 +70,7 @@ const ImportData = () => {
     <Card>
       <Container>
         <ModalAlert show={show} msg={alertMessage} status={status} />
-        <input type="file" onChange={handleSelectedFile} />
+        <input className="input-btn" type="file" onChange={handleSelectedFile} />
         <Button onClick={handleSubmit}>Import Data</Button>
       </Container>
     </Card>

@@ -37,6 +37,13 @@ const MyPaginate = styled(ReactPaginate).attrs({
   li.disabled a {
     cursor: default;
   }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    width: 100%;
+    min-width: 1200px;
+    overflow: scroll;
+  }
 `;
 const Paginate = ({ setCurrentPage, totalPages }) => (
   <MyPaginate
