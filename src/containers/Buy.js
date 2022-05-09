@@ -1385,32 +1385,32 @@ const Buy = () => {
         ) : (
           <>
             <FlexContainer>
-              <StepDiv>
-                <div style={{ display: "block", margin: "0 20px" }}>
+              <StepDiv page={page}>
+                <div className="step one">
                   <Step
                     isActive={page === 1}
                     onClick={() => handlerOnClickPage(1)}
                   >
                     <b>1</b>
-                    <Line />
+                    <Line className="hr two" />
                   </Step>
                   <StepDetail isActive={page === 1}>
                     ขั้นตอนที่ 1 - ลงทะเบียนจองสิทธิ์
                   </StepDetail>
                 </div>
-                <div style={{ display: "block", margin: "0 20px" }}>
+                <div className="step two">
                   <Step
                     isActive={page === 2}
                     onClick={() => handlerOnClickPage(2)}
                   >
                     <b>2</b>
-                    <Line />
+                    <Line className="hr three" />
                   </Step>
                   <StepDetail isActive={page === 2}>
                     ขั้นตอนที่ 2 - จัดการจองซื้อ
                   </StepDetail>
                 </div>
-                <div style={{ display: "block", margin: "0 20px" }}>
+                <div className="step three">
                   <Step
                     isActive={page === 3}
                     onClick={() => handlerOnClickPage(3)}
@@ -1424,7 +1424,12 @@ const Buy = () => {
               </StepDiv>
             </FlexContainer>
             <FlexContainer
-              style={{ display: "block", justifyContent: "flex-start" }}
+              style={{
+                display: "block",
+                justifyContent: "flex-start",
+                overflow: "scroll",
+                minHeight: "1200px",
+              }}
             >
               {(() => {
                 if (page === 1) {
@@ -1927,7 +1932,9 @@ const Buy = () => {
                 if (page === 3) {
                   return (
                     <>
-                      <LineCard style={{ borderColor: persianblue }}>
+                      <LineCard
+                        style={{ borderColor: persianblue, width: "1024px" }}
+                      >
                         <ShareDetail
                           style={{ fontSize: "20px", padding: "20px" }}
                         >
@@ -1946,7 +1953,7 @@ const Buy = () => {
                           ท่านสามารถดำเนินการชำระเงินในการซื้อหุ้นเพิ่มทุนของท่านได้ที่
                         </p>
                       </div>
-                      <LineCard>
+                      <LineCard style={{ width: "1024px", overflow: "scroll" }}>
                         <Header>
                           <ShareDetail>
                             <h3
@@ -2151,6 +2158,7 @@ const Buy = () => {
                         className="message-info"
                         style={{
                           margin: "10px 10px 10px 10px",
+                          width: "1024px",
                           color: "#1234B0",
                         }}
                       >
@@ -2167,6 +2175,7 @@ const Buy = () => {
                         className="btn-accept-buy"
                         style={{
                           display: "flex",
+                          width: "1024px",
                           justifyContent: "space-between",
                           marginTop: "20px",
                         }}
@@ -2358,6 +2367,45 @@ const StepDiv = styled.div`
   border: 1px solid transparent;
   float: left;
   margin: auto;
+
+  .step {
+    display: block;
+    margin: 0 20px;
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    .step {
+      margin: 0px;
+    }
+
+    .one {
+      display: ${(props) => (props.page === 1 ? "block" : "none")};
+    }
+    .two {
+      display: ${(props) => (props.page === 2 ? "block" : "none")};
+    }
+    .three {
+      display: ${(props) => (props.page === 3 ? "block" : "none")};
+    }
+  }
+
+  /* For Mobile */
+  @media screen and (min-width: 540px) and (max-width: 1024px) {
+    .step {
+      margin: 0px;
+    }
+
+    .one {
+      display: ${(props) => (props.page === 1 ? "block" : "none")};
+    }
+    .two {
+      display: ${(props) => (props.page === 2 ? "block" : "none")};
+    }
+    .three {
+      display: ${(props) => (props.page === 3 ? "block" : "none")};
+    }
+  }
 `;
 
 const InputDiv = styled.div`
@@ -2365,7 +2413,8 @@ const InputDiv = styled.div`
 
   .inputField {
     display: flex;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
+    text-align: start;
     width: 100%;
     justify-content: space-between;
     align-items: baseline;
@@ -2373,6 +2422,7 @@ const InputDiv = styled.div`
     p {
       position: relative;
       margin: 0 10px;
+      width: 50%;
     }
 
     .label-input-flex {
@@ -2396,6 +2446,7 @@ const InputDiv = styled.div`
 
       p {
         position: static;
+        width: 100%;
 
         span {
           width: 200px;
@@ -2404,6 +2455,7 @@ const InputDiv = styled.div`
     }
 
     .inputField > .label-input {
+      backgrond: black;
       margin: 0 0 0.5rem 0;
     }
 

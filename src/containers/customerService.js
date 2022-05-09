@@ -82,22 +82,26 @@ const CustomerService = () => {
           <div className="logo-img-div">
             <img src={logo} className="logo-img" />
           </div>
-          <Header style={{ fontSize: "24px" }}>
-            Asia Wealth Securities Co.,Ltd. (AWS)
-          </Header>
+          <div>
+            <Header style={{ fontSize: "24px" }}>
+              Asia Wealth Securities Co.,Ltd. (AWS)
+            </Header>
+          </div>
           <Info>
             <FontAwesomeIcon
               icon={faPhone}
-              style={{ margin: "0", marginRight: "0.5rem" }}
+              height={50}
+            // style={{ margin: "0", marginRight: "0.5rem" }}
             />
-            02-680-5033-5
+            <p>02-680-5033-5</p>
           </Info>
           <Info>
             <FontAwesomeIcon
               icon={faEnvelope}
-              style={{ margin: "0", marginRight: "0.5rem" }}
+              height={50}
+            // style={{ margin: "0", marginRight: "0.5rem" }}
             />
-            cs@asiawealth.co.th
+            <p> cs@asiawealth.co.th</p>
           </Info>
           <Header>(วันทำการ จันทร์-ศุกร์ เวลา 08.30 -17.00 น.)</Header>
         </div>
@@ -176,7 +180,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  overflow: scroll;
   position: relative;
 
   .bg-img {
@@ -204,7 +208,6 @@ const Container = styled.div`
 const Card = styled.div`
   position: absolute;
   width: 80%;
-  height: 60%;
   margin-top: 2rem;
   background: #ffffff;
   border: 1px solid #b2c7d8;
@@ -220,7 +223,7 @@ const Card = styled.div`
     border-bottom-left-radius: 10px;
 
     * {
-      margin: 1rem 2rem;
+      margin: 1rem 1rem;
     }
 
     .logo-img-div {
@@ -268,11 +271,51 @@ const Card = styled.div`
       width: 200px;
       text-align: center;
       margin: auto;
+      margin-bottom: 1rem;
     }
   }
 
   .form-input {
     width: 60%;
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    display: inline-block;
+    .info-detail {
+      width: 100%;
+      margin: 0 2rem;
+      text-algin: start;
+
+      * {
+        width: 100%;
+      }
+
+      .logo-img-div {
+        height: 118px;
+        width: 100%;
+        position: relative;
+        left: 0;
+        background: #ffffff;
+        border-radius: 0px 8px 8px 0px;
+        marign: auto;
+  
+        .logo-img {
+          height: 100px;
+          width: 220px;
+        }
+      }
+    }
+
+    .form-input {
+      width: 100%;
+      margin: auto;
+    }
+  }
+
+  /* For Mobiles */
+  @media screen and (min-width: 540px) and (max-width: 1024px) {
+    
   }
 `;
 
@@ -280,12 +323,24 @@ const Header = styled.p`
   color: #ffffff;
   font-size: 18px;
   font-weight: 600;
+
+  /* For Mobiles */
+  @media screen and (min-width: 540px) and (max-width: 1024px) {
+    padding: 0 1rem;
+  }
 `;
 
 const Info = styled.p`
   color: #ffffff;
   font-size: 16px;
   font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  text-align: start;
+
+  /* For Tablets */
+  @media screen and (max-width: 540px){
+  }
 `;
 
 const Button = styled.button`

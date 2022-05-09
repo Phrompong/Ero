@@ -20,10 +20,26 @@ export const ModalStyled = styled.div`
   /* For Mobile */
   @media screen and (max-width: 540px) {
     padding: ${props => props.isBuy && "10rem"};
+    height: 640px;
+    overflow: scroll;
+
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    ::-webkit-scrollbar {
+      display: none; /* for Chrome, Safari, and Opera */
+    }
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 880px) {
+  @media screen and (min-width: 540px) and (max-width: 1024px) {
+    height: 760px;
+    overflow: scroll;
+
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    ::-webkit-scrollbar {
+      display: none; /* for Chrome, Safari, and Opera */
+    }
   }
 `;
 
