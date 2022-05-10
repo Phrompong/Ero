@@ -156,21 +156,25 @@ const Dashboard = () => {
             <p>12:15 PM at 19th November 2020</p>
           </Header>
           <SearchDiv>
-            <Dropdown
-              options={type}
-              selected={selectedType}
-              setSelected={setSelectedType}
-            />
-            <InputSeacrh placeholder="Search..." ref={searchInputRef} />
-            <Button onClick={handleSearchButtonClicked}>
-              <SearchIcon />
-            </Button>
+            <div className="search-div">
+              <Dropdown
+                options={type}
+                selected={selectedType}
+                setSelected={setSelectedType}
+              />
+            </div>
+            <div className="search-div flex">
+              <InputSeacrh placeholder="Search..." ref={searchInputRef} />
+              <Button onClick={handleSearchButtonClicked}>
+                <SearchIcon />
+              </Button>
+            </div>
           </SearchDiv>
         </FlexContainer>
         <FlexContainer
           style={{
             justifyContent: "flex-start",
-            width: "fit-content",
+            width: "100px",
           }}
         >
           <Overview
@@ -214,6 +218,8 @@ const Container = styled.div`
   justify-content: center;
   flex-direction: column;
   overflow: scroll;
+  overflow-x: auto;
+  overflow-y: auto;
 
   > * {
     margin: 10px 0;
@@ -237,6 +243,30 @@ const SearchDiv = styled.div`
   > :not(:first-child) {
     margin-left: 10px;
   }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    display: block;
+
+    .search-div {
+      width: 100%;
+      margin: 0.25rem 0;
+    }
+
+    .flex {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: space-between
+    }
+
+    > :not(:first-child) {
+      margin-left: 0px;
+    }
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+  }
 `;
 
 const SearchIcon = styled(Search)`
@@ -256,6 +286,11 @@ const InputSeacrh = styled.input`
 
   :focus {
     outline: none;
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    width: 85%;
   }
 `;
 

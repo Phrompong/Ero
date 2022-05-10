@@ -42,7 +42,12 @@ const MyPaginate = styled(ReactPaginate).attrs({
   @media screen and (max-width: 540px) {
     width: 100%;
     min-width: 1200px;
-    overflow: scroll;
+  }
+
+  /* For Mobile */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    width: 100%;
+    min-width: 1200px;
   }
 `;
 const Paginate = ({ setCurrentPage, totalPages }) => (

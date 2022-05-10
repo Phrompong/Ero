@@ -112,6 +112,8 @@ const Container = styled.div`
   justify-content: center;
   flex-direction: column;
   overflow: scroll;
+  overflow-x: auto;
+  overflow-y: auto;
 
   > * {
     margin: 10px 0;

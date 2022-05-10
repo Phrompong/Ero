@@ -18,6 +18,7 @@ const Container = styled.div`
 
   /* For Mobile */
   @media screen and (max-width: 540px) {
+    width: 90vw;
     display: block;
     text-align: center;
 
@@ -28,7 +29,8 @@ const Container = styled.div`
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 1024px) {
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    width: 90vw;
   }
 `;
 

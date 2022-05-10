@@ -488,7 +488,7 @@ const Buy = () => {
                 โปรดตรวจสอบข้อมูลของท่านก่อนการลงทะเบียนจองสิทธิ์
               </h3>
             </Header>
-            <LineCard style={{ padding: "10px 20px" }}>
+            <LineCard style={{ padding: "10px 20px", overflow: "visible" }}>
               <div className="modal-flex">
                 <p className="modal-flex-label" >
                   หมายเลขบัตรประชาชน
@@ -511,7 +511,7 @@ const Buy = () => {
                 <p className="modal-flex-label">
                   ที่อยู่
                 </p>
-                <p className="modal-flex-pre">
+                <p className="modal-flex-label-info">
                   {profile ? `${profile.address} ${profile.zipcode}` : '-'}
                 </p>
               </div>
@@ -572,6 +572,7 @@ const Buy = () => {
                   padding: "10px",
                   width: "60px",
                   borderRadius: "100%",
+                  margin: "auto"
                 }}
               />
             </Header>
@@ -581,6 +582,7 @@ const Buy = () => {
                   fontSize: "20px",
                   color: "#1D3AB1",
                   fontWeight: "bold",
+                  margin: "auto"
                 }}
               >
                 เปลี่ยนแปลงข้อมูลเรียบร้อยแล้ว
@@ -592,6 +594,7 @@ const Buy = () => {
                   fontSize: "17px",
                   color: "#000000",
                   fontWeight: "normal",
+                  margin: "auto"
                 }}
               >
                 ระบบได้ทำการเปลี่ยนแปลงข้อมูลที่ท่านแก้ไขแล้ว
@@ -607,6 +610,7 @@ const Buy = () => {
                   height: "35px",
                   width: "50%",
                   marginTop: "20px",
+                  margin: "auto"
                 }}
               />
             </Header>
@@ -1022,7 +1026,7 @@ const Buy = () => {
                             className="content-detail-share"
                             style={{ marginTop: "10px" }}
                           >
-                            <div className="text-title">
+                            <div className="text-title" style={{ width: "100%" }}>
                               <p>รวมเป็นเงินทั้งสิ้น</p>
                               <b className="text-black" style={{ fontSize: "28px" }}>
                                 {currentPrice} บาท
@@ -1251,7 +1255,7 @@ const Buy = () => {
                             className="content-detail-share"
                             style={{ marginTop: "10px", marginBottom: "10px" }}
                           >
-                            <div className="text-title">
+                            <div className="text-title" style={{ width: "100%" }}>
                               <p>รวมเป็นเงินทั้งสิ้น</p>
                               <b className="text-black" style={{ fontSize: "28px" }}>
                                 {currentPrice} บาท
@@ -1278,15 +1282,15 @@ const Buy = () => {
                           className="content-detail-member"
                         >
                           <div className="content-detail-text">
-                            <p className="bank-title">ฝากเข้าผ่านธนาคาร :</p>
+                            <p className="bank-title" style={{ margin: "auto" }}>ฝากเข้าผ่านธนาคาร :</p>
                             <div className="bank-logo-img">
-                              <img src={depositBank.logo} height={"33px"} width={"32px"} style={{ margin: "auto" }} />
-                              <p className="text-black" style={{ marginLeft: "1rem" }}>{depositBank.nameTH}</p>
+                              <img src={depositBank.logo} height={"33px"} width={"32px"} style={{ margin: "auto", padding: "0 2rem", marginRight: "1rem", marginLeft: "1rem" }} />
+                              <p className="text-black" style={{ margin: "auto" }}>{depositBank.nameTH}</p>
                             </div>
                           </div>
-                          <div className="content-detail-text">
+                          <div className="content-detail-text" style={{ marginTop: "auto", marginBottom: "auto" }}>
                             <p>เลขที่บัญชี :</p>
-                            <p className="detail-text-label">{bank}</p>
+                            <p className="detail-text-label" style={{ marginTop: "auto", marginBottom: "auto" }}>{bank}</p>
                           </div>
                         </div>
                       </div>
@@ -1385,7 +1389,7 @@ const Buy = () => {
               </StepDiv>
             </FlexContainer>
             <FlexContainer
-              style={{ display: "block", justifyContent: "flex-start", overflow: "scroll", minHeight: "1200px" }}
+              style={{ display: "block", justifyContent: "flex-start" }}
             >
               {(() => {
                 if (page === 1) {
@@ -1415,7 +1419,7 @@ const Buy = () => {
                           </p>
                           <div className="desc">
                             {/* <p style={{ height: "157.4px" }}>{shareDescription}</p> */}
-                            <p style={{ maxHeight: "300px" }}>{shareDescription}</p>
+                            <p>{shareDescription}</p>
                           </div>
                           <div className="btn-read-more">
                             <Button
@@ -2225,15 +2229,15 @@ const Container = styled.div`
 
   /* For Tablets */
   @media screen and (min-width: 540px) and (max-width: 880px) {
-    width: 80vw;
+    width: 90vw;
 
     .card-tag {
       display: inline;
     }
-  }
-
-  /* For Tablets */
-  @media screen and (min-width: 880px) and (max-width: 1024px) {
+    
+    .buy-flex {
+      width: 100%;
+    }
     .buy-flex {
       width: 100%;
     }
@@ -2298,7 +2302,7 @@ const StepDiv = styled.div`
   }
 
   /* For Mobile */
-  @media screen and (min-width: 540px) and (max-width: 1024px) {
+  @media screen and (min-width: 540px) and (max-width: 880px) {
     .step {
       margin: 0px;
     }
@@ -2320,7 +2324,6 @@ const InputDiv = styled.div`
 
   .inputField {
     display: flex;
-    // flex-wrap: wrap;
     text-align: start;
     width: 100%;
     justify-content: space-between;
@@ -2342,6 +2345,10 @@ const InputDiv = styled.div`
       width: 100%;
       display: flex;
     }
+
+    .label-input {
+      width: fit-content;
+    }
   }
 
   /* For Mobile */
@@ -2360,11 +2367,6 @@ const InputDiv = styled.div`
         }
       }
     }
-    
-    .inputField > .label-input {
-      backgrond: black;
-      margin: 0 0 0.5rem 0;
-    }
 
     .inputField > .div-dropdown {
       width: 100%;
@@ -2378,7 +2380,7 @@ const InputDiv = styled.div`
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 1024px) {
+  @media screen and (min-width: 540px) and (max-width: 880px) {
     .inputField > .div-dropdown {
 
       .label-input-flex {
@@ -2465,9 +2467,10 @@ const Content = styled.div`
   position: relative;
   .desc {
     font-size: 17px;
-    overflow-y: scroll;
+    overflow-y: auto;
     scrollbar-color: rebeccapurple green;
     scrollbar-width: thin;
+    max-height: 300px;
   }
 
   .btn-read-more {
@@ -2491,9 +2494,6 @@ const Content = styled.div`
 
   /* For Tablets */
   @media screen and (min-width: 540px) and (max-width: 880px) {
-    display: flex;
-    justify-content: space-between;
-
     .btn-read-more {
       width: 120px;
     }
@@ -2726,7 +2726,7 @@ const StyledLineCard = styled.div`
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 1024px) {
+  @media screen and (min-width: 540px) and (max-width: 880px) {
     margin: 0;
     width: 100%;
   }

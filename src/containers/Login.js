@@ -165,7 +165,6 @@ const Login = () => {
                       </div>
                       <div
                         style={{
-                          margin: "0 4rem  0 5rem",
                           width: "100%",
                           padding: "0 5rem",
                         }}
@@ -298,7 +297,9 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  // overflow: scroll;
+  // overflow-x: auto;
+  // overflow-y: auto;
   .inner {
     display: flex;
     justify-content: center;
@@ -312,6 +313,17 @@ const Container = styled.div`
       line-height: 24px;
       color: #1d3ab1;
     }
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    .inner {
+      margin: 2rem;
+    }
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
   }
 `;
 

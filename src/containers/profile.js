@@ -131,12 +131,14 @@ const Dashboard = () => {
 
         <TableSection>
           <LineCard>
-            <DataTableProfile
-              header="รายการสั่งซื้อของท่าน"
-              theaders={theaders}
-              data={data}
-              refreshData={fetchDataTable}
-            />
+            <div className="table-detail">
+              <DataTableProfile
+                header="รายการสั่งซื้อของท่าน"
+                theaders={theaders}
+                data={data}
+                refreshData={fetchDataTable}
+              />
+            </div>
           </LineCard>
         </TableSection>
       </Container>
@@ -148,11 +150,25 @@ export default Dashboard;
 const Container = styled.div`
   padding: 20px 20px;
   height: 90vh;
-  min-width: 60vw;
+  width: 70vw;
   display: flex;
   flex-direction: column;
+  overflow: scroll;
+  overflow-x: auto;
+  overflow-y: auto;
+
   section {
     margin: 10px 0;
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    width: 90vw;
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    width: 90vw;
   }
 `;
 

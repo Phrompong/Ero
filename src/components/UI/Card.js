@@ -14,30 +14,38 @@ export const StyledCard = styled.div`
   overflow: ${props => props.isScroll ? 'scroll' : 'visible'};
   scrollbar-color: rebeccapurple green;
   scrollbar-width: thin;
+  overflow-x: auto;
+  overflow-y: auto;
 
   /* For Mobile */
   @media screen and (max-width: 540px) {
-    // margin: 1rem 0;
+    margin: auto;
     overflow: scroll;
+    overflow-x: auto;
+    overflow-y: auto;
   }
 
   /* For Tablets */
   @media screen and (min-width: 540px) and (max-width: 880px) {
-    margin: 0;
-  }
-
-  /* For Tablets */
-  @media screen and (min-width: 880px) and (max-width: 1024px) {
-    // max-height: 80%;
-    min-height: 80%;
+    margin: auto;
     overflow: scroll;
+    overflow-x: auto;
+    overflow-y: auto;
   }
 `;
 
 export const StyledLineCard = styled.div`
   border-radius: 10px;
   border: 1px solid #d9e1e7;
-  margin: 0 10px;
+  width: 100%;
+  // margin: 0 10px;
+
+  .table-detail {
+    overflow: scroll;
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 100%;
+  }
 
   .modal-flex {
     display: flex;
@@ -66,8 +74,9 @@ export const StyledLineCard = styled.div`
     justify-content: space-between;
 
     .modal-block-label {
+      width: 50%;
       margin-top: auto;
-      margin-bottom: 0.5rem;
+      margin-bottom: auto;
     }
   }
 
@@ -98,13 +107,15 @@ export const StyledLineCard = styled.div`
       width: 100%;
 
       .modal-block-label {
-        margin-bottom: 0.5rem;
+        width: 100%;
+        margin-top: 0.5rem;
+        margin-bottom: auto;
       }
     }
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 1024px) {
+  @media screen and (min-width: 540px) and (max-width: 880ยป) {
     margin: 0;
 
     .modal-flex {
@@ -124,6 +135,7 @@ export const StyledLineCard = styled.div`
       width: 100%;
 
       .modal-block-label {
+        width: 100%;
         margin-bottom: 0.5rem;
       }
     }

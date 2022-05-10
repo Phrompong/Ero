@@ -17,29 +17,25 @@ export const ModalStyled = styled.div`
   transform: translate(-50%, -50%);
   display: ${({ show }) => (show ? "block" : "none")};
   overflow: scroll;
+  overflow-x: auto;
+  overflow-y: auto;
+
   /* For Mobile */
   @media screen and (max-width: 540px) {
     padding: ${props => props.isBuy && "10rem"};
     height: 640px;
     overflow: scroll;
-
-    -ms-overflow-style: none; /* for Internet Explorer, Edge */
-    scrollbar-width: none; /* for Firefox */
-    ::-webkit-scrollbar {
-      display: none; /* for Chrome, Safari, and Opera */
-    }
+    overflow-x: auto;
+    overflow-y: auto;
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 1024px) {
+  @media screen and (min-width: 540px) and (max-width: 880px) {
     height: 760px;
     overflow: scroll;
-
-    -ms-overflow-style: none; /* for Internet Explorer, Edge */
-    scrollbar-width: none; /* for Firefox */
-    ::-webkit-scrollbar {
-      display: none; /* for Chrome, Safari, and Opera */
-    }
+    overflow-x: auto;
+    overflow-y: auto;
+    margin: auto;
   }
 `;
 

@@ -177,6 +177,8 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   overflow: scroll;
+  overflow-x: auto;
+  overflow-y: auto;
   position: relative;
 
   .bg-img {

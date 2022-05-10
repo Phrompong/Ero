@@ -106,13 +106,15 @@ const CheckRightCustomer = () => {
 
         <TableSection>
           <LineCard>
-            <DataTableCheckRight
-              header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
-              theaders={theaders}
-              data={data}
-              refreshData={fetchDataTable}
-            />
-            <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
+            <div className="table-detail">
+              <DataTableCheckRight
+                header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
+                theaders={theaders}
+                data={data}
+                refreshData={fetchDataTable}
+              />
+              <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
+            </div>
           </LineCard>
         </TableSection>
       </Container>
@@ -123,10 +125,13 @@ export default CheckRightCustomer;
 
 const Container = styled.div`
   padding: 20px 20px;
+  height: 90vh;
+  width: 70vw;
   display: flex;
-  justify-content: center;
   flex-direction: column;
   overflow: scroll;
+  overflow-x: auto;
+  overflow-y: auto;
 
   > * {
     margin: 10px 0;
@@ -134,11 +139,13 @@ const Container = styled.div`
 
   /* For Mobile */
   @media screen and (max-width: 540px) {
+    width: 90vw;
     justify-content: flex-start;
   }
 
   /* For Tablets */
   @media screen and (min-width: 540px) and (max-width: 880px) {
+    width: 90vw;
     justify-content: flex-start;
   }
 `;
@@ -206,5 +213,7 @@ const TableSection = styled.section`
   /* For Mobile */
   @media screen and (max-width: 540px) {
     overflow: scroll;
+    overflow-x: auto;
+    overflow-y: auto;
   }
 `;
