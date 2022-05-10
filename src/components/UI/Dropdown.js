@@ -159,7 +159,7 @@ export const DropdownArrow = ({
   onClick,
   onBlur,
   display,
-  otherOption = false
+  otherOption = false,
 }) => {
   return (
     <Container
@@ -174,7 +174,7 @@ export const DropdownArrow = ({
             placeholder={"กรุณาเลือก"}
             value={selected ? selected[display] : ""}
             style={{ width: "100%" }}
-          // disabled={!searchable}
+            // disabled={!searchable}
           />
           {isOpen ? <OpenArrow /> : <CloseArrow />}
         </div>
@@ -201,14 +201,14 @@ export const DropdownArrow = ({
                     {option[display]}
                   </OptionSelect>
                 ))}
-              {otherOption &&
+              {otherOption && (
                 <OptionSelect
                   onMouseDown={() => setSelected({ nameTH: "อื่นๆ" })}
                   style={{ width: "100%" }}
                 >
                   อื่นๆ
                 </OptionSelect>
-              }
+              )}
             </WrapperOption>
           </>
         )}

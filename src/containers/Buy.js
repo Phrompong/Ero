@@ -39,7 +39,7 @@ const Buy = () => {
   const [alertMessage, setAlertMessage] = useState();
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [showRegistrationModal, setShowRegistrationModal] = useState(true)
+  const [showRegistrationModal, setShowRegistrationModal] = useState(true);
   const [status, setStatus] = useState();
 
   const [currentStockVolume, setCurrentStockVolume] = useState(0);
@@ -51,28 +51,32 @@ const Buy = () => {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [registrationNo, setRegistrationNo] = useState(false);
 
-  const [isDisableToPage2, setIsDisableToPage2] = useState(true)
+  const [isDisableToPage2, setIsDisableToPage2] = useState(true);
 
   // modal registration
-  const [nationalId, setNationalId] = useState(null)
-  const [allRegistrations, setAllRegistrations] = useState([])
-  const [isRegistrationChecked, setIsRegistrationChecked] = useState(false)
-  const [isDisableRegistration, setIsDisableRegistration] = useState(true)
+  const [nationalId, setNationalId] = useState(null);
+  const [allRegistrations, setAllRegistrations] = useState([]);
+  const [isRegistrationChecked, setIsRegistrationChecked] = useState(true);
+  const [isDisableRegistration, setIsDisableRegistration] = useState(true);
 
   // step 1
   const [shareName, setShareName] = useState("-");
   const [shareDescription, setShareDescription] = useState("-");
+  const [shareDescriptionShort, setShareDescriptionShort] = useState("-");
+  const [shareDescriptionMore, setShareDescriptionMore] = useState("-");
   const [fullname, setFullname] = useState(null);
   const [shareId, setShareId] = useState(null);
   const [phoneNo, setPhoneNo] = useState(null);
   const [shareOption, setShareOption] = useState([]);
   const [shareBankRefundOption, setShareBankRefundOption] = useState([]);
   const [dropdownSelect, setDropdownSelect] = useState(null);
-  const [dropdownBankRefundSelect, setDropdownBankRefundSelect] = useState(null);
+  const [dropdownBankRefundSelect, setDropdownBankRefundSelect] =
+    useState(null);
   const [isReadMore, setIsReadMore] = useState(false);
   const [tradingAccountNo, setTradingAccountNo] = useState(null);
 
-  const [isOpenDropdownArrowStep1, setIsOpenDropdownArrowStep1] = useState(false);
+  const [isOpenDropdownArrowStep1, setIsOpenDropdownArrowStep1] =
+    useState(false);
 
   // modal
   const [fullnameModal, setFullnameModal] = useState(null);
@@ -91,11 +95,11 @@ const Buy = () => {
   const [isAcceptVerify, setIsAcceptVerify] = useState(false);
   const [isConfirmBooking, setIsConfirmBooking] = useState(false);
 
-  const [bankDisableButton, setBankDisableButton] = useState(true)
+  const [bankDisableButton, setBankDisableButton] = useState(true);
 
   // step 3
   const [radioCheckedPayment, setRadioCheckPayment] = useState(false);
-  const [lastVerifyChecked, setLastVerifyChecked] = useState(false)
+  const [lastVerifyChecked, setLastVerifyChecked] = useState(false);
 
   // addres modal
   const [addressModal, setAddressModal] = useState(false);
@@ -116,6 +120,8 @@ const Buy = () => {
   const [depositBank, setDepositBank] = useState(null);
 
   const [profile, setProfile] = useState(null);
+  const [isConfirmOrder, setIsConfirmOrder] = useState(true);
+  const [isSummitOrder, setIsSummitOrder] = useState(true);
 
   const fetchStep1 = () => {
     getCustomerProfile();
@@ -141,10 +147,13 @@ const Buy = () => {
     if (status === 200) {
       const payload = res.data[0];
       const registrations = res.data.map((data) => {
-        return { registraionNo: data.registrationNo }
-      })
-      setAllRegistrations(registrations)
-      setNationalId(payload.customerId.nationalId)
+        return { registraionNo: data.registrationNo };
+      });
+      setAllRegistrations(registrations);
+      setShareId(
+        registrations.length > 0 ? registrations[0].registraionNo : null
+      );
+      setNationalId(payload.customerId.nationalId);
       setFullname(`${payload.customerId.name} ${payload.customerId.lastname}`);
       // setShareId(payload.registrationNo);
       setPhoneNo(payload.customerId.telephone);
@@ -154,6 +163,10 @@ const Buy = () => {
       );
       setShareIdModal(payload.registrationNo);
       setPhoneNoModal(payload.customerId.telephone);
+      setShareName(payload.company);
+      setShareDescription(payload.detailShort);
+      setShareDescriptionShort(payload.detailShort);
+      setShareDescriptionMore(payload.detailFull);
     }
   };
 
@@ -210,7 +223,12 @@ const Buy = () => {
 
   const handlerOnAcceptVerify = () => {
     setAddressModal(false);
+
     setIsAcceptVerify(true);
+
+    if (currentStockVolume > 0) {
+      setIsConfirmOrder(false);
+    }
   };
 
   const handleSelectedFile = (e) => {
@@ -257,15 +275,15 @@ const Buy = () => {
 
   useEffect(() => {
     if (shareId && isRegistrationChecked) {
-      setIsDisableRegistration(false)
+      setIsDisableRegistration(false);
     }
-  }, [shareId, isRegistrationChecked])
+  }, [shareId, isRegistrationChecked]);
 
   useEffect(() => {
     if (dropdownSelect && tradingAccountNo) {
-      setIsDisableToPage2(false)
+      setIsDisableToPage2(false);
     }
-  }, [dropdownSelect, tradingAccountNo])
+  }, [dropdownSelect, tradingAccountNo]);
 
   const hanlderOnBack = () => {
     if (page === 2) {
@@ -319,7 +337,7 @@ const Buy = () => {
     let endpoint = `masterCustomers/${user.customerId}`;
 
     const [res, status] = await httpGetRequest(endpoint);
-    console.log(res["data"]);
+
     setProfile(res["data"]);
   }
 
@@ -373,7 +391,7 @@ const Buy = () => {
         address: `${profile.address} ${profile.zipcode}`,
         registrationNo: shareId,
         bankRefund: depositBank._id,
-        bankRefundNo: bank
+        bankRefundNo: bank,
       },
       "orders"
     );
@@ -385,14 +403,16 @@ const Buy = () => {
       setAlertMessage("ยืนยันคำสั่งซื้อสำเร็จ");
       showAlert(setShow, 2000);
 
-
       const formData = new FormData();
       formData.append("File", file);
       const endpoint = `uploads/image?orderId=${res.data._id}`;
 
-      const [_res, _status] = await httpPostRequestUploadFile(formData, endpoint);
-      console.log(_res)
-      console.log(_status)
+      const [_res, _status] = await httpPostRequestUploadFile(
+        formData,
+        endpoint
+      );
+      console.log(_res);
+      console.log(_status);
       let msg = _res.message;
       setStatus(_status);
       if (status === 200) {
@@ -401,30 +421,25 @@ const Buy = () => {
         setAlertMessage(msg);
         showAlert(setShow, 2000);
         setFile();
-        // navigate(`/somewhere`)
+        setTimeout(() => {
+          navigate(`/profile`);
+        }, 2000);
       }
     }
-  }
+  };
 
   const handlerOnReadMore = () => {
+    console.log(isReadMore);
     if (!isReadMore) {
-      setShareDescription(`
-          บมจ. เน็คซ์ แคปปิตอล (“บริษัท” หรืด “NCAP”) เปิดเผยว่า ที่ประชุมสามัญผู้ถือหุ้น ประจำปี 2565 ของบริษัท เน็คซ์ แคปปิตอล จำกัด (มหาชน) เมื่อวันที่ 21 เมษายน 2565 ได้มีมติอนุมัติการจัดสรรหุ้นสามัญเพิ่มทุนใหม่จำนวน450,000,000 หุ้น มูลค่าที่ตราไว้หุ้นละ 0.50 บาท เพื่อเสนอขายให้แก่ผู้ถือหุ้นเดิมของบริษัทตามสัดส่วนการถือหุ้น โดยไม่จัดสรรให้ผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศพร้อมใบสำคัญแสดงสิทธิ ในอัตราส่วน 2 หุ้นสามัญเดิมต่อ 1 หุ้นสามัญเพิ่มทุนใหม่ (ในกรณีมีเศษของหุ้นที่เกิดจากการคำนวณ ให้ปัดเศษของหุ้นนั้นทิ้ง) ในราคาเสนอขายหุ้นละ 4.50 บาท ที่มีรายชื่อปรากฏอยู่ในวันกำหนดรายชื่อผู้ถือหุ้น (Record Date) ในวันที่ 29 เมษายน 2565 และจัดสรรใบสำคัญแสดงสิทธิที่จะซื้อหุ้นสามัญ (NCAP-W1) (“ใบสำคัญแสดงสิทธิ”) จำนวน 225,000,000 หน่วย ให้แก่ผู้ถือหุ้นเดิมของบริษัทที่ได้จองซื้อหุ้นสามัญเพิ่มทุนของบริษัท (Right Offering) ในอัตราส่วน 2 หุ้นสามัญเพิ่มทุน ต่อ 1 หน่วยใบสำคัญแสดงสิทธิ (ในกรณีที่มีเศษหุ้นจากการคำนวณให้ปัดทิ้ง) ที่ราคาเสนอขายใบสำคัญแสดงสิทธิ หน่วยละ 0 บาท 
-        ในการจัดสรรหุ้นสามัญเพิ่มทุนให้แก่ผู้ถือหุ้นเดิมของบริษัทตามสัดส่วนการถือหุ้นที่ผู้ถือหุ้นแต่ละรายถือ อยู่ในครั้งนี้ โดยไม่จัดสรรให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศ ในกรณีที่มีหุ้นสามัญเพิ่มทุนเหลือจากการจัดสรรให้แก่ผู้ถือหุ้นเดิมของบริษัทตามสัดส่วนการถือหุ้นที่ผู้ถือหุ้นแต่ละรายถืออยู่ในรอบแรกแล้ว โดยไม่จัดสรรให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศ บริษัทจะจัดสรรหุ้นสามัญเพิ่มทุนที่เหลือดังกล่าวให้กับผู้ถือหุ้นเดิมที่ประสงค์จะจองซื้อเกินกว่าสิทธิตาม สัดส่วนการถือหุ้นเดิมโดยไม่จัดสรรให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศในราคาเดียวกันกับหุ้นที่ได้รับการจัดสรรตามสิทธิดังนี้
-        ในกรณีที่มีหุ้นเหลือจากการจัดสรรให้แก่ผู้ถือหุ้นเดิมของบริษัทตามสัดส่วนการถือหุ้นโดยไม่ จัดสรรให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศที่แต่ละรายถืออยู่ในรอบ แรกเป็นจำนวนมากกว่าหรือเท่ากับหุ้นที่ผู้ถือหุ้นเดิมจองซื้อเกินกว่าสิทธิ บริษัทจะจัดสรรหุ้นที่เหลือดังกล่าวให้แก่ผู้ที่จองซื้อเกินกว่าสิทธิและชำระค่าจองซื้อหุ้นดังกล่าวทั้งหมดทุกรายตามจำนวนที่แสดงความจำนงจองซื้อเกินกว่าสิทธิ
-        ในกรณีที่มีหุ้นเหลือจากการจัดสรรให้แก่ผู้ถือหุ้นเดิมของบริษัทตามสัดส่วนการถือหุ้นโดยไม่จัดสรรให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศที่แต่ละรายถืออยู่ในรอบแรกเป็นจำนวนน้อยกว่าหุ้นที่ผู้ถือหุ้นเดิมจองซื้อเกินกว่าสิทธิ บริษัทจะจัดสรรหุ้นที่เหลือดังกล่าวให้แก่ผู้ที่จองซื้อเกินกว่าสิทธิตามขั้นตอนดังต่อไปนี้
-        (ก) จัดสรรตามสัดส่วนการถือหุ้นเดิมของผู้ที่จองซื้อเกินกว่าสิทธิแต่ละรายโดยไม่จัดสรร ให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศ โดยนำสัดส่วนการถือหุ้นเดิมของผู้ที่จองซื้อเกินกว่าสิทธิแต่ละรายคูณด้วยจำนวนหุ้นที่เหลือจะได้เป็นจำนวนหุ้นที่ผู้ที่จองซื้อเกินกว่าสิทธิแต่ละรายมีสิทธิที่จะได้รับจัดสรร ในกรณีที่มีเศษของหุ้นให้ ปัดเศษของหุ้นนั้นทิ้ง ทั้งนี้ จำนวนหุ้นที่จะได้รับการจัดสรรจะไม่เกินจำ นวนหุ้นที่ผู้ถือหุ้น แต่ละรายจองซื้อและชำระค่าจองซื้อแล้ว 
-        (ข) ในกรณีที่ยังมีหุ้นคงเหลือหลังจากการจัดสรรตามข้อ (ก) ให้ทำการจัดสรรให้แก่ผู้ที่จองซื้อเกินกว่าสิทธิแต่ละรายซึ่งยังได้รับการจัดสรรไม่ครบตามจำนวนหุ้นที่จองซื้อนั้น โดยนำสัดส่วนการถือหุ้นเดิมของผู้ที่จองซื้อเกินกว่าสิทธิแต่ละรายนั้นคูณด้วยจำนวนหุ้นที่เหลือ จะได้เป็นจำนวนหุ้นที่ผู้ที่จองซื้อเกินกว่าสิทธิแต่ละรายมีสิทธิที่จะได้รับจัดสรร ในกรณีที่มี เศษของหุ้นให้ปัดเศษของหุ้นนั้นทิ้ง โดยจำนวนหุ้นที่จะได้รับการจัดสรรจะไม่เกินจำนวนหุ้นที่ผู้ถือหุ้นแต่ละรายจองซื้อและชำระค่าจองซื้อแล้ว ทั้งนี้ ให้ดำเนินการจัดสรรหุ้นให้แก่ผู้ที่จองซื้อเกินกว่าสิทธิตามวิธีการในข้อ (2) นี้จนกระทั่งไม่มีหุ้นเหลือจากการจัดสรร หรือไม่สามารถจัดสรรได้อีกเนื่องจากเป็นเศษของหุ้น
-        การจัดสรรหุ้นที่จองซื้อเกินกว่าสิทธิจะต้องไม่ทำให้ผู้ถื้อหุ้นที่จองซื้อหุ้นสามัญเพิ่มทุนเกินกว่าสิทธิรายใดมีหน้าที่ต้องทำคำเสนอซื้อหลักทรัพย์ (Tender Offer) ตามที่กำหนดในประกาศคณะกรรมการกำกับตลาดทุนที่ ทจ.12/2554 เรื่อง หลักเกณฑ์ เงื่อนไข และวิธีการในการเข้าถือหลักทรัพย์เพื่อครอบงำกิจการ ลงวันที่ 13 พฤษภาคม 2554 (รวมทั้งที่ได้มีการแก้ไขเพิ่มเติม)
-        ในการจัดสรรหุ้นสามัญเพิ่มทุนให้กับผู้ถือหุ้นเดิมของบริษัทตามสัดส่วนการถือหุ้นโดยไม่จัดสรรให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศตามรายละเอียดข้างต้นไม่ว่ากรณีใด จะต้องไม่มีลักษณะที่เป็นการฝ่าฝืนข้อจำกัดการถือหุ้นของบุคคลผู้ไม่มีสัญชาติไทย ตามที่ระบุไว้ในข้อบังคับของบริษัท และคณะกรรมการบริษัทมีสิทธิใช้ดุลยพินิจพิจารณาไม่เสนอขายหุ้นสามัญเพิ่มทุนให้แก่ผู้ถือหุ้นเดิมของบริษัทตามสัดส่วนการถือหุ้นโดยไม่จัดสรรให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศ หากการเสนอขายดังกล่าวทำให้หรืออาจเป็นผลให้บริษัทมีภาระหรือหน้าที่ต้องปฏิบัติหรือดำเนินการใดๆ ตามกฎหมายต่างประเทศ ซึ่งได้แก่ ประเทศสหรัฐอเมริกา 
-      `);
+      setShareDescription(shareDescriptionMore);
       setIsReadMore(true);
     } else {
-      const desc = `บมจ.สกาย ทาวเวอร์ (STOWER) เปิดเผยว่า ที่ประชุมคณะกรรมการบริษัท ครั้งที่ 3/2565 เมื่อวันที่ 18 มี.ค.65 มีมติให้นำเสนอต่อที่ประชุมสามัญผู้ถือหุ้น ประจำปี 2565 เพื่อพิจารณาอนุมัติการออกและเสนอขายหุ้นสามัญเพิ่มทุนของบริษัทจำนวนไม่เกิน 17,979,717,949 หุ้นให้แก่ผู้ถือหุ้นเดิมตามสัดส่วนจำนวนหุ้น
-        ที่ผู้ถือหุ้นแต่ละรายถือยู่ (Right Offering) ในอัตราส่วนการจัดสรร 1.5 หุ้นสามัญเดิมต่อ 1 หุ้นสามัญเพิ่มทุน โดยมีราคาเสนอขาย หุ้นละ 0.05 บาท พร้อมใบสำคัญแสดงสิทธิ STOWER -W4 ในอัตราส่วน 2.7 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
-        และหุ้นสามัญเพิ่มทุนส่วนที่เหลือจาก Right Offering จะจัดสรรให้กับบุคคลในวงจำกัด พร้อมใบสำคัญแสดงสิทธิ STOWER-W4 ในอัตราส่วน 3 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
-      `;
-      setShareDescription(desc);
+      // const desc = `บมจ.สกาย ทาวเวอร์ (STOWER) เปิดเผยว่า ที่ประชุมคณะกรรมการบริษัท ครั้งที่ 3/2565 เมื่อวันที่ 18 มี.ค.65 มีมติให้นำเสนอต่อที่ประชุมสามัญผู้ถือหุ้น ประจำปี 2565 เพื่อพิจารณาอนุมัติการออกและเสนอขายหุ้นสามัญเพิ่มทุนของบริษัทจำนวนไม่เกิน 17,979,717,949 หุ้นให้แก่ผู้ถือหุ้นเดิมตามสัดส่วนจำนวนหุ้น
+      //   ที่ผู้ถือหุ้นแต่ละรายถือยู่ (Right Offering) ในอัตราส่วนการจัดสรร 1.5 หุ้นสามัญเดิมต่อ 1 หุ้นสามัญเพิ่มทุน โดยมีราคาเสนอขาย หุ้นละ 0.05 บาท พร้อมใบสำคัญแสดงสิทธิ STOWER -W4 ในอัตราส่วน 2.7 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
+      //   และหุ้นสามัญเพิ่มทุนส่วนที่เหลือจาก Right Offering จะจัดสรรให้กับบุคคลในวงจำกัด พร้อมใบสำคัญแสดงสิทธิ STOWER-W4 ในอัตราส่วน 3 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
+      // `;
+      console.log(shareDescription);
+      setShareDescription(shareDescriptionShort);
       setIsReadMore(false);
     }
   };
@@ -441,9 +456,9 @@ const Buy = () => {
 
   useEffect(() => {
     if (depositBank && bank) {
-      setBankDisableButton(false)
+      setBankDisableButton(false);
     }
-  }, [depositBank, bank])
+  }, [depositBank, bank]);
 
   useEffect(() => {
     setCurrentPrice(Number(currentStockVolume) * Number(offerPrice));
@@ -455,17 +470,19 @@ const Buy = () => {
   }, [currentStockVolume]);
 
   useEffect(() => {
-    setShareName("บมจ.สกาย ทาวเวอร์ (STOWER)");
-    const desc = `บมจ.สกาย ทาวเวอร์ (STOWER) เปิดเผยว่า ที่ประชุมคณะกรรมการบริษัท ครั้งที่ 3/2565 เมื่อวันที่ 18 มี.ค.65 มีมติให้นำเสนอต่อที่ประชุมสามัญผู้ถือหุ้น ประจำปี 2565 เพื่อพิจารณาอนุมัติการออกและเสนอขายหุ้นสามัญเพิ่มทุนของบริษัทจำนวนไม่เกิน 17,979,717,949 หุ้นให้แก่ผู้ถือหุ้นเดิมตามสัดส่วนจำนวนหุ้น
-    ที่ผู้ถือหุ้นแต่ละรายถือยู่ (Right Offering) ในอัตราส่วนการจัดสรร 1.5 หุ้นสามัญเดิมต่อ 1 หุ้นสามัญเพิ่มทุน โดยมีราคาเสนอขาย หุ้นละ 0.05 บาท พร้อมใบสำคัญแสดงสิทธิ STOWER -W4 ในอัตราส่วน 2.7 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
-               และหุ้นสามัญเพิ่มทุนส่วนที่เหลือจาก Right Offering จะจัดสรรให้กับบุคคลในวงจำกัด พร้อมใบสำคัญแสดงสิทธิ STOWER-W4 ในอัตราส่วน 3 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
-    `;
-    setShareDescription(desc);
+    // const desc = `บมจ.สกาย ทาวเวอร์ (STOWER) เปิดเผยว่า ที่ประชุมคณะกรรมการบริษัท ครั้งที่ 3/2565 เมื่อวันที่ 18 มี.ค.65 มีมติให้นำเสนอต่อที่ประชุมสามัญผู้ถือหุ้น ประจำปี 2565 เพื่อพิจารณาอนุมัติการออกและเสนอขายหุ้นสามัญเพิ่มทุนของบริษัทจำนวนไม่เกิน 17,979,717,949 หุ้นให้แก่ผู้ถือหุ้นเดิมตามสัดส่วนจำนวนหุ้น
+    // ที่ผู้ถือหุ้นแต่ละรายถือยู่ (Right Offering) ในอัตราส่วนการจัดสรร 1.5 หุ้นสามัญเดิมต่อ 1 หุ้นสามัญเพิ่มทุน โดยมีราคาเสนอขาย หุ้นละ 0.05 บาท พร้อมใบสำคัญแสดงสิทธิ STOWER -W4 ในอัตราส่วน 2.7 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
+    //            และหุ้นสามัญเพิ่มทุนส่วนที่เหลือจาก Right Offering จะจัดสรรให้กับบุคคลในวงจำกัด พร้อมใบสำคัญแสดงสิทธิ STOWER-W4 ในอัตราส่วน 3 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
+    // `;
+    // setShareDescription(desc);
   }, []);
 
   return (
     <Card>
-      <Modal show={showRegistrationModal} style={{ width: "100%", overflow: "visible" }}>
+      <Modal
+        show={showRegistrationModal}
+        style={{ width: "100%", overflow: "visible" }}
+      >
         <Card>
           <ContainerCard>
             <Header
@@ -490,21 +507,15 @@ const Buy = () => {
             </Header>
             <LineCard style={{ padding: "10px 20px", overflow: "visible" }}>
               <div className="modal-flex">
-                <p className="modal-flex-label" >
-                  หมายเลขบัตรประชาชน
-                </p>
+                <p className="modal-flex-label">หมายเลขบัตรประชาชน</p>
                 <p className="modal-flex-label-info">{nationalId}</p>
               </div>
               <div className="modal-flex">
-                <p className="modal-flex-label">
-                  เบอร์โทรศัพท์
-                </p>
+                <p className="modal-flex-label">เบอร์โทรศัพท์</p>
                 <p className="modal-flex-label-info">{phoneNo}</p>
               </div>
               <div className="modal-flex">
-                <p className="modal-flex-label">
-                  ชื่อ - นามสกุล
-                </p>
+                <p className="modal-flex-label">ชื่อ - นามสกุล</p>
                 <p className="modal-flex-label-info">{fullname}</p>
               </div>
               <div className="modal-flex">
@@ -516,29 +527,38 @@ const Buy = () => {
                 </p>
               </div>
               <div className="modal-block">
-                <p className="modal-block-label">
-                  หมายเลขทะเบียนผู้ถือหุ้น
-                </p>
+                <p className="modal-block-label">หมายเลขทะเบียนผู้ถือหุ้น</p>
                 <div className="modal-block-label">
                   <DropdownArrow
                     options={allRegistrations}
                     isOpen={isOpenDropdownArrow}
-                    onClick={() =>
-                      setIsOpenDropdownArrow(
-                        !isOpenDropdownArrow
-                      )
-                    }
+                    onClick={() => setIsOpenDropdownArrow(!isOpenDropdownArrow)}
                     onBlur={() => setIsOpenDropdownArrow(false)}
                     setSelected={(e) => setShareId(e.registraionNo)}
-                    selected={{ registraionNo: shareId }}
+                    selected={{
+                      registraionNo:
+                        allRegistrations.length > 0 && !shareId
+                          ? allRegistrations[0].registraionNo
+                          : shareId,
+                    }}
                     display={"registraionNo"}
                   />
                 </div>
               </div>
             </LineCard>
             <SubTitleDescription>
-              <input type={"checkbox"} value={isRegistrationChecked} style={{ transform: "scale(1.5)", marginRight: "1rem" }} onChange={() => setIsRegistrationChecked(!isRegistrationChecked)} />
-              <label>ข้าพเจ้าขอรับรองว่า ข้าพเจ้าได้ทำการตรวจสอบข้อมูลข้างต้นนี้เป็นที่เรียบร้อยแล้ว</label>
+              <input
+                type={"checkbox"}
+                value={isRegistrationChecked}
+                style={{ transform: "scale(1.5)", marginRight: "1rem" }}
+                onChange={() =>
+                  setIsRegistrationChecked(!isRegistrationChecked)
+                }
+              />
+              <label>
+                ข้าพเจ้าขอรับรองว่า
+                ข้าพเจ้าได้ทำการตรวจสอบข้อมูลข้างต้นนี้เป็นที่เรียบร้อยแล้ว
+              </label>
             </SubTitleDescription>
             <Header style={{ textAlign: "center" }}>
               {
@@ -546,19 +566,19 @@ const Buy = () => {
                   type="button"
                   value={"ยืนยันว่าตรวจสอบแล้ว"}
                   onClick={() => setShowRegistrationModal(false)}
-                  disabled={isDisableRegistration}
+                  disabled={isRegistrationChecked}
                   style={{
                     fontSize: "16px",
                     height: "40px",
                     width: "50%",
-                    marginTop: "20px",
+                    margin: "auto"
                   }}
                 />
               }
             </Header>
           </ContainerCard>
         </Card>
-      </Modal >
+      </Modal>
       <Modal show={showAlertModal} style={{ width: "100%" }}>
         <Card>
           <ContainerCard>
@@ -632,26 +652,22 @@ const Buy = () => {
               </h3>
             </Header>
             <LineCard style={{ padding: "20px", fontSize: "17px" }}>
-              <div className="modal-flex"  >
-                <p className="modal-flex-label" >
-                  ชื่อ - นามสกุล*
-                </p>
+              <div className="modal-flex">
+                <p className="modal-flex-label">ชื่อ - นามสกุล*</p>
                 <p className="modal-flex-label-info">{fullnameModal}</p>
               </div>
-              <div className="modal-flex" >
-                <p className="modal-flex-label" >
-                  เลขทะเบียนผู้ถือหุ้น*
-                </p>
+              <div className="modal-flex">
+                <p className="modal-flex-label">เลขทะเบียนผู้ถือหุ้น*</p>
                 <p className="modal-flex-label-info">{shareIdModal}</p>
               </div>
               <div className="modal-block">
-                <p className="modal-block-label" >
-                  เบอร์โทรศัพท์*
-                </p>
+                <p className="modal-block-label">เบอร์โทรศัพท์*</p>
                 <div className="modal-block-label">
                   <FieldInput
                     value={phoneNoModal}
-                    onChange={(e) => setPhoneNoModal(e.target.value.replace(/[^0-9.]/, ""))}
+                    onChange={(e) =>
+                      setPhoneNoModal(e.target.value.replace(/[^0-9.]/, ""))
+                    }
                     placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"}
                   />
                 </div>
@@ -683,14 +699,22 @@ const Buy = () => {
                 style={{
                   fontSize: "17px",
                   height: "35px",
-                  margin: "0 0 0 10px"
+                  margin: "0 0 0 10px",
                 }}
               />
             </div>
           </ContainerCard>
         </Card>
       </Modal>
-      <Modal show={addressModal} style={{ width: "100%", height: "100%", maxHeight: "800px", padding: "1rem" }}>
+      <Modal
+        show={addressModal}
+        style={{
+          width: "100%",
+          height: "100%",
+          maxHeight: "800px",
+          padding: "1rem",
+        }}
+      >
         {/* addressModal */}
         {/* เหลือ responsive mobile */}
         <Card style={{ width: "100%" }}>
@@ -712,9 +736,9 @@ const Buy = () => {
                 }}
               />
               <h3 style={{ color: "#FB0303" }}>
-                กรณีที่ท่านแจ้งบัญชีธนาคารนอกเหนือจาก 9 ธนาคาร<br />
-                ทางบริษัทขอคืนเงินให้ท่านเป็นเช็ค
-                โดยส่งไปตามที่อยู่ด้านล่าง
+                กรณีที่ท่านแจ้งบัญชีธนาคารนอกเหนือจาก 9 ธนาคาร
+                <br />
+                ทางบริษัทขอคืนเงินให้ท่านเป็นเช็ค โดยส่งไปตามที่อยู่ด้านล่าง
               </h3>
             </Header>
             <LineCard style={{ padding: "1rem 2rem", marginBottom: "1rem" }}>
@@ -730,9 +754,7 @@ const Buy = () => {
                             height={25}
                             style={{ marginLeft: "1rem", marginRight: "1rem" }}
                           />
-                          <p>
-                            {bank.nameTH}
-                          </p>
+                          <p>{bank.nameTH}</p>
                         </LineCardBank>
                       </>
                     );
@@ -753,13 +775,17 @@ const Buy = () => {
                 <InputDiv>
                   <div className="inputField">
                     <p className="label-input">ชื่อ-นามสกุล :</p>
-                    <p className="label-input">{profile ? `${profile.name} ${profile.lastname}` : "-"}</p>
+                    <p className="label-input">
+                      {profile ? `${profile.name} ${profile.lastname}` : "-"}
+                    </p>
                   </div>
                 </InputDiv>
                 <InputDiv>
                   <div className="inputField">
                     <p className="label-input">ที่อยู่ :</p>
-                    <p className="label-input">{profile ? profile.address + " " + profile.zipcode : ""}</p>
+                    <p className="label-input">
+                      {profile ? profile.address + " " + profile.zipcode : ""}
+                    </p>
                   </div>
                 </InputDiv>
                 <InputDiv>
@@ -770,7 +796,9 @@ const Buy = () => {
                 </InputDiv>
               </div>
             </LineCard>
-            <div style={{ margin: "auto", marginTop: "1rem", maxWidth: "400px" }}>
+            <div
+              style={{ margin: "auto", marginTop: "1rem", maxWidth: "400px" }}
+            >
               <Button
                 type="submit"
                 value={"ฉันรับทราบแล้ว"}
@@ -779,7 +807,7 @@ const Buy = () => {
             </div>
           </ContainerCard>
         </Card>
-      </Modal >
+      </Modal>
       <Modal show={false} style={{ padding: "50px" }}>
         <Card style={{ height: "auto", width: "60%" }}>
           <ContainerCard>
@@ -881,12 +909,8 @@ const Buy = () => {
                       >
                         <b>ข้อมูลทั่วไปของสมาชิก</b>
                       </div>
-                      <div
-                        className="content-member"
-                      >
-                        <div
-                          className="content-detail-member"
-                        >
+                      <div className="content-member">
+                        <div className="content-detail-member">
                           <div className="content-detail-text">
                             <p>ชื่อ-นามสกุล :</p>
                             <p className="detail-text-label">{fullname}</p>
@@ -898,7 +922,10 @@ const Buy = () => {
                         </div>
                         <div
                           className="content-detail-member"
-                          style={{ display: "flex", justifyContent: "space-between" }}
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
                         >
                           <div className="content-detail-text">
                             <p>เบอร์โทรศัพท์ :</p>
@@ -916,25 +943,23 @@ const Buy = () => {
                       >
                         <b>รายละเอียดการจัดสรรหุ้น</b>
                       </div>
-                      <div
-                        className="content-member"
-                      >
-                        <div
-                          className="content-detail-member"
-                        >
+                      <div className="content-member">
+                        <div className="content-detail-member">
                           <div className="content-detail-text">
-                            <p>ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก :</p>
+                            <p>
+                              ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก :
+                            </p>
                             <p className="detail-text-label">
                               {dropdownSelect.code} {dropdownSelect.name}
                             </p>
                           </div>
                         </div>
-                        <div
-                          className="content-detail-member"
-                        >
+                        <div className="content-detail-member">
                           <div className="content-detail-text">
                             <p>เลขที่บัญชีซื้อขาย :</p>
-                            <p className="detail-text-label">{tradingAccountNo}</p>
+                            <p className="detail-text-label">
+                              {tradingAccountNo}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -948,10 +973,11 @@ const Buy = () => {
                       >
                         <b>รายละเอียดการสั่งซื้อ</b>
                       </div>
-                      <div
-                        className="content-member"
-                      >
-                        <div className="content-detail-member" style={{ display: "block" }}>
+                      <div className="content-member">
+                        <div
+                          className="content-detail-member"
+                          style={{ display: "block" }}
+                        >
                           <div className="content-detail-share">
                             <div className="text-title">
                               <p>หุ้นเดิม</p>
@@ -959,11 +985,7 @@ const Buy = () => {
                             </div>
                             <div className="text-amount">
                               <p>จำนวน</p>
-                              <b
-                                className="text-black"
-                              >
-                                {stockVolume}
-                              </b>
+                              <b className="text-black">{stockVolume}</b>
                               <p>หุ้น</p>
                             </div>
                           </div>
@@ -1026,9 +1048,12 @@ const Buy = () => {
                             className="content-detail-share"
                             style={{ marginTop: "10px" }}
                           >
-                            <div className="text-title" style={{ width: "100%" }}>
+                            <div className="text-title-end">
                               <p>รวมเป็นเงินทั้งสิ้น</p>
-                              <b className="text-black" style={{ fontSize: "28px" }}>
+                              <b
+                                className="text-black"
+                                style={{ fontSize: "28px" }}
+                              >
                                 {currentPrice} บาท
                               </b>
                             </div>
@@ -1044,19 +1069,10 @@ const Buy = () => {
                   <div
                     className="message-info"
                     style={{ margin: "10px 10px 10px 10px", color: "#1234B0" }}
-                  >
-                    <p>
-                      <FontAwesomeIcon
-                        icon={faCircleInfo}
-                        style={{ margin: "0 10px", color: "#FB0303" }}
-                      />
-                      โปรดตรวจสอบข้อมูลของท่านให้เรียบร้อย หากท่านกดปุ่ม{" "}
-                      <b>ถัดไป</b> จะไม่สามารถกลับมาแก้ไขข้อมูลได้อีก
-                    </p>
-                  </div>
+                  ></div>
                   <div
                     className="btn-accept-buy"
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={{ display: "flex", justifyContent: "center" }}
                   >
                     <Button
                       type="submit"
@@ -1079,7 +1095,7 @@ const Buy = () => {
                     />
                   </div>
                 </>
-              )
+              );
             } else if (page === 3) {
               return (
                 <>
@@ -1110,12 +1126,8 @@ const Buy = () => {
                       >
                         <b>ข้อมูลทั่วไปของสมาชิก</b>
                       </div>
-                      <div
-                        className="content-member"
-                      >
-                        <div
-                          className="content-detail-member"
-                        >
+                      <div className="content-member">
+                        <div className="content-detail-member">
                           <div className="content-detail-text">
                             <p>ชื่อ-นามสกุล :</p>
                             <p className="detail-text-label">{fullname}</p>
@@ -1127,7 +1139,10 @@ const Buy = () => {
                         </div>
                         <div
                           className="content-detail-member"
-                          style={{ display: "flex", justifyContent: "space-between" }}
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
                         >
                           <div className="content-detail-text">
                             <p>เบอร์โทรศัพท์ :</p>
@@ -1145,25 +1160,23 @@ const Buy = () => {
                       >
                         <b>รายละเอียดการจัดสรรหุ้น</b>
                       </div>
-                      <div
-                        className="content-member"
-                      >
-                        <div
-                          className="content-detail-member"
-                        >
+                      <div className="content-member">
+                        <div className="content-detail-member">
                           <div className="content-detail-text">
-                            <p>ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก :</p>
+                            <p>
+                              ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก :
+                            </p>
                             <p className="detail-text-label">
                               {dropdownSelect.code} {dropdownSelect.name}
                             </p>
                           </div>
                         </div>
-                        <div
-                          className="content-detail-member"
-                        >
+                        <div className="content-detail-member">
                           <div className="content-detail-text">
                             <p>เลขที่บัญชีซื้อขาย :</p>
-                            <p className="detail-text-label">{tradingAccountNo}</p>
+                            <p className="detail-text-label">
+                              {tradingAccountNo}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -1177,10 +1190,11 @@ const Buy = () => {
                       >
                         <b>รายละเอียดการสั่งซื้อ</b>
                       </div>
-                      <div
-                        className="content-member"
-                      >
-                        <div className="content-detail-member" style={{ display: "block" }}>
+                      <div className="content-member">
+                        <div
+                          className="content-detail-member"
+                          style={{ display: "block" }}
+                        >
                           <div className="content-detail-share">
                             <div className="text-title">
                               <p>หุ้นเดิม</p>
@@ -1188,11 +1202,7 @@ const Buy = () => {
                             </div>
                             <div className="text-amount">
                               <p>จำนวน</p>
-                              <b
-                                className="text-black"
-                              >
-                                {stockVolume}
-                              </b>
+                              <b className="text-black">{stockVolume}</b>
                               <p>หุ้น</p>
                             </div>
                           </div>
@@ -1255,9 +1265,12 @@ const Buy = () => {
                             className="content-detail-share"
                             style={{ marginTop: "10px", marginBottom: "10px" }}
                           >
-                            <div className="text-title" style={{ width: "100%" }}>
+                            <div className="text-title-end">
                               <p>รวมเป็นเงินทั้งสิ้น</p>
-                              <b className="text-black" style={{ fontSize: "28px" }}>
+                              <b
+                                className="text-black"
+                                style={{ fontSize: "28px" }}
+                              >
                                 {currentPrice} บาท
                               </b>
                             </div>
@@ -1273,14 +1286,12 @@ const Buy = () => {
                           color: persianblue,
                         }}
                       >
-                        <b>กรณีหุ้นที่ไม่ได้รับการจัดสรรขอให้โอนเงินคืนเข้าผ่านบัญชีธนาคาร</b>
+                        <b>
+                          กรณีหุ้นที่ไม่ได้รับการจัดสรรขอให้โอนเงินคืนเข้าผ่านบัญชีธนาคาร
+                        </b>
                       </div>
-                      <div
-                        className="content-member"
-                      >
-                        <div
-                          className="content-detail-member"
-                        >
+                      <div className="content-member">
+                        <div className="content-detail-member">
                           <div className="content-detail-text">
                             <p className="bank-title" style={{ margin: "auto" }}>ฝากเข้าผ่านธนาคาร :</p>
                             <div className="bank-logo-img">
@@ -1299,20 +1310,40 @@ const Buy = () => {
                   <div className="line-space" style={{ padding: "0 20px" }}>
                     <hr style={{ border: "0.75px solid #D9E1E7" }} />
                   </div>
-                  <div
-                    className="content-member"
-                  >
-                    <div
-                      className="content-detail-member"
-                    >
+                  <div className="content-member">
+                    <div className="content-detail-member">
                       <FlexContainer>
-                        <div
-                          style={{ width: "100%", fontSize: "20px" }}
-                        >
+                        <div style={{ width: "100%", fontSize: "20px" }}>
                           <div className="content-detail-condition">
                             <p className="text-title">ข้อตกลง :</p>
-                            <p className="text-black" style={{ fontSize: "20px", width: "100%", textAlign: "center" }}><input type={"checkbox"} value={lastVerifyChecked} onChange={() => setLastVerifyChecked(!lastVerifyChecked)} style={{ transform: "scale(1.5)", marginLeft: "1rem", marginRight: "1rem", textAlign: "center" }} /> ข้าพเจ้าขอรับรองว่า ข้าพเจ้าในฐานะผู้ถือหุ้นได้รับการจัดสรรหุ้นสามัญออกใหม่ เป็นผู้รับประโยชน์ที่แท้จริง<br />
-                              **รายการจะสมบูรณ์ เมื่อท่านยืนยันรายการและบริษัทตรวจสอบผลการชำระเงินครบถ้วนสมบูรณ์</p>
+                            <p
+                              className="text-black"
+                              style={{
+                                fontSize: "20px",
+                                width: "100%",
+                                textAlign: "center",
+                              }}
+                            >
+                              <input
+                                type={"checkbox"}
+                                value={lastVerifyChecked}
+                                onChange={() =>
+                                  setLastVerifyChecked(!lastVerifyChecked)
+                                }
+                                style={{
+                                  transform: "scale(1.5)",
+                                  marginLeft: "1rem",
+                                  marginRight: "1rem",
+                                  textAlign: "center",
+                                }}
+                              />{" "}
+                              ข้าพเจ้าขอรับรองว่า
+                              ข้าพเจ้าในฐานะผู้ถือหุ้นได้รับการจัดสรรหุ้นสามัญออกใหม่
+                              เป็นผู้รับประโยชน์ที่แท้จริง
+                              <br />
+                              **รายการจะสมบูรณ์
+                              เมื่อท่านยืนยันรายการและบริษัทตรวจสอบผลการชำระเงินครบถ้วนสมบูรณ์
+                            </p>
                           </div>
                         </div>
                       </FlexContainer>
@@ -1320,9 +1351,9 @@ const Buy = () => {
                   </div>
                   <div
                     className="btn-accept-buy"
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={{ display: "flex", justifyContent: "center" }}
                   >
-                    <Button
+                    {/* <Button
                       type="submit"
                       value={"ย้อนกลับ"}
                       onClick={() => setValidateAccept(false)}
@@ -1331,7 +1362,7 @@ const Buy = () => {
                         margin: "0 10px 10px 10px",
                         backgroundColor: "#809FB8",
                       }}
-                    />
+                    /> */}
                     <Button
                       type="submit"
                       value={"ถัดไป"}
@@ -1344,7 +1375,7 @@ const Buy = () => {
                     />
                   </div>
                 </>
-              )
+              );
             }
           })()
         ) : (
@@ -1474,14 +1505,19 @@ const Buy = () => {
                           </InputDiv>
                           <InputDiv>
                             <div className="inputField">
-                              <p className="label-input">เบอร์โทรศัพท์ที่สามารถติดต่อได้</p>
+                              <p className="label-input">
+                                เบอร์โทรศัพท์ที่สามารถติดต่อได้
+                              </p>
                               <p className="label-input">{phoneNo}</p>
                             </div>
                           </InputDiv>
                         </ContentSpace>
                         <Content>
                           <InputDiv>
-                            <div className="inputField" style={{ justifyContent: "start" }}>
+                            <div
+                              className="inputField"
+                              style={{ justifyContent: "start" }}
+                            >
                               <div className="div-dropdown">
                                 <p className="label-input-flex">
                                   เลขทะเบียนผู้ถือหุ้น
@@ -1494,8 +1530,12 @@ const Buy = () => {
                                       !isOpenDropdownArrowStep1
                                     )
                                   }
-                                  onBlur={() => setIsOpenDropdownArrowStep1(false)}
-                                  setSelected={(e) => setShareId(e.registraionNo)}
+                                  onBlur={() =>
+                                    setIsOpenDropdownArrowStep1(false)
+                                  }
+                                  setSelected={(e) =>
+                                    setShareId(e.registraionNo)
+                                  }
                                   selected={{ registraionNo: shareId }}
                                   display={"registraionNo"}
                                 />
@@ -1540,7 +1580,13 @@ const Buy = () => {
                           </InputDiv>
                         </Content>
                       </LineCard>
-                      <div style={{ margin: "auto", marginTop: "1rem", maxWidth: "400px" }}>
+                      <div
+                        style={{
+                          margin: "auto",
+                          marginTop: "1rem",
+                          maxWidth: "400px",
+                        }}
+                      >
                         <Button
                           type="submit"
                           value="ถัดไป"
@@ -1682,11 +1728,18 @@ const Buy = () => {
                             <Input
                               type={"text"}
                               value={currentStockVolume}
-                              onChange={(e) =>
+                              onChange={(e) => {
                                 setCurrentStockVolume(
                                   e.target.value.replace(/[^0-9.]/, "")
-                                )
-                              }
+                                );
+
+                                if (
+                                  e.target.value.replace(/[^0-9.]/, "") > 0 &&
+                                  isAcceptVerify === true
+                                ) {
+                                  setIsConfirmOrder(false);
+                                }
+                              }}
                             />
                             <p>หุ้น</p>
                           </ShareDetail>
@@ -1768,7 +1821,9 @@ const Buy = () => {
                             </Header>
                             <ShareDetail style={{ display: "block" }}>
                               <div className="input-div">
-                                <InputDiv style={{ width: "100%", margin: "auto" }}>
+                                <InputDiv
+                                  style={{ width: "100%", margin: "auto" }}
+                                >
                                   <p>ฝากเงินเข้าบัญชีธนาคาร</p>
                                 </InputDiv>
                                 <InputDiv
@@ -1795,7 +1850,9 @@ const Buy = () => {
                                 </InputDiv>
                               </div>
                               <div className="input-div">
-                                <InputDiv style={{ width: "100%", margin: "auto" }}>
+                                <InputDiv
+                                  style={{ width: "100%", margin: "auto" }}
+                                >
                                   <p
                                     style={{
                                       width: "200px",
@@ -1843,11 +1900,17 @@ const Buy = () => {
                           </StyledLineCard>
                         </div>
                       </div>
-                      <div style={{ margin: "auto", marginTop: "1rem", maxWidth: "400px" }}>
+                      <div
+                        style={{
+                          margin: "auto",
+                          marginTop: "1rem",
+                          maxWidth: "400px",
+                        }}
+                      >
                         <Button
                           type="submit"
                           value="ยืนยันคำสั่งซื้อ"
-                          disabled={!isAcceptVerify}
+                          disabled={isConfirmOrder}
                           onClick={() => handlerOnSubmited()}
                         />
                       </div>
@@ -1858,9 +1921,11 @@ const Buy = () => {
                 if (page === 3) {
                   return (
                     <>
-                      <LineCard style={{ borderColor: persianblue, width: "1024px" }}>
+                      <LineCard
+                        style={{ borderColor: persianblue, width: "1024px" }}
+                      >
                         <ShareDetail
-                          style={{ fontSize: "20px", padding: "20px", }}
+                          style={{ fontSize: "20px", padding: "20px" }}
                         >
                           <b style={{ whiteSpace: "pre" }}>
                             ยอดที่ท่านต้องการทำรายการ
@@ -2029,6 +2094,7 @@ const Buy = () => {
                             <input
                               type="file"
                               style={{ display: "none" }}
+                              accept="image/jpeg, image/png"
                               onChange={handleSelectedFile}
                             />
                           </UploadButton>
@@ -2045,8 +2111,7 @@ const Buy = () => {
                                 icon={faCircleInfo}
                                 style={{ margin: "0 10px" }}
                               />
-                              กรุณาอัพโหลดไฟล์ .PNG และ JPEG ขนาดไม่เกิน 5 MB
-                              file
+                              กรุณาอัพโหลดไฟล์ .PNG .JPG และ JPEG ขนาดไม่เกิน 5 MB
                             </p>
                           </div>
                         </div>
@@ -2079,7 +2144,11 @@ const Buy = () => {
                       </LineCard>
                       <div
                         className="message-info"
-                        style={{ margin: "10px 10px 10px 10px", width: "1024px", color: "#1234B0" }}
+                        style={{
+                          margin: "10px 10px 10px 10px",
+                          width: "1024px",
+                          color: "#1234B0",
+                        }}
                       >
                         <p>
                           <FontAwesomeIcon
@@ -2102,8 +2171,16 @@ const Buy = () => {
                         <Button
                           type="button"
                           value={"ย้อนกลับ"}
-                          style={{ marginTop: "1rem", margin: "0 2rem", backgroundColor: "#809FB8", }}
-                          onClick={hanlderOnBack}
+                          style={{
+                            marginTop: "1rem",
+                            margin: "0 2rem",
+                            backgroundColor: "#809FB8",
+                          }}
+                          onClick={() => {
+                            setValidateAccept(false);
+
+                            setPage(2);
+                          }}
                         />
 
                         <Button
@@ -2122,7 +2199,7 @@ const Buy = () => {
           </>
         )}
       </Container>
-    </Card >
+    </Card>
   );
 };
 
@@ -2130,7 +2207,7 @@ const UploadButton = styled.label`
   margin: auto;
   width: 100%;
   text-align: center;
-  background: #EDB52D;
+  background: #edb52d;
   border: none;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -2153,6 +2230,13 @@ const Container = styled.div`
 
   .card-tag {
     display: flex;
+    justify-content: space-between;
+  }
+
+  .text-title-end {
+    width: 50%;
+    display: flex;
+    align-items: baseline;
     justify-content: space-between;
   }
 
@@ -2221,9 +2305,16 @@ const Container = styled.div`
         text-align: center;
 
         .text-title {
-          width: 100%;
+          // width: 100%;
         }
       }
+    }
+
+    .text-title-end {
+      width: 100%;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
     }
   }
 
@@ -2251,6 +2342,13 @@ const Container = styled.div`
           width: 100%;
         }
       }
+    }
+
+    .text-title-end {
+      width: 100%;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
     }
   }
 `;
@@ -2289,15 +2387,15 @@ const StepDiv = styled.div`
     .step {
       margin: 0px;
     }
-    
+
     .one {
-      display: ${((props) => props.page === 1 ? "block" : "none")};
+      display: ${(props) => (props.page === 1 ? "block" : "none")};
     }
     .two {
-      display: ${((props) => props.page === 2 ? "block" : "none")};
+      display: ${(props) => (props.page === 2 ? "block" : "none")};
     }
     .three {
-      display: ${((props) => props.page === 3 ? "block" : "none")};
+      display: ${(props) => (props.page === 3 ? "block" : "none")};
     }
   }
 
@@ -2306,15 +2404,15 @@ const StepDiv = styled.div`
     .step {
       margin: 0px;
     }
-    
+
     .one {
-      display: ${((props) => props.page === 1 ? "block" : "none")};
+      display: ${(props) => (props.page === 1 ? "block" : "none")};
     }
     .two {
-      display: ${((props) => props.page === 2 ? "block" : "none")};
+      display: ${(props) => (props.page === 2 ? "block" : "none")};
     }
     .three {
-      display: ${((props) => props.page === 3 ? "block" : "none")};
+      display: ${(props) => (props.page === 3 ? "block" : "none")};
     }
   }
 `;
@@ -2382,7 +2480,6 @@ const InputDiv = styled.div`
   /* For Tablets */
   @media screen and (min-width: 540px) and (max-width: 880px) {
     .inputField > .div-dropdown {
-
       .label-input-flex {
         width: 100%;
       }
@@ -2736,6 +2833,6 @@ const SubTitleDescription = styled.div`
   margin: auto;
   display: flex;
   margin-top: 1rem;
-`
+`;
 
 export default Buy;

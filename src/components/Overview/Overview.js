@@ -34,7 +34,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   white-space: nowrap;
-  min-width: 400px;
+  min-width: 375px;
 
   h2 {
     margin-bottom: 10px;
@@ -70,10 +70,21 @@ const Container = styled.div`
 const Div = styled.div`
   display: flex;
   align-items: center;
+  width: 100%;
+
+  /* For Mobile */
+  @media screen and (max-width: 880px) {
+    justify-content: center;
+  }
 `;
 
 const Header = styled.h3`
   color: ${persianblue};
+
+  /* For Mobile */
+  @media screen and (max-width: 880px) {
+    text-align: center;
+  }
 `;
 
 const Info = styled.div`

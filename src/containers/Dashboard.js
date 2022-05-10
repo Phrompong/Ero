@@ -6,6 +6,7 @@ import Overview from "../components/Overview/Overview";
 import Paginate from "../components/Paginate/Paginate";
 
 import { Button } from "../components/UI/Button";
+import { InputSearch } from "../components/UI/Input";
 import { Card, LineCard } from "../components/UI/Card";
 import { Dropdown } from "../components/UI/Dropdown";
 import { FlexContainer } from "../components/UI/FlexContainer";
@@ -47,8 +48,6 @@ const Dashboard = () => {
     let endpoint = `orders/progressPie/${path}?type=${type}`;
 
     if (key) endpoint = `${endpoint}&key=${key}`;
-
-    console.log(`data progress : ${endpoint}`);
 
     const [res, status] = await httpGetRequest(endpoint);
     func(res["data"]);
@@ -173,37 +172,44 @@ const Dashboard = () => {
         </FlexContainer>
         <FlexContainer
           style={{
-            justifyContent: "flex-start",
-            width: "100px",
+            justifyContent: "flex-start"
           }}
         >
-          <Overview
-            header="จำนวนคำสั่งซื้อในปัจจุบัน"
-            pvalue={currentOrderAmount}
-            p1="ยอดรวมที่ชำระเงินแล้ว"
-            num1={paidAmount}
-            p2="จากยอดสั่งซื้อทั้งหมด"
-            num2={paymentAmount}
-          />
-          <Overview
-            header="จำนวนคำสั่งซื้อเมื่อเทียบกับยอดจัดจำหน่าย"
-            pvalue={currentSaleAmount}
-            color={shamrock}
-            p1="คำสั่งซื้อทั้งหมด"
-            num1={orderAmount}
-            p2="ยอดจัดจำหน่ายทั้งหมด"
-            num2={saleAmount}
-          />
+          <div className="overview">
+            <div className="overview-content">
+              <Overview
+                header="จำนวนคำสั่งซื้อในปัจจุบัน"
+                pvalue={currentOrderAmount}
+                p1="ยอดรวมที่ชำระเงินแล้ว"
+                num1={paidAmount}
+                p2="จากยอดสั่งซื้อทั้งหมด"
+                num2={paymentAmount}
+              />
+            </div>
+            <div className="overview-content">
+              <Overview
+                header="จำนวนคำสั่งซื้อเมื่อเทียบกับยอดจัดจำหน่าย"
+                pvalue={currentSaleAmount}
+                color={shamrock}
+                p1="คำสั่งซื้อทั้งหมด"
+                num1={orderAmount}
+                p2="ยอดจัดจำหน่ายทั้งหมด"
+                num2={saleAmount}
+              />
+            </div>
+          </div>
         </FlexContainer>
         <TableSection>
           <LineCard>
-            <DataTable
-              header="รายการสั่งซื้อทั้งหมดในระบบ"
-              theaders={theaders}
-              data={data}
-              refreshData={refreshData}
-            />
-            <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
+            <div className="table-detail">
+              <DataTable
+                header="รายการสั่งซื้อทั้งหมดในระบบ"
+                theaders={theaders}
+                data={data}
+                refreshData={refreshData}
+              />
+              <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
+            </div>
           </LineCard>
         </TableSection>
       </Container>
@@ -217,6 +223,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
+  height: 100%;
   overflow: scroll;
   overflow-x: auto;
   overflow-y: auto;
@@ -226,12 +233,7 @@ const Container = styled.div`
   }
 
   /* For Mobile */
-  @media screen and (max-width: 540px) {
-    justify-content: flex-start;
-  }
-
-  /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 880px) {
+  @media screen and (max-width: 880px) {
     justify-content: flex-start;
   }
 `;
@@ -262,10 +264,6 @@ const SearchDiv = styled.div`
     > :not(:first-child) {
       margin-left: 0px;
     }
-  }
-
-  /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 880px) {
   }
 `;
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Sidebar from "../../components/Navigation/Sidebar/Sidebar";
@@ -17,7 +17,8 @@ const Container = styled.div`
 const Main = styled.main`
   position: relative;
   background-color: ${ivory};
-  height: 100%;
+  height: 100vh;
+  /* height: 100%; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,15 +44,16 @@ const Layout = ({ children }) => {
     "/dashboard",
     "/checkRightAdmin",
     "/import",
-    "/customer/service"
+    "/admin/service",
   ];
 
   const pagesCustomer = [
     "/login/customer",
     "/buy",
     "/checkRightCustomer",
+    "/checkRightCustomer/info",
     "/profile",
-    "/customer/service"
+    "/customer/service",
   ];
 
   const pagesAll = pagesAdmin.concat(pagesCustomer);
@@ -60,7 +62,11 @@ const Layout = ({ children }) => {
 
   const isPage = pagesAll.includes(path);
 
-  const isLogin = path !== "/login/admin" && path !== "/login/customer" && path !== "/customer/service";
+  const isLogin =
+    path !== "/login/admin" &&
+    path !== "/login/customer" &&
+    path !== "/customer/service" &&
+    path !== "/admin/service";
 
   console.log(user);
 
@@ -71,11 +77,14 @@ const Layout = ({ children }) => {
         <DisplayNotfound></DisplayNotfound>
       </>
     );
-  } 
+  }
 
   // * Case normally login
   if (
-    (path === "/login/admin" || path === "/login/customer" || path === "/customer/service") &&
+    (path === "/login/admin" ||
+      path === "/login/customer" ||
+      path === "/customer/service" ||
+      path === "/admin/service") &&
     (!user || user.length === 0)
   ) {
     return <>{children}</>;
@@ -97,7 +106,6 @@ const Layout = ({ children }) => {
     let isPageAllow = false;
     switch (role) {
       case "admin":
-        console.log("admin");
         pagesAdmin.push("/login/customer");
         isPageAllow =
           pagesAdmin.filter((o) => o.includes(path)).length > 0 ? true : false;
@@ -112,7 +120,6 @@ const Layout = ({ children }) => {
 
         break;
       case "client":
-        console.log("client");
         pagesCustomer.push("/login/admin");
         isPageAllow =
           pagesCustomer.filter((o) => o.includes(path)).length > 0

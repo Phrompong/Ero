@@ -44,7 +44,7 @@ export const StyledLineCard = styled.div`
     overflow: scroll;
     overflow-x: auto;
     overflow-y: auto;
-    height: 100%;
+    // height: 100%;
   }
 
   .modal-flex {

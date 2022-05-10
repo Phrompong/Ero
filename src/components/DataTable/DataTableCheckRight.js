@@ -90,7 +90,7 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
                 </TD>
                 <TD>{x["rightStockName"]}</TD>
                 <TD>{x["registrationNo"]}</TD>
-                <TD>{`${
+                <TD style={{ textAlign: "start" }}>{`${
                   x["customers"].name + " " + x["customers"].lastname
                 }`}</TD>
                 <TD>{x["stockVolume"]}</TD>

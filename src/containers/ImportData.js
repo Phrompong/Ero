@@ -19,8 +19,6 @@ const Container = styled.div`
   /* For Mobile */
   @media screen and (max-width: 540px) {
     width: 90vw;
-    display: block;
-    text-align: center;
 
     .input-btn {
       margin-top: 1rem;
@@ -41,8 +39,26 @@ const ImportData = () => {
   const [alertMessage, setAlertMessage] = useState();
 
   const handleSelectedFile = (e) => {
+    const allowTypeFile = [
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ];
+
     const [file] = e.target.files;
-    const { name: fileName, size } = file;
+    const { name: fileName, size, type } = file;
+    if (!allowTypeFile.includes(type)) {
+      setStatus(999);
+      setAlertMessage("ประเภทไฟล์ไม่ถูกต้อง");
+      setShow(true);
+      setTimeout(() => {
+        setShow(false);
+      }, 2000);
+
+      setTimeout(() => {
+        window.location.reload(false);
+      }, 2000);
+
+      return;
+    }
     setFile(file);
   };
 
@@ -59,20 +75,24 @@ const ImportData = () => {
     if (status === 200) {
       msg = "Upload Completed";
     }
-    setAlertMessage(msg);
+    setAlertMessage("Data cannot be uploaded");
     showAlert(setShow, 2000);
     setFile();
 
     setTimeout(() => {
       window.location.reload(false);
-    }, 1000);
+    }, 2000);
   };
 
   return (
     <Card>
       <Container>
         <ModalAlert show={show} msg={alertMessage} status={status} />
-        <input className="input-btn" type="file" onChange={handleSelectedFile} />
+        <input
+          type="file"
+          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          onChange={handleSelectedFile}
+        />
         <Button onClick={handleSubmit}>Import Data</Button>
       </Container>
     </Card>

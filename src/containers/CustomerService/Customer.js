@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import logo from "../assets/logo_awsc2.jpeg";
-import bgCustomerService from "../assets/bgCustomerService.png";
-import customerServiceLeft from "../assets/customerServiceLeft.png";
-import { DropdownArrow } from "../components/UI/Dropdown";
+import logo from "../../assets/logo_awsc2.jpeg";
+import bgCustomerService from "../../assets/bgCustomerService.png";
+import customerServiceLeft from "../../assets/customerServiceLeft.png";
+import { DropdownArrow } from "../../components/UI/Dropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { faCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { persianblue } from "../utils/color";
-import { httpGetRequest } from "../utils/fetch";
-import { httpFetch } from "../utils/fetch";
-import { ModalAlert } from "../components/ModalAlert/ModalAlert";
-import { showAlert } from "../utils/showAlert";
+import { persianblue } from "../../utils/color";
+import { httpGetRequest } from "../../utils/fetch";
+import { httpFetch } from "../../utils/fetch";
+import { ModalAlert } from "../../components/ModalAlert/ModalAlert";
+import { showAlert } from "../../utils/showAlert";
+import { useNavigate } from "react-router-dom";
 
 const CustomerService = () => {
+  const navigate = useNavigate();
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [masterIssue, setMasterIssue] = useState([]);
@@ -56,10 +58,17 @@ const CustomerService = () => {
       setStatus(200);
       setAlertMessage("แจ้งปัญหาสำเร็จ");
       showAlert(setShow, 2000);
+
       setTimeout(() => {
-        window.location.reload(false);
+        redirectPage();
       }, 2000);
+      //navigate("/login/admin");
     }
+  };
+
+  const redirectPage = () => {
+    console.log("redirect");
+    navigate("/login/customer");
   };
 
   return (
@@ -68,7 +77,7 @@ const CustomerService = () => {
       <div className="bg-img">
         <div className="bg-text">
           <p>Customer Service</p>
-          <Button>
+          <Button onClick={redirectPage}>
             <FontAwesomeIcon
               icon={faCircleLeft}
               style={{ marginRight: "0.25rem" }}
@@ -82,26 +91,22 @@ const CustomerService = () => {
           <div className="logo-img-div">
             <img src={logo} className="logo-img" />
           </div>
-          <div>
-            <Header style={{ fontSize: "24px" }}>
-              Asia Wealth Securities Co.,Ltd. (AWS)
-            </Header>
-          </div>
+          <Header style={{ fontSize: "24px" }}>
+            Asia Wealth Securities Co.,Ltd. (AWS)
+          </Header>
           <Info>
             <FontAwesomeIcon
               icon={faPhone}
-              height={50}
-            // style={{ margin: "0", marginRight: "0.5rem" }}
+              style={{ margin: "0", marginRight: "0.5rem" }}
             />
-            <p>02-680-5033-5</p>
+            02-680-5033-5
           </Info>
           <Info>
             <FontAwesomeIcon
               icon={faEnvelope}
-              height={50}
-            // style={{ margin: "0", marginRight: "0.5rem" }}
+              style={{ margin: "0", marginRight: "0.5rem" }}
             />
-            <p> cs@asiawealth.co.th</p>
+            cs@asiawealth.co.th
           </Info>
           <Header>(วันทำการ จันทร์-ศุกร์ เวลา 08.30 -17.00 น.)</Header>
         </div>
@@ -180,9 +185,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: scroll;
-  overflow-x: auto;
-  overflow-y: auto;
+  overflow: hidden;
   position: relative;
 
   .bg-img {
@@ -210,6 +213,7 @@ const Container = styled.div`
 const Card = styled.div`
   position: absolute;
   width: 80%;
+  height: 60%;
   margin-top: 2rem;
   background: #ffffff;
   border: 1px solid #b2c7d8;
@@ -225,7 +229,7 @@ const Card = styled.div`
     border-bottom-left-radius: 10px;
 
     * {
-      margin: 1rem 1rem;
+      margin: 1rem 2rem;
     }
 
     .logo-img-div {
@@ -273,51 +277,11 @@ const Card = styled.div`
       width: 200px;
       text-align: center;
       margin: auto;
-      margin-bottom: 1rem;
     }
   }
 
   .form-input {
     width: 60%;
-  }
-
-  /* For Mobile */
-  @media screen and (max-width: 540px) {
-    display: inline-block;
-    .info-detail {
-      width: 100%;
-      margin: 0 2rem;
-      text-algin: start;
-
-      * {
-        width: 100%;
-      }
-
-      .logo-img-div {
-        height: 118px;
-        width: 100%;
-        position: relative;
-        left: 0;
-        background: #ffffff;
-        border-radius: 0px 8px 8px 0px;
-        marign: auto;
-  
-        .logo-img {
-          height: 100px;
-          width: 220px;
-        }
-      }
-    }
-
-    .form-input {
-      width: 100%;
-      margin: auto;
-    }
-  }
-
-  /* For Mobiles */
-  @media screen and (min-width: 540px) and (max-width: 1024px) {
-    
   }
 `;
 
@@ -325,24 +289,12 @@ const Header = styled.p`
   color: #ffffff;
   font-size: 18px;
   font-weight: 600;
-
-  /* For Mobiles */
-  @media screen and (min-width: 540px) and (max-width: 1024px) {
-    padding: 0 1rem;
-  }
 `;
 
 const Info = styled.p`
   color: #ffffff;
   font-size: 16px;
   font-weight: 600;
-  display: flex;
-  justify-content: space-between;
-  text-align: start;
-
-  /* For Tablets */
-  @media screen and (max-width: 540px){
-  }
 `;
 
 const Button = styled.button`

@@ -6,6 +6,17 @@ const Container = styled.div`
   justify-content: space-between;
   margin-bottom: 0px;
 
+  .overview {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .overview-content {
+      width: 100%;
+      margin: 0.5rem 0.5rem 0rem 0.5rem;
+    }
+  }
+
   .card-div {
     display: flex;
     width: 100%;
@@ -54,6 +65,16 @@ const Container = styled.div`
   /* For Mobile */
   @media screen and (max-width: 540px) {
     flex-direction: column;
+
+    .overview {
+      display: block;
+      width: 100%;
+
+      .overview-content {
+        width: 100%;
+        margin: 0.5rem 0.5rem 0rem 0.5rem;
+      }
+    }
 
     > div {
       margin-left: 0;
@@ -119,13 +140,16 @@ const Container = styled.div`
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 1024px) {
-    /* flex-direction: column;  */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    .overview {
+      display: block;
+      width: 100%;
 
-    // > div {
-    //   margin-left: 0;
-    //   margin-bottom: 20px;
-    // }
+      .overview-content {
+        width: 100%;
+        margin: 0.5rem 0.5rem 0rem 0.5rem;
+      }
+    }
 
     .card-div {
       display: block;

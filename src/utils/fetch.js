@@ -1,5 +1,6 @@
-const BASE_URL = "http://203.151.211.133:3002/api/v1/";
-// const BASE_URL = "http://localhost:3002/api/v1/";
+//const BASE_URL = "https://ero-bke-test.domain.local/api/v1/";
+//const BASE_URL = "https://ero-bke-test.domain.local/api/v1/";
+const BASE_URL = "https://ero-bke-test.asiawealth.co.th/api/v1/";
 
 class JSONRPCError extends Error {
   constructor(errData) {
@@ -84,10 +85,6 @@ export async function httpPostRequestUploadFile(body, endpoint) {
     body: body,
     redirect: "follow",
   });
-
-  if (!res.ok) {
-    throw new Error("Could not fetch data", endpoint);
-  }
 
   const data = await res.json();
   return [data, res.status];

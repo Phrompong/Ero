@@ -47,7 +47,7 @@ const Login = () => {
     const [res, status] = await httpFetch("POST", { customerId }, endpoint);
 
     if (status === 200) {
-      navigate(`/buy`);
+      navigate(`/profile`);
     } else {
       setShowError(true);
       setErrorMsg(res.message);
@@ -97,7 +97,7 @@ const Login = () => {
         role: "client",
       });
 
-      if (isAccept) await navigate("/buy");
+      if (isAccept) await navigate("/profile");
     } else {
       setShowError(true);
       setErrorMsg(res.message);
@@ -265,7 +265,10 @@ const Login = () => {
                             onClick={handleSubmited}
                           />
                           {link("problem to sign in ?", "/customer/service")}
-                          {link("มีปัญหาในการเข้าใช้งานกรุณาคลิกที่นี่", "/customer/service")}
+                          {link(
+                            "มีปัญหาในการเข้าใช้งานกรุณาคลิกที่นี่",
+                            "/customer/service"
+                          )}
                         </div>
                       </div>
 

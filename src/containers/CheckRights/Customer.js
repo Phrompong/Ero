@@ -1,3 +1,7 @@
+import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect, useRef } from "react";
+
 import styled from "styled-components";
 import Overview from "../../components/Overview/Overview";
 import DataTable from "../../components/DataTable/DataTable";
@@ -7,16 +11,18 @@ import News from "../../components/News/News";
 import Paginate from "../../components/Paginate/Paginate";
 
 import { Card, LineCard } from "../../components/UI/Card";
+import { InputSearch } from "../../components/UI/Input";
 import { Dropdown } from "../../components/UI/Dropdown";
 import { SearchableInput } from "../../components/UI/Search";
 import { balihai, shamrock } from "../../utils/color";
-import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect, useRef } from "react";
+
 import { httpGetRequest } from "../../utils/fetch";
 import { Search } from "@styled-icons/bootstrap/Search";
 import { Button } from "../../components/UI/Button";
 
 const CheckRightCustomer = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [data, setData] = useState(null);
@@ -97,7 +103,7 @@ const CheckRightCustomer = () => {
     <Card>
       <Container>
         <SearchDiv>
-          <InputSeacrh
+          <Input
             placeholder="ค้นหาหมายเลขประจำตัวประชาชน / เลขที่หนังสือเดินทาง / เลขทะเบียนนิติบุคคล"
             ref={searchInputRef}
           />
@@ -114,6 +120,12 @@ const CheckRightCustomer = () => {
                 refreshData={fetchDataTable}
               />
               <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
+            </div>
+            <div className="button-section">
+              <Button onClick={() => navigate(`${location.pathname}/info`)}>
+                ท่านสามารถกดตรวจสอบสิทธิ์การจองซื้อหุ้นภายหลังวันที่ 16 มิถุนายน
+                2565 เป็นต้นไป
+              </Button>
             </div>
           </LineCard>
         </TableSection>
@@ -150,17 +162,8 @@ const Container = styled.div`
   }
 `;
 
-const InputSeacrh = styled.input`
-  border: 2px solid #d9e1e7;
-  border-radius: 10px;
-  background: #fff;
-  position: relative;
-  font-size: 16px;
-  padding: 10px;
+const Input = styled(InputSearch)`
   width: 100%;
-  :focus {
-    outline: none;
-  }
 `;
 
 const SearchDiv = styled.div`
@@ -209,6 +212,13 @@ const TableSection = styled.section`
   /* background-color: lightblue; */
   height: 100%;
   display: flex;
+
+  .button-section {
+    margin: auto;
+    padding: 1rem 0;
+    width: 100%;
+    text-align: center;
+  }
 
   /* For Mobile */
   @media screen and (max-width: 540px) {
