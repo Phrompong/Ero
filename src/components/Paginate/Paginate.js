@@ -8,6 +8,8 @@ const MyPaginate = styled(ReactPaginate).attrs({
 })`
   margin-bottom: 1rem;
   display: flex;
+  width: 100%;
+  min-width: 1200px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

@@ -17,12 +17,50 @@ export const StyledCard = styled.div`
   overflow-x: auto;
   overflow-y: auto;
 
+  .card-term-condition {
+    padding-left: 0;
+    width: 100%;
+    padding: 0 2rem;
+    margin-bottom: 0;
+
+    .pre-term-condition {
+      padding: 0 2rem;
+      white-space: break-spaces;
+      margin-bottom: 0;
+    }
+
+    .div-term-condition {
+      height: 210px;
+      overflow: scroll;
+      overflow-x: auto;
+      overflow-y: auto;
+    }
+  }
+  .btn-div {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .accept-term-condition {
+    // display: flex;
+    // justify-content: space-betwenn;
+    overflow: scroll;
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+
   /* For Mobile */
   @media screen and (max-width: 540px) {
     margin: auto;
     overflow: scroll;
     overflow-x: auto;
-    overflow-y: auto;
+    overflow-y: auto;    
+    
+    .btn-div {
+      display: grid;
+      text-align: center;
+    }
   }
 
   /* For Tablets */
@@ -31,6 +69,11 @@ export const StyledCard = styled.div`
     overflow: scroll;
     overflow-x: auto;
     overflow-y: auto;
+
+    .btn-div {
+      display: grid;
+      text-align: center;
+    }
   }
 `;
 

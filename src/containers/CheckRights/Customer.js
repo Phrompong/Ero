@@ -111,23 +111,25 @@ const CheckRightCustomer = () => {
         </SearchDiv>
 
         <TableSection>
-          <LineCard>
-            <div className="table-detail">
-              <DataTableCheckRight
-                header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
-                theaders={theaders}
-                data={data}
-                refreshData={fetchDataTable}
-              />
-              <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
-            </div>
+          {/* <div style={{ overflow: "scroll" }}> */}
+            <LineCard>
+              <div className="table-detail">
+                <DataTableCheckRight
+                  header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
+                  theaders={theaders}
+                  data={data}
+                  refreshData={fetchDataTable}
+                />
+                <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
+              </div>
+            </LineCard>
             <div className="button-section">
               <Button onClick={() => navigate(`${location.pathname}/info`)}>
                 ท่านสามารถกดตรวจสอบสิทธิ์การจองซื้อหุ้นภายหลังวันที่ 16 มิถุนายน
                 2565 เป็นต้นไป
               </Button>
             </div>
-          </LineCard>
+          {/* </div> */}
         </TableSection>
       </Container>
     </Card>
@@ -211,7 +213,7 @@ const OverviewSection = styled.section`
 const TableSection = styled.section`
   /* background-color: lightblue; */
   height: 100%;
-  display: flex;
+  display: block;
 
   .button-section {
     margin: auto;

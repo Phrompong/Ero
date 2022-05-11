@@ -221,9 +221,10 @@ export default Dashboard;
 const Container = styled.div`
   padding: 20px 20px;
   display: flex;
-  justify-content: center;
+  // justify-content: center;
   flex-direction: column;
-  height: 100%;
+  height: 90vh;
+  width: 70vw;
   overflow: scroll;
   overflow-x: auto;
   overflow-y: auto;
@@ -247,7 +248,7 @@ const SearchDiv = styled.div`
   }
 
   /* For Mobile */
-  @media screen and (max-width: 540px) {
+  @media screen and (max-width: 880px) {
     display: block;
 
     .search-div {

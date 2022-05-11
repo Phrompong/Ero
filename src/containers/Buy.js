@@ -110,7 +110,7 @@ const Buy = () => {
   const [addressZipcode, setAddressZipcode] = useState(null);
   const [addressTel, setAddressTel] = useState(null);
 
-  const [file, setFile] = useState();
+  const [file, setFile] = useState(null);
   const [filename, setFilename] = useState();
   const [orderId, setOrderId] = useState(null);
 
@@ -2178,8 +2178,8 @@ const Buy = () => {
                           }}
                           onClick={() => {
                             setValidateAccept(false);
-
                             setPage(2);
+                            setFile(null)
                           }}
                         />
 
@@ -2285,7 +2285,7 @@ const Container = styled.div`
   }
 
   .buy-flex {
-    width: 50%;
+    width: 48%;
   }
 
   /* For Mobile */
@@ -2445,7 +2445,8 @@ const InputDiv = styled.div`
     }
 
     .label-input {
-      width: fit-content;
+      justify-content: start;
+      width: 50%;
     }
   }
 
@@ -2463,6 +2464,11 @@ const InputDiv = styled.div`
         span {
           width: 200px;
         }
+      }
+
+      .label-input {
+        justify-content: start;
+        width: 100%;
       }
     }
 
@@ -2815,7 +2821,7 @@ const StyledLineCard = styled.div`
   border-radius: 10px;
   border: 1px solid #d9e1e7;
   margin: 0 10px;
-  width: 50%;
+  width: 49%;
 
   @media screen and (max-width: 540px) {
     margin: 0;

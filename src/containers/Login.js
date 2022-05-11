@@ -117,7 +117,8 @@ const Login = () => {
   return (
     <>
       {(() => {
-        if (isConfirmModal) {
+        if (true) {
+          // isConfirmModal
           return (
             <>
               <Container size={"full"}>
@@ -127,25 +128,16 @@ const Login = () => {
                       <div>
                         <img src={logo} />
                       </div>
-                      <div className="title">
-                        การยินยอมเปิดเผยข้อมูล และข้อตกลงการให้บริการ
+                      <div className="title" style={{ margin: "0 2rem", textAlign: "center" }}>
+                        <p>การยินยอมเปิดเผยข้อมูล และข้อตกลงการให้บริการ</p>
                       </div>
                       <div
-                        style={{
-                          paddingLeft: "0",
-                          width: "100%",
-                          padding: "0 5rem",
-                          marginBottom: "0",
-                        }}
+                        className="card-term-condition"
                       >
                         <LineCard style={{ width: "100%" }}>
-                          <div>
+                          <div className="div-term-condition">
                             <pre
-                              style={{
-                                padding: "0 2rem",
-                                whiteSpace: "break-spaces",
-                                marginBottom: "0",
-                              }}
+                              className="pre-term-condition"
                             >
                               <input
                                 type="checkbox"
@@ -166,15 +158,11 @@ const Login = () => {
                       <div
                         style={{
                           width: "100%",
-                          padding: "0 5rem",
+                          padding: "0 2rem",
                         }}
                       >
                         <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            width: "100%",
-                          }}
+                          style={{ display: "flex", justifyContent: "center" }}
                         >
                           <input
                             type="checkbox"
@@ -182,9 +170,9 @@ const Login = () => {
                             onChange={() =>
                               setIsCheckedSecond(!isCheckedSecond)
                             }
-                            style={{ marginTop: "1.25rem" }}
+                            style={{ marginTop: "2rem", marginRight: "1rem" }}
                           />
-                          <pre style={{ margin: "0" }}>
+                          <pre className="accept-term-condition">
                             {`
 ข้าพเจ้าขอรับรอง และตกลงว่าจะรับหุ้นสามัญเพิ่มทุนจำนวนดังกล่าว หรือในจำนวนที่บริษัทฯ จัดสรรให้ และจะไม่ยกเลิกการจองซื้อ
 หุ้นสามัญเพิ่มทุนนี้ รวมทั้งยินยอมรับคืนเงินในกรณีที่บริษัทฯ ปฏิเสธการจองซื้อหรือ หากข้าพเจ้าส่งรายละเอียดไม่ครบถ้วนถูกต้อง 
@@ -196,22 +184,18 @@ const Login = () => {
                               `}
                           </pre>
                         </div>
-                        <div>
-                          <pre
-                            style={{ color: "#1D3AB1", textAlign: "center" }}
-                          >
-                            ** รายการจองซื้อหุ้นของท่าน
-                            จะสำเร็จเมื่อบริษัทตรวจสอบผลการชำระเงินค่าจองซื้อหุ้นเข้าบัญชีบริษัทเรียบร้อยแล้ว
-                            **
-                          </pre>
-                        </div>
+                      </div>
+                      <div style={{ width: "80%" }}>
+                        <pre
+                          style={{ color: "#1D3AB1", textAlign: "center", whiteSpace: "break-spaces" }}
+                        >
+                          ** รายการจองซื้อหุ้นของท่าน
+                          จะสำเร็จเมื่อบริษัทตรวจสอบผลการชำระเงินค่าจองซื้อหุ้นเข้าบัญชีบริษัทเรียบร้อยแล้ว
+                          **
+                        </pre>
                       </div>
                       <div
-                        style={{
-                          display: "flex",
-                          width: "100%",
-                          justifyContent: "space-around",
-                        }}
+                        className="btn-div"
                       >
                         <Button
                           type="button"
@@ -221,6 +205,7 @@ const Login = () => {
                             width: "292px",
                             fontSize: "20px",
                             background: "#809FB8",
+                            marginBottom: "1rem"
                           }}
                         />
                         <Button
@@ -228,7 +213,7 @@ const Login = () => {
                           value="ยินยอม"
                           onClick={handlerOnAcceptForm}
                           disabled={!isButtonChecked}
-                          style={{ width: "292px", fontSize: "20px" }}
+                          style={{ width: "292px", fontSize: "20px", marginBottom: "1rem" }}
                         />
                       </div>
                     </Form>
@@ -307,14 +292,17 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: ${(props) => (props.size === "full" ? "914px" : "510px")};
-    height: 740px;
+    height: 90vh;
+    width: 70vw;
+    max-width: ${(props) => (props.size === "full" ? "914px" : "510px")};
+    max-height: 740px;
 
     .title {
       font-weight: 700;
       font-size: 20px;
       line-height: 24px;
       color: #1d3ab1;
+      margin-bottom: 0.5rem;
     }
   }
 

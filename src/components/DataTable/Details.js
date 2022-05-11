@@ -69,7 +69,7 @@ const Details = ({ show, details, closed, options }) => {
               </UserInfo>
             </LineCard>
             <FlexContainer>
-              <LineCard style={{ flex: 1 }}>
+              <LineCard style={{ flex: 1, marginRight: "0.5rem" }}>
                 <TransactionInfo>
                   <SubHeader>การสั่งซื้อหุ้นเพิ่มทุน</SubHeader>
                   <div className="transaction-details">
@@ -117,7 +117,7 @@ const Details = ({ show, details, closed, options }) => {
                   </div>
                 </TransactionInfo>
               </LineCard>
-              <LineCard style={{ flex: 1 }}>
+              <LineCard style={{ flex: 1, marginLeft: "0.5rem" }}>
                 <TransactionPhoto>
                   <img src={details["attachedFile"]} height="400px" />
                 </TransactionPhoto>
@@ -144,6 +144,8 @@ export default Details;
 
 const Container = styled.div`
   padding: 20px;
+  height: 65vh;
+  width: 70vw;
   position: relative;
 
   p {

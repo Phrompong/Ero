@@ -11,9 +11,13 @@ import { useDispatch, useSelector } from "react-redux";
 const Container = styled.div`
   padding: 30px 20px;
   display: flex;
-  justify-content: center;
+  height: 90vh;
+  width: 70vw;
+  // justify-content: center;
   flex-direction: column;
   overflow: scroll;
+  overflow-x: auto;
+  overflow-y: auto;
 `;
 
 const Header = styled.h2`
