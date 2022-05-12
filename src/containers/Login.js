@@ -117,8 +117,7 @@ const Login = () => {
   return (
     <>
       {(() => {
-        if (true) {
-          // isConfirmModal
+        if (isConfirmModal) {
           return (
             <>
               <Container size={"full"}>
