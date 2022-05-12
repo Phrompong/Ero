@@ -277,17 +277,15 @@ export default Login;
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  min-width: 600px;
-  min-height: 740px;
+  // min-width: 600px;
+  // min-height: 740px;
   background-image: url(${bg});
   background-position: center center;
   background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
-  // overflow: scroll;
-  // overflow-x: auto;
-  // overflow-y: auto;
+
   .inner {
     display: flex;
     justify-content: center;
