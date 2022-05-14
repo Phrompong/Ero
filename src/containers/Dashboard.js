@@ -14,6 +14,7 @@ import { balihai, shamrock } from "../utils/color";
 import { httpGetRequest } from "../utils/fetch";
 
 import { Search } from "@styled-icons/bootstrap/Search";
+import { FileExport } from "@styled-icons/boxicons-solid/FileExport"
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
@@ -170,6 +171,12 @@ const Dashboard = () => {
             </div>
           </SearchDiv>
         </FlexContainer>
+        <FlexContainer style={{ justifyContent: "end" }}>
+          <Button>
+            <ExportIcon />
+            Export file
+          </Button>
+        </FlexContainer>
         <FlexContainer
           style={{
             justifyContent: "flex-start"
@@ -268,6 +275,13 @@ const SearchDiv = styled.div`
   }
 `;
 
+const ExportIcon = styled(FileExport)`
+  width: 17px;
+  vertical-align: text-top;
+  color: #FFFFFFF;
+  margin-right: 1rem;
+`
+
 const SearchIcon = styled(Search)`
   width: 17px;
   vertical-align: text-top;
@@ -308,3 +322,4 @@ const Header = styled.div`
 const TableSection = styled.section`
   display: flex;
 `;
+

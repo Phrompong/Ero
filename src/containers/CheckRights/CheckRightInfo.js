@@ -235,7 +235,7 @@ const CheckRightInfo = () => {
         </Section>
         <Line />
         <Section>
-          {header}
+          {/* {header} */}
           <HighLightText>
             <h3>ผลการจองซื้อ</h3>
           </HighLightText>

@@ -120,15 +120,16 @@ const CheckRightCustomer = () => {
                   data={data}
                   refreshData={fetchDataTable}
                 />
-                <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
+                {/* <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} /> */}
               </div>
+              <div className="button-section">
+                <Button onClick={() => navigate(`${location.pathname}/info`)}>
+                  ท่านสามารถกดตรวจสอบสิทธิการจองซื้อหุ้นภายหลังวันที่ 16 มิถุนายน
+                  2565 เป็นต้นไป
+                </Button>
+              </div>
+              <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
             </LineCard>
-            <div className="button-section">
-              <Button onClick={() => navigate(`${location.pathname}/info`)}>
-                ท่านสามารถกดตรวจสอบสิทธิการจองซื้อหุ้นภายหลังวันที่ 16 มิถุนายน
-                2565 เป็นต้นไป
-              </Button>
-            </div>
           {/* </div> */}
         </TableSection>
       </Container>

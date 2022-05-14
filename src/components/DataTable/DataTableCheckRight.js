@@ -84,7 +84,7 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
           </THead>
           <TBody>
             {data.map((x, index) => (
-              <TR key={index}>
+              <TR key={index} onClick={() => handleClicked(x)}>
                 <TD style={{ width: "100px" }} className="left">
                   จองซื้อ / Book
                 </TD>

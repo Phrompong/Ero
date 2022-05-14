@@ -177,12 +177,24 @@ const Login = () => {
                       <div
                       >
                         <LineCard style={{ width: "100%", border: "none" }}>
-                          <div className="div-term-condition">
+                          <div className="div-term-condition" style={{ display: "flex" }}>
+                            <pre
+                              className="pre-term-condition"
+                              style={{ color: "#1D3AB1", textAlign: "center", fontSize: "16px", fontWeight: "400", marginRight: "1rem", marginLeft: "2rem" }}
+                            >
+                              **
+                            </pre>
                             <pre
                               className="pre-term-condition"
                               style={{ color: "#1D3AB1", textAlign: "center", fontSize: "16px", fontWeight: "400" }}
                             >
-                              {Parser(`** รายการจองซื้อหุ้นของท่านจะสำเร็จเมื่อบริษัทตรวจสอบผลการชำระเงินค่าจองซื้อหุ้นเข้าบัญชีบริษัทเรียบร้อยแล้ว **`)}
+                              {Parser(`รายการจองซื้อหุ้นของท่านจะสำเร็จเมื่อบริษัทตรวจสอบผลการชำระเงินค่าจองซื้อหุ้นเข้าบัญชีบริษัทเรียบร้อยแล้ว`)}
+                            </pre>
+                            <pre
+                              className="pre-term-condition"
+                              style={{ color: "#1D3AB1", textAlign: "center", fontSize: "16px", fontWeight: "400", marginRight: "2rem", marginLeft: "1rem" }}
+                            >
+                              **
                             </pre>
                           </div>
                         </LineCard>

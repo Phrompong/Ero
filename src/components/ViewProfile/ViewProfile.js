@@ -96,9 +96,9 @@ const ViewProfile = ({ header, profile }) => {
     zipcode,
   } = profile;
   const info = (label, value, link) => (
-    <FlexContainer>
-      <p style={{ flex: 1 }}>{label}</p>
-      <p style={{ flex: 1 }}> {value}</p>
+    <FlexContainer style={{ display: "flex", justifyContent: "start", alignItems: "baseline" }}>
+      <p className="info-label">{label}</p>
+      <p className="info-detail">{value}</p>
       <p>{link}</p>
     </FlexContainer>
   );

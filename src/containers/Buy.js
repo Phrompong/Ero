@@ -469,13 +469,11 @@ const Buy = () => {
     );
   }, [currentStockVolume]);
 
-  useEffect(() => {
-    // const desc = `บมจ.สกาย ทาวเวอร์ (STOWER) เปิดเผยว่า ที่ประชุมคณะกรรมการบริษัท ครั้งที่ 3/2565 เมื่อวันที่ 18 มี.ค.65 มีมติให้นำเสนอต่อที่ประชุมสามัญผู้ถือหุ้น ประจำปี 2565 เพื่อพิจารณาอนุมัติการออกและเสนอขายหุ้นสามัญเพิ่มทุนของบริษัทจำนวนไม่เกิน 17,979,717,949 หุ้นให้แก่ผู้ถือหุ้นเดิมตามสัดส่วนจำนวนหุ้น
-    // ที่ผู้ถือหุ้นแต่ละรายถือยู่ (Right Offering) ในอัตราส่วนการจัดสรร 1.5 หุ้นสามัญเดิมต่อ 1 หุ้นสามัญเพิ่มทุน โดยมีราคาเสนอขาย หุ้นละ 0.05 บาท พร้อมใบสำคัญแสดงสิทธิ STOWER -W4 ในอัตราส่วน 2.7 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
-    //            และหุ้นสามัญเพิ่มทุนส่วนที่เหลือจาก Right Offering จะจัดสรรให้กับบุคคลในวงจำกัด พร้อมใบสำคัญแสดงสิทธิ STOWER-W4 ในอัตราส่วน 3 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
-    // `;
-    // setShareDescription(desc);
-  }, []);
+  const WaitComponent = () => {
+    return <>
+      <p style={{ color: "#C4C4C4" }}>รอการจัดสรร</p>
+    </>
+  }
 
   return (
     <Card>
@@ -711,102 +709,104 @@ const Buy = () => {
         style={{
           width: "100%",
           height: "100%",
-          maxHeight: "800px",
+          maxHeight: "900px",
           padding: "1rem",
         }}
       >
-        {/* addressModal */}
-        {/* เหลือ responsive mobile */}
-        <Card style={{ width: "100%" }}>
-          <ContainerCard>
-            <Header
-              style={{
-                margin: "20px",
-                color: "#1D3AB1",
-                fontWeight: "bold",
-                display: "flex",
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faCircleInfo}
-                style={{
-                  margin: "10px 10px 0px 10px",
-                  color: "#FB0303",
-                  fontSize: "30px",
-                }}
-              />
-              <h3 style={{ color: "#FB0303" }}>
-                กรณีที่ท่านแจ้งบัญชีธนาคารนอกเหนือจาก 9 ธนาคาร
-                <br />
-                ทางบริษัทขอคืนเงินให้ท่านเป็นเช็ค โดยส่งไปตามที่อยู่ด้านล่าง
-              </h3>
-            </Header>
-            <LineCard style={{ padding: "1rem 2rem", marginBottom: "1rem" }}>
-              <div style={{ display: "flex", flexWrap: "wrap" }}>
-                {masterBankRefund.length > 0 &&
-                  masterBankRefund.map((bank, index) => {
-                    return (
-                      <>
-                        <LineCardBank>
-                          <img
-                            src={bank.logo}
-                            width={25}
-                            height={25}
-                            style={{ marginLeft: "1rem", marginRight: "1rem" }}
-                          />
-                          <p>{bank.nameTH}</p>
-                        </LineCardBank>
-                      </>
-                    );
-                  })}
-              </div>
-            </LineCard>
-            <LineCard style={{ marginBottom: "1rem" }}>
+        <div className="bank-validate">
+          <Card>
+            <ContainerCard>
               <Header
+                bank={true}
                 style={{
+                  margin: "20px",
                   color: "#1D3AB1",
                   fontWeight: "bold",
-                  marginLeft: "2rem",
+                  display: "flex",
+                  justifyContent: "center"
                 }}
               >
-                <h3>รายละเอียดที่อยู่ของท่าน</h3>
+                <FontAwesomeIcon
+                  icon={faCircleInfo}
+                  style={{
+                    margin: "10px 10px 0px 10px",
+                    color: "#FB0303",
+                    fontSize: "30px",
+                  }}
+                />
+                <h3 style={{ color: "#FB0303" }}>
+                  กรณีที่ท่านแจ้งบัญชีธนาคารนอกเหนือจาก 9 ธนาคาร
+                  <br />
+                  ทางบริษัทขอคืนเงินให้ท่านเป็นเช็ค โดยส่งไปตามที่อยู่ด้านล่าง
+                </h3>
               </Header>
-              <div class="profile-detail" style={{ padding: "1rem 2rem" }}>
-                <InputDiv>
-                  <div className="inputField">
-                    <p className="label-input">ชื่อ-นามสกุล :</p>
-                    <p className="label-input">
-                      {profile ? `${profile.name} ${profile.lastname}` : "-"}
-                    </p>
-                  </div>
-                </InputDiv>
-                <InputDiv>
-                  <div className="inputField">
-                    <p className="label-input">ที่อยู่ :</p>
-                    <p className="label-input">
-                      {profile ? profile.address + " " + profile.zipcode : ""}
-                    </p>
-                  </div>
-                </InputDiv>
-                <InputDiv>
-                  <div className="inputField">
-                    <p className="label-input">เบอร์โทรศัพท์ :</p>
-                    <p className="label-input">{phoneNo}</p>
-                  </div>
-                </InputDiv>
+              <LineCard style={{ padding: "1rem 2rem", marginBottom: "1rem" }}>
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                  {masterBankRefund.length > 0 &&
+                    masterBankRefund.map((bank, index) => {
+                      return (
+                        <>
+                          <LineCardBank>
+                            <img
+                              src={bank.logo}
+                              width={25}
+                              height={25}
+                              style={{ marginLeft: "1rem", marginRight: "1rem" }}
+                            />
+                            <p>{bank.nameTH}</p>
+                          </LineCardBank>
+                        </>
+                      );
+                    })}
+                </div>
+              </LineCard>
+              <LineCard style={{ marginBottom: "1rem" }}>
+                <Header
+                  style={{
+                    color: "#1D3AB1",
+                    fontWeight: "bold",
+                    marginLeft: "2rem",
+                  }}
+                >
+                  <h3>รายละเอียดที่อยู่ของท่าน</h3>
+                </Header>
+                <div class="profile-detail" style={{ padding: "1rem 2rem" }}>
+                  <InputDiv>
+                    <div className="inputField">
+                      <p className="label-input bank-detail-title">ชื่อ-นามสกุล :</p>
+                      <p className="label-input bank-detail">
+                        {profile ? `${profile.name} ${profile.lastname}` : "-"}
+                      </p>
+                    </div>
+                  </InputDiv>
+                  <InputDiv>
+                    <div className="inputField">
+                      <p className="label-input bank-detail-title">ที่อยู่ :</p>
+                      <p className="label-input bank-detail">
+                        {profile ? profile.address + " " + profile.zipcode : ""}
+                      </p>
+                    </div>
+                  </InputDiv>
+                  <InputDiv>
+                    <div className="inputField">
+                      <p className="label-input bank-detail-title">เบอร์โทรศัพท์ :</p>
+                      <p className="label-input bank-detail">{phoneNo}</p>
+                    </div>
+                  </InputDiv>
+                </div>
+              </LineCard>
+              <div
+                style={{ margin: "auto", marginTop: "1rem", maxWidth: "400px" }}
+              >
+                <Button
+                  type="submit"
+                  value={"ฉันรับทราบแล้ว"}
+                  onClick={handlerOnAcceptVerify}
+                />
               </div>
-            </LineCard>
-            <div
-              style={{ margin: "auto", marginTop: "1rem", maxWidth: "400px" }}
-            >
-              <Button
-                type="submit"
-                value={"ฉันรับทราบแล้ว"}
-                onClick={handlerOnAcceptVerify}
-              />
-            </div>
-          </ContainerCard>
-        </Card>
+            </ContainerCard>
+          </Card>
+        </div>
       </Modal>
       <Modal show={false} style={{ padding: "50px" }}>
         <Card style={{ height: "auto", width: "60%" }}>
@@ -1023,7 +1023,7 @@ const Buy = () => {
                                 className="text-black"
                                 style={{ marginLeft: "-20px" }}
                               >
-                                {rightSpecialVolume}
+                                {rightSpecialVolume === 0 ? WaitComponent() : rightSpecialVolume }
                               </b>
                               <p>หุ้น</p>
                             </div>
@@ -1240,7 +1240,7 @@ const Buy = () => {
                                 className="text-black"
                                 style={{ marginLeft: "-20px" }}
                               >
-                                {rightSpecialVolume}
+                                {rightSpecialVolume === 0 ? WaitComponent() : rightSpecialVolume }
                               </b>
                               <p>หุ้น</p>
                             </div>
@@ -1435,7 +1435,7 @@ const Buy = () => {
                       >
                         <Header>
                           <h3>ข้อมูลการเสนอขายหุ้นเพิ่มทุน</h3>
-                          <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
+                          <h3 className="share-name" style={{ color: "#1D3AB1", fontWeight: "bold" }}>
                             {shareName}
                           </h3>
                         </Header>
@@ -1450,7 +1450,7 @@ const Buy = () => {
                           </p>
                           <div className="desc">
                             {/* <p style={{ height: "157.4px" }}>{shareDescription}</p> */}
-                            <p>{shareDescription}</p>
+                            <p style={{ textIndent: "2rem", textAlign: "justify", paddingTop: "1rem", paddingRight: "1rem" }}>{shareDescription}</p>
                           </div>
                           <div className="btn-read-more">
                             <Button
@@ -1499,16 +1499,17 @@ const Buy = () => {
                         <ContentSpace>
                           <InputDiv>
                             <div className="inputField">
-                              <p className="label-input">ชื่อ-นามสกุล</p>
-                              <p className="label-input">{fullname}</p>
+                              <p className="label-input share-detail">ชื่อ-นามสกุล</p>
+                              <p className="label-input share-detail">{fullname}</p>
                             </div>
                           </InputDiv>
+                          <Spacer/>
                           <InputDiv>
                             <div className="inputField">
-                              <p className="label-input">
+                              <p className="label-input share-detail">
                                 เบอร์โทรศัพท์ที่สามารถติดต่อได้
                               </p>
-                              <p className="label-input">{phoneNo}</p>
+                              <p className="label-input share-detail">{phoneNo}</p>
                             </div>
                           </InputDiv>
                         </ContentSpace>
@@ -1522,23 +1523,25 @@ const Buy = () => {
                                 <p className="label-input-flex">
                                   เลขทะเบียนผู้ถือหุ้น
                                 </p>
-                                <DropdownArrow
-                                  options={allRegistrations}
-                                  isOpen={isOpenDropdownArrowStep1}
-                                  onClick={() =>
-                                    setIsOpenDropdownArrowStep1(
-                                      !isOpenDropdownArrowStep1
-                                    )
-                                  }
-                                  onBlur={() =>
-                                    setIsOpenDropdownArrowStep1(false)
-                                  }
-                                  setSelected={(e) =>
-                                    setShareId(e.registraionNo)
-                                  }
-                                  selected={{ registraionNo: shareId }}
-                                  display={"registraionNo"}
-                                />
+                                <div className="label-dropdown">
+                                  <DropdownArrow
+                                    options={allRegistrations}
+                                    isOpen={isOpenDropdownArrowStep1}
+                                    onClick={() =>
+                                      setIsOpenDropdownArrowStep1(
+                                        !isOpenDropdownArrowStep1
+                                      )
+                                    }
+                                    onBlur={() =>
+                                      setIsOpenDropdownArrowStep1(false)
+                                    }
+                                    setSelected={(e) =>
+                                      setShareId(e.registraionNo)
+                                    }
+                                    selected={{ registraionNo: shareId }}
+                                    display={"registraionNo"}
+                                  />
+                                </div>
                               </div>
                             </div>
                           </InputDiv>
@@ -1877,14 +1880,38 @@ const Buy = () => {
                                 </InputDiv>
                               </div>
                               <div className="input-div">
-                                <InputDiv style={{ width: "100%" }}>
-                                  <p></p>
+                                <InputDiv style={{ width: "100%", padding: "0 1rem" }}>
+                                  <Button
+                                    type="button"
+                                    value="แนบหน้าบัญชีธนาคาร"
+                                    style={{ width: "100%" }}
+                                  />
+                                  {/* <UploadButton>
+                                    <p
+                                      style={{
+                                        width: "100%",
+                                        fontSize: "17px",
+                                        margin: "auto",
+                                        marginBottom: "20px",
+                                        marginTop: "20px",
+                                      }}
+                                    >
+                                      แนบหลักฐานการชำระเงิน
+                                    </p>
+                                    <input
+                                      type="file"
+                                      style={{ display: "none" }}
+                                      accept="image/jpeg, image/png"
+                                      onChange={handleSelectedFile}
+                                    />
+                                  </UploadButton> */}
                                 </InputDiv>
                                 <InputDiv
                                   style={{
                                     marginTop: "10px",
                                     width: "100%",
                                     textAlign: "start",
+                                    padding: "0 1rem" 
                                   }}
                                 >
                                   <Button
@@ -1942,7 +1969,7 @@ const Buy = () => {
                           ท่านสามารถดำเนินการชำระเงินในการซื้อหุ้นเพิ่มทุนของท่านได้ที่
                         </p>
                       </div>
-                      <LineCard style={{ width: "1024px", overflow: "scroll" }}>
+                      <LineCard>
                         <Header>
                           <ShareDetail>
                             <h3
@@ -2442,11 +2469,28 @@ const InputDiv = styled.div`
     .div-dropdown {
       width: 100%;
       display: flex;
+      
+      .label-dropdown {
+        width: 30%;
+        max-width: 1000px;
+      }
     }
 
     .label-input {
       justify-content: start;
       width: 50%;
+    }
+
+    .share-detail {
+      white-space: nowrap;
+      width: 100%;
+    }
+
+    .bank-detail-title {
+      width: 20%;
+    }
+    .bank-detail {
+      width: 80%;
     }
   }
 
@@ -2470,6 +2514,13 @@ const InputDiv = styled.div`
         justify-content: start;
         width: 100%;
       }
+
+      .bank-detail-title {
+        width: 100%;
+      }
+      .bank-detail {
+        width: 100%;
+      }
     }
 
     .inputField > .div-dropdown {
@@ -2480,6 +2531,10 @@ const InputDiv = styled.div`
         width: 100%;
         margin: 0 0 0.5rem 0;
       }
+
+      .label-dropdown {
+        width: 100%;
+      }
     }
   }
 
@@ -2487,6 +2542,10 @@ const InputDiv = styled.div`
   @media screen and (min-width: 540px) and (max-width: 880px) {
     .inputField > .div-dropdown {
       .label-input-flex {
+        width: 100%;
+      }
+
+      .label-dropdown {
         width: 100%;
       }
     }
@@ -2553,15 +2612,26 @@ const Header = styled.div`
   h3 {
     font-weight: 400;
   }
+  display: flex;
+  .share-name {
+    margin-left: 1rem;
+  }
 
   /* For Mobile */
   @media screen and (max-width: 540px) {
+    display: block;
+    .share-name {
+      margin-left: 0rem;
+    }
   }
 
   /* For Tablets */
   @media screen and (min-width: 540px) and (max-width: 880px) {
     display: flex;
-    justify-content: space-between;
+    justify-content: ${((props) => props.bank ? "start" : "space-between")};
+    .share-name {
+      margin-left: 0rem;
+    }
   }
 `;
 
@@ -2606,7 +2676,7 @@ const Content = styled.div`
 const ContentSpace = styled.div`
   margin: 0 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   .desc {
     font-size: 17px;
     overflow-y: scroll;
@@ -2840,5 +2910,18 @@ const SubTitleDescription = styled.div`
   display: flex;
   margin-top: 1rem;
 `;
+
+const Spacer = styled.div`
+  margin: 0 5rem;
+
+  @media screen and (max-width: 540px) {
+    margin: 0;
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 540px) and (max-width: 880px) {
+    margin: 0;
+  }
+`
 
 export default Buy;

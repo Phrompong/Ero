@@ -108,8 +108,9 @@ export default CheckRightAdmin;
 
 const Container = styled.div`
   padding: 20px 20px;
+  height: 90vh;
+  width: 70vw;
   display: flex;
-  justify-content: center;
   flex-direction: column;
   overflow: scroll;
   overflow-x: auto;

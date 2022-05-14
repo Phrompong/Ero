@@ -9,10 +9,9 @@ const Container = styled.div`
   .overview {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
 
     .overview-content {
-      width: 100%;
       margin: 0.5rem 0.5rem 0rem 0.5rem;
     }
   }
@@ -62,6 +61,15 @@ const Container = styled.div`
     }
   }
 
+  .info-label {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .info-detail {
+    width: 100%;
+  }
+
   /* For Mobile */
   @media screen and (max-width: 540px) {
     flex-direction: column;
@@ -70,10 +78,10 @@ const Container = styled.div`
       display: block;
       width: 100%;
 
-      .overview-content {
-        width: 100%;
-        margin: 0.5rem 0.5rem 0rem 0.5rem;
-      }
+      // .overview-content {
+      //   width: 100%;
+      //   margin: 0.5rem 0.5rem 0rem 0.5rem;
+      // }
     }
 
     > div {
@@ -145,10 +153,10 @@ const Container = styled.div`
       display: block;
       width: 100%;
 
-      .overview-content {
-        width: 100%;
-        margin: 0.5rem 0.5rem 0rem 0.5rem;
-      }
+      // .overview-content {
+      //   width: 100%;
+      //   margin: 0.5rem 0.5rem 0rem 0.5rem;
+      // }
     }
 
     .card-div {

@@ -85,7 +85,7 @@ const DataTable = ({ header, theaders, data, refreshData }) => {
           <TBody>
             {data.map((x, index) => (
               <TR key={index} onClick={() => handleClicked(x)}>
-                <TD className="left">
+                <TD>
                   {new Date(x["createdOn"]).toLocaleDateString()}
                 </TD>
                 <TD>{`${x["customerId"]["name"]} ${x["customerId"]["lastname"]} `}</TD>
