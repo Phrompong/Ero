@@ -66,6 +66,10 @@ const DataTable = ({ header, theaders, data, refreshData }) => {
     [details, showDetails]
   );
 
+  const fotmatNumber = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   return (
     <Container>
       <TableHeader>{header}</TableHeader>
@@ -84,15 +88,15 @@ const DataTable = ({ header, theaders, data, refreshData }) => {
                 <TD className="left">
                   {new Date(x["createdOn"]).toLocaleDateString()}
                 </TD>
-                <TD className="left">{`${x["customerId"]["name"]} ${x["customerId"]["lastname"]} `}</TD>
+                <TD>{`${x["customerId"]["name"]} ${x["customerId"]["lastname"]} `}</TD>
                 <TD>{x["rightStockName"]}</TD>
-                <TD>{x["paidRightVolume"]}</TD>
+                <TD>{fotmatNumber(x["paidRightVolume"])}</TD>
                 <TD>
                   {x["customerStock"]["rightSpecialName"]}{" "}
                   {x["customerStock"]["rightSpecialVolume"]}
                 </TD>
-                <TD>{x["paymentAmount"]}</TD>
-                <Status className="left" color={color[x["status"]["value"]]}>
+                <TD>{fotmatNumber(x["paymentAmount"])}</TD>
+                <Status color={color[x["status"]["value"]]}>
                   {x["status"]["status"]}
                 </Status>
               </TR>

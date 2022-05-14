@@ -199,11 +199,11 @@ const CheckRightInfo = () => {
         <Section>
           {header}
           <p className="inner">
-            <b>E-RO</b> ตรวจสอบสิทธิ์การจองซื้อหุ้นสามัญเพิ่มทุน
+            <b>E-RO</b> ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน
             <b>{company}</b>
           </p>
           <div className="inner search">
-            <p>เพื่อตรวจสอบสิทธิ์ของท่านแล้วกรอกข้อมูลให้ถูกต้อง</p>
+            <p>เพื่อตรวจสอบสิทธิของท่านแล้วกรอกข้อมูลให้ถูกต้อง</p>
             <Search>
               <InputSearch
                 placeholder="ค้นหาหมายเลชประจำตัวประชาชน / เลขที่หนังสือเดินทาง/เลขทะเบียนนิติบุคคล"
@@ -215,7 +215,7 @@ const CheckRightInfo = () => {
           <HighLightText>
             <h3>
               {rightStockName} (อัตราส่วน {getRight} หุ้น สามัญเดิม : {ratio}
-              หุ้นสามัญเพิ่มทุน) จองเกินสิทธิ์ได้
+              หุ้นสามัญเพิ่มทุน) จองเกินสิทธิได้
             </h3>
             <p>
               ผู้จองซื้อหุ้นสามัญเพิ่มทุนที่จองซื้อและได้รับการจัดสรรหุ้นสามัญเพิ่มทุน
@@ -245,7 +245,7 @@ const CheckRightInfo = () => {
           </p>
         </Section>
         <Details style={{ marginTop: 15 }}>
-          <p>จองตามสิทธิ์</p>
+          <p>จองตามสิทธิ</p>
           <p>จำนวน</p>
           <p className="unit">
             {bookingRight}
@@ -253,7 +253,7 @@ const CheckRightInfo = () => {
           </p>
         </Details>
         <Details>
-          <p>จองเกินสิทธิ์</p>
+          <p>จองเกินสิทธิ</p>
           <p>จำนวน</p>
           <p className="unit">
             {bookingOverRight}

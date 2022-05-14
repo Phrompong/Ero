@@ -55,7 +55,7 @@ const Details = ({ show, details, closed, options }) => {
             <Header>ตรวจสอบข้อมูลการชำระเงิน / เปลี่ยนสถานะ</Header>
             <LineCard>
               <UserInfo>
-                <SubHeader>ข้อมูลทั่วไปของผู้สั่งซื้อ</SubHeader>
+                <SubHeader>ข้อมูลทั่วไปของผู้จองซื้อ</SubHeader>
                 <div className="info">
                   {info(
                     "ชื่อ-นามสกุล / Name-Lastname   :",
@@ -71,7 +71,7 @@ const Details = ({ show, details, closed, options }) => {
             <FlexContainer>
               <LineCard style={{ flex: 1, marginRight: "0.5rem" }}>
                 <TransactionInfo>
-                  <SubHeader>การสั่งซื้อหุ้นเพิ่มทุน</SubHeader>
+                  <SubHeader>การจองซื้อหุ้นเพิ่มทุน</SubHeader>
                   <div className="transaction-details">
                     <div className="row">
                       <p className="text-box">{details["rightStockName"]}</p>
@@ -96,9 +96,13 @@ const Details = ({ show, details, closed, options }) => {
                   <SubHeader>สิทธิเพิ่มเติมที่ท่านได้รับ</SubHeader>
                   <div className="row">
                     <p>{details["customerStock"]["rightSpecialName"]}</p>
-                    <BoldText>
-                      {details["customerStock"]["rightSpecialVolume"]}
-                    </BoldText>
+                    {
+                      details["customerStock"]["rightSpecialVolume"] === 0 ?
+                        <BoldText style={{ color: "#809FB8" }}>รอการจัดสรร</BoldText> :
+                        <BoldText>
+                          {details["customerStock"]["rightSpecialVolume"]}
+                        </BoldText>
+                    }
                     <p className="unit">หุ้น</p>
                   </div>
                   <BoldText style={{ margin: "20px 0 5px 0" }}>
@@ -107,7 +111,7 @@ const Details = ({ show, details, closed, options }) => {
 
                   <div className="row">
                     <SmallText>
-                      {`ส่งคำสั่งซื้อเมื่อ ${formatDate(details["createdOn"])}`}
+                      {`ส่งคำจองซื้อเมื่อ ${formatDate(details["createdOn"])}`}
                     </SmallText>
                     <SmallText>
                       {`แนบหลักฐานการโอนเมื่อ ${formatDate(

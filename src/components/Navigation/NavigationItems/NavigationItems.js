@@ -76,37 +76,37 @@ const NavigationItems = () => {
               return (
                 <>
                   <NavigationItem link="/dashboard" exact="true" img={traffic}>
-                    Dashboard
+                    แดชบอร์ด / Dashboard
                   </NavigationItem>
                   <NavigationItem link="/import" img={account}>
-                    import data
+                    นำเข้าข้อมูล / Import data
                   </NavigationItem>
                   <NavigationItem link="/checkRightAdmin" img={Vector}>
-                    ตรวจสอบสิทธิ์
+                    ตรวจสอบสิทธิ / Check rights
                   </NavigationItem>
                   <NavigationItem link="/login/admin" exact="true" img={Logout}>
-                    Logout
+                    ออกจากระบบ / Log out
                   </NavigationItem>
                 </>
               );
             } else if (user.role === "client") {
               return (
                 <>
-                  <NavigationItem link="/buy" img={traffic}>
-                    จองซื้อ / Book
-                  </NavigationItem>
-                  <NavigationItem link="/checkRightCustomer" img={Vector}>
-                    ตรวจสอบสิทธิ์ / Check rights
-                  </NavigationItem>
                   <NavigationItem link="/profile" img={profile}>
                     ข้อมูลของฉัน / Profile
+                  </NavigationItem>
+                  <NavigationItem link="/checkRightCustomer" img={Vector}>
+                    ตรวจสอบสิทธิ / Check rights
+                  </NavigationItem>
+                  <NavigationItem link="/buy" img={traffic}>
+                    จองซื้อ / Book
                   </NavigationItem>
                   <NavigationItem
                     link="/login/customer"
                     exact="true"
                     img={Logout}
                   >
-                    Logout
+                    ออกจากระบบ / Log out
                   </NavigationItem>
                 </>
               );
@@ -120,7 +120,7 @@ const NavigationItems = () => {
           <p className="year">© 2022 </p>
         </div>
         <p className="text">
-          สงวนสิทธิ์ในการใช้งาน <br />
+          สงวนสิทธิในการใช้งาน <br />
           เป็นไปตามเงื่อนไขที่บริษัทกำหนด
         </p>
       </Footer>

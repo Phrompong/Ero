@@ -125,7 +125,7 @@ const CheckRightCustomer = () => {
             </LineCard>
             <div className="button-section">
               <Button onClick={() => navigate(`${location.pathname}/info`)}>
-                ท่านสามารถกดตรวจสอบสิทธิ์การจองซื้อหุ้นภายหลังวันที่ 16 มิถุนายน
+                ท่านสามารถกดตรวจสอบสิทธิการจองซื้อหุ้นภายหลังวันที่ 16 มิถุนายน
                 2565 เป็นต้นไป
               </Button>
             </div>

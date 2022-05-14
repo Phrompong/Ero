@@ -400,7 +400,7 @@ const Buy = () => {
       setIsConfirmBooking(true);
       setOrderId(res.data._id);
       setStatus(200);
-      setAlertMessage("ยืนยันคำสั่งซื้อสำเร็จ");
+      setAlertMessage("ยืนยันคำจองซื้อสำเร็จ");
       showAlert(setShow, 2000);
 
       const formData = new FormData();
@@ -502,7 +502,7 @@ const Buy = () => {
                 }}
               />
               <h3 style={{ marginTop: "auto" }}>
-                โปรดตรวจสอบข้อมูลของท่านก่อนการลงทะเบียนจองสิทธิ์
+                โปรดตรวจสอบข้อมูลของท่านก่อนการลงทะเบียนจองสิทธิ
               </h3>
             </Header>
             <LineCard style={{ padding: "10px 20px", overflow: "visible" }}>
@@ -648,7 +648,7 @@ const Buy = () => {
                   fontWeight: "bold",
                 }}
               >
-                ข้อมูลการจองสิทธิ์
+                ข้อมูลการจองสิทธิ
               </h3>
             </Header>
             <LineCard style={{ padding: "20px", fontSize: "17px" }}>
@@ -891,7 +891,7 @@ const Buy = () => {
                         color: persianblue,
                       }}
                     >
-                      <b>รายละเอียดข้อมูลคำสั่งซื้อการจองสิทธิ</b>
+                      <b>รายละเอียดข้อมูลคำจองซื้อการจองสิทธิ</b>
                     </div>
                   </FlexContainer>
                   <FlexContainer>
@@ -971,7 +971,7 @@ const Buy = () => {
                           color: persianblue,
                         }}
                       >
-                        <b>รายละเอียดการสั่งซื้อ</b>
+                        <b>รายละเอียดการจองซื้อ</b>
                       </div>
                       <div className="content-member">
                         <div
@@ -998,7 +998,7 @@ const Buy = () => {
                           </div>
                           <div className="content-detail-share">
                             <div className="text-title">
-                              <p>สิทธิ์ในการจองซื้อหุ้นเพิ่มทุน</p>
+                              <p>สิทธิในการจองซื้อหุ้นเพิ่มทุน</p>
                               <p className="text-black">{rightStockName}</p>
                             </div>
                             <div className="text-amount">
@@ -1030,7 +1030,7 @@ const Buy = () => {
                           </div>
                           <div className="content-detail-share">
                             <div className="text-title">
-                              <p>หุ้นจองซื้อเกินสิทธิ์</p>
+                              <p>หุ้นจองซื้อเกินสิทธิ</p>
                               <p className="text-black">{rightStockName}</p>
                             </div>
                             <div className="text-amount">
@@ -1108,7 +1108,7 @@ const Buy = () => {
                         color: persianblue,
                       }}
                     >
-                      <b>รายละเอียดข้อมูลคำสั่งซื้อการจองสิทธิ</b>
+                      <b>รายละเอียดข้อมูลคำจองซื้อการจองสิทธิ</b>
                     </div>
                   </FlexContainer>
                   <FlexContainer>
@@ -1188,7 +1188,7 @@ const Buy = () => {
                           color: persianblue,
                         }}
                       >
-                        <b>รายละเอียดการสั่งซื้อ</b>
+                        <b>รายละเอียดการจองซื้อ</b>
                       </div>
                       <div className="content-member">
                         <div
@@ -1215,7 +1215,7 @@ const Buy = () => {
                           </div>
                           <div className="content-detail-share">
                             <div className="text-title">
-                              <p>สิทธิ์ในการจองซื้อหุ้นเพิ่มทุน</p>
+                              <p>สิทธิในการจองซื้อหุ้นเพิ่มทุน</p>
                               <p className="text-black">{rightStockName}</p>
                             </div>
                             <div className="text-amount">
@@ -1247,7 +1247,7 @@ const Buy = () => {
                           </div>
                           <div className="content-detail-share">
                             <div className="text-title">
-                              <p>หุ้นจองซื้อเกินสิทธิ์</p>
+                              <p>หุ้นจองซื้อเกินสิทธิ</p>
                               <p className="text-black">{rightStockName}</p>
                             </div>
                             <div className="text-amount">
@@ -1391,7 +1391,7 @@ const Buy = () => {
                     <Line className="hr two" />
                   </Step>
                   <StepDetail isActive={page === 1}>
-                    ขั้นตอนที่ 1 - ลงทะเบียนจองสิทธิ์
+                    ขั้นตอนที่ 1 - ลงทะเบียนจองสิทธิ
                   </StepDetail>
                 </div>
                 <div className="step two">
@@ -1478,7 +1478,7 @@ const Buy = () => {
                               fontWeight: "bold",
                             }}
                           >
-                            กรอกข้อมูลจองสิทธิ์
+                            กรอกข้อมูลจองสิทธิ
                           </h3>
                           <div>
                             <Button
@@ -1720,7 +1720,7 @@ const Buy = () => {
                             <h3
                               style={{ color: "#1D3AB1", fontWeight: "bold" }}
                             >
-                              การสั่งซื้อหุ้นเพิ่มทุนของท่าน
+                              การจองซื้อหุ้นเพิ่มทุนของท่าน
                             </h3>
                           </Header>
                           <ShareDetail style={{ marginBottom: "-10px" }}>
@@ -1793,7 +1793,7 @@ const Buy = () => {
                               <h3
                                 style={{ color: "#1D3AB1", fontWeight: "bold" }}
                               >
-                                จำนวนหุ้นที่ท่านซื้อเกินสิทธิ์
+                                จำนวนหุ้นที่ท่านซื้อเกินสิทธิ
                               </h3>
                             </Header>
                             <ShareDetail>
@@ -1815,7 +1815,7 @@ const Buy = () => {
                               <h3
                                 style={{ color: "#1D3AB1", fontWeight: "bold" }}
                               >
-                                กรณีไม่ได้จัดสรรหุ้นส่วนที่เกินสิทธิ์
+                                กรณีไม่ได้จัดสรรหุ้นส่วนที่เกินสิทธิ
                                 ขอให้โอนเงินเข้าบัญชี
                               </h3>
                             </Header>
@@ -1909,7 +1909,7 @@ const Buy = () => {
                       >
                         <Button
                           type="submit"
-                          value="ยืนยันคำสั่งซื้อ"
+                          value="ยืนยันคำจองซื้อ"
                           disabled={isConfirmOrder}
                           onClick={() => handlerOnSubmited()}
                         />

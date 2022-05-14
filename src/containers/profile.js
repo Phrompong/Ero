@@ -81,9 +81,9 @@ const Dashboard = () => {
   const theaders = [
     "วันที่",
     "รายละเอียด",
-    "จำนวนการสั่งซื้อหุ้นเพิ่มทุน",
+    "จำนวนการจองซื้อหุ้นเพิ่มทุน",
     "สิทธิเพิ่มเติม",
-    "มูลค่าการสั่งซื้อ",
+    "มูลค่าการจองซื้อ",
     "สถานะรายการ",
   ];
 
@@ -133,7 +133,7 @@ const Dashboard = () => {
           <LineCard>
             <div className="table-detail">
               <DataTableProfile
-                header="รายการสั่งซื้อของท่าน"
+                header="รายการจองซื้อของท่าน"
                 theaders={theaders}
                 data={data}
                 refreshData={fetchDataTable}

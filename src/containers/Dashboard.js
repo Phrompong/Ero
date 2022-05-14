@@ -135,9 +135,9 @@ const Dashboard = () => {
     "วันที่",
     "ชื่อ-นามสกุล",
     "รายละเอียด",
-    "จำนวนการสั่งซื้อหุ้นเพิ่มทุน",
+    "จำนวนการจองซื้อหุ้นเพิ่มทุน",
     "สิทธิเพิ่มเติม",
-    "มูลค่าการสั่งซื้อ",
+    "มูลค่าการจองซื้อ",
     "สถานะรายการ",
   ];
 
@@ -178,20 +178,20 @@ const Dashboard = () => {
           <div className="overview">
             <div className="overview-content">
               <Overview
-                header="จำนวนคำสั่งซื้อในปัจจุบัน"
+                header="จำนวนคำจองซื้อในปัจจุบัน"
                 pvalue={currentOrderAmount}
                 p1="ยอดรวมที่ชำระเงินแล้ว"
                 num1={paidAmount}
-                p2="จากยอดสั่งซื้อทั้งหมด"
+                p2="จากยอดจองซื้อทั้งหมด"
                 num2={paymentAmount}
               />
             </div>
             <div className="overview-content">
               <Overview
-                header="จำนวนคำสั่งซื้อเมื่อเทียบกับยอดจัดจำหน่าย"
+                header="จำนวนคำจองซื้อเมื่อเทียบกับยอดจัดจำหน่าย"
                 pvalue={currentSaleAmount}
                 color={shamrock}
-                p1="คำสั่งซื้อทั้งหมด"
+                p1="คำจองซื้อทั้งหมด"
                 num1={orderAmount}
                 p2="ยอดจัดจำหน่ายทั้งหมด"
                 num2={saleAmount}
@@ -203,7 +203,7 @@ const Dashboard = () => {
           <LineCard>
             <div className="table-detail">
               <DataTable
-                header="รายการสั่งซื้อทั้งหมดในระบบ"
+                header="รายการจองซื้อทั้งหมดในระบบ"
                 theaders={theaders}
                 data={data}
                 refreshData={refreshData}

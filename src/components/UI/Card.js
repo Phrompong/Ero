@@ -24,6 +24,9 @@ export const StyledCard = styled.div`
     margin-bottom: 0;
 
     .pre-term-condition {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
       padding: 0 2rem;
       white-space: break-spaces;
       margin-bottom: 0;
@@ -60,6 +63,14 @@ export const StyledCard = styled.div`
     .btn-div {
       display: grid;
       text-align: center;
+    }
+
+    .card-term-condition {
+      padding: 0;
+
+      .pre-term-condition {
+        padding: 0 0.25rem;
+      }
     }
   }
 
