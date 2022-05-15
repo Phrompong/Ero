@@ -87,17 +87,22 @@ const CheckRightAdmin = () => {
           />
           <Button onClick={handleSearchButtonClicked}>ค้นหา</Button>
         </SearchDiv>
-
+        
         <TableSection>
-          <LineCard>
-            <DataTableCheckRight
-              header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
-              theaders={theaders}
-              data={data}
-              refreshData={fetchDataTable}
-            />
-            <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
-          </LineCard>
+          {/* <div style={{ overflow: "scroll" }}> */}
+            <LineCard>
+              <div className="table-detail">
+                <DataTableCheckRight
+                  header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
+                  theaders={theaders}
+                  data={data}
+                  refreshData={fetchDataTable}
+                />
+                {/* <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} /> */}
+              </div>
+              <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
+            </LineCard>
+          {/* </div> */}
         </TableSection>
       </Container>
     </Card>

@@ -144,8 +144,7 @@ const Container = styled.div`
   width: 70vw;
   display: flex;
   flex-direction: column;
-  overflow: scroll;
-  overflow-x: auto;
+  // overflow: auto;
   overflow-y: auto;
 
   > * {
