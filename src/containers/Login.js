@@ -186,7 +186,7 @@ const Login = () => {
                             </pre>
                             <pre
                               className="pre-term-condition"
-                              style={{ color: "#1D3AB1", textAlign: "center", fontSize: "16px", fontWeight: "400" }}
+                              style={{ color: "#1D3AB1", textAlign: "center", fontSize: "16px", fontWeight: "400", whiteSpace: "initial"  }}
                             >
                               {Parser(`รายการจองซื้อหุ้นของท่านจะสำเร็จเมื่อบริษัทตรวจสอบผลการชำระเงินค่าจองซื้อหุ้นเข้าบัญชีบริษัทเรียบร้อยแล้ว`)}
                             </pre>
