@@ -23,7 +23,7 @@ const Toggle = styled.div`
     display: flex;
   }
 
-  @media screen and (min-width: 540px) and (max-width: 1000px) {
+  @media screen and (min-width: 541px) and (max-width: 1000px) {
     display: flex;
   }
 `;

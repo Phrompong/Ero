@@ -75,7 +75,7 @@ export const StyledCard = styled.div`
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 880px) {
+  @media screen and (min-width: 541px) and (max-width: 880px) {
     margin: auto;
     overflow: scroll;
     overflow-x: auto;
@@ -134,15 +134,40 @@ export const StyledLineCard = styled.div`
     }
   }
 
+  .payment-method {
+    padding: 10px 20px;
+    display: flex;
+
+    .bank-name {
+      margin-top: 1rem;
+      width: 80%;
+    }
+
+    .btn-label {
+      width: 20%;
+      margin: auto 10px;
+    }
+
+    .btn-upload {
+      width: 20%;
+      font-size: 17px;
+      height: 60%;
+      padding: 1rem;
+    }
+
+    .warning-text {
+      width: 60%;
+      margin: auto 0;
+      color: #575656;
+    }
+  }
+
   /* For Mobile */
   @media screen and (max-width: 540px) {
     margin: 0;
     overflow: scroll;
-    -ms-overflow-style: none; /* for Internet Explorer, Edge */
-    scrollbar-width: none; /* for Firefox */
-    ::-webkit-scrollbar {
-      display: none; /* for Chrome, Safari, and Opera */
-    }
+    overflow-x: auto;
+    overflow-y: auto;
     
     .modal-flex {
       display: flex;
@@ -166,10 +191,51 @@ export const StyledLineCard = styled.div`
         margin-bottom: auto;
       }
     }
+
+    .result {
+      text-align: center;
+
+      .result-label {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    .payment-method {
+      padding: 10px 20px;
+      width: 100%;
+      display: block;
+
+      .bank-name {
+        margin-top: 1rem;
+        width: 100%;
+      }
+
+      .btn-label {
+        width: 100%;
+        margin: auto 10px;
+        margin-bottom: 2rem;
+      }
+  
+      .btn-upload {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        width: 100%;
+        font-size: 17px;
+        height: 60%;
+        padding: 1rem;
+      }
+  
+      .warning-text {
+        margin: 2rem 0 auto 0;
+        width: 100%;
+        color: #575656;
+      }
+    }
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 880ยป) {
+  @media screen and (min-width: 541px) and (max-width: 880px) {
     margin: 0;
 
     .modal-flex {
@@ -193,6 +259,39 @@ export const StyledLineCard = styled.div`
         margin-bottom: 0.5rem;
       }
     }
+
+    .payment-method {
+      padding: 10px 20px;
+      width: 100%;
+      display: block;
+
+      .bank-name {
+        margin-top: 1rem;
+        width: 100%;
+      }
+
+      .btn-label {
+        width: 100%;
+        margin: auto 10px;
+        margin-bottom: 2rem;
+      }
+  
+      .btn-upload {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        width: 100%;
+        font-size: 17px;
+        height: 60%;
+        padding: 1rem;
+      }
+  
+      .warning-text {
+        margin: 2rem 0 auto 0;
+        width: 100%;
+        color: #575656;
+      }
+    }
+  }
   }
 `;
 
@@ -214,7 +313,7 @@ export const StyledLineCardBank = styled.div`
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 1024px) {
+  @media screen and (min-width: 541px) and (max-width: 1024px) {
     margin: 0.5rem;
   }
 `;

@@ -5,6 +5,10 @@ import { persianblue } from "../../utils/color";
 
 import { LineCard } from "../UI/Card";
 
+const formatNumber = (number) => {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 const Overview = ({ header, pvalue, color, p1, p2, num1, num2 }) => (
   <Container color={color}>
     <LineCard style={{ padding: 15 }}>
@@ -16,12 +20,12 @@ const Overview = ({ header, pvalue, color, p1, p2, num1, num2 }) => (
         <Info>
           <Paragraph>{p1}</Paragraph>
           <h2>
-            {num1}
+            {formatNumber(num1)}
             <span>บาท</span>
           </h2>
           <Paragraph>{p2}</Paragraph>
           <h4>
-            {num2}
+            {formatNumber(num2)}
             <span>บาท</span>
           </h4>
         </Info>

@@ -316,7 +316,7 @@ const Card = styled.div`
   }
 
   /* For Mobiles */
-  @media screen and (min-width: 540px) and (max-width: 1024px) {
+  @media screen and (min-width: 541px) and (max-width: 1024px) {
     
   }
 `;
@@ -327,7 +327,7 @@ const Header = styled.p`
   font-weight: 600;
 
   /* For Mobiles */
-  @media screen and (min-width: 540px) and (max-width: 1024px) {
+  @media screen and (min-width: 541px) and (max-width: 1024px) {
     padding: 0 1rem;
   }
 `;

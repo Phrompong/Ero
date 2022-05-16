@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useMemo } from "react";
 import { httpGetRequest } from "../utils/fetch";
 
+// import { GoogleMap, LoadScript } from '@react-google-maps/api';
+
 const Dashboard = () => {
   const [data, setData] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -167,7 +169,7 @@ const Container = styled.div`
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 880px) {
+  @media screen and (min-width: 541px) and (max-width: 880px) {
     width: 90vw;
   }
 `;

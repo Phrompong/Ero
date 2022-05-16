@@ -317,7 +317,7 @@ const Container = styled.div`
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 880px) {
+  @media screen and (min-width: 541px) and (max-width: 880px) {
   }
 `;
 

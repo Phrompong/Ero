@@ -43,13 +43,13 @@ const MyPaginate = styled(ReactPaginate).attrs({
   /* For Mobile */
   @media screen and (max-width: 540px) {
     width: 100%;
-    min-width: 1200px;
+    // min-width: 1200px;
   }
 
   /* For Mobile */
-  @media screen and (min-width: 540px) and (max-width: 880px) {
+  @media screen and (min-width: 541px) and (max-width: 880px) {
     width: 100%;
-    min-width: 1200px;
+    // min-width: 1200px;
   }
 `;
 const Paginate = ({ setCurrentPage, totalPages }) => (

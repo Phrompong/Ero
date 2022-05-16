@@ -23,7 +23,7 @@ const StyledSidebar = styled.div`
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 980px) {
+  @media screen and (min-width: 541px) and (max-width: 980px) {
     transform: translateX(-100%);
   }
 `;

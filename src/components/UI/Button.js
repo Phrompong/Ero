@@ -22,7 +22,7 @@ export const Button = styled.button`
     font-size: 14px;
   }
 
-  @media screen and (min-width: 540px) and (max-width: 880px) {
+  @media screen and (min-width: 541px) and (max-width: 880px) {
     font-size: 14px;
   }
 `;

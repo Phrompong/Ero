@@ -21,14 +21,13 @@ export const ModalStyled = styled.div`
   overflow-y: auto;
 
   .bank-validate {
-    width: 60%;
+    width: 700px;
     margin: auto;
   }  
 
   /* For Mobile */
   @media screen and (max-width: 540px) {
     padding: ${props => props.isBuy && "10rem"};
-    height: 640px;
     overflow: scroll;
     overflow-x: auto;
     overflow-y: auto;
@@ -40,8 +39,7 @@ export const ModalStyled = styled.div`
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 880px) {
-    height: 760px;
+  @media screen and (min-width: 541px) and (max-width: 880px) {
     overflow: scroll;
     overflow-x: auto;
     overflow-y: auto;

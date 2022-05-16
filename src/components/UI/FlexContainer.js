@@ -32,8 +32,12 @@ const Container = styled.div`
 
     .content-detail-member {
       display: flex;
-      justify-content: space-between;
+      justify-content: start;
 
+      .right {
+        margin-left: 2rem;
+      }
+      
       .content-detail-text {
         display: flex;
         justify-content: space-between;
@@ -54,9 +58,35 @@ const Container = styled.div`
         }
       }
 
+      .share {
+        > :nth-child(1) {
+          width: 500px;
+        }
+
+        > :nth-child(2) {
+          margin: 0;
+          width: 150px;
+        }
+
+        > :nth-child(3) {
+          margin: 0;
+          width: 150px;
+        }
+
+        > :nth-child(4) {
+          margin: 0;
+          width: 150px;
+        }
+      }
+
       .content-detail-share {
+        margin: 1rem 0;
         display: flex;
-        justify-content: space-between;
+        justify-content: start;
+
+        .right {
+          margin-left: 2rem;
+        }
       }
     }
   }
@@ -68,6 +98,10 @@ const Container = styled.div`
 
   .info-detail {
     width: 100%;
+  }
+
+  .step-div {
+    margin: auto;
   }
 
   /* For Mobile */
@@ -106,6 +140,14 @@ const Container = styled.div`
       .content-detail-member {
         display: block;
 
+        .content-detail-share {
+          display: block;
+        }
+
+        .right {
+          margin-left: 0;
+        }
+
         .content-detail-text {
           display: block;
 
@@ -130,7 +172,9 @@ const Container = styled.div`
 
         .content-detail-share {
           display: block;
-          
+          .right {
+            margin-left: 0;
+          }
           .text-title {
             display: flex;
             width: 100%;
@@ -148,7 +192,7 @@ const Container = styled.div`
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 880px) {
+  @media screen and (min-width: 541px) and (max-width: 880px) {
     .overview {
       display: block;
       width: 100%;
@@ -176,6 +220,10 @@ const Container = styled.div`
       .content-detail-member {
         display: flex;
         justify-content: space-between;
+
+        .right {
+          margin-left: 0;
+        }
   
         .content-detail-text {
           display: block;
@@ -187,7 +235,7 @@ const Container = styled.div`
           }
   
           .bank-title {
-            margin-right: 1rem;
+            margin: 0;
           }
   
           .bank-logo-img {

@@ -12,6 +12,8 @@ import {
 
 import Details from "./Details";
 import Paginate from "../Paginate/Paginate";
+import Detail from "../Modal/ModalDetail";
+
 import { httpGetRequest } from "../../utils/fetch";
 
 const DataTable = ({ header, theaders, data, refreshData }) => {
@@ -66,7 +68,7 @@ const DataTable = ({ header, theaders, data, refreshData }) => {
     [details, showDetails]
   );
 
-  const fotmatNumber = (number) => {
+  const formatNumber = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
@@ -90,12 +92,12 @@ const DataTable = ({ header, theaders, data, refreshData }) => {
                 </TD>
                 <TD>{`${x["customerId"]["name"]} ${x["customerId"]["lastname"]} `}</TD>
                 <TD>{x["rightStockName"]}</TD>
-                <TD>{fotmatNumber(x["paidRightVolume"])}</TD>
+                <TD>{formatNumber(x["paidRightVolume"])}</TD>
                 <TD>
                   {x["customerStock"]["rightSpecialName"]}{" "}
                   {x["customerStock"]["rightSpecialVolume"]}
                 </TD>
-                <TD>{fotmatNumber(x["paymentAmount"])}</TD>
+                <TD>{formatNumber(x["paymentAmount"])}</TD>
                 <Status color={color[x["status"]["value"]]}>
                   {x["status"]["status"]}
                 </Status>

@@ -12,7 +12,11 @@ import {
 } from "../../utils/color";
 
 import Details from "./Details";
+import { ModalDetail } from "../Modal/ModalDetail";
 import Paginate from "../Paginate/Paginate";
+
+import { Modal } from "../UI/Modal";
+
 import { httpGetRequest } from "../../utils/fetch";
 
 const DataTableProfile = ({ header, theaders, data, refreshData }) => {
@@ -47,6 +51,7 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
   };
 
   const handleClicked = (details) => {
+    console.log(details)
     setShowDetails(true);
     setDetails(details);
   };
@@ -58,12 +63,33 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
 
   const detailsModal = useMemo(
     () => (
-      <Details
-        options={options}
-        show={showDetails}
-        closed={handleClosedModal}
-        details={details}
-      />
+      details && (
+        <Modal show={showDetails}>
+          <ModalContainer>
+            <ModalDetail
+              fullname={`${details["customers"].name} ${details["customers"].lastname}`}
+              shareId={details["registrationNo"]}
+              phoneNo={details["customers"].telephone}
+              dropdownSelect={{
+                code: "test",
+                name: "test"
+              }}
+              tradingAccountNo={"test"}
+              rightStockName={details["tradingAccountNo"]}
+              stockVolume={details["stockVolume"]}
+              offerPrice={details["offerPrice"]}
+              rightStockVolume={details["rightStockVolume"]}
+              rightSpecialName={details["rightSpecialName"]}
+              excessVolume={0}
+              currentPrice={0}
+              // depositBank={depositBank}
+              // bank={bank}
+              hanlderOnBack={() => setShowDetails(false)}
+              handlerOnAccept={() => setShowDetails(false)}
+            />
+          </ModalContainer>
+        </Modal>
+      )
     ),
     [details, showDetails]
   );
@@ -85,29 +111,27 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
           <TBody>
             {data.map((x, index) => (
               <TR key={index} onClick={() => handleClicked(x)}>
-                <TD style={{ width: "100px" }} className="left">
+                <TD style={{ width: "100px" }}>
                   จองซื้อ / Book
                 </TD>
                 <TD>{x["rightStockName"]}</TD>
                 <TD>{x["registrationNo"]}</TD>
-                <TD style={{ textAlign: "start" }}>{`${
+                <TD>{`${
                   x["customers"].name + " " + x["customers"].lastname
                 }`}</TD>
                 <TD>{x["stockVolume"]}</TD>
                 <TD>{x["rightStockVolume"]}</TD>
-                <TD style={{ width: "300px" }}>
-                  {x["status"].length > 0 ? (
-                    x["status"].map((obj) => (
-                      <Status className="left" color={color[obj["value"]]}>
-                        {obj["status"]}
-                      </Status>
-                    ))
-                  ) : (
-                    <Status className="left" color={color[0]}>
-                      ยังไม่ได้ดำเนินการ
-                    </Status>
-                  )}
-                </TD>
+                {x["status"].length > 0 ? (
+                  x["status"].map((obj) => (
+                    <TD color={color[obj["value"]]}>
+                      {obj["status"]}
+                    </TD>
+                  ))
+                ) : (
+                  <TD color={color[0]}>
+                    ยังไม่ได้ดำเนินการ
+                  </TD>
+                )}
               </TR>
             ))}
           </TBody>
@@ -135,10 +159,6 @@ const Table = styled.table`
   text-align: center;
   border-collapse: collapse;
   width: 100%;
-
-  .left {
-    text-align: left;
-  }
 `;
 
 const THead = styled.thead`
@@ -166,6 +186,7 @@ const TR = styled.tr`
 `;
 
 const TD = styled.td`
+  color: ${({ color }) => (color ? color : "#000000")};
   :not(:first-child) {
     padding: 5px 25px;
   }
@@ -175,4 +196,172 @@ const Status = styled.td`
   color: ${({ color }) => (color ? color : "#000")};
   font-weight: bold;
   padding: 5px 20px;
+`;
+
+const ModalContainer = styled.div`
+  border-radius: 10px;
+  border: 1px solid #d9e1e7;
+  background: #FFFFFF;
+  padding: 20px 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  overflow-x: auto;
+  overflow-y: auto;
+
+  > * {
+    margin: 10px 0;
+  }
+
+  .card-tag {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .text-title-end {
+    width: 40%;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .content-member {
+    color: #809fb8;
+
+    .content-detail-text {
+      margin: 10px 0;
+      display: flex;
+      align-items: baseline;
+    }
+
+    .content-detail-condition {
+      display: flex;
+      text-align: center;
+
+      .text-title {
+        width: 100px;
+      }
+    }
+
+    .content-detail-share {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+
+      .text-title {
+        width: 40%;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+      }
+    }
+
+    .text-black {
+      color: #000000;
+    }
+
+    .text-amount {
+      display: flex;
+      justify-content: space-between;
+      width: 40%;
+      align-items: baseline;
+    }
+  }
+
+  .buy-flex {
+    width: 48%;
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    width: 90vw;
+
+    .card-tag {
+      display: inline;
+    }
+    .buy-flex {
+      width: 100%;
+    }
+
+    .content-member {
+      .content-detail-condition {
+        display: block;
+        text-align: center;
+
+        .text-title {
+          // width: 100%;
+        }
+      }
+
+      // .content-detail-share {
+      //   width: 100%;
+      //   display: block;
+      //   align-items: baseline;
+  
+      //   .text-title {
+      //     width: 40%;
+      //     display: flex;
+      //     align-items: baseline;
+      //     justify-content: space-between;
+      //   }
+      // }
+    }
+
+    .text-title-end {
+      width: 100%;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 541px) and (max-width: 880px) {
+    width: 90vw;
+
+    .card-tag {
+      display: inline;
+    }
+    
+    .buy-flex {
+      width: 100%;
+    }
+    .buy-flex {
+      width: 100%;
+    }
+
+    .content-member {
+      .content-detail-condition {
+        display: block;
+        text-align: center;
+
+        .text-title {
+          width: 100%;
+        }
+      }
+
+      .content-detail-share {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+  
+        .text-title {
+          width: 50%;
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+        }
+      }
+  
+    }
+
+    .text-title-end {
+      width: 50%;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+  }
 `;

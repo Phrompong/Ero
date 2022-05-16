@@ -8,6 +8,10 @@ import { useState, useEffect, useRef } from "react";
 import { httpGetRequest } from "../../utils/fetch";
 import { useDispatch, useSelector } from "react-redux";
 
+import {
+  DropdownArrow
+} from "../../components/UI/Dropdown";
+
 const Container = styled.div`
   padding: 30px 20px;
   display: flex;
@@ -83,17 +87,26 @@ const Section = styled.section`
   .search {
     padding-top: 2rem;
   }
+
+  .modal-block {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+
+    .modal-block-label {
+      display: flex;
+      width: 50%;
+      margin-top: auto;
+      margin-bottom: auto;
+      margin-right: 0;
+    }
+  }
 `;
 
 const Search = styled.div`
   margin-top: 10px;
   display: flex;
   width: 80%;
-
-  input {
-    flex: 1;
-    margin-right: 20px;
-  }
 `;
 
 const Line = styled.div`
@@ -116,7 +129,29 @@ const CheckRightInfo = () => {
   const [numCert, setNumCert] = useState("");
   const searchInputRef = useRef("");
 
+  const [shareId, setShareId] = useState(null);
+  const [allRegistrations, setAllRegistrations] = useState([]);
+
+  const [isOpenDropdownArrow, setIsOpenDropdownArrow] = useState(false);
+
   const { user } = useSelector((state) => state);
+
+  const getCustomerProfile = async () => {
+    const [res, status] = await httpGetRequest(
+      `customerStocks?customerId=${user.customerId}`
+    );
+
+    if (status === 200) {
+      const payload = res.data[0];
+      const registrations = res.data.map((data) => {
+        return { registraionNo: data.registrationNo };
+      });
+      setAllRegistrations(registrations);
+      setShareId(
+        registrations.length > 0 ? registrations[0].registraionNo : null
+      );
+    }
+  };
 
   async function fetchCustomerStock() {
     const inputValue = searchInputRef.current.value;
@@ -185,6 +220,10 @@ const CheckRightInfo = () => {
     fetchCustomerStock();
   };
 
+  useEffect(() => {
+    getCustomerProfile()
+  }, [])
+
   const header = (
     <Header>
       <span>
@@ -205,10 +244,26 @@ const CheckRightInfo = () => {
           <div className="inner search">
             <p>เพื่อตรวจสอบสิทธิของท่านแล้วกรอกข้อมูลให้ถูกต้อง</p>
             <Search>
-              <InputSearch
+              {/* <InputSearch
                 placeholder="ค้นหาหมายเลชประจำตัวประชาชน / เลขที่หนังสือเดินทาง/เลขทะเบียนนิติบุคคล"
                 ref={searchInputRef}
-              />
+              /> */}
+              <div className="modal-block-label" style={{ marginRight: "1rem" }}>
+                <DropdownArrow
+                  options={allRegistrations}
+                  isOpen={isOpenDropdownArrow}
+                  onClick={() => setIsOpenDropdownArrow(!isOpenDropdownArrow)}
+                  onBlur={() => setIsOpenDropdownArrow(false)}
+                  setSelected={(e) => setShareId(e.registraionNo)}
+                  selected={{
+                    registraionNo:
+                      allRegistrations.length > 0 && !shareId
+                        ? allRegistrations[0].registraionNo
+                        : shareId,
+                  }}
+                  display={"registraionNo"}
+                />
+              </div>
               <Button onClick={handleSearchButtonClicked}>ค้นหา</Button>
             </Search>
           </div>

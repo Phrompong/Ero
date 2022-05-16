@@ -66,7 +66,7 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
     [details, showDetails]
   );
 
-  const fotmatNumber = (number) => {
+  const formatNumber = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
@@ -89,12 +89,12 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
                   {new Date(x["createdOn"]).toLocaleDateString()}
                 </TD>
                 <TD>{x["rightStockName"]}</TD>
-                <TD>{fotmatNumber(x["paidRightVolume"])}</TD>
+                <TD>{formatNumber(x["paidRightVolume"])}</TD>
                 <TD>
                   {x["customerStock"]["rightSpecialName"]}{" "}
                   {x["customerStock"]["rightSpecialVolume"]}
                 </TD>
-                <TD>{fotmatNumber(x["paymentAmount"])}</TD>
+                <TD>{formatNumber(x["paymentAmount"])}</TD>
                 <Status color={color[x["status"]["value"]]}>
                   {x["status"]["status"]}
                 </Status>

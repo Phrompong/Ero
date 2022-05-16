@@ -29,7 +29,7 @@ const Main = styled.main`
     margin-left: 0;
   }
 
-  @media screen and (min-width: 540px) and (max-width: 990px) {
+  @media screen and (min-width: 541px) and (max-width: 990px) {
     margin-left: 0;
   }
 `;

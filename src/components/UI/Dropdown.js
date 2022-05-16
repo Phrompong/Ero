@@ -34,7 +34,7 @@ const Select = styled.select`
     font-size: 14px;
   }
 
-  @media screen and (min-width: 540px) and (max-width: 880px) {
+  @media screen and (min-width: 541px) and (max-width: 880px) {
     font-size: 14px;
   }
 `;
@@ -106,6 +106,7 @@ const Wrapper = styled.div`
 
   .input-select {
     width: 100%;
+    display: flex;
   }
 `;
 

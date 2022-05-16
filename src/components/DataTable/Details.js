@@ -96,13 +96,14 @@ const Details = ({ show, details, closed, options }) => {
                   <SubHeader>สิทธิเพิ่มเติมที่ท่านได้รับ</SubHeader>
                   <div className="row">
                     <p>{details["customerStock"]["rightSpecialName"]}</p>
-                    {
+                    <BoldText style={{ color: "#809FB8" }}>รอการจัดสรร</BoldText>
+                    {/* {
                       details["customerStock"]["rightSpecialVolume"] === 0 ?
                         <BoldText style={{ color: "#809FB8" }}>รอการจัดสรร</BoldText> :
                         <BoldText>
                           {details["customerStock"]["rightSpecialVolume"]}
                         </BoldText>
-                    }
+                    } */}
                     <p className="unit">หุ้น</p>
                   </div>
                   <BoldText style={{ margin: "20px 0 5px 0" }}>
@@ -303,7 +304,7 @@ const Header = styled.h3`
   }
 
   /* For Tablets */
-  @media screen and (min-width: 540px) and (max-width: 880px) {
+  @media screen and (min-width: 541px) and (max-width: 880px) {
     margin-left: 0;
   }
 `;
