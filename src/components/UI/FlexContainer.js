@@ -170,6 +170,11 @@ const Container = styled.div`
           }
         }
 
+        .share {
+          width: 100%;
+          display: flex;
+        }
+
         .content-detail-share {
           display: block;
           .right {
@@ -242,6 +247,11 @@ const Container = styled.div`
             margin-left: 0rem;
             display: flex;
           }
+        }
+
+        .share {
+          width: 100%;
+          display: flex;
         }
   
         .content-detail-share {
