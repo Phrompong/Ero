@@ -14,7 +14,7 @@ import { balihai, shamrock } from "../utils/color";
 import { httpGetRequest } from "../utils/fetch";
 
 import { Search } from "@styled-icons/bootstrap/Search";
-import { FileExport } from "@styled-icons/boxicons-solid/FileExport"
+import { FileExport } from "@styled-icons/boxicons-solid/FileExport";
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
@@ -132,6 +132,10 @@ const Dashboard = () => {
     );
   };
 
+  const handleExport = async () => {
+    window.open("http://203.151.211.133:3002/api/v1/orders/export/excel");
+  };
+
   const theaders = [
     "วันที่",
     "ชื่อ-นามสกุล",
@@ -172,14 +176,14 @@ const Dashboard = () => {
           </SearchDiv>
         </FlexContainer>
         <FlexContainer style={{ justifyContent: "end" }}>
-          <Button>
+          <Button onClick={handleExport}>
             <ExportIcon />
             Export file
           </Button>
         </FlexContainer>
         <FlexContainer
           style={{
-            justifyContent: "flex-start"
+            justifyContent: "flex-start",
           }}
         >
           <div className="overview">
@@ -215,7 +219,10 @@ const Dashboard = () => {
                 data={data}
                 refreshData={refreshData}
               />
-              <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
+              <Paginate
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+              />
             </div>
           </LineCard>
         </TableSection>
@@ -266,7 +273,7 @@ const SearchDiv = styled.div`
     .flex {
       margin-top: 0.5rem;
       display: flex;
-      justify-content: space-between
+      justify-content: space-between;
     }
 
     > :not(:first-child) {
@@ -280,7 +287,7 @@ const ExportIcon = styled(FileExport)`
   vertical-align: text-top;
   color: #FFFFFFF;
   margin-right: 1rem;
-`
+`;
 
 const SearchIcon = styled(Search)`
   width: 17px;
@@ -322,4 +329,3 @@ const Header = styled.div`
 const TableSection = styled.section`
   display: flex;
 `;
-
