@@ -25,7 +25,7 @@ const CheckRightCustomer = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [profile, setProfile] = useState(null);
   const searchInputRef = useRef("");
   const [news, setNews] = useState(null);

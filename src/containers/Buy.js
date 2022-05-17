@@ -59,6 +59,8 @@ const Buy = () => {
   const [bookbankFile, setBookbankFile] = useState(null);
   const hiddenFileInput = React.useRef(null);
 
+  const [previewImage, setPreviewImage] = useState(null)
+
   const handleClick = () => {
     hiddenFileInput.current.click();
   };
@@ -66,7 +68,11 @@ const Buy = () => {
   const handleOnFileSelect = (event) => {
     const fileUploaded = event.target.files[0];
     setBookbankFile(fileUploaded)
-    console.log(fileUploaded)
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      setPreviewImage(reader.result);
+    });
+    reader.readAsDataURL(fileUploaded);
   };
 
   // modal registration
@@ -253,7 +259,6 @@ const Buy = () => {
     const [file] = e.target.files;
     const maxAllowedSize = 5 * 1024 * 1024;
     const { name: fileName, size, type } = file;
-    console.log(type);
 
     if (!allowTypeFile.includes(type)) {
       setStatus(999);
@@ -274,7 +279,6 @@ const Buy = () => {
         setShow(false);
       }, 2000);
     } else {
-      console.log("ok");
       setFilename(fileName);
       setFile(file);
     }
@@ -420,27 +424,34 @@ const Buy = () => {
       setAlertMessage("ยืนยันคำจองซื้อสำเร็จ");
       showAlert(setShow, 2000);
 
-      const formData = new FormData();
-      formData.append("File", file);
-      const endpoint = `uploads/image?orderId=${res.data._id}`;
-
-      const [_res, _status] = await httpPostRequestUploadFile(
-        formData,
-        endpoint
+      const formDataBookbank = new FormData();
+      formDataBookbank.append("File", bookbankFile);
+      const endpointBookbank = `uploads/bookbank?orderId=${res.data._id}`;
+      const [resBookbank, statusBookbank] = await httpPostRequestUploadFile(
+        formDataBookbank,
+        endpointBookbank
       );
-      console.log(_res);
-      console.log(_status);
-      let msg = _res.message;
-      setStatus(_status);
-      if (status === 200) {
-        msg = "Upload Completed";
-        console.log(msg);
-        setAlertMessage(msg);
-        showAlert(setShow, 2000);
-        setFile();
-        setTimeout(() => {
-          navigate(`/profile`);
-        }, 2000);
+      if (statusBookbank === 200) {
+        const formData = new FormData();
+        formData.append("File", file);
+        const endpoint = `uploads/image?orderId=${res.data._id}`;
+
+        const [_res, _status] = await httpPostRequestUploadFile(
+          formData,
+          endpoint
+        );
+        let msg = _res.message;
+        setStatus(_status);
+        if (_status === 200) {
+          msg = "Upload Completed";
+          console.log(msg);
+          setAlertMessage(msg);
+          showAlert(setShow, 2000);
+          setFile();
+          setTimeout(() => {
+            navigate(`/profile`);
+          }, 2000);
+        }
       }
     }
   };
@@ -472,10 +483,10 @@ const Buy = () => {
   }, [page]);
 
   useEffect(() => {
-    if (depositBank && bank) {
+    if (depositBank && bank && bookbankFile) {
       setBankDisableButton(false);
     }
-  }, [depositBank, bank]);
+  }, [depositBank, bank, bookbankFile]);
 
   useEffect(() => {
     setCurrentPrice(Number(currentStockVolume) * Number(offerPrice));
@@ -905,6 +916,8 @@ const Buy = () => {
                   currentPrice={currentPrice}
                   hanlderOnBack={hanlderOnBack}
                   handlerOnAccept={handlerOnAccept}
+                  previewImage={previewImage}
+                  isBuy={true}
                 />
               );
             } else if (page === 3) {

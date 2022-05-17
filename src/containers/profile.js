@@ -14,10 +14,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useMemo } from "react";
 import { httpGetRequest } from "../utils/fetch";
 
+import { Spinner } from "../components/Logo/Spinner"
 // import { GoogleMap, LoadScript } from '@react-google-maps/api';
 
 const Dashboard = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [profile, setProfile] = useState(null);
   const [news, setNews] = useState(null);
 

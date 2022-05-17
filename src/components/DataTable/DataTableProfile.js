@@ -14,8 +14,11 @@ import Details from "./Details";
 import Paginate from "../Paginate/Paginate";
 import { httpGetRequest } from "../../utils/fetch";
 
+import { Spinner } from "../Logo/Spinner"
+
 const DataTableProfile = ({ header, theaders, data, refreshData }) => {
   const [showDetails, setShowDetails] = useState(false);
+  const [isFetching, setIsFetching] = useState(true)
   const [details, setDetails] = useState();
   const [options, setOptions] = useState([]);
 
@@ -54,6 +57,14 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
     refreshData();
   };
 
+  useEffect(() => {
+    if (data.length === 0) {
+      setIsFetching(true)
+    } else {
+      setIsFetching(false)
+    }
+  }, [data])
+
   const detailsModal = useMemo(
     () => (
       <Details
@@ -82,25 +93,39 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
               ))}
             </TR>
           </THead>
-          <TBody>
-            {data.map((x, index) => (
-              <TR key={index}>
-                <TD className="center">
-                  {new Date(x["createdOn"]).toLocaleDateString()}
-                </TD>
-                <TD>{x["rightStockName"]}</TD>
-                <TD>{formatNumber(x["paidRightVolume"])}</TD>
-                <TD>
-                  {x["customerStock"]["rightSpecialName"]}{" "}
-                  {x["customerStock"]["rightSpecialVolume"]}
-                </TD>
-                <TD>{formatNumber(x["paymentAmount"])}</TD>
-                <Status color={color[x["status"]["value"]]}>
-                  {x["status"]["status"]}
-                </Status>
-              </TR>
-            ))}
-          </TBody>
+          {
+            isFetching ? (
+              <TBody>
+                <TR>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                </TR>
+              </TBody> ) : (
+                <TBody>
+                  {data.map((x, index) => (
+                    <TR key={index}>
+                      <TD className="center">
+                        {new Date(x["createdOn"]).toLocaleDateString()}
+                      </TD>
+                      <TD>{x["rightStockName"]}</TD>
+                      <TD>{formatNumber(x["paidRightVolume"])}</TD>
+                      <TD>
+                        {x["customerStock"]["rightSpecialName"]}{" "}
+                        {x["customerStock"]["rightSpecialVolume"]}
+                      </TD>
+                      <TD>{formatNumber(x["paymentAmount"])}</TD>
+                      <Status color={color[x["status"]["value"]]}>
+                        {x["status"]["status"]}
+                      </Status>
+                    </TR>
+                  ))}
+                </TBody>
+              )
+          }
         </Table>
       )}
       {showDetails && detailsModal}
