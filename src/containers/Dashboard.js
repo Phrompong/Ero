@@ -133,7 +133,9 @@ const Dashboard = () => {
   };
 
   const handleExport = async () => {
-    window.open("http://203.151.211.133:3002/api/v1/orders/export/excel");
+    window.open(
+      "https://ero-bke-test.asiawealth.co.th/api/v1/orders/export/excel"
+    );
   };
 
   const theaders = [
