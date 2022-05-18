@@ -8,9 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import { httpGetRequest } from "../../utils/fetch";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  DropdownArrow
-} from "../../components/UI/Dropdown";
+import { DropdownArrow } from "../../components/UI/Dropdown";
 
 const Container = styled.div`
   padding: 30px 20px;
@@ -154,52 +152,47 @@ const CheckRightInfo = () => {
   };
 
   async function fetchCustomerStock() {
+    const endpoint = `customerStocks/search/value?customerId=${user.customerId}`;
+
     const inputValue = searchInputRef.current.value;
-    const endpoint = `orders/search/value?type=year&customerId=${user.customerId}&key=${inputValue}`;
+    if (inputValue) {
+      endpoint = `${endpoint}&key=${inputValue}`;
+    }
 
     const [res, status] = await httpGetRequest(endpoint);
 
     if (res["data"].length > 0) {
-      const statusId = res["data"][0].status._id;
-      if (
-        statusId === "62592501d017af7548e56f31" ||
-        statusId === "62592501d017af7548e56f33"
-      ) {
-        const { customerId, customerStock, excessAmount, paidRightVolume } =
-          res["data"][0];
+      console.log(res["data"][0]);
 
-        console.log("test");
-        const {
-          company,
-          rightStockName,
-          getRight,
-          ratio,
-          registrationNo,
-          offerPrice,
-        } = customerStock;
+      const {
+        registrationNo,
+        customers,
+        customerStock,
+        offerPrice,
+        orders,
+        getRight,
+      } = res["data"][0];
 
-        setCompany(company);
-        setRightStockName(rightStockName);
-        setGetRight(getRight);
-        setRatio(ratio);
-        setRegistrationNo(registrationNo);
+      const { name, lastname } = customers;
 
-        const tempBooking = excessAmount / offerPrice - paidRightVolume;
-        setBookingRight(tempBooking < 0 ? -1 * tempBooking : tempBooking);
+      setRegistrationNo(registrationNo);
+      setName(name);
+      setLastname(lastname);
 
-        const tempBookingOver = excessAmount / offerPrice;
-        setBookingOverRight(tempBookingOver);
-        setPaidRightVolume(paidRightVolume);
+      const { excessAmount, paidRightVolume } = orders;
 
-        const tempNumCert = paidRightVolume / getRight;
-        setNumCert(tempNumCert);
+      const tempBooking = excessAmount / offerPrice - paidRightVolume;
+      setBookingRight(tempBooking < 0 ? -1 * tempBooking : tempBooking); // * จองตามสิทธิ
 
-        if (customerId) {
-          const { name, lastname } = customerId;
-          setName(name);
-          setLastname(lastname);
-        }
-      }
+      const tempBookingOver = excessAmount / offerPrice;
+      setBookingOverRight(tempBookingOver); // * จองเกินสิทธิ
+
+      setPaidRightVolume(paidRightVolume); // * รวมจำนวนหุ้นที่ได้รับทั้งสิ้น
+
+      const tempNumCert = paidRightVolume / getRight;
+      console.log(`paidRightVolume : ${paidRightVolume}`);
+      console.log(`getRight : ${getRight}`);
+      setNumCert(paidRightVolume / getRight); // * รวมจำนวนใบสำคัญแสดงสิทธที่ได้รับทั้งสิ้น
     } else {
       setCompany("");
       setRightStockName("");
@@ -221,8 +214,8 @@ const CheckRightInfo = () => {
   };
 
   useEffect(() => {
-    getCustomerProfile()
-  }, [])
+    getCustomerProfile();
+  }, []);
 
   const header = (
     <Header>
@@ -239,7 +232,7 @@ const CheckRightInfo = () => {
           {header}
           <p className="inner">
             <b>E-RO</b> ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน
-            <b>{company}</b>
+            <b>{company || " บริษัท เน็คซ์ แคปปิตอล จำกัด (มหาชน)"}</b>
           </p>
           <div className="inner search">
             <p>เพื่อตรวจสอบสิทธิของท่านแล้วกรอกข้อมูลให้ถูกต้อง</p>
@@ -248,7 +241,10 @@ const CheckRightInfo = () => {
                 placeholder="ค้นหาหมายเลชประจำตัวประชาชน / เลขที่หนังสือเดินทาง/เลขทะเบียนนิติบุคคล"
                 ref={searchInputRef}
               /> */}
-              <div className="modal-block-label" style={{ marginRight: "1rem" }}>
+              <div
+                className="modal-block-label"
+                style={{ marginRight: "1rem" }}
+              >
                 <DropdownArrow
                   options={allRegistrations}
                   isOpen={isOpenDropdownArrow}
@@ -269,7 +265,8 @@ const CheckRightInfo = () => {
           </div>
           <HighLightText>
             <h3>
-              {rightStockName} (อัตราส่วน {getRight} หุ้น สามัญเดิม : {ratio}
+              {rightStockName || "NCAP"} (อัตราส่วน {getRight || "2"} หุ้น
+              สามัญเดิม : {ratio || "1 "}
               หุ้นสามัญเพิ่มทุน) จองเกินสิทธิได้
             </h3>
             <p>
@@ -303,7 +300,7 @@ const CheckRightInfo = () => {
           <p>จองตามสิทธิ</p>
           <p>จำนวน</p>
           <p className="unit">
-            {bookingRight}
+            {bookingRight || "-"}
             <span>หุ้น</span>
           </p>
         </Details>
@@ -311,7 +308,7 @@ const CheckRightInfo = () => {
           <p>จองเกินสิทธิ</p>
           <p>จำนวน</p>
           <p className="unit">
-            {bookingOverRight}
+            {bookingOverRight || "-"}
             <span>หุ้น</span>
           </p>
         </Details>
@@ -319,7 +316,7 @@ const CheckRightInfo = () => {
           <p>รวมจำนวนหุ้นที่ได้รับทั้งสิ้น</p>
           <p>จำนวน</p>
           <p className="unit">
-            {paidRightVolume}
+            {paidRightVolume || "-"}
             <span>หุ้น</span>
           </p>
         </Details>
@@ -327,7 +324,7 @@ const CheckRightInfo = () => {
           <p>รวมจำนวนใบสำคัญแสดงสิทธที่ได้รับทั้งสิ้น</p>
           <p>จำนวน</p>
           <p className="unit">
-            {numCert}
+            {numCert || "-"}
             <span>หน่วย</span>
           </p>
         </Details>
