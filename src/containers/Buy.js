@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -59,7 +59,7 @@ const Buy = () => {
   const [bookbankFile, setBookbankFile] = useState(null);
   const hiddenFileInput = React.useRef(null);
 
-  const [previewImage, setPreviewImage] = useState(null)
+  const [previewImage, setPreviewImage] = useState(null);
 
   const handleClick = () => {
     hiddenFileInput.current.click();
@@ -67,7 +67,7 @@ const Buy = () => {
 
   const handleOnFileSelect = (event) => {
     const fileUploaded = event.target.files[0];
-    setBookbankFile(fileUploaded)
+    setBookbankFile(fileUploaded);
     const reader = new FileReader();
     reader.addEventListener("load", () => {
       setPreviewImage(reader.result);
@@ -144,7 +144,6 @@ const Buy = () => {
   const [profile, setProfile] = useState(null);
   const [isConfirmOrder, setIsConfirmOrder] = useState(true);
   const [isSummitOrder, setIsSummitOrder] = useState(true);
-  
 
   const fetchStep1 = () => {
     getCustomerProfile();
@@ -176,7 +175,7 @@ const Buy = () => {
       setShareId(
         registrations.length > 0 ? registrations[0].registraionNo : null
       );
-      setNationalId(payload.customerId.nationalId);
+      setNationalId(payload.customerId.refNo);
       setFullname(`${payload.customerId.name} ${payload.customerId.lastname}`);
       // setShareId(payload.registrationNo);
       setPhoneNo(payload.customerId.telephone);
@@ -187,9 +186,15 @@ const Buy = () => {
       setShareIdModal(payload.registrationNo);
       setPhoneNoModal(payload.customerId.telephone);
       setShareName(payload.company);
-      setShareDescription(payload.detailShort);
-      setShareDescriptionShort(payload.detailShort);
-      setShareDescriptionMore(payload.detailFull);
+      const desc = `บมจ.สกาย ทาวเวอร์ (STOWER) เปิดเผยว่า ที่ประชุมคณะกรรมการบริษัท ครั้งที่ 3/2565 เมื่อวันที่ 18 มี.ค.65 มีมติให้นำเสนอต่อที่ประชุมสามัญผู้ถือหุ้น ประจำปี 2565 เพื่อพิจารณาอนุมัติการออกและเสนอขายหุ้นสามัญเพิ่มทุนของบริษัทจำนวนไม่เกิน 17,979,717,949 หุ้นให้แก่ผู้ถือหุ้นเดิมตามสัดส่วนจำนวนหุ้น
+      ที่ผู้ถือหุ้นแต่ละรายถือยู่ (Right Offering) ในอัตราส่วนการจัดสรร 1.5 หุ้นสามัญเดิมต่อ 1 หุ้นสามัญเพิ่มทุน โดยมีราคาเสนอขาย หุ้นละ 0.05 บาท พร้อมใบสำคัญแสดงสิทธิ STOWER -W4 ในอัตราส่วน 2.7 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
+      และหุ้นสามัญเพิ่มทุนส่วนที่เหลือจาก Right Offering จะจัดสรรให้กับบุคคลในวงจำกัด พร้อมใบสำคัญแสดงสิทธิ STOWER-W4 ในอัตราส่วน 3 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
+    `;
+      const descFull =
+        "บมจ. เน็คซ์ แคปปิตอล (“บริษัท” หรือ “NCAP”) เปิดเผยว่า ที่ประชุมสามัญผู้ถือหุ้น ประจำปี 2565 ของบริษัท เน็คซ์ แคปปิตอล จำกัด (มหาชน) เมื่อวันที่ 21 เมษายน 2565 ได้มีมติอนุมัติการจัดสรรหุ้นสามัญเพิ่มทุนใหม่จำนวน450,000,000 หุ้น มูลค่าที่ตราไว้หุ้นละ 0.50 บาท เพื่อเสนอขายให้แก่ผู้ถือหุ้นเดิมของบริษัทตามสัดส่วนการถือหุ้น โดยไม่จัดสรรให้ผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศพร้อมใบสำคัญแสดงสิทธิ ในอัตราส่วน 2 หุ้นสามัญเดิมต่อ 1 หุ้นสามัญเพิ่มทุนใหม่ (ในกรณีมีเศษของหุ้นที่เกิดจากการคำนวณ ให้ปัดเศษของหุ้นนั้นทิ้ง) ในราคาเสนอขายหุ้นละ 4.50 บาท ที่มีรายชื่อปรากฏอยู่ในวันกำหนดรายชื่อผู้ถือหุ้น (Record Date) ในวันที่ 29 เมษายน 2565 และจัดสรรใบสำคัญแสดงสิทธิที่จะซื้อหุ้นสามัญ (NCAP-W1) (“ใบสำคัญแสดงสิทธิ”) จำนวน 225,000,000 หน่วย ให้แก่ผู้ถือหุ้นเดิมของบริษัทที่ได้จองซื้อหุ้นสามัญเพิ่มทุนของบริษัท (Right Offering) ในอัตราส่วน 2 หุ้นสามัญเพิ่มทุน ต่อ 1 หน่วยใบสำคัญแสดงสิทธิ (ในกรณีที่มีเศษหุ้นจากการคำนวณให้ปัดทิ้ง) ที่ราคาเสนอขายใบสำคัญแสดงสิทธิ หน่วยละ 0 บาท ในการจัดสรรหุ้นสามัญเพิ่มทุนให้แก่ผู้ถือหุ้นเดิมของบริษัทตามสัดส่วนการถือหุ้นที่ผู้ถือหุ้นแต่ละรายถือ อยู่ในครั้งนี้ โดยไม่จัดสรรให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศ ในกรณีที่มีหุ้นสามัญเพิ่มทุนเหลือจากการจัดสรรให้แก่ผู้ถือหุ้นเดิมของบริษัทตามสัดส่วนการถือหุ้นที่ผู้ถือหุ้นแต่ละรายถืออยู่ในรอบแรกแล้ว โดยไม่จัดสรรให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศ บริษัทจะจัดสรรหุ้นสามัญเพิ่มทุนที่เหลือดังกล่าวให้กับผู้ถือหุ้นเดิมที่ประสงค์จะจองซื้อเกินกว่าสิทธิตาม สัดส่วนการถือหุ้นเดิมโดยไม่จัดสรรให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศในราคาเดียวกันกับหุ้นที่ได้รับการจัดสรรตามสิทธิดังนี้ในกรณีที่มีหุ้นเหลือจากการจัดสรรให้แก่ผู้ถือหุ้นเดิมของบริษัทตามสัดส่วนการถือหุ้นโดยไม่ จัดสรรให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศที่แต่ละรายถืออยู่ในรอบ แรกเป็นจำนวนมากกว่าหรือเท่ากับหุ้นที่ผู้ถือหุ้นเดิมจองซื้อเกินกว่าสิทธิ บริษัทจะจัดสรรหุ้นที่เหลือดังกล่าวให้แก่ผู้ที่จองซื้อเกินกว่าสิทธิและชำระค่าจองซื้อหุ้นดังกล่าวทั้งหมดทุกรายตามจำนวนที่แสดงความจำนงจองซื้อเกินกว่าสิทธิในกรณีที่มีหุ้นเหลือจากการจัดสรรให้แก่ผู้ถือหุ้นเดิมของบริษัทตามสัดส่วนการถือหุ้นโดยไม่จัดสรรให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศที่แต่ละรายถืออยู่ในรอบแรกเป็นจำนวนน้อยกว่าหุ้นที่ผู้ถือหุ้นเดิมจองซื้อเกินกว่าสิทธิ บริษัทจะจัดสรรหุ้นที่เหลือดังกล่าวให้แก่ผู้ที่จองซื้อเกินกว่าสิทธิตามขั้นตอนดังต่อไปนี้(ก) จัดสรรตามสัดส่วนการถือหุ้นเดิมของผู้ที่จองซื้อเกินกว่าสิทธิแต่ละรายโดยไม่จัดสรร ให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศ โดยนำสัดส่วนการถือหุ้นเดิมของผู้ที่จองซื้อเกินกว่าสิทธิแต่ละรายคูณด้วยจำนวนหุ้นที่เหลือจะได้เป็นจำนวนหุ้นที่ผู้ที่จองซื้อเกินกว่าสิทธิแต่ละรายมีสิทธิที่จะได้รับจัดสรร ในกรณีที่มีเศษของหุ้นให้ ปัดเศษของหุ้นนั้นทิ้ง ทั้งนี้ จำนวนหุ้นที่จะได้รับการจัดสรรจะไม่เกินจำ นวนหุ้นที่ผู้ถือหุ้น แต่ละรายจองซื้อและชำระค่าจองซื้อแล้ว (ข) ในกรณีที่ยังมีหุ้นคงเหลือหลังจากการจัดสรรตามข้อ (ก) ให้ทำการจัดสรรให้แก่ผู้ที่จองซื้อเกินกว่าสิทธิแต่ละรายซึ่งยังได้รับการจัดสรรไม่ครบตามจำนวนหุ้นที่จองซื้อนั้น โดยนำสัดส่วนการถือหุ้นเดิมของผู้ที่จองซื้อเกินกว่าสิทธิแต่ละรายนั้นคูณด้วยจำนวนหุ้นที่เหลือ จะได้เป็นจำนวนหุ้นที่ผู้ที่จองซื้อเกินกว่าสิทธิแต่ละรายมีสิทธิที่จะได้รับจัดสรร ในกรณีที่มี เศษของหุ้นให้ปัดเศษของหุ้นนั้นทิ้ง โดยจำนวนหุ้นที่จะได้รับการจัดสรรจะไม่เกินจำนวนหุ้นที่ผู้ถือหุ้นแต่ละรายจองซื้อและชำระค่าจองซื้อแล้ว ทั้งนี้ ให้ดำเนินการจัดสรรหุ้นให้แก่ผู้ที่จองซื้อเกินกว่าสิทธิตามวิธีการในข้อ (2) นี้จนกระทั่งไม่มีหุ้นเหลือจากการจัดสรร หรือไม่สามารถจัดสรรได้อีกเนื่องจากเป็นเศษของหุ้นการจัดสรรหุ้นที่จองซื้อเกินกว่าสิทธิจะต้องไม่ทำให้ผู้ถื้อหุ้นที่จองซื้อหุ้นสามัญเพิ่มทุนเกินกว่าสิทธิรายใดมีหน้าที่ต้องทำคำเสนอซื้อหลักทรัพย์ (Tender Offer) ตามที่กำหนดในประกาศคณะกรรมการกำกับตลาดทุนที่ ทจ.12/2554 เรื่อง หลักเกณฑ์ เงื่อนไข และวิธีการในการเข้าถือหลักทรัพย์เพื่อครอบงำกิจการ ลงวันที่ 13 พฤษภาคม 2554 (รวมทั้งที่ได้มีการแก้ไขเพิ่มเติม)ในการจัดสรรหุ้นสามัญเพิ่มทุนให้กับผู้ถือหุ้นเดิมของบริษัทตามสัดส่วนการถือหุ้นโดยไม่จัดสรรให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศตามรายละเอียดข้างต้นไม่ว่ากรณีใด จะต้องไม่มีลักษณะที่เป็นการฝ่าฝืนข้อจำกัดการถือหุ้นของบุคคลผู้ไม่มีสัญชาติไทย ตามที่ระบุไว้ในข้อบังคับของบริษัท และคณะกรรมการบริษัทมีสิทธิใช้ดุลยพินิจพิจารณาไม่เสนอขายหุ้นสามัญเพิ่มทุนให้แก่ผู้ถือหุ้นเดิมของบริษัทตามสัดส่วนการถือหุ้นโดยไม่จัดสรรให้กับผู้ถือหุ้นที่จะทำให้บริษัทมีหน้าที่ตามกฎหมายต่างประเทศ หากการเสนอขายดังกล่าวทำให้หรืออาจเป็นผลให้บริษัทมีภาระหรือหน้าที่ต้องปฏิบัติหรือดำเนินการใดๆ ตามกฎหมายต่างประเทศ ซึ่งได้แก่ ประเทศสหรัฐอเมริกา จจองซื้อหุ้นสามัญเพิ่มทุนเกินกว่าสิทธิได้";
+      setShareDescription(payload.detailShort || desc);
+      setShareDescriptionShort(payload.detailShort || desc);
+      setShareDescriptionMore(payload.detailFull || descFull);
     }
   };
 
@@ -462,11 +467,6 @@ const Buy = () => {
       setShareDescription(shareDescriptionMore);
       setIsReadMore(true);
     } else {
-      // const desc = `บมจ.สกาย ทาวเวอร์ (STOWER) เปิดเผยว่า ที่ประชุมคณะกรรมการบริษัท ครั้งที่ 3/2565 เมื่อวันที่ 18 มี.ค.65 มีมติให้นำเสนอต่อที่ประชุมสามัญผู้ถือหุ้น ประจำปี 2565 เพื่อพิจารณาอนุมัติการออกและเสนอขายหุ้นสามัญเพิ่มทุนของบริษัทจำนวนไม่เกิน 17,979,717,949 หุ้นให้แก่ผู้ถือหุ้นเดิมตามสัดส่วนจำนวนหุ้น
-      //   ที่ผู้ถือหุ้นแต่ละรายถือยู่ (Right Offering) ในอัตราส่วนการจัดสรร 1.5 หุ้นสามัญเดิมต่อ 1 หุ้นสามัญเพิ่มทุน โดยมีราคาเสนอขาย หุ้นละ 0.05 บาท พร้อมใบสำคัญแสดงสิทธิ STOWER -W4 ในอัตราส่วน 2.7 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
-      //   และหุ้นสามัญเพิ่มทุนส่วนที่เหลือจาก Right Offering จะจัดสรรให้กับบุคคลในวงจำกัด พร้อมใบสำคัญแสดงสิทธิ STOWER-W4 ในอัตราส่วน 3 หุ้นสามัญเพิ่มทุนต่อ 1 หน่วยใบสำคัญแสดงสิทธิ STOWER-W4
-      // `;
-      console.log(shareDescription);
       setShareDescription(shareDescriptionShort);
       setIsReadMore(false);
     }
@@ -499,7 +499,7 @@ const Buy = () => {
 
   const formatNumber = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
+  };
 
   return (
     <Card>
@@ -543,11 +543,9 @@ const Buy = () => {
                 <p className="modal-flex-label-info">{fullname}</p>
               </div>
               <div className="modal-flex">
-                <p className="modal-flex-label">
-                  ที่อยู่
-                </p>
+                <p className="modal-flex-label">ที่อยู่</p>
                 <p className="modal-flex-label-info">
-                  {profile ? `${profile.address} ${profile.zipcode}` : '-'}
+                  {profile ? `${profile.address} ${profile.zipcode}` : "-"}
                 </p>
               </div>
               <div className="modal-block">
@@ -595,7 +593,7 @@ const Buy = () => {
                     fontSize: "16px",
                     height: "40px",
                     width: "50%",
-                    margin: "auto"
+                    margin: "auto",
                   }}
                 />
               }
@@ -616,7 +614,7 @@ const Buy = () => {
                   padding: "10px",
                   width: "60px",
                   borderRadius: "100%",
-                  margin: "auto"
+                  margin: "auto",
                 }}
               />
             </Header>
@@ -626,7 +624,7 @@ const Buy = () => {
                   fontSize: "20px",
                   color: "#1D3AB1",
                   fontWeight: "bold",
-                  margin: "auto"
+                  margin: "auto",
                 }}
               >
                 เปลี่ยนแปลงข้อมูลเรียบร้อยแล้ว
@@ -638,7 +636,7 @@ const Buy = () => {
                   fontSize: "17px",
                   color: "#000000",
                   fontWeight: "normal",
-                  margin: "auto"
+                  margin: "auto",
                 }}
               >
                 ระบบได้ทำการเปลี่ยนแปลงข้อมูลที่ท่านแก้ไขแล้ว
@@ -654,7 +652,7 @@ const Buy = () => {
                   height: "35px",
                   width: "50%",
                   marginTop: "20px",
-                  margin: "auto"
+                  margin: "auto",
                 }}
               />
             </Header>
@@ -730,9 +728,7 @@ const Buy = () => {
           </ContainerCard>
         </Card>
       </Modal>
-      <Modal
-        show={addressModal}
-      >
+      <Modal show={addressModal}>
         <div className="bank-validate">
           <Card>
             <ContainerCard>
@@ -743,7 +739,7 @@ const Buy = () => {
                   color: "#1D3AB1",
                   fontWeight: "bold",
                   display: "flex",
-                  justifyContent: "start"
+                  justifyContent: "start",
                 }}
               >
                 <FontAwesomeIcon
@@ -771,7 +767,10 @@ const Buy = () => {
                               src={bank.logo}
                               width={25}
                               height={25}
-                              style={{ marginLeft: "1rem", marginRight: "1rem" }}
+                              style={{
+                                marginLeft: "1rem",
+                                marginRight: "1rem",
+                              }}
                             />
                             <p>{bank.nameTH}</p>
                           </LineCardBank>
@@ -793,7 +792,9 @@ const Buy = () => {
                 <div class="profile-detail" style={{ padding: "1rem 2rem" }}>
                   <InputDiv>
                     <div className="inputField">
-                      <p className="label-input bank-detail-title">ชื่อ-นามสกุล :</p>
+                      <p className="label-input bank-detail-title">
+                        ชื่อ-นามสกุล :
+                      </p>
                       <p className="label-input bank-detail">
                         {profile ? `${profile.name} ${profile.lastname}` : "-"}
                       </p>
@@ -809,7 +810,9 @@ const Buy = () => {
                   </InputDiv>
                   <InputDiv>
                     <div className="inputField">
-                      <p className="label-input bank-detail-title">เบอร์โทรศัพท์ :</p>
+                      <p className="label-input bank-detail-title">
+                        เบอร์โทรศัพท์ :
+                      </p>
                       <p className="label-input bank-detail">{phoneNo}</p>
                     </div>
                   </InputDiv>
@@ -940,7 +943,9 @@ const Buy = () => {
                   hanlderOnBack={() => setValidateAccept(false)}
                   handlerOnAccept={handlerOnSubmitedOrder}
                   lastVerifyChecked={lastVerifyChecked}
-                  setLastVerifyChecked={() => setLastVerifyChecked(!lastVerifyChecked)}
+                  setLastVerifyChecked={() =>
+                    setLastVerifyChecked(!lastVerifyChecked)
+                  }
                   checkbox={true}
                 />
               );
@@ -1003,7 +1008,10 @@ const Buy = () => {
                       >
                         <Header>
                           <h3>ข้อมูลการเสนอขายหุ้นเพิ่มทุน</h3>
-                          <h3 className="share-name" style={{ color: "#1D3AB1", fontWeight: "bold" }}>
+                          <h3
+                            className="share-name"
+                            style={{ color: "#1D3AB1", fontWeight: "bold" }}
+                          >
                             {shareName}
                           </h3>
                         </Header>
@@ -1018,7 +1026,16 @@ const Buy = () => {
                           </p>
                           <div className="desc">
                             {/* <p style={{ height: "157.4px" }}>{shareDescription}</p> */}
-                            <p style={{ textIndent: "2rem", textAlign: "justify", paddingTop: "1rem", paddingRight: "1rem" }}>{shareDescription}</p>
+                            <p
+                              style={{
+                                textIndent: "2rem",
+                                textAlign: "justify",
+                                paddingTop: "1rem",
+                                paddingRight: "1rem",
+                              }}
+                            >
+                              {shareDescription}
+                            </p>
                           </div>
                           <div className="btn-read-more">
                             <Button
@@ -1067,8 +1084,12 @@ const Buy = () => {
                         <ContentSpace>
                           <InputDiv className="input-detail">
                             <div className="inputField">
-                              <p className="label-input share-detail">ชื่อ-นามสกุล</p>
-                              <p className="label-input share-detail">{fullname}</p>
+                              <p className="label-input share-detail">
+                                ชื่อ-นามสกุล
+                              </p>
+                              <p className="label-input share-detail">
+                                {fullname}
+                              </p>
                             </div>
                           </InputDiv>
                           <InputDiv className="input-detail">
@@ -1076,14 +1097,18 @@ const Buy = () => {
                               <p className="label-input share-detail">
                                 เบอร์โทรศัพท์ที่สามารถติดต่อได้
                               </p>
-                              <p className="label-input share-detail">{phoneNo}</p>
+                              <p className="label-input share-detail">
+                                {phoneNo}
+                              </p>
                             </div>
                           </InputDiv>
                         </ContentSpace>
                         <ContentSpace>
-                          <InputDiv className="input-detail flex" >
+                          <InputDiv className="input-detail flex">
                             <div className="inputField">
-                              <p className="label-input share-detail">เลขทะเบียนผู้ถือหุ้น</p>
+                              <p className="label-input share-detail">
+                                เลขทะเบียนผู้ถือหุ้น
+                              </p>
                             </div>
                           </InputDiv>
                           <InputDiv className="input-detail">
@@ -1099,9 +1124,7 @@ const Buy = () => {
                                 onBlur={() =>
                                   setIsOpenDropdownArrowStep1(false)
                                 }
-                                setSelected={(e) =>
-                                  setShareId(e.registraionNo)
-                                }
+                                setSelected={(e) => setShareId(e.registraionNo)}
                                 selected={{ registraionNo: shareId }}
                                 display={"registraionNo"}
                               />
@@ -1480,7 +1503,7 @@ const Buy = () => {
                                     marginTop: "10px",
                                     width: "100%",
                                     textAlign: "start",
-                                    padding: "0 1rem" 
+                                    padding: "0 1rem",
                                   }}
                                 >
                                   <Button
@@ -1490,14 +1513,19 @@ const Buy = () => {
                                     accept="image/jpeg, image/png"
                                     style={{ width: "100%" }}
                                   />
-                                  <input type="file" ref={hiddenFileInput} onChange={handleOnFileSelect} style={{ display: "none" }}/>
+                                  <input
+                                    type="file"
+                                    ref={hiddenFileInput}
+                                    onChange={handleOnFileSelect}
+                                    style={{ display: "none" }}
+                                  />
                                 </InputDiv>
                                 <InputDiv
                                   style={{
                                     marginTop: "10px",
                                     width: "100%",
                                     textAlign: "start",
-                                    padding: "0 1rem" 
+                                    padding: "0 1rem",
                                   }}
                                 >
                                   <Button
@@ -1541,10 +1569,15 @@ const Buy = () => {
                           className="result"
                           style={{ fontSize: "20px", padding: "20px" }}
                         >
-                          <b className="result-label" style={{ whiteSpace: "pre" }}>
+                          <b
+                            className="result-label"
+                            style={{ whiteSpace: "pre" }}
+                          >
                             ยอดที่ท่านต้องการทำรายการ
                           </b>
-                          <b className="result-label">{formatNumber(currentPrice)}</b>
+                          <b className="result-label">
+                            {formatNumber(currentPrice)}
+                          </b>
                           <b className="result-label">บาท</b>
                         </ShareDetail>
                       </LineCard>
@@ -1576,9 +1609,7 @@ const Buy = () => {
                         >
                           <hr style={{ border: "0.75px solid #D9E1E7" }} />
                         </div>
-                        <div
-                          className="payment-method"
-                        >
+                        <div className="payment-method">
                           <b style={{ width: "20%", margin: "10px" }}>
                             เลือกวิธีการชำระเงิน
                           </b>
@@ -1676,14 +1707,9 @@ const Buy = () => {
                             </LineCard>
                           </div>
                         </div>
-                        <div
-                          className="payment-method"
-                        >
+                        <div className="payment-method">
                           <div className="btn-label">
-                            <b
-                            >
-                              หลักฐานการชำระเงิน
-                            </b>
+                            <b>หลักฐานการชำระเงิน</b>
                           </div>
                           <UploadButton className="btn-upload">
                             แนบหลักฐานการชำระเงิน
@@ -1694,15 +1720,14 @@ const Buy = () => {
                               onChange={handleSelectedFile}
                             />
                           </UploadButton>
-                          <div
-                            className="warning-text"
-                          >
+                          <div className="warning-text">
                             <p>
                               <FontAwesomeIcon
                                 icon={faCircleInfo}
                                 style={{ margin: "0 10px" }}
                               />
-                              กรุณาอัพโหลดไฟล์ .PNG .JPG และ JPEG ขนาดไม่เกิน 5 MB
+                              กรุณาอัพโหลดไฟล์ .PNG .JPG และ JPEG ขนาดไม่เกิน 5
+                              MB
                             </p>
                           </div>
                         </div>
@@ -1758,7 +1783,7 @@ const Buy = () => {
                           width: "100%",
                           justifyContent: "space-between",
                           marginTop: "20px",
-                          margin: "auto"
+                          margin: "auto",
                         }}
                       >
                         <Button
@@ -1772,7 +1797,7 @@ const Buy = () => {
                           onClick={() => {
                             setValidateAccept(false);
                             setPage(2);
-                            setFile(null)
+                            setFile(null);
                           }}
                         />
 
@@ -1907,7 +1932,7 @@ const Container = styled.div`
       //   width: 100%;
       //   display: block;
       //   align-items: baseline;
-  
+
       //   .text-title {
       //     width: 40%;
       //     display: flex;
@@ -1932,7 +1957,7 @@ const Container = styled.div`
     .card-tag {
       display: inline;
     }
-    
+
     .buy-flex {
       width: 100%;
     }
@@ -1955,7 +1980,7 @@ const Container = styled.div`
         display: flex;
         justify-content: space-between;
         align-items: baseline;
-  
+
         .text-title {
           width: 50%;
           display: flex;
@@ -1963,7 +1988,6 @@ const Container = styled.div`
           justify-content: space-between;
         }
       }
-  
     }
 
     .text-title-end {
@@ -2067,7 +2091,7 @@ const InputDiv = styled.div`
     .div-dropdown {
       width: 100%;
       display: flex;
-      
+
       .label-dropdown {
         width: 30%;
         max-width: 1000px;
@@ -2226,7 +2250,7 @@ const Header = styled.div`
   /* For Tablets */
   @media screen and (min-width: 541px) and (max-width: 880px) {
     display: flex;
-    justify-content: ${((props) => props.bank ? "start" : "space-between")};
+    justify-content: ${(props) => (props.bank ? "start" : "space-between")};
     .share-name {
       margin-left: 0rem;
     }
@@ -2536,6 +2560,6 @@ const Spacer = styled.div`
   @media screen and (min-width: 541px) and (max-width: 880px) {
     margin: 0;
   }
-`
+`;
 
 export default Buy;
