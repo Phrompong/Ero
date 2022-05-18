@@ -138,8 +138,8 @@ const CloseArrow = styled.i`
   border-top: 15px solid ${persianblue};
 `;
 
-export const Dropdown = ({ options, setSelected, selected }) => (
-  <Container>
+export const Dropdown = ({ options, setSelected, selected, style }) => (
+  <Container style={style}>
     <Select onChange={(e) => setSelected(e.target.value)} value={selected}>
       {options &&
         options.map((option, index) => (

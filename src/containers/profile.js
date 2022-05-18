@@ -14,10 +14,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useMemo } from "react";
 import { httpGetRequest } from "../utils/fetch";
 
+import { Spinner } from "../components/Logo/Spinner"
 // import { GoogleMap, LoadScript } from '@react-google-maps/api';
 
 const Dashboard = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [profile, setProfile] = useState(null);
   const [news, setNews] = useState(null);
 
@@ -152,7 +153,7 @@ export default Dashboard;
 const Container = styled.div`
   padding: 20px 20px;
   height: 90vh;
-  width: 70vw;
+  width: 80vw;
   display: flex;
   flex-direction: column;
   overflow: scroll;

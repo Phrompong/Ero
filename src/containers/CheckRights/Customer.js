@@ -25,7 +25,7 @@ const CheckRightCustomer = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [profile, setProfile] = useState(null);
   const searchInputRef = useRef("");
   const [news, setNews] = useState(null);
@@ -141,7 +141,7 @@ export default CheckRightCustomer;
 const Container = styled.div`
   padding: 20px 20px;
   height: 90vh;
-  width: 70vw;
+  width: 80vw;
   display: flex;
   flex-direction: column;
   // overflow: auto;

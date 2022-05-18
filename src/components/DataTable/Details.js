@@ -15,10 +15,11 @@ import { httpGetRequest, httpPutRequest } from "../../utils/fetch";
 
 const Details = ({ show, details, closed, options }) => {
   console.log(show);
+  console.log('------- detail --------')
   console.log(details);
   console.log(options);
   const [selectedStatus, setSelectedStatus] = useState(
-    details["status"]["_id"]
+    details["status"][0]["_id"]
   );
 
   const handleConfirmStatus = async () => {
@@ -39,7 +40,7 @@ const Details = ({ show, details, closed, options }) => {
     </FlexContainer>
   );
 
-  const customer = details["customerId"];
+  const customer = details["customers"];
 
   console.log(details);
 
@@ -61,7 +62,7 @@ const Details = ({ show, details, closed, options }) => {
                     "ชื่อ-นามสกุล / Name-Lastname   :",
                     `${customer["name"]} ${customer["lastname"]} `
                   )}
-                  {info("โทรศัพท์ / Telephone  :", details["customerTel"])}
+                  {info("โทรศัพท์ / Telephone  :", details["telephone"])}
                   {info("อีเมล์ / Email  :", customer["email"])}
                   {info("หมายเลขบัญชี ATS :", customer["atsBankNo"])}
                   {info("BANK ATS :", customer["atsBank"])}
@@ -76,7 +77,7 @@ const Details = ({ show, details, closed, options }) => {
                     <div className="row">
                       <p className="text-box">{details["rightStockName"]}</p>
                       <div className="num-box">
-                        {details["paidRightVolume"]}
+                        {details["orders"].paidRightVolume}
                       </div>
                       <p className="unit">หุ้น</p>
                     </div>
@@ -89,13 +90,13 @@ const Details = ({ show, details, closed, options }) => {
                     </div>
                     <div className="row">
                       <p className="text-box">จำนวนเงิน</p>
-                      <div className="num-box">{details["paymentAmount"]}</div>
+                      <div className="num-box">{details["orders"].paymentAmount}</div>
                       <p className="unit">บาท</p>
                     </div>
                   </div>
                   <SubHeader>สิทธิเพิ่มเติมที่ท่านได้รับ</SubHeader>
                   <div className="row">
-                    <p>{details["customerStock"]["rightSpecialName"]}</p>
+                    <p>{details["rightSpecialName"]}</p>
                     <BoldText style={{ color: "#809FB8" }}>รอการจัดสรร</BoldText>
                     {/* {
                       details["customerStock"]["rightSpecialVolume"] === 0 ?
@@ -107,7 +108,7 @@ const Details = ({ show, details, closed, options }) => {
                     <p className="unit">หุ้น</p>
                   </div>
                   <BoldText style={{ margin: "20px 0 5px 0" }}>
-                    ซื้อเกินสิทธิเป็นเงิน {details["excessAmount"]} บาท
+                    ซื้อเกินสิทธิเป็นเงิน {details["orders"].excessAmount} บาท
                   </BoldText>
 
                   <div className="row">
@@ -116,7 +117,7 @@ const Details = ({ show, details, closed, options }) => {
                     </SmallText>
                     <SmallText>
                       {`แนบหลักฐานการโอนเมื่อ ${formatDate(
-                        details["attachedOn"]
+                        details["orders"].attachedOn
                       )}`}
                     </SmallText>
                   </div>
@@ -124,7 +125,7 @@ const Details = ({ show, details, closed, options }) => {
               </LineCard>
               <LineCard style={{ flex: 1, marginLeft: "0.5rem" }}>
                 <TransactionPhoto>
-                  <img src={details["attachedFile"]} height="400px" />
+                  <img src={details["orders"].attachedFile} height="400px" />
                 </TransactionPhoto>
               </LineCard>
             </FlexContainer>
@@ -150,7 +151,7 @@ export default Details;
 const Container = styled.div`
   padding: 20px;
   height: 65vh;
-  width: 70vw;
+  width: 80vw;
   position: relative;
 
   p {

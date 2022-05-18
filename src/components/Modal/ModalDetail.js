@@ -11,7 +11,7 @@ const formatNumber = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-export const ModalDetail = ({ fullname, shareId, phoneNo, dropdownSelect, tradingAccountNo, rightStockName, stockVolume, offerPrice, rightStockVolume, rightSpecialName, excessVolume, currentPrice, hanlderOnBack, handlerOnAccept, depositBank, bank, checkbox, lastVerifyChecked, setLastVerifyChecked }) => {
+export const ModalDetail = ({ fullname, shareId, phoneNo, dropdownSelect, tradingAccountNo, rightStockName, stockVolume, offerPrice, rightStockVolume, rightSpecialName, excessVolume, currentPrice, hanlderOnBack, handlerOnAccept, depositBank, bank, checkbox, lastVerifyChecked, setLastVerifyChecked, isCheckRight, optional1, optional2, optional3, optional4, previewImage, isBuy }) => {
     return (
         <>
             <FlexContainer>
@@ -177,82 +177,95 @@ export const ModalDetail = ({ fullname, shareId, phoneNo, dropdownSelect, tradin
                             </div>
                         </div>
                     </div>
-                    {/* <div
-                        className="content-header"
-                        style={{
-                            paddingLeft: "2rem",
-                            backgroundColor: "#F1F7FB",
-                            color: persianblue,
-                        }}
-                    >
-                        <b>รายละเอียดการจัดสรรหุ้นเพิ่มทุนที่ได้รับ</b>
-                    </div>
-                    <div className="content-member">
-                        <div className="content-detail-member">
-                            <div className="content-detail-text share">
-                                <p>
-                                    จองตามสิทธิ
-                                </p>
-                                <p>
-                                    จำนวน
-                                </p>
-                                <p>
-                                    100,000
-                                </p>
-                                <p>
-                                    หุ้น
-                                </p>
+                    {
+                        previewImage && (
+                            <div style={{ width: "100%", textAlign: "center", marginTop: "1rem" }}>
+                                <img src={previewImage} style={{ width: "100%", height: "600px", maxWidth: "600px" }}/>
                             </div>
-                        </div>
-                        <div className="content-detail-member">
-                            <div className="content-detail-text share">
-                                <p>
-                                    จองเกินสิทธิ
-                                </p>
-                                <p>
-                                    จำนวน
-                                </p>
-                                <p>
-                                    100,000
-                                </p>
-                                <p>
-                                    หุ้น
-                                </p>
-                            </div>
-                        </div>
-                        <div className="content-detail-member">
-                            <div className="content-detail-text share">
-                                <b>
-                                    รวมจำนวนหุ้นที่ได้รับทั้งสิ้น
-                                </b>
-                                <b>
-                                    จำนวน
-                                </b>
-                                <b>
-                                    100,000
-                                </b>
-                                <b>
-                                    หุ้น
-                                </b>
-                            </div>
-                        </div>
-                        <div className="content-detail-member">
-                            <div className="content-detail-text share">
-                                <b>
-                                    รวมจำนวนใบสำคัญแสดงสิทธิที่ได้รับทั้งสิ้น
-                                </b>
-                                <b>
-                                    จำนวน
-                                </b>
-                                <b>
-                                    100,000
-                                </b>
-                                <b>
-                                    หุ้น
-                                </b>
-                            </div>
-                        </div>
-                    </div> */}
+                        )
+                    }
+                    {
+                        isCheckRight && (
+                            <>
+                                <div
+                                    className="content-header"
+                                    style={{
+                                        paddingLeft: "2rem",
+                                        backgroundColor: "#F1F7FB",
+                                        color: persianblue,
+                                    }}
+                                >
+                                    <b>รายละเอียดการจัดสรรหุ้นเพิ่มทุนที่ได้รับ</b>
+                                </div>
+                                <div className="content-member">
+                                    <div className="content-detail-member">
+                                        <div className="content-detail-text share">
+                                            <p>
+                                                จองตามสิทธิ
+                                            </p>
+                                            <p>
+                                                จำนวน
+                                            </p>
+                                            <b style={{ color: "#000000"}}>
+                                               {formatNumber(optional1)}
+                                            </b>
+                                            <p>
+                                                หุ้น
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="content-detail-member">
+                                        <div className="content-detail-text share">
+                                            <p>
+                                                จองเกินสิทธิ
+                                            </p>
+                                            <p>
+                                                จำนวน
+                                            </p>
+                                            <b style={{ color: "#000000"}}>
+                                                {formatNumber(optional2)}
+                                            </b>
+                                            <p>
+                                                หุ้น
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="content-detail-member">
+                                        <div className="content-detail-text share">
+                                            <p>
+                                                รวมจำนวนหุ้นที่ได้รับทั้งสิ้น
+                                            </p>
+                                            <p>
+                                                จำนวน
+                                            </p>
+                                            <b style={{ color: "#000000"}}>
+                                                {formatNumber(optional3)}
+                                            </b>
+                                            <p>
+                                                หุ้น
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="content-detail-member">
+                                        <div className="content-detail-text share">
+                                            <p>
+                                                รวมจำนวนใบสำคัญแสดงสิทธิที่ได้รับทั้งสิ้น
+                                            </p>
+                                            <p>
+                                                จำนวน
+                                            </p>
+                                            <b style={{ color: "#000000"}}>
+                                                {formatNumber(optional4)}
+                                            </b>
+                                            <p>
+                                                หุ้น
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        )
+                    }
                     {
                         depositBank && (
                             <>
@@ -274,7 +287,7 @@ export const ModalDetail = ({ fullname, shareId, phoneNo, dropdownSelect, tradin
                                         <div className="content-detail-text">
                                             <p className="bank-title" style={{ margin: "auto" }}>ฝากเข้าผ่านธนาคาร :</p>
                                             <div className="bank-logo-img">
-                                                <img src={depositBank.logo} height={"33px"} width={"32px"} style={{ margin: "auto", padding: "0 2rem", marginRight: "1rem", marginLeft: "1rem" }} />
+                                                <img src={depositBank.logo} height={"33px"} width={"32px"} style={{ margin: "auto", marginRight: "1rem", marginLeft: "1rem" }} />
                                                 <p className="text-black" style={{ margin: "auto" }}>{depositBank.nameTH}</p>
                                             </div>
                                         </div>
@@ -292,24 +305,30 @@ export const ModalDetail = ({ fullname, shareId, phoneNo, dropdownSelect, tradin
             <div className="line-space" style={{ padding: "0 20px" }}>
                 <hr style={{ border: "0.75px solid #D9E1E7" }} />
             </div>
-            <div
-                className="message-info"
-                style={{
-                    paddingLeft: "10px",
-                    width: "100%",
-                    whiteSpace: "initial",
-                    color: "#1234B0",
-                }}
-                >
-                <p>
-                    <FontAwesomeIcon
-                    icon={faCircleInfo}
-                    style={{ margin: "0 10px", color: "#FB0303" }}
-                    />
-                    โปรดตรวจสอบข้อมูลของท่านให้เรียบร้อย หากท่านกดปุ่ม{" "}
-                    <b>ถัดไป</b> จะไม่สามารถกลับมาแก้ไขข้อมูลได้อีก
-                </p>
-            </div>
+            {
+                isBuy && (
+                    <>
+                        <div
+                            className="message-info"
+                            style={{
+                                paddingLeft: "10px",
+                                width: "100%",
+                                whiteSpace: "initial",
+                                color: "#1234B0",
+                            }}
+                            >
+                            <p>
+                                <FontAwesomeIcon
+                                icon={faCircleInfo}
+                                style={{ margin: "0 10px", color: "#FB0303" }}
+                                />
+                                โปรดตรวจสอบข้อมูลของท่านให้เรียบร้อย หากท่านกดปุ่ม{" "}
+                                <b>ถัดไป</b> จะไม่สามารถกลับมาแก้ไขข้อมูลได้อีก
+                            </p>
+                        </div>
+                    </>
+                )
+            }
             {
                 checkbox && (
                     <>
@@ -359,39 +378,71 @@ export const ModalDetail = ({ fullname, shareId, phoneNo, dropdownSelect, tradin
             className="btn-accept-buy"
             style={{ display: "flex", justifyContent: "center" }}
             >
-                <Button
-                    type="submit"
-                    value={"ย้อนกลับ"}
-                    onClick={() => hanlderOnBack()}
-                    style={{
-                        height: "40px",
-                        margin: "0 10px 10px 10px",
-                        backgroundColor: "#809FB8",
-                    }}
-                />
                 {
-                    checkbox ? (
-                        <Button
-                            type="submit"
-                            value={"ถัดไป"}
-                            onClick={() => handlerOnAccept()}
-                            disabled={!lastVerifyChecked}
-                            style={{
-                                height: "40px",
-                                margin: "0 10px 10px 10px",
-                            }}
-                        />
-                    ) : (
-                        <Button
-                            type="submit"
-                            value={"ถัดไป"}
-                            onClick={() => handlerOnAccept()}
-                            style={{
-                                height: "40px",
-                                margin: "0 10px 10px 10px",
-                            }}
-                        />
-                    )
+                    (() => {
+                        if (checkbox) {
+                            return (
+                                <>
+                                    <Button
+                                        type="submit"
+                                        value={"ย้อนกลับ"}
+                                        onClick={() => hanlderOnBack()}
+                                        style={{
+                                            height: "40px",
+                                            margin: "0 10px 10px 10px",
+                                            backgroundColor: "#809FB8",
+                                        }}
+                                    />
+                                    <Button
+                                        type="submit"
+                                        value={"ถัดไป"}
+                                        onClick={() => handlerOnAccept()}
+                                        disabled={!lastVerifyChecked}
+                                        style={{
+                                            height: "40px",
+                                            margin: "0 10px 10px 10px",
+                                        }}
+                                    />
+                                </>
+                            )
+                        } else if (isBuy) {
+                            return (
+                                <>
+                                    <Button
+                                        type="submit"
+                                        value={"ย้อนกลับ"}
+                                        onClick={() => hanlderOnBack()}
+                                        style={{
+                                            height: "40px",
+                                            margin: "0 10px 10px 10px",
+                                            backgroundColor: "#809FB8",
+                                        }}
+                                    />
+                                    <Button
+                                        type="submit"
+                                        value={"ถัดไป"}
+                                        onClick={() => handlerOnAccept()}
+                                        style={{
+                                            height: "40px",
+                                            margin: "0 10px 10px 10px",
+                                        }}
+                                    />
+                                </>
+                            )
+                        } else {
+                            return (
+                                <Button
+                                    type="submit"
+                                    value={"ปิดหน้าต่าง"}
+                                    onClick={() => handlerOnAccept()}
+                                    style={{
+                                        height: "40px",
+                                        margin: "0 10px 10px 10px",
+                                    }}
+                                />
+                            )
+                        }
+                    })()
                 }
             </div>
         </>

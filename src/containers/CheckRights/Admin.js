@@ -18,9 +18,10 @@ import { Button } from "../../components/UI/Button";
 const CheckRightAdmin = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [profile, setProfile] = useState(null);
   const [news, setNews] = useState(null);
+  const [isFetching, setIsFetching] = useState(true)
   const searchInputRef = useRef("");
   const { user } = useSelector((state) => state);
 
@@ -53,13 +54,14 @@ const CheckRightAdmin = () => {
   async function fetchDataTable() {
     const inputValue = searchInputRef.current.value;
     console.log(currentPage);
+    setIsFetching(true)
     let endpoint = `customerStocks/search/value?page=${currentPage}${
       inputValue ? "&key=" + inputValue : ""
     }`;
 
     const [res, status] = await httpGetRequest(endpoint);
+    setIsFetching(false)
     const { totalPages } = res["_metadata"];
-
     setTotalPages(totalPages);
     setData(res["data"]);
   }
@@ -114,7 +116,7 @@ export default CheckRightAdmin;
 const Container = styled.div`
   padding: 20px 20px;
   height: 90vh;
-  width: 70vw;
+  width: 80vw;
   display: flex;
   flex-direction: column;
   overflow: scroll;

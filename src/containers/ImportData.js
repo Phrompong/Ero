@@ -11,7 +11,7 @@ import { ModalAlert } from "../components/ModalAlert/ModalAlert";
 const Container = styled.div`
   padding: 10px;
   height: 80vh;
-  width: 70vw;
+  width: 80vw;
   display: flex;
   justify-content: center;
   align-items: center;

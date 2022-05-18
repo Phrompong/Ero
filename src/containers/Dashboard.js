@@ -162,16 +162,23 @@ const Dashboard = () => {
             <p>12:15 PM at 19th November 2020</p>
           </Header>
           <SearchDiv>
-            <div className="search-div">
+            <div className="search-div block">
+              <InputSeacrh className="date-input" type="text" placeholder={'Start date'} onFocus={(e) => e.target.type = 'date'} onBlur={(e) => e.target.type = 'text'} value={null}/>
+            </div>
+            <div className="search-div block">
+              <InputSeacrh className="date-input" type="text" placeholder={'End date'} onFocus={(e) => e.target.type = 'date'} onBlur={(e) => e.target.type = 'text'} value={null}/>
+            </div>
+            {/* <div className="search-div">
               <Dropdown
                 options={type}
                 selected={selectedType}
                 setSelected={setSelectedType}
+                style={{ height: "42px" }}
               />
-            </div>
+            </div> */}
             <div className="search-div flex">
               <InputSeacrh placeholder="Search..." ref={searchInputRef} />
-              <Button onClick={handleSearchButtonClicked}>
+              <Button onClick={handleSearchButtonClicked} style={{ marginLeft: "1rem" }}>
                 <SearchIcon />
               </Button>
             </div>
@@ -240,7 +247,7 @@ const Container = styled.div`
   // justify-content: center;
   flex-direction: column;
   height: 90vh;
-  width: 70vw;
+  width: 80vw;
   overflow: scroll;
   overflow-x: auto;
   overflow-y: auto;
@@ -262,6 +269,11 @@ const SearchDiv = styled.div`
   > :not(:first-child) {
     margin-left: 10px;
   }
+  
+  .block {
+      display: block;
+      text-align: end;
+  }
 
   /* For Mobile */
   @media screen and (max-width: 880px) {
@@ -271,7 +283,6 @@ const SearchDiv = styled.div`
       width: 100%;
       margin: 0.25rem 0;
     }
-
     .flex {
       margin-top: 0.5rem;
       display: flex;
@@ -305,6 +316,11 @@ const InputSeacrh = styled.input`
   position: relative;
   font-size: 16px;
   padding: 10px;
+  
+  .date-input {
+    width: 200px;
+    height: 42px;
+  }
 
   :focus {
     outline: none;
@@ -312,7 +328,12 @@ const InputSeacrh = styled.input`
 
   /* For Mobile */
   @media screen and (max-width: 540px) {
-    width: 85%;
+    width: 100%;
+
+    .date-input {
+      width: 100%;
+      height: 42px;
+    }
   }
 `;
 

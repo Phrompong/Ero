@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useSelector } from "react-redux";
 
 import styled from "styled-components";
 
@@ -17,17 +18,20 @@ import Paginate from "../Paginate/Paginate";
 
 import { Modal } from "../UI/Modal";
 
+import { Spinner } from "../Logo/Spinner"
+
 import { httpGetRequest } from "../../utils/fetch";
 
 const DataTableProfile = ({ header, theaders, data, refreshData }) => {
+  const { user } = useSelector((state) => state);
   const [showDetails, setShowDetails] = useState(false);
+  const [isFetching, setIsFetching] = useState(true)
   const [details, setDetails] = useState();
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       const endpoint = "status";
-
       const [res, status] = await httpGetRequest(endpoint);
       handleFetchStatusOption(res);
     }
@@ -51,6 +55,7 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
   };
 
   const handleClicked = (details) => {
+    console.log(user.role == "client")
     console.log(details)
     setShowDetails(true);
     setDetails(details);
@@ -61,36 +66,60 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
     refreshData();
   };
 
+  useEffect(() => {
+    if (data.length === 0) {
+      setIsFetching(true)
+    } else {
+      setIsFetching(false)
+    }
+  }, [data])
+
   const detailsModal = useMemo(
-    () => (
-      details && (
-        <Modal show={showDetails}>
-          <ModalContainer>
-            <ModalDetail
-              fullname={`${details["customers"].name} ${details["customers"].lastname}`}
-              shareId={details["registrationNo"]}
-              phoneNo={details["customers"].telephone}
-              dropdownSelect={{
-                code: "test",
-                name: "test"
-              }}
-              tradingAccountNo={"test"}
-              rightStockName={details["tradingAccountNo"]}
-              stockVolume={details["stockVolume"]}
-              offerPrice={details["offerPrice"]}
-              rightStockVolume={details["rightStockVolume"]}
-              rightSpecialName={details["rightSpecialName"]}
-              excessVolume={0}
-              currentPrice={0}
-              // depositBank={depositBank}
-              // bank={bank}
-              hanlderOnBack={() => setShowDetails(false)}
-              handlerOnAccept={() => setShowDetails(false)}
-            />
-          </ModalContainer>
-        </Modal>
-      )
-    ),
+    () => {
+      if (details && user.role === "admin") {
+        return (
+          <Modal show={showDetails}>
+            <ModalContainer>
+              <ModalDetail
+                fullname={`${details["customers"].name} ${details["customers"].lastname}`}
+                shareId={details["registrationNo"]}
+                phoneNo={details["customers"].telephone}
+                dropdownSelect={{
+                  code: details["orders"].brokerId.code,
+                  name: details["orders"].brokerId.name
+                }}
+                tradingAccountNo={details["orders"].accountNo}
+                rightStockName={details["orders"].rightStockName}
+                stockVolume={details["stockVolume"]}
+                offerPrice={details["offerPrice"]}
+                rightStockVolume={details.rightStockVolume}
+                rightSpecialName={details["orders"].rightSpecialName}
+                excessVolume={details["orders"].excessAmount}
+                currentPrice={details["orders"].paymentAmount}
+                optional1={Number(details["orders"].paidRightVolume) - (Number(details["orders"].excessAmount) / Number(details.offerPrice))}
+                optional2={Number(details["orders"].excessAmount) / Number(details.offerPrice)}
+                optional3={Number(details["orders"].paidRightVolume)}
+                optional4={Number(details["orders"].paidRightVolume) /  Number(details.getRight)}
+                depositBank={details["orders"].bankRefund}
+                bank={details["orders"].bankRefundNo}
+                hanlderOnBack={() => setShowDetails(false)}
+                handlerOnAccept={() => setShowDetails(false)}
+                isCheckRight={true}
+              />
+            </ModalContainer>
+          </Modal>
+        )
+      } else if (details && user.role == "client") {
+        return (
+          <Details
+            options={options}
+            show={showDetails}
+            closed={handleClosedModal}
+            details={details}
+          />
+        )
+      }
+    },
     [details, showDetails]
   );
 
@@ -108,33 +137,48 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
               ))}
             </TR>
           </THead>
-          <TBody>
-            {data.map((x, index) => (
-              <TR key={index} onClick={() => handleClicked(x)}>
-                <TD style={{ width: "100px" }}>
-                  จองซื้อ / Book
-                </TD>
-                <TD>{x["rightStockName"]}</TD>
-                <TD>{x["registrationNo"]}</TD>
-                <TD>{`${
-                  x["customers"].name + " " + x["customers"].lastname
-                }`}</TD>
-                <TD>{x["stockVolume"]}</TD>
-                <TD>{x["rightStockVolume"]}</TD>
-                {x["status"].length > 0 ? (
-                  x["status"].map((obj) => (
-                    <TD color={color[obj["value"]]}>
-                      {obj["status"]}
-                    </TD>
-                  ))
-                ) : (
-                  <TD color={color[0]}>
-                    ยังไม่ได้ดำเนินการ
-                  </TD>
-                )}
-              </TR>
-            ))}
-          </TBody>
+          {
+            isFetching ? (
+              <TBody>
+                <TR>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                </TR>
+              </TBody> ) : (
+                <TBody>
+                  {data.map((x, index) => (
+                    <TR key={index} onClick={() => handleClicked(x)}>
+                      <TD style={{ width: "100px" }}>
+                        จองซื้อ / Book
+                      </TD>
+                      <TD>{x["rightStockName"]}</TD>
+                      <TD>{x["registrationNo"]}</TD>
+                      <TD>{`${
+                        x["customers"].name + " " + x["customers"].lastname
+                      }`}</TD>
+                      <TD>{x["stockVolume"]}</TD>
+                      <TD>{x["rightStockVolume"]}</TD>
+                      {x["status"].length > 0 ? (
+                        x["status"].map((obj) => (
+                          <TD color={color[obj["value"]]}>
+                            {obj["status"]}
+                          </TD>
+                        ))
+                      ) : (
+                        <TD color={color[0]}>
+                          ยังไม่ได้ดำเนินการ
+                        </TD>
+                      )}
+                    </TR>
+                  ))}
+              </TBody>
+            )
+          }
         </Table>
       )}
       {showDetails && detailsModal}
@@ -199,6 +243,8 @@ const Status = styled.td`
 `;
 
 const ModalContainer = styled.div`
+  height: 90vh;
+  // width: 80vw;
   border-radius: 10px;
   border: 1px solid #d9e1e7;
   background: #FFFFFF;
