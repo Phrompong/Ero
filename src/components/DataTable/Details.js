@@ -151,7 +151,7 @@ export default Details;
 const Container = styled.div`
   padding: 20px;
   height: 65vh;
-  width: 70vw;
+  width: 80vw;
   position: relative;
 
   p {

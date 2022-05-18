@@ -244,7 +244,7 @@ const Status = styled.td`
 
 const ModalContainer = styled.div`
   height: 90vh;
-  // width: 70vw;
+  // width: 80vw;
   border-radius: 10px;
   border: 1px solid #d9e1e7;
   background: #FFFFFF;

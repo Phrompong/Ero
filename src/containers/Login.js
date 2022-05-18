@@ -296,7 +296,7 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     height: 90vh;
-    width: 70vw;
+    width: 80vw;
     max-width: ${(props) => (props.size === "full" ? "914px" : "510px")};
     max-height: 740px;
 

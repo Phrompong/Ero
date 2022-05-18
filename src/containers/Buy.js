@@ -1812,7 +1812,7 @@ const UploadButton = styled.label`
 const Container = styled.div`
   padding: 20px 20px;
   height: 90vh;
-  width: 70vw;
+  width: 80vw;
   display: flex;
   flex-direction: column;
   // overflow: auto;
