@@ -15,7 +15,7 @@ import { httpFetch } from "../../utils/fetch";
 import { ModalAlert } from "../../components/ModalAlert/ModalAlert";
 import { showAlert } from "../../utils/showAlert";
 import { useNavigate } from "react-router-dom";
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 const CustomerService = () => {
   const navigate = useNavigate();
@@ -79,8 +79,8 @@ const CustomerService = () => {
   };
 
   const center = {
-    lat: -3.745,
-    lng: -38.523,
+    lat: 13.7595228,
+    lng: 100.5349187,
   };
 
   const onLoad = () => {
@@ -134,8 +134,8 @@ const CustomerService = () => {
               zoom={10}
               onLoad={onLoad}
             >
-              { /* Child components, such as markers, info windows, etc. */ }
-              <Marker position={center}/>
+              {/* Child components, such as markers, info windows, etc. */}
+              <Marker position={center} />
             </GoogleMap>
           </LoadScript>
         </div>
