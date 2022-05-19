@@ -83,10 +83,6 @@ const CustomerService = () => {
     lng: -38.523,
   };
 
-  const onLoad = () => {
-    console.log("test");
-  };
-
   return (
     <Container>
       <ModalAlert show={show} msg={alertMessage} status={status} />
@@ -132,7 +128,6 @@ const CustomerService = () => {
               mapContainerStyle={containerStyle}
               center={center}
               zoom={10}
-              onLoad={onLoad}
             >
               { /* Child components, such as markers, info windows, etc. */ }
               <Marker position={center}/>
