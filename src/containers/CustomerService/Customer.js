@@ -15,7 +15,7 @@ import { httpFetch } from "../../utils/fetch";
 import { ModalAlert } from "../../components/ModalAlert/ModalAlert";
 import { showAlert } from "../../utils/showAlert";
 import { useNavigate } from "react-router-dom";
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, LoadScript } from "@react-google-maps/api";
 
 const CustomerService = () => {
   const navigate = useNavigate();
@@ -28,6 +28,7 @@ const CustomerService = () => {
   const [show, setShow] = useState(false);
   const [alertMessage, setAlertMessage] = useState();
   const [status, setStatus] = useState();
+  const [map, setMap] = useState(null);
 
   useEffect(() => {
     getMasterIssue();
@@ -73,14 +74,18 @@ const CustomerService = () => {
   };
 
   const containerStyle = {
-    width: '100%',
-    height: '100%'
+    width: "100%",
+    height: "100%",
   };
-  
+
   const center = {
     lat: -3.745,
-    lng: -38.523
-  };  
+    lng: -38.523,
+  };
+
+  const onLoad = () => {
+    console.log("test");
+  };
 
   return (
     <Container>
@@ -122,15 +127,13 @@ const CustomerService = () => {
           <Header>(วันทำการ จันทร์-ศุกร์ เวลา 08.30 -17.00 น.)</Header>
         </div>
         <div className="form-input">
-          <LoadScript
-            googleMapsApiKey="AIzaSyBfgww-89GYas4zE9QmXPNnPVPivA3npd8"
-          >
+          <LoadScript googleMapsApiKey="AIzaSyDJ7PUAZgUsUcqmHVbsdWijNCjli02gPHo">
             <GoogleMap
               mapContainerStyle={containerStyle}
               center={center}
               zoom={10}
+              onLoad={onLoad}
             >
-              { /* Child components, such as markers, info windows, etc. */ }
               <></>
             </GoogleMap>
           </LoadScript>
