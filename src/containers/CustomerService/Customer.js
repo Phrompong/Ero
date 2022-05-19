@@ -15,7 +15,7 @@ import { httpFetch } from "../../utils/fetch";
 import { ModalAlert } from "../../components/ModalAlert/ModalAlert";
 import { showAlert } from "../../utils/showAlert";
 import { useNavigate } from "react-router-dom";
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 const CustomerService = () => {
   const navigate = useNavigate();
@@ -131,7 +131,7 @@ const CustomerService = () => {
               zoom={10}
             >
               { /* Child components, such as markers, info windows, etc. */ }
-              <></>
+              <Marker position={center}/>
             </GoogleMap>
           </LoadScript>
         </div>
