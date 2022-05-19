@@ -147,7 +147,7 @@ export const ModalDetail = ({ fullname, shareId, phoneNo, dropdownSelect, tradin
                                 <div className="text-amount right">
                                     <p>จำนวน</p>
                                     <p style={{ color: "#C4C4C4" }}>รอการจัดสรร</p>
-                                    <p>หุ้น</p>
+                                    <p>หน่วย</p>
                                 </div>
                             </div>
                             <div className="content-detail-share">

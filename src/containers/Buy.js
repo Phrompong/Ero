@@ -498,7 +498,9 @@ const Buy = () => {
   }, [currentStockVolume]);
 
   const formatNumber = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return Number(number)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   return (
@@ -591,8 +593,6 @@ const Buy = () => {
                   disabled={isRegistrationChecked}
                   style={{
                     fontSize: "16px",
-                    height: "40px",
-                    width: "50%",
                     margin: "auto",
                   }}
                 />
@@ -1007,7 +1007,9 @@ const Buy = () => {
                         }}
                       >
                         <Header>
-                          <h3>ข้อมูลการเสนอขายหุ้นเพิ่มทุน</h3>
+                          <h3 style={{ fontWeight: "bold" }}>
+                            ข้อมูลการเสนอขายหุ้นเพิ่มทุน
+                          </h3>
                           <h3
                             className="share-name"
                             style={{ color: "#1D3AB1", fontWeight: "bold" }}
@@ -1084,7 +1086,10 @@ const Buy = () => {
                         <ContentSpace>
                           <InputDiv className="input-detail">
                             <div className="inputField">
-                              <p className="label-input share-detail">
+                              <p
+                                className="label-input share-detail"
+                                style={{ fontWeight: "bold" }}
+                              >
                                 ชื่อ-นามสกุล
                               </p>
                               <p className="label-input share-detail">
@@ -1094,7 +1099,10 @@ const Buy = () => {
                           </InputDiv>
                           <InputDiv className="input-detail">
                             <div className="inputField">
-                              <p className="label-input share-detail">
+                              <p
+                                className="label-input share-detail"
+                                style={{ fontWeight: "bold" }}
+                              >
                                 เบอร์โทรศัพท์ที่สามารถติดต่อได้
                               </p>
                               <p className="label-input share-detail">
@@ -1106,7 +1114,10 @@ const Buy = () => {
                         <ContentSpace>
                           <InputDiv className="input-detail flex">
                             <div className="inputField">
-                              <p className="label-input share-detail">
+                              <p
+                                className="label-input share-detail"
+                                style={{ fontWeight: "bold" }}
+                              >
                                 เลขทะเบียนผู้ถือหุ้น
                               </p>
                             </div>
@@ -1172,7 +1183,9 @@ const Buy = () => {
                         <Content>
                           <InputDiv>
                             <Dot />
-                            <p>ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก</p>
+                            <p style={{ fontWeight: "bold" }}>
+                              ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก
+                            </p>
                           </InputDiv>
                           <InputDiv
                             style={{ marginTop: "20px", marginLeft: "50px" }}
@@ -1188,7 +1201,9 @@ const Buy = () => {
                             />
                           </InputDiv>
                           <InputDiv style={{ marginLeft: "50px" }}>
-                            <p>เลขที่บัญชีซื้อขาย</p>
+                            <p style={{ fontWeight: "bold" }}>
+                              เลขที่บัญชีซื้อขาย
+                            </p>
                           </InputDiv>
                           <InputDiv style={{ marginLeft: "50px" }}>
                             <FieldInput
@@ -1238,7 +1253,9 @@ const Buy = () => {
                           </Header>
                           <ShareDetail>
                             <p>{rightStockName}</p>
-                            <b>{stockVolume}</b>
+                            <b>
+                              {stockVolume ? formatNumber(stockVolume) : "-"}
+                            </b>
                             <p>หุ้น</p>
                           </ShareDetail>
                         </StyledLineCard>
@@ -1264,7 +1281,9 @@ const Buy = () => {
                             >
                               ราคาเสนอขายหุ้นละ
                             </p>
-                            <p style={{ fontSize: "18.72px" }}>{offerPrice}</p>
+                            <p style={{ fontSize: "18.72px" }}>
+                              {offerPrice ? formatNumber(offerPrice) : "0"}
+                            </p>
                             <p style={{ fontSize: "18.72px" }}>บาท</p>
                           </ShareDetail>
                         </StyledLineCard>
@@ -1285,7 +1304,11 @@ const Buy = () => {
                           </Header>
                           <ShareDetail>
                             <p>{rightStockName}</p>
-                            <b>{rightStockVolume}</b>
+                            <b>
+                              {rightStockVolume
+                                ? formatNumber(rightStockVolume)
+                                : "-"}
+                            </b>
                             <p>หุ้น</p>
                           </ShareDetail>
                           <ShareDetail
@@ -1297,13 +1320,20 @@ const Buy = () => {
                           >
                             <p>เป็นจำนวนเงิน</p>
                             <b>
-                              {Number(rightStockVolume) * Number(offerPrice)}
+                              {rightStockVolume && offerPrice
+                                ? formatNumber(
+                                    Number(rightStockVolume) *
+                                      Number(offerPrice)
+                                  )
+                                : "-"}
                             </b>
                             <p>บาท</p>
                           </ShareDetail>
                           <ShareDetail style={{ fontSize: "14px" }}>
                             <p style={{ width: "100%" }}>
-                              (การคำนวนจากราคาเสนอขาย {offerPrice} บาท ต่อ หุ้น)
+                              (การคำนวนจากราคาเสนอขาย{" "}
+                              {offerPrice ? formatNumber(offerPrice) : "-"} บาท
+                              ต่อ หุ้น)
                             </p>
                           </ShareDetail>
                         </StyledLineCard>
@@ -1322,8 +1352,9 @@ const Buy = () => {
                           </Header>
                           <ShareDetail>
                             <p>{rightSpecialName}</p>
-                            <b>{rightSpecialVolume}</b>
-                            <p>หุ้น</p>
+                            <p style={{ color: "#C4C4C4" }}>รอการจัดสรร</p>
+                            {/* <b>{rightSpecialVolume}</b> */}
+                            <p>หน่วย</p>
                           </ShareDetail>
                         </StyledLineCard>
                       </div>
@@ -1348,7 +1379,7 @@ const Buy = () => {
                             <p>{rightStockName}</p>
                             <Input
                               type={"text"}
-                              value={currentStockVolume}
+                              value={formatNumber(currentStockVolume)}
                               onChange={(e) => {
                                 setCurrentStockVolume(
                                   e.target.value.replace(/[^0-9.]/, "")
@@ -1381,7 +1412,7 @@ const Buy = () => {
                             <p>จำนวนเงิน</p>
                             <Input
                               type={"text"}
-                              value={currentPrice}
+                              value={formatNumber(currentPrice)}
                               disabled
                             />
                             <p>บาท</p>
@@ -1396,7 +1427,7 @@ const Buy = () => {
                           <ShareDetail>
                             <p>{rightSpecialName}</p>
                             <p style={{ color: "#C4C4C4" }}>รอการจัดสรร</p>
-                            <p>หุ้น</p>
+                            <p>หน่วย</p>
                           </ShareDetail>
                         </StyledLineCard>
                         <div className="buy-flex">
@@ -1419,7 +1450,11 @@ const Buy = () => {
                             </Header>
                             <ShareDetail>
                               <p>{rightStockName}</p>
-                              <b>{excessVolume}</b>
+                              <b>
+                                {excessVolume
+                                  ? formatNumber(excessVolume)
+                                  : "-"}
+                              </b>
                               <p>หุ้น</p>
                             </ShareDetail>
                           </StyledLineCard>
@@ -1445,7 +1480,9 @@ const Buy = () => {
                                 <InputDiv
                                   style={{ width: "100%", margin: "auto" }}
                                 >
-                                  <p>ฝากเงินเข้าบัญชีธนาคาร</p>
+                                  <p style={{ fontWeight: "bold" }}>
+                                    ฝากเงินเข้าบัญชีธนาคาร
+                                  </p>
                                 </InputDiv>
                                 <InputDiv
                                   style={{
@@ -1478,6 +1515,7 @@ const Buy = () => {
                                     style={{
                                       width: "200px",
                                       textAlign: "start",
+                                      fontWeight: "bold",
                                     }}
                                   >
                                     หมายเลขบัญชีธนาคาร
@@ -1497,6 +1535,17 @@ const Buy = () => {
                                   />
                                 </InputDiv>
                               </div>
+                              {bookbankFile && (
+                                <div
+                                  style={{
+                                    width: "100%",
+                                    textAlign: "start",
+                                    marginLeft: "2rem",
+                                  }}
+                                >
+                                  {bookbankFile.name}
+                                </div>
+                              )}
                               <div className="input-div">
                                 <InputDiv
                                   style={{
@@ -1692,6 +1741,8 @@ const Buy = () => {
                                                 <b style={{ margin: "0 20px" }}>
                                                   {bank.accountName}
                                                 </b>
+                                              </p>
+                                              <p>
                                                 สาขา
                                                 <b style={{ margin: "0 20px" }}>
                                                   {bank.branch}
@@ -1832,6 +1883,15 @@ const UploadButton = styled.label`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   font-size: 17px;
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    width: 100%;
+  }
+
+  /* For Tablet */
+  @media screen and (min-width: 541px) and (min-width: 880px) {
+  }
 `;
 
 const Container = styled.div`
@@ -2195,7 +2255,7 @@ const StepDetail = styled.p`
 
 const Button = styled.input`
   width: 100%;
-  height: 54px;
+  height: 40px;
   background-color: ${persianblue};
   color: #ffffff;
   border: none;

@@ -15,6 +15,7 @@ import { httpFetch } from "../../utils/fetch";
 import { ModalAlert } from "../../components/ModalAlert/ModalAlert";
 import { showAlert } from "../../utils/showAlert";
 import { useNavigate } from "react-router-dom";
+import { GoogleMap, LoadScript } from "@react-google-maps/api";
 
 const CustomerService = () => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const CustomerService = () => {
   const [show, setShow] = useState(false);
   const [alertMessage, setAlertMessage] = useState();
   const [status, setStatus] = useState();
+  const [map, setMap] = useState(null);
 
   useEffect(() => {
     getMasterIssue();
@@ -71,6 +73,20 @@ const CustomerService = () => {
     navigate("/login/customer");
   };
 
+  const containerStyle = {
+    width: "100%",
+    height: "100%",
+  };
+
+  const center = {
+    lat: -3.745,
+    lng: -38.523,
+  };
+
+  const onLoad = () => {
+    console.log("test");
+  };
+
   return (
     <Container>
       <ModalAlert show={show} msg={alertMessage} status={status} />
@@ -111,66 +127,16 @@ const CustomerService = () => {
           <Header>(วันทำการ จันทร์-ศุกร์ เวลา 08.30 -17.00 น.)</Header>
         </div>
         <div className="form-input">
-          <div className="form-header">
-            <Header style={{ color: "#1D3AB1", fontSize: "24px" }}>
-              Submit a request
-            </Header>
-          </div>
-          <div className="form-input-detail">
-            <div className="form-label">
-              <label style={{ width: "100%" }}>
-                โปรดระบุอีเมล์ของท่าน /Your email address
-              </label>
-            </div>
-            <div className="tag-input">
-              <Input onChange={(e) => setEmail(e.target.value)} />
-            </div>
-          </div>
-          <div className="form-input-detail">
-            <div className="form-label">
-              <label style={{ width: "100%" }}>
-                โปรดระบุหัวข้อของท่าน / Subject
-              </label>
-            </div>
-            <div className="tag-input">
-              <Input onChange={(e) => setSubject(e.target.value)} />
-            </div>
-          </div>
-          <div className="form-input-detail">
-            <div className="form-label">
-              <label style={{ width: "100%" }}>
-                โปรดเลือกปัญหาที่ท่านต้องการแจ้งทราบ /What's the issue?
-              </label>
-            </div>
-            <div className="tag-input">
-              <DropdownArrow
-                options={masterIssue}
-                isOpen={isOpenDropdown}
-                onClick={() => setIsOpenDropdown(!isOpenDropdown)}
-                onBlur={() => setIsOpenDropdown(false)}
-                setSelected={setSelectedIssue}
-                selected={selectedIssue}
-                display={"nameTH"}
-              />
-            </div>
-          </div>
-          <div className="form-input-detail">
-            <div className="form-label">
-              <label style={{ width: "100%" }}>
-                โปรดระบุรายละเอียด / Please specify your issue on the subject
-                field
-              </label>
-            </div>
-            <div className="tag-input">
-              <Input onChange={(e) => setSpecifyIssue(e.target.value)} />
-            </div>
-          </div>
-          <div className="btn-submit">
-            <SubmitButton
-              value={"Submit"}
-              onClick={() => handlerOnSubmited()}
-            />
-          </div>
+          <LoadScript googleMapsApiKey="AIzaSyDJ7PUAZgUsUcqmHVbsdWijNCjli02gPHo">
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={center}
+              zoom={10}
+              onLoad={onLoad}
+            >
+              <></>
+            </GoogleMap>
+          </LoadScript>
         </div>
       </Card>
     </Container>

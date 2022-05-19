@@ -254,7 +254,7 @@ const Login = () => {
                             value="Sign in"
                             onClick={handleSubmited}
                           />
-                          {link("problem to sign in ?", "/customer/service")}
+                          {link("Problem to sign in ?", "/customer/service")}
                           {link(
                             "มีปัญหาในการเข้าใช้งานกรุณาคลิกที่นี่",
                             "/customer/service"
