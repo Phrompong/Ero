@@ -17,7 +17,7 @@ const Container = styled.div`
 const Main = styled.main`
   position: relative;
   background-color: ${ivory};
-  height: 100vh;
+  // height: 100vh;
   /* height: 100%; */
   display: flex;
   justify-content: center;

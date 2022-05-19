@@ -15,7 +15,7 @@ import { useState, useEffect, useMemo } from "react";
 import { httpGetRequest } from "../utils/fetch";
 
 import { Spinner } from "../components/Logo/Spinner"
-// import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, LoadScript } from '@react-google-maps/api';
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
