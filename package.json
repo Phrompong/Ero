@@ -6,7 +6,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
-    "@react-google-maps/api": "^2.10.2",
+    "@react-google-maps/api": "^2.10.3",
     "@styled-icons/bootstrap": "^10.34.0",
     "@styled-icons/boxicons-solid": "^10.38.0",
     "@testing-library/jest-dom": "^5.16.4",
