@@ -100,16 +100,17 @@ const DataTableProfile = ({ header, theaders, data, refreshData, isFetching }) =
             </ModalContainer>
           </Modal>
         )
-      } else if (details && user.role == "client") {
-        return (
-          <Details
-            options={options}
-            show={showDetails}
-            closed={handleClosedModal}
-            details={details}
-          />
-        )
-      }
+      } 
+      // else if (details && user.role == "client") {
+      //   return (
+      //     <Details
+      //       options={options}
+      //       show={showDetails}
+      //       closed={handleClosedModal}
+      //       details={details}
+      //     />
+      //   )
+      // }
     },
     [details, showDetails]
   );
