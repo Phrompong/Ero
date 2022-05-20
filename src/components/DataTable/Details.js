@@ -15,11 +15,10 @@ import { httpGetRequest, httpPutRequest } from "../../utils/fetch";
 
 const Details = ({ show, details, closed, options }) => {
   console.log(show);
-  console.log('------- detail --------')
   console.log(details);
   console.log(options);
   const [selectedStatus, setSelectedStatus] = useState(
-    details["status"][0]["_id"]
+    details["status"]["_id"]
   );
 
   const handleConfirmStatus = async () => {
@@ -40,7 +39,7 @@ const Details = ({ show, details, closed, options }) => {
     </FlexContainer>
   );
 
-  const customer = details["customers"];
+  const customer = details["customerId"];
 
   console.log(details);
 
@@ -56,28 +55,31 @@ const Details = ({ show, details, closed, options }) => {
             <Header>ตรวจสอบข้อมูลการชำระเงิน / เปลี่ยนสถานะ</Header>
             <LineCard>
               <UserInfo>
-                <SubHeader>ข้อมูลทั่วไปของผู้จองซื้อ</SubHeader>
+                <SubHeader>ข้อมูลทั่วของผู้สั่งซื้อ</SubHeader>
                 <div className="info">
                   {info(
                     "ชื่อ-นามสกุล / Name-Lastname   :",
                     `${customer["name"]} ${customer["lastname"]} `
                   )}
-                  {info("โทรศัพท์ / Telephone  :", details["telephone"])}
+                  {info("โทรศัพท์ / Telephone  :", details["customerTel"])}
                   {info("อีเมล์ / Email  :", customer["email"])}
                   {info("หมายเลขบัญชี ATS :", customer["atsBankNo"])}
                   {info("BANK ATS :", customer["atsBank"])}
                 </div>
+                <Link>
+                  <a href="">หากข้อมูลไม่ถูกต้องกรุณาคลิก</a>
+                </Link>
               </UserInfo>
             </LineCard>
             <FlexContainer>
-              <LineCard style={{ flex: 1, marginRight: "0.5rem" }}>
+              <LineCard style={{ flex: 1 }}>
                 <TransactionInfo>
-                  <SubHeader>การจองซื้อหุ้นเพิ่มทุน</SubHeader>
+                  <SubHeader>การสั่งซื้อหุ้นเพิ่มทุน</SubHeader>
                   <div className="transaction-details">
                     <div className="row">
                       <p className="text-box">{details["rightStockName"]}</p>
                       <div className="num-box">
-                        {details["orders"].paidRightVolume}
+                        {details["paidRightVolume"]}
                       </div>
                       <p className="unit">หุ้น</p>
                     </div>
@@ -90,42 +92,37 @@ const Details = ({ show, details, closed, options }) => {
                     </div>
                     <div className="row">
                       <p className="text-box">จำนวนเงิน</p>
-                      <div className="num-box">{details["orders"].paymentAmount}</div>
+                      <div className="num-box">{details["paymentAmount"]}</div>
                       <p className="unit">บาท</p>
                     </div>
                   </div>
                   <SubHeader>สิทธิเพิ่มเติมที่ท่านได้รับ</SubHeader>
                   <div className="row">
-                    <p>{details["rightSpecialName"]}</p>
-                    <BoldText style={{ color: "#809FB8" }}>รอการจัดสรร</BoldText>
-                    {/* {
-                      details["customerStock"]["rightSpecialVolume"] === 0 ?
-                        <BoldText style={{ color: "#809FB8" }}>รอการจัดสรร</BoldText> :
-                        <BoldText>
-                          {details["customerStock"]["rightSpecialVolume"]}
-                        </BoldText>
-                    } */}
+                    <p>{details["customerStock"]["rightSpecialName"]}</p>
+                    <BoldText>
+                      {details["customerStock"]["rightSpecialVolume"]}
+                    </BoldText>
                     <p className="unit">หุ้น</p>
                   </div>
                   <BoldText style={{ margin: "20px 0 5px 0" }}>
-                    ซื้อเกินสิทธิเป็นเงิน {details["orders"].excessAmount} บาท
+                    ซื้อเกินสิทธิเป็นเงิน {details["excessAmount"]} บาท
                   </BoldText>
 
                   <div className="row">
                     <SmallText>
-                      {`ส่งคำจองซื้อเมื่อ ${formatDate(details["createdOn"])}`}
+                      {`ส่งคำสั่งซื้อเมื่อ ${formatDate(details["createdOn"])}`}
                     </SmallText>
                     <SmallText>
                       {`แนบหลักฐานการโอนเมื่อ ${formatDate(
-                        details["orders"].attachedOn
+                        details["attachedOn"]
                       )}`}
                     </SmallText>
                   </div>
                 </TransactionInfo>
               </LineCard>
-              <LineCard style={{ flex: 1, marginLeft: "0.5rem" }}>
+              <LineCard style={{ flex: 1 }}>
                 <TransactionPhoto>
-                  <img src={details["orders"].attachedFile} height="400px" />
+                  <img src={details["attachedFile"]} height="400px" />
                 </TransactionPhoto>
               </LineCard>
             </FlexContainer>
@@ -150,18 +147,13 @@ export default Details;
 
 const Container = styled.div`
   padding: 20px;
-  height: 65vh;
-  width: 80vw;
   position: relative;
-
   p {
     font-size: 1rem;
   }
-
   > :nth-child(2) {
     margin-bottom: 20px;
   }
-
   @media screen and (min-width: 1400px) {
     min-width: 1000px;
   }
@@ -186,7 +178,6 @@ const Link = styled.div`
     color: ${gold};
   }
   text-align: right;
-
   @media screen and (max-width: 540px) {
     text-align: left;
   }
@@ -206,42 +197,35 @@ const Icon2 = styled(DownArrow)`
 
 const TransactionInfo = styled(Div)`
   flex-grow: 1;
-
   .transaction-details {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
     margin-bottom: 10px;
   }
-
   .column {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
   }
-
   .row {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-
   .icon-to {
     width: 180px;
     text-align: center;
   }
-
   .text-box {
     width: 80px;
   }
-
   .unit,
   .icon-change {
     margin-right: 10px;
     width: 25px;
   }
-
   .num-box {
     width: 200px;
     text-align: center;
@@ -267,7 +251,6 @@ const SmallText = styled.p`
 const TransactionPhoto = styled(Div)`
   text-align: center;
   width: 100%;
-
   img {
     /* height: 250px; */
     width: 300px;
@@ -279,15 +262,12 @@ const Footer = styled(Div)`
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-
   > :not(:nth-child(1)) {
     margin-left: 10px;
   }
-
   > * {
     margin-top: 10px;
   }
-
   .dropdown {
     width: 200px;
     background-color: pink;
@@ -298,14 +278,12 @@ const Header = styled.h3`
   color: ${persianblue};
   margin-bottom: 20px;
   margin-left: 10px;
-
   @media screen and (max-width: 540px) {
     /* font-size: 16px; */
     margin-left: 0;
   }
-
   /* For Tablets */
-  @media screen and (min-width: 541px) and (max-width: 880px) {
+  @media screen and (min-width: 540px) and (max-width: 880px) {
     margin-left: 0;
   }
 `;

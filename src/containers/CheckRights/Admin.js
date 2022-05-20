@@ -52,18 +52,18 @@ const CheckRightAdmin = () => {
   ];
 
   async function fetchDataTable() {
+    setIsFetching(true)
     const inputValue = searchInputRef.current.value;
     console.log(currentPage);
-    setIsFetching(true)
     let endpoint = `customerStocks/search/value?page=${currentPage}${
       inputValue ? "&key=" + inputValue : ""
     }`;
 
     const [res, status] = await httpGetRequest(endpoint);
-    setIsFetching(false)
     const { totalPages } = res["_metadata"];
     setTotalPages(totalPages);
     setData(res["data"]);
+    setIsFetching(false)
   }
 
   useEffect(() => {
@@ -76,7 +76,6 @@ const CheckRightAdmin = () => {
 
   const handleSearchButtonClicked = async () => {
     setCurrentPage(1);
-    fetchDataTable();
   };
 
   return (
@@ -99,6 +98,7 @@ const CheckRightAdmin = () => {
                   theaders={theaders}
                   data={data}
                   refreshData={fetchDataTable}
+                  isFetching={isFetching}
                 />
                 {/* <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} /> */}
               </div>

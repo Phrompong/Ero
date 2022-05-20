@@ -24,6 +24,7 @@ const Dashboard = () => {
 
   const { user } = useSelector((state) => state);
   const [totalPages, setTotalPages] = useState(1);
+  const [isFetching, setIsFetching] = useState(true)
 
   // nowDate = `${nowDate.getHours()}:${nowDate.getMinutes()} at ${nowDate.getDate()}th ${nowDate.getMonth()}`;
   const fakedata = [
@@ -91,6 +92,7 @@ const Dashboard = () => {
   ];
 
   async function fetchDataTable() {
+    setIsFetching(true)
     let endpoint = `orders?customerId=${user.customerId}`;
 
     const [res, status] = await httpGetRequest(endpoint);
@@ -98,6 +100,7 @@ const Dashboard = () => {
 
     setTotalPages(totalPages);
     setData(res["data"]);
+    setIsFetching(false)
   }
 
   async function fetchDataProfile() {
@@ -110,8 +113,7 @@ const Dashboard = () => {
 
   async function fetchDataNews() {
     let endpoint = `news`;
-
-    const [res, status] = await httpGetRequest(endpoint);
+    const [res, status] = await httpGetRequest(endpoint)
     console.log(res["data"][0]);
     setNews(res["data"][0]);
     console.log(news);
@@ -140,6 +142,7 @@ const Dashboard = () => {
                 theaders={theaders}
                 data={data}
                 refreshData={fetchDataTable}
+                isFetching={isFetching}
               />
             </div>
           </LineCard>

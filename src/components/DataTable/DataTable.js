@@ -13,10 +13,11 @@ import {
 import Details from "./Details";
 import Paginate from "../Paginate/Paginate";
 import Detail from "../Modal/ModalDetail";
+import { Spinner } from "../Logo/Spinner"
 
 import { httpGetRequest } from "../../utils/fetch";
 
-const DataTable = ({ header, theaders, data, refreshData }) => {
+const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [details, setDetails] = useState();
   const [options, setOptions] = useState([]);
@@ -84,26 +85,40 @@ const DataTable = ({ header, theaders, data, refreshData }) => {
               ))}
             </TR>
           </THead>
-          <TBody>
-            {data.map((x, index) => (
-              <TR key={index} onClick={() => handleClicked(x)}>
-                <TD>
-                  {new Date(x["createdOn"]).toLocaleDateString()}
-                </TD>
-                <TD>{`${x["customerId"]["name"]} ${x["customerId"]["lastname"]} `}</TD>
-                <TD>{x["rightStockName"]}</TD>
-                <TD>{formatNumber(x["paidRightVolume"])}</TD>
-                <TD>
-                  {x["customerStock"]["rightSpecialName"]}{" "}
-                  {x["customerStock"]["rightSpecialVolume"]}
-                </TD>
-                <TD>{formatNumber(x["paymentAmount"])}</TD>
-                <Status color={color[x["status"]["value"]]}>
-                  {x["status"]["status"]}
-                </Status>
-              </TR>
-            ))}
-          </TBody>
+          {
+            isFetching ? (
+              <TBody>
+                <TR>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                  <TD><Spinner/></TD>
+                </TR>
+              </TBody> ) : (
+                <TBody>
+                  {data.map((x, index) => (
+                    <TR key={index} onClick={() => handleClicked(x)}>
+                      <TD>
+                        {new Date(x["createdOn"]).toLocaleDateString()}
+                      </TD>
+                      <TD>{`${x["customerId"]["name"]} ${x["customerId"]["lastname"]} `}</TD>
+                      <TD>{x["rightStockName"]}</TD>
+                      <TD>{formatNumber(x["paidRightVolume"])}</TD>
+                      <TD>
+                        {x["customerStock"]["rightSpecialName"]}{" "}
+                        {x["customerStock"]["rightSpecialVolume"]}
+                      </TD>
+                      <TD>{formatNumber(x["paymentAmount"])}</TD>
+                      <Status color={color[x["status"]["value"]]}>
+                        {x["status"]["status"]}
+                      </Status>
+                    </TR>
+                  ))}
+                </TBody>
+              )
+          }
         </Table>
       )}
       {showDetails && detailsModal}
