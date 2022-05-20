@@ -22,10 +22,9 @@ import { Spinner } from "../Logo/Spinner"
 
 import { httpGetRequest } from "../../utils/fetch";
 
-const DataTableProfile = ({ header, theaders, data, refreshData }) => {
+const DataTableProfile = ({ header, theaders, data, refreshData, isFetching }) => {
   const { user } = useSelector((state) => state);
   const [showDetails, setShowDetails] = useState(false);
-  const [isFetching, setIsFetching] = useState(true)
   const [details, setDetails] = useState();
   const [options, setOptions] = useState([]);
 
@@ -65,14 +64,6 @@ const DataTableProfile = ({ header, theaders, data, refreshData }) => {
     setShowDetails(false);
     refreshData();
   };
-
-  useEffect(() => {
-    if (data.length === 0) {
-      setIsFetching(true)
-    } else {
-      setIsFetching(false)
-    }
-  }, [data])
 
   const detailsModal = useMemo(
     () => {

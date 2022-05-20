@@ -17,7 +17,7 @@ import { Search } from "@styled-icons/bootstrap/Search";
 import { FileExport } from "@styled-icons/boxicons-solid/FileExport"
 
 const Dashboard = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -29,9 +29,12 @@ const Dashboard = () => {
   const [saleAmount, setSaleAmount] = useState(0);
   const [currentSaleAmount, setCurrentSaleAmount] = useState(0);
 
+  const [isFetching, setIsFetching] = useState(true)
+
   const searchInputRef = useRef("");
 
   async function fetchDataTable() {
+    setIsFetching(true)
     let endpoint = `orders/search/value?type=${selectedType}&page=${currentPage}`;
     const inputValue = searchInputRef.current.value;
     if (inputValue) {
@@ -43,6 +46,7 @@ const Dashboard = () => {
 
     setTotalPages(totalPages);
     setData(res["data"]);
+    setIsFetching(false)
   }
 
   async function fetchDataProgress(path, key, type, func) {
@@ -221,6 +225,7 @@ const Dashboard = () => {
                 theaders={theaders}
                 data={data}
                 refreshData={refreshData}
+                isFetching={isFetching}
               />
               <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
             </div>
