@@ -92,6 +92,7 @@ const Dashboard = () => {
   ];
 
   async function fetchDataTable() {
+    setIsFetching(true)
     let endpoint = `orders?customerId=${user.customerId}`;
 
     const [res, status] = await httpGetRequest(endpoint);
@@ -99,6 +100,7 @@ const Dashboard = () => {
 
     setTotalPages(totalPages);
     setData(res["data"]);
+    setIsFetching(false)
   }
 
   async function fetchDataProfile() {
@@ -117,12 +119,10 @@ const Dashboard = () => {
     console.log(news);
   }
 
-  useEffect(async () => {
-    setIsFetching(true)
-    await fetchDataTable();
-    await fetchDataProfile();
-    await fetchDataNews();
-    setIsFetching(false)
+  useEffect(() => {
+    fetchDataTable();
+    fetchDataProfile();
+    fetchDataNews();
   }, []);
 
   return (
