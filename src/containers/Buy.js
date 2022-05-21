@@ -179,7 +179,7 @@ const Buy = () => {
       setNationalId(payload.customerId.nationalId);
       setFullname(`${payload.customerId.name} ${payload.customerId.lastname}`);
       // setShareId(payload.registrationNo);
-      setPhoneNo(payload.customerId.telephone);
+      setPhoneNo(localStorage.getItem("step_1") ? JSON.parse(localStorage.getItem("step_1")).phoneNo : payload.customerId.telephone);
       setRegistrationNo(payload.registrationNo);
       setFullnameModal(
         `${payload.customerId.name} ${payload.customerId.lastname}`
@@ -301,6 +301,14 @@ const Buy = () => {
   }, [shareId, isRegistrationChecked]);
 
   useEffect(() => {
+    if (dropdownSelect || tradingAccountNo) {
+      localStorage.setItem("step_1", JSON.stringify({
+        ...JSON.parse(localStorage.getItem("step_1")),
+        dropdownSelect: dropdownSelect || "",
+        tradingAccountNo: tradingAccountNo || ""
+      }))
+    }
+
     if (dropdownSelect && tradingAccountNo) {
       setIsDisableToPage2(false);
     }
@@ -385,6 +393,11 @@ const Buy = () => {
       setFullname(fullnameModal);
       setShareId(shareIdModal);
       setPhoneNo(phoneNoModal);
+
+      localStorage.setItem("step_1", JSON.stringify({
+        ...JSON.parse(localStorage.getItem("step_1")),
+        phoneNo: phoneNoModal
+      }))
     } else if (page === 2) {
       setShowAlertModal(false);
     }
@@ -497,6 +510,18 @@ const Buy = () => {
     );
   }, [currentStockVolume]);
 
+  // local storage initial
+  useEffect(() => {
+    console.log("Local storage initial")
+    console.log(JSON.parse(localStorage.getItem("step_1")))
+    if (!JSON.parse(localStorage.getItem("step_1"))) {
+      return;
+    }
+    if (JSON.parse(localStorage.getItem("step_1")).tradingAccountNo) {
+      setTradingAccountNo(JSON.parse(localStorage.getItem("step_1")).tradingAccountNo)
+    }
+  }, [])
+
   const formatNumber = (number) => {
     return Number(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
@@ -536,7 +561,7 @@ const Buy = () => {
               </div>
               <div className="modal-flex">
                 <p className="modal-flex-label">เบอร์โทรศัพท์</p>
-                <p className="modal-flex-label-info">{phoneNo}</p>
+                <p className="modal-flex-label-info">{phoneNo ? phoneNo : "-"}</p>
               </div>
               <div className="modal-flex">
                 <p className="modal-flex-label">ชื่อ - นามสกุล</p>
@@ -1074,7 +1099,7 @@ const Buy = () => {
                               <p className="label-input share-detail" style={{ fontWeight: "bold" }}>
                                 เบอร์โทรศัพท์ที่สามารถติดต่อได้
                               </p>
-                              <p className="label-input share-detail">{phoneNo}</p>
+                              <p className="label-input share-detail">{phoneNo || "-"}</p>
                             </div>
                           </InputDiv>
                         </ContentSpace>
@@ -1159,7 +1184,7 @@ const Buy = () => {
                               onClick={() => setIsOpenDropdown(!isOpenDropdown)}
                               onBlur={() => setIsOpenDropdown(false)}
                               setSelected={setDropdownSelect}
-                              selected={dropdownSelect}
+                              selected={JSON.parse(localStorage.getItem("step_1")) ? JSON.parse(localStorage.getItem("step_1")).dropdownSelect : dropdownSelect}
                             />
                           </InputDiv>
                           <InputDiv style={{ marginLeft: "50px" }}>
@@ -1168,7 +1193,7 @@ const Buy = () => {
                           <InputDiv style={{ marginLeft: "50px" }}>
                             <FieldInput
                               value={tradingAccountNo}
-                              onChange={(e) =>
+                              onChange={(e) => 
                                 setTradingAccountNo(e.target.value)
                               }
                               placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"}
