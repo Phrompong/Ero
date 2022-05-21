@@ -18,11 +18,17 @@ import Paginate from "../Paginate/Paginate";
 
 import { Modal } from "../UI/Modal";
 
-import { Spinner } from "../Logo/Spinner"
+import { Spinner } from "../Logo/Spinner";
 
 import { httpGetRequest } from "../../utils/fetch";
 
-const DataTableProfile = ({ header, theaders, data, refreshData, isFetching }) => {
+const DataTableProfile = ({
+  header,
+  theaders,
+  data,
+  refreshData,
+  isFetching,
+}) => {
   const { user } = useSelector((state) => state);
   const [showDetails, setShowDetails] = useState(false);
   const [details, setDetails] = useState();
@@ -54,8 +60,8 @@ const DataTableProfile = ({ header, theaders, data, refreshData, isFetching }) =
   };
 
   const handleClicked = (details) => {
-    console.log(user.role == "client")
-    console.log(details)
+    console.log(user.role == "client");
+    console.log(details);
     setShowDetails(true);
     setDetails(details);
   };
@@ -65,55 +71,106 @@ const DataTableProfile = ({ header, theaders, data, refreshData, isFetching }) =
     refreshData();
   };
 
-  const detailsModal = useMemo(
-    () => {
-      if (details && user.role === "admin") {
-        return (
-          <Modal show={showDetails}>
-            <ModalContainer>
-              <ModalDetail
-                fullname={`${details["customers"].name} ${details["customers"].lastname}`}
-                shareId={details["registrationNo"]}
-                phoneNo={details["customers"].telephone}
-                dropdownSelect={{
-                  code: details["orders"].brokerId.code,
-                  name: details["orders"].brokerId.name
-                }}
-                tradingAccountNo={details["orders"].accountNo}
-                rightStockName={details["orders"].rightStockName}
-                stockVolume={details["stockVolume"]}
-                offerPrice={details["offerPrice"]}
-                rightStockVolume={details.rightStockVolume}
-                rightSpecialName={details["orders"].rightSpecialName}
-                excessVolume={details["orders"].excessAmount}
-                currentPrice={details["orders"].paymentAmount}
-                optional1={Number(details["orders"].paidRightVolume) - (Number(details["orders"].excessAmount) / Number(details.offerPrice))}
-                optional2={Number(details["orders"].excessAmount) / Number(details.offerPrice)}
-                optional3={Number(details["orders"].paidRightVolume)}
-                optional4={Number(details["orders"].paidRightVolume) /  Number(details.getRight)}
-                depositBank={details["orders"].bankRefund}
-                bank={details["orders"].bankRefundNo}
-                hanlderOnBack={() => setShowDetails(false)}
-                handlerOnAccept={() => setShowDetails(false)}
-                isCheckRight={true}
-              />
-            </ModalContainer>
-          </Modal>
-        )
-      } 
-      // else if (details && user.role == "client") {
-      //   return (
-      //     <Details
-      //       options={options}
-      //       show={showDetails}
-      //       closed={handleClosedModal}
-      //       details={details}
-      //     />
-      //   )
-      // }
-    },
-    [details, showDetails]
-  );
+  const detailsModal = useMemo(() => {
+    if (details && user.role === "admin") {
+      return (
+        <Modal show={showDetails}>
+          <ModalContainer>
+            <ModalDetail
+              fullname={`${details["customers"].name} ${details["customers"].lastname}`}
+              shareId={details["registrationNo"]}
+              phoneNo={details["customers"].telephone}
+              dropdownSelect={{
+                code:
+                  Object.keys(details["orders"]).length > 0
+                    ? details["orders"].brokerId.code
+                    : "-",
+                name:
+                  Object.keys(details["orders"]).length > 0
+                    ? details["orders"].brokerId.name
+                    : "-",
+              }}
+              tradingAccountNo={
+                Object.keys(details["orders"]).length > 0
+                  ? details["orders"].accountNo
+                  : "-"
+              }
+              rightStockName={
+                Object.keys(details["orders"]).length > 0
+                  ? details["orders"].rightStockName
+                  : "-"
+              }
+              stockVolume={details["stockVolume"]}
+              offerPrice={details["offerPrice"]}
+              rightStockVolume={details.rightStockVolume}
+              rightSpecialName={
+                Object.keys(details["orders"]).length > 0
+                  ? details["orders"].rightSpecialName
+                  : "-"
+              }
+              excessVolume={
+                Object.keys(details["orders"]).length > 0
+                  ? details["orders"].excessAmount
+                  : "-"
+              }
+              currentPrice={
+                Object.keys(details["orders"]).length > 0
+                  ? details["orders"].paymentAmount
+                  : "-"
+              }
+              optional1={
+                Object.keys(details["orders"]).length > 0
+                  ? Number(details["orders"].paidRightVolume) -
+                    Number(details["orders"].excessAmount) /
+                      Number(details.offerPrice)
+                  : "-"
+              }
+              optional2={
+                Object.keys(details["orders"]).length > 0
+                  ? Number(details["orders"].excessAmount) /
+                    Number(details.offerPrice)
+                  : "-"
+              }
+              optional3={
+                Object.keys(details["orders"]).length > 0
+                  ? Number(details["orders"].paidRightVolume)
+                  : "-"
+              }
+              optional4={
+                Object.keys(details["orders"]).length > 0
+                  ? Number(details["orders"].paidRightVolume) /
+                    Number(details.getRight)
+                  : "-"
+              }
+              depositBank={
+                Object.keys(details["orders"]).length > 0
+                  ? details["orders"].bankRefund
+                  : "-"
+              }
+              bank={
+                Object.keys(details["orders"]).length > 0
+                  ? details["orders"].bankRefundNo
+                  : "-"
+              }
+              hanlderOnBack={() => setShowDetails(false)}
+              handlerOnAccept={() => setShowDetails(false)}
+              isCheckRight={true}
+            />
+          </ModalContainer>
+        </Modal>
+      );
+    }
+    // else if (details && user.role == "client") {
+    //   return (
+    //     <Details
+    //       options={options}
+    //       show={showDetails}
+    //       closed={handleClosedModal}
+    //       details={details}
+    //     />
+    //   )
+    // }
+  }, [details, showDetails]);
 
   return (
     <Container>
@@ -129,48 +186,55 @@ const DataTableProfile = ({ header, theaders, data, refreshData, isFetching }) =
               ))}
             </TR>
           </THead>
-          {
-            isFetching ? (
-              <TBody>
-                <TR>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
+          {isFetching ? (
+            <TBody>
+              <TR>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+              </TR>
+            </TBody>
+          ) : (
+            <TBody>
+              {data.map((x, index) => (
+                <TR key={index} onClick={() => handleClicked(x)}>
+                  <TD style={{ width: "100px" }}>จองซื้อ / Book</TD>
+                  <TD>{x["rightStockName"]}</TD>
+                  <TD>{x["registrationNo"]}</TD>
+                  <TD>{`${
+                    x["customers"].name + " " + x["customers"].lastname
+                  }`}</TD>
+                  <TD>{x["stockVolume"]}</TD>
+                  <TD>{x["rightStockVolume"]}</TD>
+                  {x["status"].length > 0 ? (
+                    x["status"].map((obj) => (
+                      <TD color={color[obj["value"]]}>{obj["status"]}</TD>
+                    ))
+                  ) : (
+                    <TD color={color[0]}>ยังไม่ได้ดำเนินการ</TD>
+                  )}
                 </TR>
-              </TBody> ) : (
-                <TBody>
-                  {data.map((x, index) => (
-                    <TR key={index} onClick={() => handleClicked(x)}>
-                      <TD style={{ width: "100px" }}>
-                        จองซื้อ / Book
-                      </TD>
-                      <TD>{x["rightStockName"]}</TD>
-                      <TD>{x["registrationNo"]}</TD>
-                      <TD>{`${
-                        x["customers"].name + " " + x["customers"].lastname
-                      }`}</TD>
-                      <TD>{x["stockVolume"]}</TD>
-                      <TD>{x["rightStockVolume"]}</TD>
-                      {x["status"].length > 0 ? (
-                        x["status"].map((obj) => (
-                          <TD color={color[obj["value"]]}>
-                            {obj["status"]}
-                          </TD>
-                        ))
-                      ) : (
-                        <TD color={color[0]}>
-                          ยังไม่ได้ดำเนินการ
-                        </TD>
-                      )}
-                    </TR>
-                  ))}
-              </TBody>
-            )
-          }
+              ))}
+            </TBody>
+          )}
         </Table>
       )}
       {showDetails && detailsModal}
@@ -239,7 +303,7 @@ const ModalContainer = styled.div`
   // width: 80vw;
   border-radius: 10px;
   border: 1px solid #d9e1e7;
-  background: #FFFFFF;
+  background: #ffffff;
   padding: 20px 20px;
   display: flex;
   flex-direction: column;
@@ -336,7 +400,7 @@ const ModalContainer = styled.div`
       //   width: 100%;
       //   display: block;
       //   align-items: baseline;
-  
+
       //   .text-title {
       //     width: 40%;
       //     display: flex;
@@ -361,7 +425,7 @@ const ModalContainer = styled.div`
     .card-tag {
       display: inline;
     }
-    
+
     .buy-flex {
       width: 100%;
     }
@@ -384,7 +448,7 @@ const ModalContainer = styled.div`
         display: flex;
         justify-content: space-between;
         align-items: baseline;
-  
+
         .text-title {
           width: 50%;
           display: flex;
@@ -392,7 +456,6 @@ const ModalContainer = styled.div`
           justify-content: space-between;
         }
       }
-  
     }
 
     .text-title-end {

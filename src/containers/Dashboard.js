@@ -29,16 +29,22 @@ const Dashboard = () => {
   const [saleAmount, setSaleAmount] = useState(0);
   const [currentSaleAmount, setCurrentSaleAmount] = useState(0);
 
-  const [isFetching, setIsFetching] = useState(true)
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [isFetching, setIsFetching] = useState(true);
 
   const searchInputRef = useRef("");
 
   async function fetchDataTable() {
-    setIsFetching(true)
+    setIsFetching(true);
     let endpoint = `orders/search/value?type=${selectedType}&page=${currentPage}`;
     const inputValue = searchInputRef.current.value;
     if (inputValue) {
       endpoint = `${endpoint}&key=${inputValue}`;
+    }
+
+    if (startDate && endDate) {
+      endpoint = `${endpoint}&startDate=${startDate}&endDate=${endDate}`;
     }
 
     const [res, status] = await httpGetRequest(endpoint);
@@ -46,13 +52,17 @@ const Dashboard = () => {
 
     setTotalPages(totalPages);
     setData(res["data"]);
-    setIsFetching(false)
+    setIsFetching(false);
   }
 
   async function fetchDataProgress(path, key, type, func) {
     let endpoint = `orders/progressPie/${path}?type=${type}`;
 
     if (key) endpoint = `${endpoint}&key=${key}`;
+
+    if (startDate && endDate) {
+      endpoint = `${endpoint}&startDate=${startDate}&endDate=${endDate}`;
+    }
 
     const [res, status] = await httpGetRequest(endpoint);
     func(res["data"]);
@@ -167,10 +177,30 @@ const Dashboard = () => {
           </Header>
           <SearchDiv>
             <div className="search-div block">
-              <InputSeacrh className="date-input" type="text" placeholder={'Start date'} onFocus={(e) => e.target.type = 'date'} onBlur={(e) => e.target.type = 'text'} value={null}/>
+              <InputSeacrh
+                className="date-input"
+                type="text"
+                placeholder={"Start date"}
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => (e.target.type = "text")}
+                value={startDate}
+                onChange={(e) => {
+                  setStartDate(e.target.value);
+                }}
+              />
             </div>
             <div className="search-div block">
-              <InputSeacrh className="date-input" type="text" placeholder={'End date'} onFocus={(e) => e.target.type = 'date'} onBlur={(e) => e.target.type = 'text'} value={null}/>
+              <InputSeacrh
+                className="date-input"
+                type="text"
+                placeholder={"End date"}
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => (e.target.type = "text")}
+                value={endDate}
+                onChange={(e) => {
+                  setEndDate(e.target.value);
+                }}
+              />
             </div>
             {/* <div className="search-div">
               <Dropdown
@@ -182,7 +212,10 @@ const Dashboard = () => {
             </div> */}
             <div className="search-div flex">
               <InputSeacrh placeholder="Search..." ref={searchInputRef} />
-              <Button onClick={handleSearchButtonClicked} style={{ marginLeft: "1rem" }}>
+              <Button
+                onClick={handleSearchButtonClicked}
+                style={{ marginLeft: "1rem" }}
+              >
                 <SearchIcon />
               </Button>
             </div>
@@ -274,10 +307,10 @@ const SearchDiv = styled.div`
   > :not(:first-child) {
     margin-left: 10px;
   }
-  
+
   .block {
-      display: block;
-      text-align: end;
+    display: block;
+    text-align: end;
   }
 
   /* For Mobile */
@@ -321,7 +354,7 @@ const InputSeacrh = styled.input`
   position: relative;
   font-size: 16px;
   padding: 10px;
-  
+
   .date-input {
     width: 200px;
     height: 42px;

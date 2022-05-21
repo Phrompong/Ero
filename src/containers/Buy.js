@@ -538,7 +538,7 @@ const Buy = () => {
               </div>
               <div className="modal-flex">
                 <p className="modal-flex-label">เบอร์โทรศัพท์</p>
-                <p className="modal-flex-label-info">{phoneNo}</p>
+                <p className="modal-flex-label-info">{phoneNo || "-"}</p>
               </div>
               <div className="modal-flex">
                 <p className="modal-flex-label">ชื่อ - นามสกุล</p>
