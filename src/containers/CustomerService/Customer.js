@@ -4,7 +4,6 @@ import styled from "styled-components";
 import logo from "../../assets/logo_awsc2.jpeg";
 import bgCustomerService from "../../assets/bgCustomerService.png";
 import customerServiceLeft from "../../assets/customerServiceLeft.png";
-import { DropdownArrow } from "../../components/UI/Dropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { faCircleLeft } from "@fortawesome/free-solid-svg-icons";
@@ -15,7 +14,7 @@ import { httpFetch } from "../../utils/fetch";
 import { ModalAlert } from "../../components/ModalAlert/ModalAlert";
 import { showAlert } from "../../utils/showAlert";
 import { useNavigate } from "react-router-dom";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import Iframe from 'react-iframe'
 
 const CustomerService = () => {
   const navigate = useNavigate();
@@ -73,23 +72,13 @@ const CustomerService = () => {
     navigate("/login/customer");
   };
 
-  const containerStyle = {
-    width: "100%",
-    height: "100%",
-  };
-
-  const center = {
-    lat: 13.7595228,
-    lng: 100.5349187,
-  };
-
   return (
     <Container>
       <ModalAlert show={show} msg={alertMessage} status={status} />
       <div className="bg-img">
         <div className="bg-text">
           <p>Customer Service</p>
-          <Button onClick={redirectPage}>
+          <Button onClick={redirectPage} className="btn">
             <FontAwesomeIcon
               icon={faCircleLeft}
               style={{ marginRight: "0.25rem" }}
@@ -120,19 +109,16 @@ const CustomerService = () => {
             />
             cs@asiawealth.co.th
           </Info>
-          <Header>(วันทำการ จันทร์-ศุกร์ เวลา 08.30 -17.00 น.)</Header>
+          <Header style={{ marginBottom: "0" }}>(วันทำการ จันทร์-ศุกร์ เวลา 08.30 -17.00 น.)</Header>
         </div>
         <div className="form-input">
-          <LoadScript googleMapsApiKey="AIzaSyDJ7PUAZgUsUcqmHVbsdWijNCjli02gPHo">
-            <GoogleMap
-              mapContainerStyle={containerStyle}
-              center={center}
-              zoom={10}
-            >
-              {/* Child components, such as markers, info windows, etc. */}
-              <Marker position={center} />
-            </GoogleMap>
-          </LoadScript>
+          <Iframe 
+            url="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.590078805388!2d100.54203281500452!3d13.743250090352943!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29f29a76569cd%3A0x44d9202229edba57!2sAsia%20Wealth%20Security!5e0!3m2!1sth!2sth!4v1653241766237!5m2!1sth!2sth"
+            width="100%"
+            height="100%"
+            display="initial"
+            position="relative"
+          />
         </div>
       </Card>
     </Container>
@@ -142,13 +128,13 @@ const CustomerService = () => {
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  min-width: 600px;
-  min-height: 740px;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
   position: relative;
+  overflow: scroll;
+  overflow-x: auto;
+  overflow-y: auto;
 
   .bg-img {
     position: absolute;
@@ -163,11 +149,28 @@ const Container = styled.div`
       color: #ffffff;
       font-weight: 600;
       font-size: 48px;
-      margin-left: 10%;
-      margin-right: 10%;
+      // margin-left: 10%;
+      // margin-right: 10%;
       margin-top: 5rem;
       display: flex;
       justify-content: space-between;
+    }
+
+    /* For Mobile */
+    @media screen and (max-width: 540px) {
+      height: 100%;
+
+      .bg-text {
+        margin-top: 2rem;
+
+        .btn {
+          margin: auto;
+        }
+      }
+    }
+
+    /* For Tablet */
+    @media screen and (min-width: 541px) and (min-width: 880px) {
     }
   }
 `;
@@ -195,8 +198,8 @@ const Card = styled.div`
     }
 
     .logo-img-div {
-      height: 118px;
-      width: 312px;
+      max-height: 118px;
+      max-width: 312px;
       position: relative;
       left: -50px;
       background: #ffffff;
@@ -244,6 +247,39 @@ const Card = styled.div`
 
   .form-input {
     width: 60%;
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    margin-top: 150px;
+
+    .info-detail {
+      width: 100%;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      padding-bottom: 1rem;
+
+      .logo-img-div {
+        text-align: center;
+        margin: 0;
+        left: 0;
+        max-height: 100%;
+        max-width: 100%;
+        border-radius: 0px;
+      }
+    }
+
+    .form-input {
+      height: 300px;
+      width: 100vw;
+    }
+  }
+
+  /* For Tablet */
+  @media screen and (min-width: 541px) and (min-width: 880px) {
   }
 `;
 
