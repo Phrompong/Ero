@@ -21,7 +21,7 @@ const CheckRightAdmin = () => {
   const [data, setData] = useState([]);
   const [profile, setProfile] = useState(null);
   const [news, setNews] = useState(null);
-  const [isFetching, setIsFetching] = useState(true)
+  const [isFetching, setIsFetching] = useState(true);
   const searchInputRef = useRef("");
   const { user } = useSelector((state) => state);
 
@@ -52,8 +52,9 @@ const CheckRightAdmin = () => {
   ];
 
   async function fetchDataTable() {
-    setIsFetching(true)
+    setIsFetching(true);
     const inputValue = searchInputRef.current.value;
+    console.log(inputValue);
     console.log(currentPage);
     let endpoint = `customerStocks/search/value?page=${currentPage}${
       inputValue ? "&key=" + inputValue : ""
@@ -63,7 +64,7 @@ const CheckRightAdmin = () => {
     const { totalPages } = res["_metadata"];
     setTotalPages(totalPages);
     setData(res["data"]);
-    setIsFetching(false)
+    setIsFetching(false);
   }
 
   useEffect(() => {
@@ -86,24 +87,24 @@ const CheckRightAdmin = () => {
             placeholder="ค้นหาหมายเลขประจำตัวประชาชน / เลขที่หนังสือเดินทาง / เลขทะเบียนนิติบุคคล"
             ref={searchInputRef}
           />
-          <Button onClick={handleSearchButtonClicked}>ค้นหา</Button>
+          <Button onClick={fetchDataTable}>ค้นหา</Button>
         </SearchDiv>
-        
+
         <TableSection>
           {/* <div style={{ overflow: "scroll" }}> */}
-            <LineCard>
-              <div className="table-detail">
-                <DataTableCheckRight
-                  header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
-                  theaders={theaders}
-                  data={data}
-                  refreshData={fetchDataTable}
-                  isFetching={isFetching}
-                />
-                {/* <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} /> */}
-              </div>
-              <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
-            </LineCard>
+          <LineCard>
+            <div className="table-detail">
+              <DataTableCheckRight
+                header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
+                theaders={theaders}
+                data={data}
+                refreshData={fetchDataTable}
+                isFetching={isFetching}
+              />
+              {/* <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} /> */}
+            </div>
+            <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
+          </LineCard>
           {/* </div> */}
         </TableSection>
       </Container>

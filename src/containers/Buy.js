@@ -61,18 +61,50 @@ const Buy = () => {
 
   const [previewImage, setPreviewImage] = useState(null);
 
-  const handleClick = () => {
+  const handleClick = (e) => {
     hiddenFileInput.current.click();
   };
 
-  const handleOnFileSelect = (event) => {
-    const fileUploaded = event.target.files[0];
-    setBookbankFile(fileUploaded);
-    const reader = new FileReader();
-    reader.addEventListener("load", () => {
-      setPreviewImage(reader.result);
-    });
-    reader.readAsDataURL(fileUploaded);
+  const handleOnFileSelect = (e) => {
+    const allowTypeFile = ["image/jpeg", "image/png"];
+    const [file] = e.target.files;
+    const maxAllowedSize = 5 * 1024 * 1024;
+    const { name: fileName, size, type } = file;
+
+    if (!allowTypeFile.includes(type)) {
+      setStatus(999);
+      setAlertMessage("ประเภทไฟล์ไม่ถูกต้อง");
+      setShow(true);
+      setTimeout(() => {
+        setShow(false);
+      }, 2000);
+
+      return;
+    }
+
+    if (size > maxAllowedSize) {
+      setStatus(999);
+      setAlertMessage("ขนาดไฟล์รูปภาพใหญ่เกินไป");
+      setShow(true);
+      setTimeout(() => {
+        setShow(false);
+      }, 2000);
+    } else {
+      const fileUploaded = e.target.files[0];
+      setBookbankFile(fileUploaded);
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setPreviewImage(reader.result);
+      });
+      reader.readAsDataURL(fileUploaded);
+    }
+    // const fileUploaded = event.target.files[0];
+    // setBookbankFile(fileUploaded);
+    // const reader = new FileReader();
+    // reader.addEventListener("load", () => {
+    //   setPreviewImage(reader.result);
+    // });
+    // reader.readAsDataURL(fileUploaded);
   };
 
   // modal registration
