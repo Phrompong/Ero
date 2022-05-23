@@ -240,7 +240,7 @@ const Login = () => {
                           <Input
                             elementType="input"
                             elementConfig={{ type: "text" }}
-                            label="National-ID"
+                            label="บัตรประจำตัวประชาชน / National-ID"
                             required
                             width="100%"
                             ref={usernameInputRef}

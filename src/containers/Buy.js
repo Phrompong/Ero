@@ -145,16 +145,37 @@ const Buy = () => {
   const [isConfirmOrder, setIsConfirmOrder] = useState(true);
   const [isSummitOrder, setIsSummitOrder] = useState(true);
 
-  const fetchStep1 = () => {
-    getCustomerProfile();
-    getBrokers();
-    fetchDataProfile();
+  const fetchStep1 = async () => {
+    await getCustomerProfile();
+    await getBrokers();
+    await fetchDataProfile();
+
+    if (JSON.parse(localStorage.getItem("step_1")) && page === 1) {
+      console.log("------ Loading local storage step 1 ------");
+      setShareId(JSON.parse(localStorage.getItem("step_1")).shareId);
+      setPhoneNo(JSON.parse(localStorage.getItem("step_1")).phoneNo);
+      setDropdownSelect(
+        JSON.parse(localStorage.getItem("step_1")).dropdownSelect
+      );
+      setTradingAccountNo(
+        JSON.parse(localStorage.getItem("step_1")).tradingAccountNo
+      );
+    }
   };
 
-  const fetchStep2 = () => {
-    getCustomerStock();
-    getMasterBank();
-    fetchDataProfile();
+  const fetchStep2 = async () => {
+    await getCustomerStock();
+    await getMasterBank();
+    await fetchDataProfile();
+
+    if (JSON.parse(localStorage.getItem("step_2")) && page === 2) {
+      console.log("------ Loading local storage step 2 ------");
+      setCurrentStockVolume(
+        JSON.parse(localStorage.getItem("step_2")).currentStockVolume
+      );
+      setDepositBank(JSON.parse(localStorage.getItem("step_2")).depositBank);
+      setBank(JSON.parse(localStorage.getItem("step_2")).bank);
+    }
   };
 
   const fetchStep3 = () => {
@@ -178,7 +199,11 @@ const Buy = () => {
       setNationalId(payload.customerId.refNo);
       setFullname(`${payload.customerId.name} ${payload.customerId.lastname}`);
       // setShareId(payload.registrationNo);
-      setPhoneNo(payload.customerId.telephone);
+      setPhoneNo(
+        localStorage.getItem("step_1")
+          ? JSON.parse(localStorage.getItem("step_1")).phoneNo
+          : payload.customerId.telephone
+      );
       setRegistrationNo(payload.registrationNo);
       setFullnameModal(
         `${payload.customerId.name} ${payload.customerId.lastname}`
@@ -306,6 +331,14 @@ const Buy = () => {
   }, [shareId, isRegistrationChecked]);
 
   useEffect(() => {
+    // if (dropdownSelect || tradingAccountNo) {
+    //   localStorage.setItem("step_1", JSON.stringify({
+    //     ...JSON.parse(localStorage.getItem("step_1")),
+    //     dropdownSelect: dropdownSelect || "",
+    //     tradingAccountNo: tradingAccountNo || ""
+    //   }))
+    // }
+
     if (dropdownSelect && tradingAccountNo) {
       setIsDisableToPage2(false);
     }
@@ -322,6 +355,29 @@ const Buy = () => {
   };
 
   const handlerOnClickPage = (page) => {
+    if (page === 2) {
+      localStorage.setItem(
+        "step_1",
+        JSON.stringify({
+          ...JSON.parse(localStorage.getItem("step_1")),
+          shareId,
+          phoneNo,
+          dropdownSelect,
+          tradingAccountNo,
+        })
+      );
+    }
+    if (page === 3) {
+      localStorage.setItem(
+        "step_1",
+        JSON.stringify({
+          ...JSON.parse(localStorage.getItem("step_2")),
+          currentStockVolume,
+          depositBank,
+          bank,
+        })
+      );
+    }
     if (!dropdownSelect) {
       setShow(true);
       setStatus(999);
@@ -368,6 +424,15 @@ const Buy = () => {
   }
 
   const handlerOnAccept = async () => {
+    localStorage.setItem(
+      "step_2",
+      JSON.stringify({
+        ...JSON.parse(localStorage.getItem("step_2")),
+        currentStockVolume,
+        depositBank,
+        bank,
+      })
+    );
     setValidateAccept(false);
     setPage(3);
   };
@@ -390,6 +455,11 @@ const Buy = () => {
       setFullname(fullnameModal);
       setShareId(shareIdModal);
       setPhoneNo(phoneNoModal);
+
+      // localStorage.setItem("step_1", JSON.stringify({
+      //   ...JSON.parse(localStorage.getItem("step_1")),
+      //   phoneNo: phoneNoModal
+      // }))
     } else if (page === 2) {
       setShowAlertModal(false);
     }
@@ -428,6 +498,7 @@ const Buy = () => {
       setStatus(200);
       setAlertMessage("ยืนยันคำจองซื้อสำเร็จ");
       showAlert(setShow, 2000);
+      localStorage.clear();
 
       const formDataBookbank = new FormData();
       formDataBookbank.append("File", bookbankFile);
@@ -489,6 +560,8 @@ const Buy = () => {
   }, [depositBank, bank, bookbankFile]);
 
   useEffect(() => {
+    console.log(currentStockVolume);
+    console.log(offerPrice);
     setCurrentPrice(Number(currentStockVolume) * Number(offerPrice));
     setExcessVolume(
       Number(currentStockVolume) > Number(rightStockVolume)
@@ -496,6 +569,26 @@ const Buy = () => {
         : 0
     );
   }, [currentStockVolume]);
+
+  // local storage initial
+  // useEffect(() => {
+  //   console.log("Local storage initial")
+  //   if (JSON.parse(localStorage.getItem("step_1")) && page === 1) {
+  //     console.log("------ Loading local storage step 1 ------")
+  //     setShareId(JSON.parse(localStorage.getItem("step_1")).shareId)
+  //     setPhoneNo(JSON.parse(localStorage.getItem("step_1")).phoneNo)
+  //     setDropdownSelect(JSON.parse(localStorage.getItem("step_1")).dropdownSelect)
+  //     setTradingAccountNo(JSON.parse(localStorage.getItem("step_1")).tradingAccountNo)
+  //   }
+
+  //   if (JSON.parse(localStorage.getItem("step_2")) && page === 2) {
+  //     console.log("------ Loading local storage step 2 ------")
+  //     console.log(JSON.parse(localStorage.getItem("step_2")))
+  //     setCurrentStockVolume(JSON.parse(localStorage.getItem("step_2")).currentStockVolume)
+  //     setDepositBank(JSON.parse(localStorage.getItem("step_2")).depositBank)
+  //     setBank(JSON.parse(localStorage.getItem("step_2")).bank)
+  //   }
+  // }, [page])
 
   const formatNumber = (number) => {
     return Number(number)
@@ -1106,7 +1199,7 @@ const Buy = () => {
                                 เบอร์โทรศัพท์ที่สามารถติดต่อได้
                               </p>
                               <p className="label-input share-detail">
-                                {phoneNo}
+                                {phoneNo || "-"}
                               </p>
                             </div>
                           </InputDiv>
@@ -1197,7 +1290,12 @@ const Buy = () => {
                               onClick={() => setIsOpenDropdown(!isOpenDropdown)}
                               onBlur={() => setIsOpenDropdown(false)}
                               setSelected={setDropdownSelect}
-                              selected={dropdownSelect}
+                              selected={
+                                JSON.parse(localStorage.getItem("step_1"))
+                                  ? JSON.parse(localStorage.getItem("step_1"))
+                                      .dropdownSelect
+                                  : dropdownSelect
+                              }
                             />
                           </InputDiv>
                           <InputDiv style={{ marginLeft: "50px" }}>
