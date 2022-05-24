@@ -186,9 +186,7 @@ export const ModalDetail = ({
                 </div>
                 <div className="text-amount right">
                   <p>จำนวน</p>
-                  <b className="text-black">
-                    {formatNumber(excessVolume) || "-"}{" "}
-                  </b>
+                  <b className="text-black">{formatNumber(optional2) || "-"}</b>
                   <p>หุ้น</p>
                 </div>
               </div>
