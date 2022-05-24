@@ -26,6 +26,8 @@ const Login = () => {
   const [isCheckedSecond, setIsCheckedSecond] = useState(false);
 
   const [isConfirmModal, setIsConfirmModal] = useState(false);
+  
+  localStorage.clear()
 
   const endpoint = "auth/signIn?type=customer";
 
