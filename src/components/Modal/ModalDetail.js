@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 
 const formatNumber = (number) => {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return number ? number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "";
 };
 
 export const ModalDetail = ({
