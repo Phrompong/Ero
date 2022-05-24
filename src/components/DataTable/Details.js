@@ -61,14 +61,14 @@ const Details = ({ show, details, closed, options }) => {
                     "ชื่อ-นามสกุล / Name-Lastname   :",
                     `${customer["name"]} ${customer["lastname"]} `
                   )}
-                  {info("โทรศัพท์ / Telephone  :", details["customerTel"])}
-                  {info("อีเมล์ / Email  :", customer["email"])}
-                  {info("หมายเลขบัญชี ATS :", customer["atsBankNo"])}
-                  {info("BANK ATS :", customer["atsBank"])}
+                  {info(
+                    "โทรศัพท์ / Telephone  :",
+                    details["customerTel"] || "-"
+                  )}
+                  {info("อีเมล์ / Email  :", customer["email"] || "-")}
+                  {info("หมายเลขบัญชี ATS :", customer["atsBankNo"] || "-")}
+                  {info("BANK ATS :", customer["atsBank"] || "-")}
                 </div>
-                <Link>
-                  <a href="">หากข้อมูลไม่ถูกต้องกรุณาคลิก</a>
-                </Link>
               </UserInfo>
             </LineCard>
             <FlexContainer>

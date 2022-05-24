@@ -79,7 +79,13 @@ const DataTableProfile = ({
             <ModalDetail
               fullname={`${details["customers"].name} ${details["customers"].lastname}`}
               shareId={details["registrationNo"]}
-              phoneNo={details["customers"].telephone}
+              phoneNo={
+                details["customers"].telephone
+                  ? details["customers"].telephone
+                  : Object.keys(details["orders"]).length > 0
+                  ? details["orders"].customerTel
+                  : "-"
+              }
               dropdownSelect={{
                 code:
                   Object.keys(details["orders"]).length > 0
