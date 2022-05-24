@@ -14,7 +14,7 @@ import { balihai, shamrock } from "../utils/color";
 import { httpGetRequest } from "../utils/fetch";
 
 import { Search } from "@styled-icons/bootstrap/Search";
-import { FileExport } from "@styled-icons/boxicons-solid/FileExport"
+import { FileExport } from "@styled-icons/boxicons-solid/FileExport";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
@@ -28,14 +28,14 @@ const Dashboard = () => {
   const [orderAmount, setOrderAmount] = useState(0);
   const [saleAmount, setSaleAmount] = useState(0);
   const [currentSaleAmount, setCurrentSaleAmount] = useState(0);
-  const [realtimeDate, setRealtimeDate] = useState(new Date)
+  const [realtimeDate, setRealtimeDate] = useState(new Date());
 
-  const [isFetching, setIsFetching] = useState(true)
+  const [isFetching, setIsFetching] = useState(true);
 
   const searchInputRef = useRef("");
 
   async function fetchDataTable() {
-    setIsFetching(true)
+    setIsFetching(true);
     let endpoint = `orders/search/value?type=${selectedType}&page=${currentPage}`;
     const inputValue = searchInputRef.current.value;
     if (inputValue) {
@@ -47,7 +47,7 @@ const Dashboard = () => {
 
     setTotalPages(totalPages);
     setData(res["data"]);
-    setIsFetching(false)
+    setIsFetching(false);
   }
 
   async function fetchDataProgress(path, key, type, func) {
@@ -158,7 +158,20 @@ const Dashboard = () => {
     }, 1000);
   }, []);
 
-  const month= ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   return (
     <Card>
@@ -166,15 +179,31 @@ const Dashboard = () => {
         <FlexContainer>
           <Header>
             <h3>Overview</h3>
-            <p>{`${realtimeDate.getDate()}/${month[realtimeDate.getMonth()]}/${realtimeDate.getFullYear()} ${realtimeDate.getHours()}:${realtimeDate.getMinutes()}:${realtimeDate.getSeconds()}`}</p>
+            <p>{`${realtimeDate.getDate()}/${
+              month[realtimeDate.getMonth()]
+            }/${realtimeDate.getFullYear()} ${realtimeDate.getHours()}:${realtimeDate.getMinutes()}:${realtimeDate.getSeconds()}`}</p>
             {/* <p>12:15 PM at 19th November 2020</p> */}
           </Header>
           <SearchDiv>
             <div className="search-div block">
-              <InputSeacrh className="date-input" type="text" placeholder={'Start date'} onFocus={(e) => e.target.type = 'date'} onBlur={(e) => e.target.type = 'text'} value={null}/>
+              <InputSeacrh
+                className="date-input"
+                type="text"
+                placeholder={"Start date"}
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => (e.target.type = "text")}
+                value={null}
+              />
             </div>
             <div className="search-div block">
-              <InputSeacrh className="date-input" type="text" placeholder={'End date'} onFocus={(e) => e.target.type = 'date'} onBlur={(e) => e.target.type = 'text'} value={null}/>
+              <InputSeacrh
+                className="date-input"
+                type="text"
+                placeholder={"End date"}
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => (e.target.type = "text")}
+                value={null}
+              />
             </div>
             {/* <div className="search-div">
               <Dropdown
@@ -186,7 +215,10 @@ const Dashboard = () => {
             </div> */}
             <div className="search-div flex">
               <InputSeacrh placeholder="Search..." ref={searchInputRef} />
-              <Button onClick={handleSearchButtonClicked} style={{ marginLeft: "1rem" }}>
+              <Button
+                onClick={handleSearchButtonClicked}
+                style={{ marginLeft: "1rem" }}
+              >
                 <SearchIcon />
               </Button>
             </div>
@@ -200,7 +232,7 @@ const Dashboard = () => {
         </FlexContainer>
         <FlexContainer
           style={{
-            justifyContent: "flex-start"
+            justifyContent: "flex-start",
           }}
         >
           <div className="overview">
@@ -237,7 +269,10 @@ const Dashboard = () => {
                 refreshData={refreshData}
                 isFetching={isFetching}
               />
-              <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
+              <Paginate
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+              />
             </div>
           </LineCard>
         </TableSection>
@@ -275,10 +310,10 @@ const SearchDiv = styled.div`
   > :not(:first-child) {
     margin-left: 10px;
   }
-  
+
   .block {
-      display: block;
-      text-align: end;
+    display: block;
+    text-align: end;
   }
 
   /* For Mobile */
@@ -292,7 +327,7 @@ const SearchDiv = styled.div`
     .flex {
       margin-top: 0.5rem;
       display: flex;
-      justify-content: space-between
+      justify-content: space-between;
     }
 
     > :not(:first-child) {
@@ -306,7 +341,7 @@ const ExportIcon = styled(FileExport)`
   vertical-align: text-top;
   color: #FFFFFFF;
   margin-right: 1rem;
-`
+`;
 
 const SearchIcon = styled(Search)`
   width: 17px;
@@ -322,7 +357,7 @@ const InputSeacrh = styled.input`
   position: relative;
   font-size: 16px;
   padding: 10px;
-  
+
   .date-input {
     width: 200px;
     height: 42px;
@@ -358,4 +393,3 @@ const Header = styled.div`
 const TableSection = styled.section`
   display: flex;
 `;
-
