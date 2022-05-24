@@ -166,7 +166,7 @@ const Dashboard = () => {
         <FlexContainer>
           <Header>
             <h3>Overview</h3>
-            <p>{`${realtimeDate.getHours()}:${realtimeDate.getMinutes()} at ${realtimeDate.getDate()} - ${month[realtimeDate.getMonth()]} - ${realtimeDate.getFullYear()}`}</p>
+            <p>{`${realtimeDate.getDate()}/${month[realtimeDate.getMonth()]}/${realtimeDate.getFullYear()} ${realtimeDate.getHours()}:${realtimeDate.getMinutes()}:${realtimeDate.getSeconds()}`}</p>
             {/* <p>12:15 PM at 19th November 2020</p> */}
           </Header>
           <SearchDiv>
