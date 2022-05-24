@@ -28,6 +28,7 @@ const Dashboard = () => {
   const [orderAmount, setOrderAmount] = useState(0);
   const [saleAmount, setSaleAmount] = useState(0);
   const [currentSaleAmount, setCurrentSaleAmount] = useState(0);
+  const [realtimeDate, setRealtimeDate] = useState(new Date());
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -167,13 +168,37 @@ const Dashboard = () => {
     { label: "This day", value: "day" },
   ];
 
+  useEffect(() => {
+    setInterval(() => {
+      setRealtimeDate(new Date());
+    }, 1000);
+  }, []);
+
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   return (
     <Card>
       <Container>
         <FlexContainer>
           <Header>
             <h3>Overview</h3>
-            <p>12:15 PM at 19th November 2020</p>
+            <p>{`${realtimeDate.getDate()}/${
+              month[realtimeDate.getMonth()]
+            }/${realtimeDate.getFullYear()} ${realtimeDate.getHours()}:${realtimeDate.getMinutes()}:${realtimeDate.getSeconds()}`}</p>
+            {/* <p>12:15 PM at 19th November 2020</p> */}
           </Header>
           <SearchDiv>
             <div className="search-div block">
