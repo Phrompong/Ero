@@ -10,8 +10,12 @@ import reportWebVitals from "./reportWebVitals";
 
 import store from './store'
 
+import VConsole from 'vconsole';
+
 // const container = document.getElementById("app");
 // const root = createRoot(container);
+
+const vConsole = new VConsole();
 
 ReactDOM.render(
   <Provider store={store}>
