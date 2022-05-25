@@ -8,6 +8,7 @@ export const StyledCard = styled.div`
   width: fit-content;
   margin: auto;
   margin: 1rem auto 1rem auto;
+  max-height: 90vh;
   border-radius: 15px;
   background: ${white};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -55,7 +56,6 @@ export const StyledCard = styled.div`
 
   /* For Mobile */
   @media screen and (max-width: 540px) {
-    max-height: 90vh;
     margin: auto;
     overflow: scroll;
     overflow-x: auto;
@@ -77,6 +77,7 @@ export const StyledCard = styled.div`
 
   /* For Tablets */
   @media screen and (min-width: 541px) and (max-width: 880px) {
+    max-width: 90vw;
     overflow: scroll;
     overflow-x: auto;
     overflow-y: auto;
@@ -193,6 +194,7 @@ export const StyledLineCard = styled.div`
     }
 
     .result {
+      display: grid;
       text-align: center;
 
       .result-label {

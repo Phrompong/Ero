@@ -47,6 +47,10 @@ const Details = ({ show, details, closed, options }) => {
     return date ? new Date(date).toLocaleDateString() : "-";
   };
 
+  const formatNumber = (number) => {
+    return number ? Number(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : '-';
+  }
+
   return (
     <Modal show={show}>
       {details && (
@@ -79,7 +83,7 @@ const Details = ({ show, details, closed, options }) => {
                     <div className="row">
                       <p className="text-box">{details["rightStockName"]}</p>
                       <div className="num-box">
-                        {details["paidRightVolume"]}
+                        {formatNumber(details["paidRightVolume"])}
                       </div>
                       <p className="unit">หุ้น</p>
                     </div>
@@ -92,7 +96,7 @@ const Details = ({ show, details, closed, options }) => {
                     </div>
                     <div className="row">
                       <p className="text-box">จำนวนเงิน</p>
-                      <div className="num-box">{details["paymentAmount"]}</div>
+                      <div className="num-box">{formatNumber(details["paymentAmount"])}</div>
                       <p className="unit">บาท</p>
                     </div>
                   </div>
@@ -105,7 +109,7 @@ const Details = ({ show, details, closed, options }) => {
                     <p className="unit">หุ้น</p>
                   </div>
                   <BoldText style={{ margin: "20px 0 5px 0" }}>
-                    ซื้อเกินสิทธิเป็นเงิน {details["excessAmount"]} บาท
+                    ซื้อเกินสิทธิเป็นเงิน {formatNumber(details["excessAmount"])} บาท
                   </BoldText>
 
                   <div className="row">

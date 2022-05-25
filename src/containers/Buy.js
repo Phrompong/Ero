@@ -862,7 +862,7 @@ const Buy = () => {
                 >
                   <h3>รายละเอียดที่อยู่ของท่าน</h3>
                 </Header>
-                <div class="profile-detail" style={{ padding: "1rem 2rem" }}>
+                <div className="profile-detail" style={{ padding: "1rem 2rem" }}>
                   <InputDiv>
                     <div className="inputField">
                       <p className="label-input bank-detail-title">ชื่อ-นามสกุล :</p>
@@ -1680,7 +1680,7 @@ const Buy = () => {
                                 <input
                                   type="radio"
                                   style={{ margin: "5px 20px 5px 30px" }}
-                                  checked={radioCheckedPayment}
+                                  defaultChecked={radioCheckedPayment}
                                 />
                                 <b>ชำระเงินผ่านเลขบัญชีธนาคาร</b>
                                 <div
@@ -1707,14 +1707,9 @@ const Buy = () => {
                                     <BankCard>
                                       {masterBankPayment.length > 0 &&
                                         masterBankPayment.map((bank, index) => (
-                                          <div style={{ display: "flex" }}>
+                                          <div className="bank-div">
                                             <div
                                               className="bank-img"
-                                              style={{
-                                                marginLeft: "40px",
-                                                marginTop: "auto",
-                                                marginBottom: "auto",
-                                              }}
                                             >
                                               <img
                                                 src={bank.logo}
@@ -1724,9 +1719,6 @@ const Buy = () => {
                                             </div>
                                             <div
                                               className="bank-detail"
-                                              style={{
-                                                margin: "10px 0px 10px 20px",
-                                              }}
                                             >
                                               <b>{bank.nameTH}</b>
                                               <p>
@@ -1960,6 +1952,9 @@ const Container = styled.div`
 
     .text-black {
       color: #000000;
+      @media screen and (max-width: 540px) {
+        text-align: end;
+      }
     }
 
     .text-amount {
@@ -2582,6 +2577,39 @@ const CloseArrow = styled.i`
 const BankCard = styled.div`
   display: block;
   margin: auto;
+  
+  .bank-div {
+    display: flex;
+
+    .bank-img {
+      margin-left: 40px;
+      margin-top: auto;
+      margin-botton: auto;
+    }
+
+    .bank-detail {
+      margin: 10px 0px 10px 20px;
+    }
+  }
+  
+  @media screen and (max-width: 540px) {
+    .bank-div {
+      display: block;
+
+      .bank-img {
+        text-align: center;
+        margin: 0;
+      }
+
+      .bank-detail {
+        margin: 0;
+
+        * {
+          width: 100%;
+        }
+      }
+    }
+  }
 `;
 
 const ContainerCard = styled.div`

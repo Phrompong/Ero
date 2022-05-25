@@ -187,7 +187,7 @@ export const ModalDetail = ({
               >
                 <div className="text-title-end">
                   <p>รวมเป็นเงินทั้งสิ้น</p>
-                  <b className="text-black" style={{ fontSize: "28px" }}>
+                  <b className="text-black end" style={{ fontSize: "28px" }}>
                     {formatNumber(currentPrice)} บาท
                   </b>
                 </div>
