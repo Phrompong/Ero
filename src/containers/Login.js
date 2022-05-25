@@ -89,7 +89,6 @@ const Login = () => {
     if (status === 200) {
       const { customerId, isAccept } = res.data;
       console.log(isAccept);
-      setIsConfirmModal(!isAccept);
 
       await createAuth({
         username,
@@ -97,7 +96,11 @@ const Login = () => {
         role: "client",
       });
 
-      if (isAccept) await navigate("/profile");
+      if (isAccept) {
+        await navigate("/profile");
+      } else {
+        setIsConfirmModal(true);
+      }
     } else {
       setShowError(true);
       setErrorMsg(res.message);
@@ -127,17 +130,16 @@ const Login = () => {
                       <div>
                         <img src={logo} />
                       </div>
-                      <div className="title" style={{ margin: "0 2rem", textAlign: "center" }}>
+                      <div
+                        className="title"
+                        style={{ margin: "0 2rem", textAlign: "center" }}
+                      >
                         <p>การยินยอมเปิดเผยข้อมูล และข้อตกลงการให้บริการ</p>
                       </div>
-                      <div
-                        className="card-term-condition"
-                      >
+                      <div className="card-term-condition">
                         <LineCard style={{ width: "100%" }}>
                           <div className="div-term-condition">
-                            <pre
-                              className="pre-term-condition"
-                            >
+                            <pre className="pre-term-condition">
                               <input
                                 type="checkbox"
                                 checked={isCheckedFirst}
@@ -146,7 +148,7 @@ const Login = () => {
                                 }
                               />
                               {Parser(` เพื่อให้บริษัทปฎิบัติตามกฏหมายคุ้มครองข้อมูลส่วนบุคคลและกฎหมายว่าด้วยการป้องกันและปราบปรามการสนับสนุนทางการเงินแก่การก่อการร้ายและแพร่ขยายอาวุธที่มีอานุภาพทำลายล้างสูง บริษัทหลักทรัพย์ เอเชีย เวลท์ จำกัด (บริษัท) ประสงค์จะเก็บ รวบรวม ใช้ ส่งต่อข้อมูลส่วนบุคคลของท่านซึ่งได้บันทึกไว้ในระบบเพื่อการทำธุรกรรมกับบริษัท (เช่น คำนำหน้าชื่อ ชื่อ นามสกุล หมายเลขบัตรประชาชน/หมายเลขหนังสือเดินทาง เบอร์โทรศัพท์ อีเมล์ เลขที่บัญชีซื้อขายฯ เลขที่บัญชีธนาคาร สิทธิประโยชน์ต่างๆ เป็นต้น) เพื่อประโยชน์ในการทำธุรกรรมกับบริษัท โดยต้องขอความยินยอมจากท่าน ทั้งนี้บริษัทจะเก็บข้อมูลของท่านสูงสุด 10 ปี ตามกฏหมาย นับแต่วันที่ท่านได้ให้ความยินยอม (หรือแล้วแต่กรณี) โดยจะมีการเปิดเผย ส่งต่อข้อมูลของท่านแก่บริษัท สถาบันการเงิน หรือองค์กรต่างๆ ที่ท่านประสงค์จะทำธุรกรรมในการนี้ด้วย ซึ่งบริษัทจะใช้ข้อมูลดังกล่าวให้สอดคล้องกับวัตถุประสงค์ตามหลักเกณฑ์และนโยบายที่บริษัทกำหนด และกฏหมายที่เกี่ยวข้องบัญญัติให้สามารถกระทำได้<br/>
-    ทั้งนี้ท่านสามารถตรวจสอบนโยบายของบริษัทได้ผ่านช่องทาง <b>www.asiawealth.co.th</b> กรณีท่านไม่ยินยอมให้บริษัทดำเนินการ จะมีผลทำให้ท่านไม่สามารถทำธุรกรรมในครั้งนี้ได้
+    ทั้งนี้ท่านสามารถตรวจสอบนโยบายของบริษัทได้ผ่านช่องทาง <b>www.asiawealth.co.th</b>
                                 `)}
                             </pre>
                           </div>
@@ -158,9 +160,7 @@ const Login = () => {
                       >
                         <LineCard style={{ width: "100%", border: "none" }}>
                           <div className="div-term-condition">
-                            <pre
-                              className="pre-term-condition"
-                            >
+                            <pre className="pre-term-condition">
                               <input
                                 type="checkbox"
                                 checked={isCheckedSecond}
@@ -174,34 +174,56 @@ const Login = () => {
                           </div>
                         </LineCard>
                       </div>
-                      <div
-                      >
+                      <div>
                         <LineCard style={{ width: "100%", border: "none" }}>
-                          <div className="div-term-condition" style={{ display: "flex" }}>
+                          <div
+                            className="div-term-condition"
+                            style={{ display: "flex" }}
+                          >
                             <pre
                               className="pre-term-condition"
-                              style={{ color: "#1D3AB1", textAlign: "center", fontSize: "16px", fontWeight: "400", marginRight: "1rem", marginLeft: "2rem" }}
+                              style={{
+                                color: "#1D3AB1",
+                                textAlign: "center",
+                                fontSize: "16px",
+                                fontWeight: "400",
+                                marginRight: "1rem",
+                                marginLeft: "2rem",
+                              }}
                             >
                               **
                             </pre>
                             <pre
                               className="pre-term-condition"
-                              style={{ color: "#1D3AB1", textAlign: "center", fontSize: "16px", fontWeight: "400", whiteSpace: "initial"  }}
+                              style={{
+                                color: "#1D3AB1",
+                                textAlign: "center",
+                                fontSize: "16px",
+                                fontWeight: "400",
+                                whiteSpace: "initial",
+                              }}
                             >
-                              {Parser(`รายการจองซื้อหุ้นของท่านจะสำเร็จเมื่อบริษัทตรวจสอบผลการชำระเงินค่าจองซื้อหุ้นเข้าบัญชีบริษัทเรียบร้อยแล้ว`)}
+                              {Parser(
+                                `รายการจองซื้อหุ้นของท่านจะสำเร็จเมื่อบริษัทตรวจสอบผลการชำระเงินค่าจองซื้อหุ้นเข้าบัญชีบริษัทเรียบร้อยแล้ว`
+                              )}
                             </pre>
                             <pre
                               className="pre-term-condition"
-                              style={{ color: "#1D3AB1", textAlign: "center", fontSize: "16px", fontWeight: "400", marginRight: "2rem", marginLeft: "1rem" }}
+                              style={{
+                                color: "#1D3AB1",
+                                textAlign: "center",
+                                fontSize: "16px",
+                                fontWeight: "400",
+                                marginRight: "2rem",
+                                marginLeft: "1rem",
+                              }}
                             >
                               **
                             </pre>
                           </div>
                         </LineCard>
                       </div>
-                      <div
-                        className="btn-div"
-                      >
+                      <div className="btn-div">
                         <Button
                           type="button"
                           value="ไม่ยินยอม"
@@ -210,7 +232,7 @@ const Login = () => {
                             width: "292px",
                             fontSize: "20px",
                             background: "#809FB8",
-                            marginBottom: "1rem"
+                            marginBottom: "1rem",
                           }}
                         />
                         <Button
@@ -218,7 +240,11 @@ const Login = () => {
                           value="ยินยอม"
                           onClick={handlerOnAcceptForm}
                           disabled={!isButtonChecked}
-                          style={{ width: "292px", fontSize: "20px", marginBottom: "1rem" }}
+                          style={{
+                            width: "292px",
+                            fontSize: "20px",
+                            marginBottom: "1rem",
+                          }}
                         />
                       </div>
                     </Form>
