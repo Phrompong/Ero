@@ -92,7 +92,7 @@ const WrapperOption = styled.div`
   width: 100%;
   position: absolute;
   background: #ffffff;
-  z-index: 998;
+  z-index: 999;
   border: 2px solid #d9e1e7;
   & ${OptionSelect}:hover {
     background: ${(props) => (props.isEmtry ? "#FFFFFF" : "#f9f9f9")};

@@ -20,6 +20,8 @@ const Auth = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const usernameInputRef = useRef("");
   const passwordInputRef = useRef("");
+  
+  localStorage.clear()
 
   const handleSubmited = async (event) => {
     event.preventDefault();

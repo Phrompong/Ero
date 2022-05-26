@@ -20,12 +20,14 @@ const Login = () => {
   const navigate = useNavigate();
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const usernameInputRef = useRef("4654499830700");
+  const usernameInputRef = useRef("3100503053540");
   const [isButtonChecked, setIsButtonChecked] = useState(false);
   const [isCheckedFirst, setIsCheckedFirst] = useState(false);
   const [isCheckedSecond, setIsCheckedSecond] = useState(false);
 
   const [isConfirmModal, setIsConfirmModal] = useState(false);
+  
+  localStorage.clear()
 
   const endpoint = "auth/signIn?type=customer";
 
@@ -142,7 +144,7 @@ const Login = () => {
                             <pre className="pre-term-condition">
                               <input
                                 type="checkbox"
-                                checked={isCheckedFirst}
+                                defaultChecked={isCheckedFirst}
                                 onChange={() =>
                                   setIsCheckedFirst(!isCheckedFirst)
                                 }
@@ -163,7 +165,7 @@ const Login = () => {
                             <pre className="pre-term-condition">
                               <input
                                 type="checkbox"
-                                checked={isCheckedSecond}
+                                defaultChecked={isCheckedSecond}
                                 onChange={() =>
                                   setIsCheckedSecond(!isCheckedSecond)
                                 }
