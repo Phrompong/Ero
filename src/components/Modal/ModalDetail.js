@@ -400,7 +400,7 @@ export const ModalDetail = ({
           if (checkbox) {
             return (
               <>
-                <Button
+                {/* <Button
                   type="submit"
                   value={"ย้อนกลับ"}
                   onClick={() => hanlderOnBack()}
@@ -409,10 +409,10 @@ export const ModalDetail = ({
                     margin: "0 10px 10px 10px",
                     backgroundColor: "#809FB8",
                   }}
-                />
+                /> */}
                 <Button
                   type="submit"
-                  value={"ถัดไป"}
+                  value={"ยืนยันการจอง"}
                   onClick={() => handlerOnAccept()}
                   disabled={!lastVerifyChecked}
                   style={{
@@ -425,7 +425,7 @@ export const ModalDetail = ({
           } else if (isBuy) {
             return (
               <>
-                <Button
+                {/* <Button
                   type="submit"
                   value={"ย้อนกลับ"}
                   onClick={() => hanlderOnBack()}
@@ -434,10 +434,10 @@ export const ModalDetail = ({
                     margin: "0 10px 10px 10px",
                     backgroundColor: "#809FB8",
                   }}
-                />
+                /> */}
                 <Button
                   type="submit"
-                  value={"ถัดไป"}
+                  value={"ยืนยันการจอง"}
                   onClick={() => handlerOnAccept()}
                   style={{
                     height: "40px",
