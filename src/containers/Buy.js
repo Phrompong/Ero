@@ -1965,7 +1965,7 @@ const Buy = () => {
                           margin: "auto",
                         }}
                       >
-                        <Button
+                        {/* <Button
                           type="button"
                           value={"ย้อนกลับ"}
                           style={{
@@ -1978,11 +1978,11 @@ const Buy = () => {
                             setPage(2);
                             setFile(null);
                           }}
-                        />
+                        /> */}
 
                         <Button
                           type="button"
-                          value={"ถัดไป"}
+                          value={"ยืนยันการจอง"}
                           disabled={!file}
                           style={{ marginTop: "1rem", margin: "0 2rem" }}
                           onClick={handleSubmit}
