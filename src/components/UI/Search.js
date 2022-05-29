@@ -59,8 +59,8 @@ export const SearchableInput = () => (
   </Container>
 );
 
-export const FieldInput = ({ placeholder, value, onChange }) => (
+export const FieldInput = ({ placeholder, value, onChange, maxLength, disabled }) => (
   <Container style={{ width: '100%', textAlign: 'center' }}>
-    <input style={{ width: '100%' }} placeholder={placeholder || 'input...'} value={value} onChange={onChange} />
+    <input style={{ width: '100%' }} placeholder={placeholder || 'input...'} value={value} onChange={onChange} maxLength={maxLength} disabled={disabled}/>
   </Container>
 );

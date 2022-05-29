@@ -102,14 +102,6 @@ const CheckRightCustomer = () => {
   return (
     <Card>
       <Container>
-        <SearchDiv>
-          <Input
-            placeholder="ค้นหาหมายเลขประจำตัวประชาชน / เลขที่หนังสือเดินทาง / เลขทะเบียนนิติบุคคล"
-            ref={searchInputRef}
-          />
-          <Button onClick={handleSearchButtonClicked}>ค้นหา</Button>
-        </SearchDiv>
-
         <TableSection>
           {/* <div style={{ overflow: "scroll" }}> */}
             <LineCard>
@@ -124,8 +116,7 @@ const CheckRightCustomer = () => {
               </div>
               <div className="button-section">
                 <Button onClick={() => navigate(`${location.pathname}/info`)}>
-                  ท่านสามารถกดตรวจสอบสิทธิการจองซื้อหุ้นภายหลังวันที่ 16 มิถุนายน
-                  2565 เป็นต้นไป
+                  ท่านสามารถกดตรวจสอบผลการจองซื้อหุ้นภายหลังวันที่ 16 มิถุนายน 2565 เป็นต้นไป
                 </Button>
               </div>
               <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />

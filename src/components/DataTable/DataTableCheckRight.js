@@ -34,6 +34,8 @@ const DataTableProfile = ({
   const [details, setDetails] = useState();
   const [options, setOptions] = useState([]);
 
+  const [verifyOrder, setVerifyOrder] = useState(0)
+
   useEffect(() => {
     async function fetchData() {
       const endpoint = "status";
@@ -60,8 +62,7 @@ const DataTableProfile = ({
   };
 
   const handleClicked = (details) => {
-    console.log(user.role == "client");
-    console.log(details);
+    console.log(details)
     setShowDetails(true);
     setDetails(details);
   };
@@ -70,6 +71,16 @@ const DataTableProfile = ({
     setShowDetails(false);
     refreshData();
   };
+
+  const formatNumber = (number) => {
+    return Number(number)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const handleOnUpdate = () => {
+    // checkbox ผ่าน ไม่ผ่าน parameter => verifyOrder
+  }
 
   const detailsModal = useMemo(() => {
     if (details && user.role === "admin") {
@@ -159,8 +170,17 @@ const DataTableProfile = ({
                   : "-"
               }
               hanlderOnBack={() => setShowDetails(false)}
-              handlerOnAccept={() => setShowDetails(false)}
+              handlerOnAccept={() => {
+                if (details["status"].length > 0) {
+                  handleOnUpdate()
+                }
+                setShowDetails(false)
+              }}
               isCheckRight={true}
+              checkRightStatus={details["status"]}
+              verifyOrder={verifyOrder}
+              setVerifyOrder={(e) => setVerifyOrder(e)}
+              // bookbankImage={details["url ภาพ book bank "]} **details["attachedFile"]
             />
           </ModalContainer>
         </Modal>
@@ -216,6 +236,9 @@ const DataTableProfile = ({
                 <TD>
                   <Spinner />
                 </TD>
+                <TD>
+                  <Spinner />
+                </TD>
               </TR>
             </TBody>
           ) : (
@@ -225,11 +248,12 @@ const DataTableProfile = ({
                   <TD style={{ width: "100px" }}>จองซื้อ / Book</TD>
                   <TD>{x["rightStockName"]}</TD>
                   <TD>{x["registrationNo"]}</TD>
+                  <TD>{x["customers"].refNo}</TD>
                   <TD>{`${
                     x["customers"].name + " " + x["customers"].lastname
                   }`}</TD>
-                  <TD>{x["stockVolume"]}</TD>
-                  <TD>{x["rightStockVolume"]}</TD>
+                  <TD>{formatNumber(x["stockVolume"])}</TD>
+                  <TD>{formatNumber(x["rightStockVolume"])}</TD>
                   {x["status"].length > 0 ? (
                     x["status"].map((obj) => (
                       <TD color={color[obj["value"]]}>{obj["status"]}</TD>

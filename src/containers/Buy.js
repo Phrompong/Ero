@@ -41,6 +41,7 @@ const Buy = () => {
   const [alertMessage, setAlertMessage] = useState();
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showStepOneVerify, setShowStepOneVerify] = useState(false)
   const [showRegistrationModal, setShowRegistrationModal] = useState(true);
   const [status, setStatus] = useState();
 
@@ -54,6 +55,9 @@ const Buy = () => {
   const [registrationNo, setRegistrationNo] = useState(false);
 
   const [isDisableToPage2, setIsDisableToPage2] = useState(true);
+
+  const [paymentDate, setPaymentDate] = useState(null)
+  const [paymentTime, setPaymentTime] = useState(null)
 
   /// input file upload
   const [bookbankFile, setBookbankFile] = useState(null);
@@ -165,7 +169,7 @@ const Buy = () => {
   const [addressTel, setAddressTel] = useState(null);
 
   const [file, setFile] = useState(null);
-  const [filename, setFilename] = useState();
+  const [filename, setFilename] = useState("");
   const [orderId, setOrderId] = useState(null);
 
   const [masterBankRefund, setMasterBankRefund] = useState([]);
@@ -349,9 +353,14 @@ const Buy = () => {
       setStatus(999);
       setAlertMessage("ไม่พบไฟล์ภาพ");
       showAlert(setShow, 2000);
+    } else if (!paymentDate && !paymentTime) {
+      setStatus(999);
+      setAlertMessage("กรุณาระบุ วันที่โอน และเวลาที่โอน");
+      showAlert(setShow, 2000);
+    } else {
+      setPage(3);
+      setValidateAccept(true);
     }
-    setPage(3);
-    setValidateAccept(true);
   };
 
   useEffect(() => {
@@ -361,14 +370,6 @@ const Buy = () => {
   }, [shareId, isRegistrationChecked]);
 
   useEffect(() => {
-    // if (dropdownSelect || tradingAccountNo) {
-    //   localStorage.setItem("step_1", JSON.stringify({
-    //     ...JSON.parse(localStorage.getItem("step_1")),
-    //     dropdownSelect: dropdownSelect || "",
-    //     tradingAccountNo: tradingAccountNo || ""
-    //   }))
-    // }
-
     if (dropdownSelect && tradingAccountNo) {
       setIsDisableToPage2(false);
     }
@@ -428,6 +429,15 @@ const Buy = () => {
       setShow(true);
       setStatus(999);
       setAlertMessage("กรุณาตรวจสอบข้อมูลในขั้นตอนที่ 2");
+      setTimeout(() => {
+        setShow(false);
+      }, 5000);
+    } else if (!phoneNo) {
+      setShow(true);
+      setStatus(999);
+      setAlertMessage(
+        "กรุณากรอกเบอร์โทรศัพท์"
+      );
       setTimeout(() => {
         setShow(false);
       }, 5000);
@@ -518,6 +528,7 @@ const Buy = () => {
         registrationNo: shareId,
         bankRefund: depositBank._id,
         bankRefundNo: bank,
+        paymentDate: new Date(`${paymentDate} ${paymentTime}`)
       },
       "orders"
     );
@@ -584,14 +595,27 @@ const Buy = () => {
   }, [page]);
 
   useEffect(() => {
-    if (depositBank && bank && bookbankFile) {
+    if (depositBank && depositBank.nameTH === "อื่นๆ") {
+      setBank(null)
+      setBankDisableButton(false);
+    } else if (depositBank && bank && bookbankFile) {
       setBankDisableButton(false);
     }
   }, [depositBank, bank, bookbankFile]);
 
   useEffect(() => {
-    console.log(currentStockVolume);
-    console.log(offerPrice);
+    setBookbankFile(null)
+  }, [depositBank])
+
+  useEffect(() => {
+    if (Number(currentStockVolume) > 0 && isAcceptVerify) {
+      setIsConfirmOrder(false);
+    } else {
+      setIsConfirmOrder(true);
+    }
+  }, [currentStockVolume])
+
+  useEffect(() => {
     setCurrentPrice(Number(currentStockVolume) * Number(offerPrice));
     setExcessVolume(
       Number(currentStockVolume) > Number(rightStockVolume)
@@ -599,26 +623,6 @@ const Buy = () => {
         : 0
     );
   }, [currentStockVolume]);
-
-  // local storage initial
-  // useEffect(() => {
-  //   console.log("Local storage initial")
-  //   if (JSON.parse(localStorage.getItem("step_1")) && page === 1) {
-  //     console.log("------ Loading local storage step 1 ------")
-  //     setShareId(JSON.parse(localStorage.getItem("step_1")).shareId)
-  //     setPhoneNo(JSON.parse(localStorage.getItem("step_1")).phoneNo)
-  //     setDropdownSelect(JSON.parse(localStorage.getItem("step_1")).dropdownSelect)
-  //     setTradingAccountNo(JSON.parse(localStorage.getItem("step_1")).tradingAccountNo)
-  //   }
-
-  //   if (JSON.parse(localStorage.getItem("step_2")) && page === 2) {
-  //     console.log("------ Loading local storage step 2 ------")
-  //     console.log(JSON.parse(localStorage.getItem("step_2")))
-  //     setCurrentStockVolume(JSON.parse(localStorage.getItem("step_2")).currentStockVolume)
-  //     setDepositBank(JSON.parse(localStorage.getItem("step_2")).depositBank)
-  //     setBank(JSON.parse(localStorage.getItem("step_2")).bank)
-  //   }
-  // }, [page])
 
   const formatNumber = (number) => {
     return Number(number)
@@ -813,6 +817,7 @@ const Buy = () => {
                     onChange={(e) =>
                       setPhoneNoModal(e.target.value.replace(/[^0-9.]/, ""))
                     }
+                    maxLength={10}
                     placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"}
                   />
                 </div>
@@ -851,6 +856,70 @@ const Buy = () => {
           </ContainerCard>
         </Card>
       </Modal>
+      <Modal show={showStepOneVerify} style={{ width: "100%" }}>
+        <Card style={{ width: "100%", maxWidth: "700px" }}>
+          <ContainerCard>
+            <Header style={{ margin: "20px" }}>
+              <h3
+                style={{
+                  fontSize: "24px",
+                  color: "#1D3AB1",
+                  fontWeight: "bold",
+                }}
+              >
+                ตรวจสอบข้อมูลการจองสิทธิ
+              </h3>
+            </Header>
+            <LineCard style={{ padding: "20px", fontSize: "17px" }}>
+              <div className="modal-flex">
+                <p className="modal-flex-label">ชื่อ - นามสกุล</p>
+                <p className="modal-flex-label-info">{fullname}</p>
+              </div>
+              <div className="modal-flex">
+                <p className="modal-flex-label">เลขทะเบียนผู้ถือหุ้น</p>
+                <p className="modal-flex-label-info">{shareId}</p>
+              </div>
+              <div className="modal-flex">
+                <p className="modal-flex-label">เบอร์โทรศัพท์</p>
+                <p className="modal-flex-label-info">{phoneNo}</p>
+              </div>
+            </LineCard>
+            <div
+              className="btn-accept-buy"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "20px",
+              }}
+            >
+              <Button
+                type="submit"
+                value={"ย้อนกลับ"}
+                onClick={() => setShowStepOneVerify(!showStepOneVerify)}
+                style={{
+                  fontSize: "17px",
+                  height: "35px",
+                  margin: "0 10px 0 0",
+                  backgroundColor: "#809FB8",
+                }}
+              />
+              <Button
+                type="submit"
+                value={"ถัดไป"}
+                onClick={() => {
+                  setShowStepOneVerify(false)
+                  handlerOnClickPage(2)
+                }}
+                style={{
+                  fontSize: "17px",
+                  height: "35px",
+                  margin: "0 0 0 10px",
+                }}
+              />
+            </div>
+          </ContainerCard>
+        </Card>
+      </Modal>
       <Modal show={addressModal}>
         <div className="bank-validate">
           <Card>
@@ -875,8 +944,8 @@ const Buy = () => {
                 />
                 <h3 style={{ color: "#FB0303" }}>
                   กรณีที่ท่านแจ้งบัญชีธนาคารนอกเหนือจาก 9 ธนาคาร
-                  <br />
-                  ทางบริษัทขอคืนเงินให้ท่านเป็นเช็ค โดยส่งไปตามที่อยู่ด้านล่าง
+                  <br/>
+                  ทางบริษัทขอคืนเงินให้ท่านเป็นเช็ค
                 </h3>
               </Header>
               <LineCard style={{ padding: "1rem 2rem", marginBottom: "1rem" }}>
@@ -1043,6 +1112,7 @@ const Buy = () => {
                   hanlderOnBack={hanlderOnBack}
                   handlerOnAccept={handlerOnAccept}
                   previewImage={previewImage}
+                  paidRightVolume={Number(currentStockVolume)}
                   isBuy={true}
                 />
               );
@@ -1069,6 +1139,7 @@ const Buy = () => {
                   setLastVerifyChecked={() =>
                     setLastVerifyChecked(!lastVerifyChecked)
                   }
+                  paidRightVolume={Number(currentStockVolume)}
                   checkbox={true}
                 />
               );
@@ -1235,7 +1306,7 @@ const Buy = () => {
                           </InputDiv>
                         </ContentSpace>
                         <ContentSpace>
-                          <InputDiv className="input-detail flex">
+                          <InputDiv className="input-detail">
                             <div className="inputField">
                               <p
                                 className="label-input share-detail"
@@ -1243,61 +1314,12 @@ const Buy = () => {
                               >
                                 เลขทะเบียนผู้ถือหุ้น
                               </p>
-                            </div>
-                          </InputDiv>
-                          <InputDiv className="input-detail">
-                            <div className="inputField">
-                              <DropdownArrow
-                                options={allRegistrations}
-                                isOpen={isOpenDropdownArrowStep1}
-                                onClick={() =>
-                                  setIsOpenDropdownArrowStep1(
-                                    !isOpenDropdownArrowStep1
-                                  )
-                                }
-                                onBlur={() =>
-                                  setIsOpenDropdownArrowStep1(false)
-                                }
-                                setSelected={(e) => setShareId(e.registraionNo)}
-                                selected={{ registraionNo: shareId }}
-                                display={"registraionNo"}
-                              />
+                              <p className="label-input share-detail">
+                                {shareId || "-"}
+                              </p>
                             </div>
                           </InputDiv>
                         </ContentSpace>
-                        {/* <Content>
-                          <InputDiv>
-                            <div
-                              className="inputField"
-                              style={{ justifyContent: "start" }}
-                            >
-                              <div className="div-dropdown">
-                                <p className="label-input-flex">
-                                  เลขทะเบียนผู้ถือหุ้น
-                                </p>
-                                <div className="label-dropdown">
-                                  <DropdownArrow
-                                    options={allRegistrations}
-                                    isOpen={isOpenDropdownArrowStep1}
-                                    onClick={() =>
-                                      setIsOpenDropdownArrowStep1(
-                                        !isOpenDropdownArrowStep1
-                                      )
-                                    }
-                                    onBlur={() =>
-                                      setIsOpenDropdownArrowStep1(false)
-                                    }
-                                    setSelected={(e) =>
-                                      setShareId(e.registraionNo)
-                                    }
-                                    selected={{ registraionNo: shareId }}
-                                    display={"registraionNo"}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </InputDiv>
-                        </Content> */}
                         <Header>
                           <h3 style={{ color: "#1D3AB1", fontWeight: "bold" }}>
                             รายละเอียดการจัดสรรหุ้น
@@ -1355,7 +1377,20 @@ const Buy = () => {
                           type="submit"
                           value="ถัดไป"
                           disabled={isDisableToPage2}
-                          onClick={() => handlerOnClickPage(2)}
+                          onClick={() => {
+                            if (!phoneNo) {
+                              setShow(true);
+                              setStatus(999);
+                              setAlertMessage(
+                                "กรุณากรอกเบอร์โทรศัพท์"
+                              );
+                              setTimeout(() => {
+                                setShow(false);
+                              }, 5000);
+                            } else {
+                              setShowStepOneVerify(true)
+                            }
+                          }}
                         />
                       </div>
                     </>
@@ -1376,7 +1411,7 @@ const Buy = () => {
                             <h3
                               style={{ color: "#1D3AB1", fontWeight: "bold" }}
                             >
-                              จำนวนหุ้นเดิมของท่าน
+                              จำนวนหุ้นเดิม
                             </h3>
                           </Header>
                           <ShareDetail>
@@ -1427,7 +1462,7 @@ const Buy = () => {
                             <h3
                               style={{ color: "#1D3AB1", fontWeight: "bold" }}
                             >
-                              สิทธิในการซื้อหุ้นเพิ่มทุนของท่าน
+                              สิทธิในการซื้อหุ้นเพิ่มทุน
                             </h3>
                           </Header>
                           <ShareDetail>
@@ -1500,7 +1535,7 @@ const Buy = () => {
                             <h3
                               style={{ color: "#1D3AB1", fontWeight: "bold" }}
                             >
-                              การจองซื้อหุ้นเพิ่มทุนของท่าน
+                              จำนวนที่ต้องการจองซื้อ
                             </h3>
                           </Header>
                           <ShareDetail style={{ marginBottom: "-10px" }}>
@@ -1573,7 +1608,7 @@ const Buy = () => {
                               <h3
                                 style={{ color: "#1D3AB1", fontWeight: "bold" }}
                               >
-                                จำนวนหุ้นที่ท่านซื้อเกินสิทธิ
+                                จำนวนหุ้นที่ซื้อเกินสิทธิ
                               </h3>
                             </Header>
                             <ShareDetail>
@@ -1635,6 +1670,30 @@ const Buy = () => {
                                   />
                                 </InputDiv>
                               </div>
+                              {
+                                ( depositBank && depositBank.nameTH === "อื่นๆ") &&
+                                (
+                                  <div className="input-div">
+                                    <InputDiv
+                                      style={{ width: "100%", margin: "auto" }}
+                                    >
+                                      <p
+                                        style={{
+                                          width: "200px",
+                                          textAlign: "start",
+                                          fontWeight: "bold",
+                                        }}
+                                      >
+                                      </p>
+                                    </InputDiv>
+                                    <InputDiv
+                                      style={{ width: "100%", textAlign: "start", margin: "0" }}
+                                    >
+                                      <p style={{ width: "100%", color: "#FB0303", margin: "0" }}>กรณีที่ท่านแจ้งบัญชีธนาคารนอกเหนือจาก 9 ธนาคาร ทางบริษัทขอคืนเงินให้ท่านเป็นเช็ค</p>
+                                    </InputDiv>
+                                  </div>
+                                )
+                              }
                               <div className="input-div">
                                 <InputDiv
                                   style={{ width: "100%", margin: "auto" }}
@@ -1655,6 +1714,7 @@ const Buy = () => {
                                   <FieldInput
                                     placeholder={"หมายเลขบัญชีธนาคาร"}
                                     value={bank}
+                                    disabled={depositBank && depositBank.nameTH === "อื่นๆ"}
                                     onChange={(e) =>
                                       setBank(
                                         e.target.value.replace(/[^0-9.]/, "")
@@ -1688,6 +1748,7 @@ const Buy = () => {
                                     value="แนบหน้าบัญชีธนาคาร"
                                     onClick={handleClick}
                                     accept="image/jpeg, image/png"
+                                    disabled={depositBank && depositBank.nameTH === "อื่นๆ"}
                                     style={{ width: "100%" }}
                                   />
                                   <input
@@ -1902,30 +1963,57 @@ const Buy = () => {
                             </p>
                           </div>
                         </div>
-                        <div
-                          className="payment-method"
-                          style={{
-                            padding: "10px 20px 30px 20px",
-                            display: "flex",
-                          }}
-                        >
-                          <b
+                        { filename && (
+                          <div
+                            className="payment-method"
                             style={{
-                              width: "20%",
-                              margin: "20px 10px 10px 10px",
+                              display: "flex",
                             }}
-                          ></b>
-                          <div>
-                            <p
+                          >
+                            <b
                               style={{
-                                width: "100%",
-                                fontSize: "17px",
-                                margin: "auto",
-                                marginBottom: "20px",
-                                marginTop: "20px",
+                                width: "20%",
+                                margin: "20px 10px 10px 10px",
                               }}
-                            ></p>
-                            {filename}
+                            ></b>
+                            <div>
+                              <p
+                                style={{
+                                  width: "100%",
+                                  fontSize: "17px",
+                                  margin: "auto",
+                                  marginBottom: "20px",
+                                  marginTop: "20px",
+                                }}
+                              ></p>
+                              {filename}
+                            </div>
+                          </div>
+                        )}
+                        <div className="payment-method">
+                          <div className="btn-label">
+                            <b>วันที่โอน</b>
+                          </div>
+                          <div className="btn-label">
+                            <InputSeacrh
+                              type="date"
+                              value={paymentDate}
+                              onChange={(e) => {
+                                setPaymentDate(e.target.value);
+                              }}
+                            />
+                          </div>
+                          <div className="btn-label">
+                            <b>เวลาโอนเงิน</b>
+                          </div>
+                          <div className="btn-label">
+                            <InputSeacrh
+                              type="time"
+                              value={paymentTime}
+                              onChange={(e) => {
+                                setPaymentTime(e.target.value);
+                              }}
+                            />
                           </div>
                         </div>
                       </LineCard>
@@ -1975,7 +2063,7 @@ const Buy = () => {
                         <Button
                           type="button"
                           value={"ถัดไป"}
-                          disabled={!file}
+                          disabled={(!file)}
                           style={{ marginTop: "1rem", margin: "0 2rem" }}
                           onClick={handleSubmit}
                         />
@@ -2704,7 +2792,7 @@ const BankCard = styled.div`
     .bank-img {
       margin-left: 40px;
       margin-top: auto;
-      margin-botton: auto;
+      margin-bottom: auto;
     }
 
     .bank-detail {
@@ -2775,6 +2863,34 @@ const Spacer = styled.div`
   /* For Tablets */
   @media screen and (min-width: 541px) and (max-width: 880px) {
     margin: 0;
+  }
+`;
+
+const InputSeacrh = styled.input`
+  border: 2px solid #d9e1e7;
+  border-radius: 10px;
+  background: #fff;
+  position: relative;
+  font-size: 16px;
+  padding: 10px;
+
+  .date-input {
+    width: 200px;
+    height: 42px;
+  }
+
+  :focus {
+    outline: none;
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    width: 100%;
+
+    .date-input {
+      width: 100%;
+      height: 42px;
+    }
   }
 `;
 
