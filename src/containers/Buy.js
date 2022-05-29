@@ -912,7 +912,10 @@ const Buy = () => {
                 >
                   <h3>รายละเอียดที่อยู่ของท่าน</h3>
                 </Header>
-                <div className="profile-detail" style={{ padding: "1rem 2rem" }}>
+                <div
+                  className="profile-detail"
+                  style={{ padding: "1rem 2rem" }}
+                >
                   <InputDiv>
                     <div className="inputField">
                       <p className="label-input bank-detail-title">
@@ -1835,18 +1838,14 @@ const Buy = () => {
                                       {masterBankPayment.length > 0 &&
                                         masterBankPayment.map((bank, index) => (
                                           <div className="bank-div">
-                                            <div
-                                              className="bank-img"
-                                            >
+                                            <div className="bank-img">
                                               <img
                                                 src={bank.logo}
                                                 height={"33px"}
                                                 width={"32px"}
                                               />
                                             </div>
-                                            <div
-                                              className="bank-detail"
-                                            >
+                                            <div className="bank-detail">
                                               <b>{bank.nameTH}</b>
                                               <p>
                                                 เลขบัญชี
@@ -2697,7 +2696,7 @@ const CloseArrow = styled.i`
 const BankCard = styled.div`
   display: block;
   margin: auto;
-  
+
   .bank-div {
     display: flex;
 
@@ -2711,7 +2710,7 @@ const BankCard = styled.div`
       margin: 10px 0px 10px 20px;
     }
   }
-  
+
   @media screen and (max-width: 540px) {
     .bank-div {
       display: block;
