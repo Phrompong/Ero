@@ -88,17 +88,17 @@ const Auth = () => {
                 <ErrorText show={showError}>{errorMsg}</ErrorText>
               </div>
 
-              <div className="submit">
+              <div className="submit" style={{ width: "100%" }}>
                 <Button
                   type="submit"
                   value="Sign in"
                   onClick={handleSubmited}
                 />
-                {link("Problem to sign in ?", "/customer/service")}
+                {/* {link("Problem to sign in ?", "/customer/service")}
                 {link(
                   "มีปัญหาในการเข้าใช้งานกรุณาคลิกที่นี่",
                   "/customer/service"
-                )}
+                )} */}
               </div>
             </div>
 
@@ -146,11 +146,11 @@ const Form = styled.form`
 
   .field {
     width: 100%;
-    flex-grow: 2;
-    display: flex;
-    flex-direction: column;
+    // flex-grow: 2;
+    // display: flex;
+    // flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
+    // justify-content: flex-end;
     text-align: center;
     margin-bottom: 20px;
   }

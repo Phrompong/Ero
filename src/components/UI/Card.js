@@ -34,7 +34,8 @@ export const StyledCard = styled.div`
     }
 
     .div-term-condition {
-      height: 210px;
+      height: 100%;
+      // max-height: 200px;
       overflow: scroll;
       overflow-x: auto;
       overflow-y: auto;
@@ -149,6 +150,11 @@ export const StyledLineCard = styled.div`
       margin: auto 10px;
     }
 
+    .datetime-label {
+      width: 10%;
+      margin: auto 10px;
+    }
+
     .btn-upload {
       width: 20%;
       font-size: 17px;
@@ -218,6 +224,12 @@ export const StyledLineCard = styled.div`
         margin: auto 10px;
         margin-bottom: 2rem;
       }
+
+      .datetime-label {
+        width: 100%;
+        margin: auto 10px;
+        margin-bottom: 2rem;
+      }
   
       .btn-upload {
         margin-top: 1rem;
@@ -273,6 +285,12 @@ export const StyledLineCard = styled.div`
       }
 
       .btn-label {
+        width: 100%;
+        margin: auto 10px;
+        margin-bottom: 2rem;
+      }
+
+      .datetime-label {
         width: 100%;
         margin: auto 10px;
         margin-bottom: 2rem;

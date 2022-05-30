@@ -114,6 +114,19 @@ const Details = ({ show, details, closed, options }) => {
 
                   <div className="row">
                     <SmallText>
+                      {`วันที่โอนเงิน ${formatDate(details["createdOn"])}`} 
+                      {console.log(details)}
+                      {/* waiting for api */}
+                    </SmallText>
+                    <SmallText>
+                      {`เวลาที่โอนเงิน ${formatDate(
+                        details["attachedOn"]
+                      )}`}
+                      {/* waiting for api */}
+                    </SmallText>
+                  </div>
+                  <div className="row">
+                    <SmallText>
                       {`ส่งคำสั่งซื้อเมื่อ ${formatDate(details["createdOn"])}`}
                     </SmallText>
                     <SmallText>

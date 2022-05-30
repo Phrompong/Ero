@@ -37,6 +37,10 @@ const Container = styled.div`
       .right {
         margin-left: 2rem;
       }
+
+      .checkbox {
+        width: 25%;
+      }
       
       .content-detail-text {
         display: flex;
@@ -148,6 +152,10 @@ const Container = styled.div`
           margin-left: 0;
         }
 
+        .checkbox {
+          width: 100%;
+        }
+        
         .content-detail-text {
           display: block;
 
@@ -228,6 +236,10 @@ const Container = styled.div`
 
         .right {
           margin-left: 0;
+        }
+
+        .checkbox {
+          width: 50%;
         }
   
         .content-detail-text {

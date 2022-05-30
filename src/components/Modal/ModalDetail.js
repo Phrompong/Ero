@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { persianblue } from "../../utils/color";
@@ -38,7 +39,18 @@ export const ModalDetail = ({
   optional4,
   previewImage,
   isBuy,
+  paidRightVolume,
+  checkRightStatus,
+  verifyOrder,
+  setVerifyOrder,
+  bookbankImage
 }) => {
+  const [_verifyOrder, _setVerifyOrder] = useState(verifyOrder || null)
+  useEffect(() => {
+    if (_verifyOrder) {
+      setVerifyOrder(_verifyOrder)
+    }
+  }, [_verifyOrder])
   return (
     <>
       <FlexContainer>
@@ -179,6 +191,21 @@ export const ModalDetail = ({
                   <p>หน่วย</p>
                 </div>
               </div>
+              {
+                ( isBuy || checkbox )&& (
+                <div className="content-detail-share">
+                  <div className="text-title">
+                    <p>จำนวนที่ต้องการจองซื้อ</p>
+                    <p className="text-black">{rightStockName || "-"}</p>
+                  </div>
+                  <div className="text-amount right">
+                    <p>จำนวน</p>
+                    <b className="text-black">{formatNumber(paidRightVolume) || "-"}</b>
+                    <p>หุ้น</p>
+                  </div>
+                </div>
+                )
+              }
               <div className="content-detail-share">
                 <div className="text-title">
                   <p>หุ้นจองซื้อเกินสิทธิ</p>
@@ -320,6 +347,59 @@ export const ModalDetail = ({
                   </div>
                 </div>
               </div>
+              {bookbankImage && (
+                <div
+                  style={{ width: "100%", textAlign: "center", marginTop: "1rem" }}
+                >
+                  <img
+                    src={bookbankImage}
+                    style={{ width: "100%", height: "600px", maxWidth: "600px" }}
+                  />
+                </div>
+              )}
+            </>
+          )}
+          {(checkRightStatus && checkRightStatus.length > 0) && (
+            <>
+              <div
+                className="content-header"
+                style={{
+                  paddingLeft: "2rem",
+                  marginTop: "1rem",
+                  backgroundColor: "#F1F7FB",
+                  color: persianblue,
+                }}
+              >
+                <b>
+                  การตรวจสอบข้อมูล
+                </b>
+              </div>
+              <div className="content-member">
+                <div className="content-detail-member">
+                  <div className="content-detail-text checkbox" style={{ display: "flex", justifyContent: "space-between"}}>
+                    <p>
+                      <input
+                        type={"checkbox"}
+                        checked={Number(_verifyOrder)===1}
+                        value={1}
+                        style={{ transform: "scale(1.5)", margin: "auto" }}
+                        onChange={(e) => _setVerifyOrder(e.target.value)}
+                      />
+                    </p>
+                    <p>ผ่าน</p>
+                    <p>
+                      <input
+                        type={"checkbox"}
+                        checked={Number(_verifyOrder)===2}
+                        value={2}
+                        style={{ transform: "scale(1.5)", margin: "auto" }}
+                        onChange={(e) => _setVerifyOrder(e.target.value)}
+                      />
+                    </p>
+                    <p>ไม่ผ่าน</p>
+                  </div>
+                </div>
+              </div>
             </>
           )}
         </div>
@@ -400,7 +480,7 @@ export const ModalDetail = ({
           if (checkbox) {
             return (
               <>
-                {/* <Button
+                <Button
                   type="submit"
                   value={"ย้อนกลับ"}
                   onClick={() => hanlderOnBack()}
@@ -409,7 +489,7 @@ export const ModalDetail = ({
                     margin: "0 10px 10px 10px",
                     backgroundColor: "#809FB8",
                   }}
-                /> */}
+                />
                 <Button
                   type="submit"
                   value={"ยืนยันการจอง"}
@@ -425,7 +505,7 @@ export const ModalDetail = ({
           } else if (isBuy) {
             return (
               <>
-                {/* <Button
+                <Button
                   type="submit"
                   value={"ย้อนกลับ"}
                   onClick={() => hanlderOnBack()}
@@ -434,7 +514,7 @@ export const ModalDetail = ({
                     margin: "0 10px 10px 10px",
                     backgroundColor: "#809FB8",
                   }}
-                /> */}
+                />
                 <Button
                   type="submit"
                   value={"ยืนยันการจอง"}
