@@ -29,6 +29,7 @@ const CheckRightCustomer = () => {
   const [profile, setProfile] = useState(null);
   const searchInputRef = useRef("");
   const [news, setNews] = useState(null);
+  const [textControl, setTextControl] = useState(null);
 
   const { user } = useSelector((state) => state);
 
@@ -94,10 +95,19 @@ const CheckRightCustomer = () => {
     console.log(news);
   }
 
+  async function fetchTextControl() {
+    let endpoint = `textControl?button=checkRight`;
+
+    const [res, status] = await httpGetRequest(endpoint);
+
+    setTextControl(res["data"]["textDescription"]);
+  }
+
   useEffect(() => {
     fetchDataTable();
     fetchDataProfile();
     fetchDataNews();
+    fetchTextControl();
   }, []);
 
   return (
@@ -117,8 +127,9 @@ const CheckRightCustomer = () => {
             </div>
             <div className="button-section">
               <Button onClick={() => navigate(`${location.pathname}/info`)}>
-                ท่านสามารถกดตรวจสอบผลการจองซื้อหุ้นภายหลังวันที่ 16 มิถุนายน
-                2565 เป็นต้นไป
+                {textControl}
+                {/* ท่านสามารถกดตรวจสอบผลการจองซื้อหุ้นภายหลังวันที่ 16 มิถุนายน
+                2565 เป็นต้นไป */}
               </Button>
             </div>
             <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
