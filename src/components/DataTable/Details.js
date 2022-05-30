@@ -12,6 +12,7 @@ import { Dropdown } from "../UI/Dropdown";
 import change from "../../assets/icon_change.png";
 import transaction from "../../assets/transaction.png";
 import { httpGetRequest, httpPutRequest } from "../../utils/fetch";
+import { format } from "date-fns";
 
 const Details = ({ show, details, closed, options }) => {
   console.log(show);
@@ -44,12 +45,20 @@ const Details = ({ show, details, closed, options }) => {
   console.log(details);
 
   const formatDate = (date) => {
-    return date ? new Date(date).toLocaleDateString() : "-";
+    return date ? format(new Date(date), "dd/MM/yyyy") : "";
+  };
+
+  const formatTime = (date) => {
+    return date ? format(new Date(date), "HH:mm:ss") : "";
   };
 
   const formatNumber = (number) => {
-    return number ? Number(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : '-';
-  }
+    return number
+      ? Number(number)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      : "-";
+  };
 
   return (
     <Modal show={show}>
@@ -96,7 +105,9 @@ const Details = ({ show, details, closed, options }) => {
                     </div>
                     <div className="row">
                       <p className="text-box">จำนวนเงิน</p>
-                      <div className="num-box">{formatNumber(details["paymentAmount"])}</div>
+                      <div className="num-box">
+                        {formatNumber(details["paymentAmount"])}
+                      </div>
                       <p className="unit">บาท</p>
                     </div>
                   </div>
@@ -109,19 +120,18 @@ const Details = ({ show, details, closed, options }) => {
                     <p className="unit">หุ้น</p>
                   </div>
                   <BoldText style={{ margin: "20px 0 5px 0" }}>
-                    ซื้อเกินสิทธิเป็นเงิน {formatNumber(details["excessAmount"])} บาท
+                    ซื้อเกินสิทธิเป็นเงิน{" "}
+                    {formatNumber(details["excessAmount"])} บาท
                   </BoldText>
 
                   <div className="row">
                     <SmallText>
-                      {`วันที่โอนเงิน ${formatDate(details["createdOn"])}`} 
+                      {`วันที่โอนเงิน ${formatDate(details["paymentDate"])}`}
                       {console.log(details)}
                       {/* waiting for api */}
                     </SmallText>
                     <SmallText>
-                      {`เวลาที่โอนเงิน ${formatDate(
-                        details["attachedOn"]
-                      )}`}
+                      {`เวลาที่โอนเงิน ${formatTime(details["paymentDate"])}`}
                       {/* waiting for api */}
                     </SmallText>
                   </div>
