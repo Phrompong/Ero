@@ -126,7 +126,11 @@ const CheckRightCustomer = () => {
               {/* <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} /> */}
             </div>
             <div className="button-section">
-              <Button onClick={() => navigate(`${location.pathname}/info`)}>
+              <Button
+                style={{ "background-color": "gray" }}
+                disabled={true}
+                onClick={() => navigate(`${location.pathname}/info`)}
+              >
                 {textControl}
                 {/* ท่านสามารถกดตรวจสอบผลการจองซื้อหุ้นภายหลังวันที่ 16 มิถุนายน
                 2565 เป็นต้นไป */}
