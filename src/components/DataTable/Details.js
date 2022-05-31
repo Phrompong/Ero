@@ -160,8 +160,8 @@ const Details = ({ show, details, closed, options }) => {
                 selected={selectedStatus}
               />
               <Button onClick={() => handleConfirmStatus()}>ยืนยันสถานะ</Button>
-              <Button background={carmine} onClick={closed}>
-                ยกเลิกการยืนยันสถานะ
+              <Button background={balihai} onClick={closed}>
+                ปิดหน้าต่าง
               </Button>
             </Footer>
           </Container>

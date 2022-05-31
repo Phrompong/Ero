@@ -127,7 +127,7 @@ const CheckRightCustomer = () => {
             </div>
             <div className="button-section">
               <Button
-                style={{ "background-color": "gray" }}
+                style={{ "background-color": balihai }}
                 disabled={true}
                 onClick={() => navigate(`${location.pathname}/info`)}
               >
