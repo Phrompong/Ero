@@ -218,6 +218,72 @@ export const DropdownArrow = ({
   );
 };
 
+export const DropdownMasterExport = ({
+  options,
+  setSelected,
+  selected,
+  isOpen,
+  onClick,
+  onBlur,
+  display,
+  otherOption = false,
+}) => {
+  return (
+    <Container
+      onClick={onClick}
+      onBlurCapture={onBlur}
+      style={{ width: "100%" }}
+    >
+      <Wrapper style={{ width: "100%" }}>
+        <div className="input-select">
+          <Input
+            type={"text"}
+            placeholder={"กรุณาเลือก"}
+            value={selected ? selected[display] : ""}
+            style={{ width: "100%" }}
+            // disabled={!searchable}
+          />
+          {isOpen ? <OpenArrow /> : <CloseArrow />}
+        </div>
+        {options.length === 0 ? (
+          <>
+            <WrapperOption
+              isOpen={isOpen}
+              isEmtry={true}
+              style={{ width: "100%" }}
+            >
+              <OptionSelect>ไม่มีข้อมูล</OptionSelect>
+            </WrapperOption>
+          </>
+        ) : (
+          <>
+            <WrapperOption isOpen={isOpen} style={{ width: "100%" }}>
+              {options &&
+                options.map((option, index) => (
+                  <OptionSelect
+                    key={index}
+                    onMouseDown={() => setSelected(option)}
+                    style={{ width: "100%" }}
+                  >
+                    {option[display]}
+                  </OptionSelect>
+                ))}
+              {otherOption && (
+                <OptionSelect
+                  onMouseDown={() => setSelected({ nameTH: "อื่นๆ" })}
+                  style={{ width: "100%" }}
+                >
+                  อื่นๆ
+                </OptionSelect>
+              )}
+            </WrapperOption>
+          </>
+        )}
+      </Wrapper>
+    </Container>
+  );
+};
+
 export const DropdownSelect = ({
   options,
   setSelected,

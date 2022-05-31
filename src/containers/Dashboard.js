@@ -15,6 +15,12 @@ import { httpGetRequest } from "../utils/fetch";
 
 import { Search } from "@styled-icons/bootstrap/Search";
 import { FileExport } from "@styled-icons/boxicons-solid/FileExport";
+import {
+  DropdownSelect,
+  DropdownSelectMasterBank,
+  DropdownArrow,
+  DropdownMasterExport,
+} from "../components/UI/Dropdown";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
@@ -33,6 +39,9 @@ const Dashboard = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isFetching, setIsFetching] = useState(true);
+  const [masterExport, setMasterExport] = useState([]);
+  const [isOpenDropdown, setIsOpenDropdown] = useState(false);
+  const [valueMasterExport, setValueMasterExport] = useState(null);
 
   const searchInputRef = useRef("");
 
@@ -69,6 +78,15 @@ const Dashboard = () => {
     func(res["data"]);
   }
 
+  async function fetchDataMasterExport() {
+    let endpoint = `masterExport`;
+
+    const [res, status] = await httpGetRequest(endpoint);
+
+    console.log(res["data"]);
+    setMasterExport(res["data"]);
+  }
+
   async function refreshData() {
     fetchDataTable();
     fetchDataProgress(
@@ -87,6 +105,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchDataTable();
+    fetchDataMasterExport();
     fetchDataProgress(
       "currentOrderAmount",
       null,
@@ -148,8 +167,10 @@ const Dashboard = () => {
   };
 
   const handleExport = async () => {
+    const { value, fileExtension } = valueMasterExport;
+
     window.open(
-      "https://ero-bke-test.asiawealth.co.th/api/v1/orders/export/excel"
+      `https://ero-bke-test.asiawealth.co.th/api/v1/exports?topic=${value}&fileExtension=${fileExtension}`
     );
   };
 
@@ -247,6 +268,37 @@ const Dashboard = () => {
           </SearchDiv>
         </FlexContainer>
         <FlexContainer style={{ justifyContent: "end" }}>
+          <InputDiv style={{ marginTop: "20px", paddingRight: "10px" }}>
+            <DropdownMasterExport
+              options={masterExport}
+              isOpen={isOpenDropdown}
+              onClick={() => setIsOpenDropdown(!isOpenDropdown)}
+              onBlur={() => setIsOpenDropdown(false)}
+              setSelected={setValueMasterExport}
+              selected={valueMasterExport}
+              display={"name"}
+              //     selected={{
+              //       registraionNo:
+              //         allRegistrations.length > 0 && !shareId
+              //           ? allRegistrations[0].registraionNo
+              //           : shareId,
+              //     }}
+              // <DropdownArrow
+              //     options={allRegistrations}
+              //     isOpen={isOpenDropdownArrow}
+              //     onClick={() => setIsOpenDropdownArrow(!isOpenDropdownArrow)}
+              //     onBlur={() => setIsOpenDropdownArrow(false)}
+              //     setSelected={(e) => setShareId(e.registraionNo)}
+              //     selected={{
+              //       registraionNo:
+              //         allRegistrations.length > 0 && !shareId
+              //           ? allRegistrations[0].registraionNo
+              //           : shareId,
+              //     }}
+              //     display={"registraionNo"}
+              //   />
+            />
+          </InputDiv>
           <Button onClick={handleExport}>
             <ExportIcon />
             Export file
@@ -414,4 +466,116 @@ const Header = styled.div`
 
 const TableSection = styled.section`
   display: flex;
+`;
+
+const InputDiv = styled.div`
+  margin: 10px 0;
+
+  .input-file-upload {
+    width: 200px;
+  }
+
+  .inputField {
+    display: flex;
+    text-align: start;
+    width: 100%;
+    justify-content: space-between;
+    align-items: baseline;
+
+    p {
+      position: relative;
+      margin: 0 10px;
+      width: 50%;
+    }
+
+    .label-input-flex {
+      width: 20%;
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+
+    .div-dropdown {
+      width: 100%;
+      display: flex;
+
+      .label-dropdown {
+        width: 30%;
+        max-width: 1000px;
+      }
+    }
+
+    .label-input {
+      justify-content: start;
+      width: 50%;
+    }
+
+    .share-detail {
+      white-space: nowrap;
+      width: 100%;
+    }
+
+    .bank-detail-title {
+      width: 20%;
+    }
+    .bank-detail {
+      width: 80%;
+    }
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    .inputField {
+      display: block;
+      width: 100%;
+      align-items: baseline;
+
+      p {
+        position: static;
+        width: 100%;
+
+        span {
+          width: 200px;
+        }
+      }
+
+      .label-input {
+        justify-content: start;
+        width: 100%;
+      }
+
+      .bank-detail-title {
+        width: 100%;
+      }
+      .bank-detail {
+        width: 100%;
+      }
+    }
+
+    .inputField > .div-dropdown {
+      width: 100%;
+      display: block;
+
+      .label-input-flex {
+        width: 100%;
+        margin: 0 0 0.5rem 0;
+      }
+
+      .label-dropdown {
+        width: 100%;
+      }
+    }
+  }
+
+  /* For Tablets */
+  @media screen and (min-width: 541px) and (max-width: 880px) {
+    .inputField > .div-dropdown {
+      .label-input-flex {
+        width: 100%;
+      }
+
+      .label-dropdown {
+        width: 100%;
+      }
+    }
+  }
 `;

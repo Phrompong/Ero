@@ -29,6 +29,7 @@ const CheckRightCustomer = () => {
   const [profile, setProfile] = useState(null);
   const searchInputRef = useRef("");
   const [news, setNews] = useState(null);
+  const [textControl, setTextControl] = useState(null);
 
   const { user } = useSelector((state) => state);
 
@@ -52,6 +53,7 @@ const CheckRightCustomer = () => {
     "รายการ",
     "ถือหุ้น",
     "เลขทะเบียนผู้ถือหุ้น",
+    "บัตรประชาชน",
     "ชื่อผู้ถือหุ้น",
     "จำนวนหุ้นสามัญเดิม",
     "จำนวนสิทธิที่ได้จัดสรร",
@@ -93,10 +95,19 @@ const CheckRightCustomer = () => {
     console.log(news);
   }
 
+  async function fetchTextControl() {
+    let endpoint = `textControl?button=checkRight`;
+
+    const [res, status] = await httpGetRequest(endpoint);
+
+    setTextControl(res["data"]["textDescription"]);
+  }
+
   useEffect(() => {
     fetchDataTable();
     fetchDataProfile();
     fetchDataNews();
+    fetchTextControl();
   }, []);
 
   return (
@@ -104,23 +115,29 @@ const CheckRightCustomer = () => {
       <Container>
         <TableSection>
           {/* <div style={{ overflow: "scroll" }}> */}
-            <LineCard>
-              <div className="table-detail">
-                <DataTableCheckRight
-                  header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
-                  theaders={theaders}
-                  data={data}
-                  refreshData={fetchDataTable}
-                />
-                {/* <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} /> */}
-              </div>
-              <div className="button-section">
-                <Button onClick={() => navigate(`${location.pathname}/info`)}>
-                  ท่านสามารถกดตรวจสอบผลการจองซื้อหุ้นภายหลังวันที่ 16 มิถุนายน 2565 เป็นต้นไป
-                </Button>
-              </div>
-              <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
-            </LineCard>
+          <LineCard>
+            <div className="table-detail">
+              <DataTableCheckRight
+                header="ตรวจสอบสิทธิการจองซื้อหุ้นสามัญเพิ่มทุน"
+                theaders={theaders}
+                data={data}
+                refreshData={fetchDataTable}
+              />
+              {/* <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} /> */}
+            </div>
+            <div className="button-section">
+              <Button
+                style={{ "background-color": balihai }}
+                disabled={true}
+                onClick={() => navigate(`${location.pathname}/info`)}
+              >
+                {textControl}
+                {/* ท่านสามารถกดตรวจสอบผลการจองซื้อหุ้นภายหลังวันที่ 16 มิถุนายน
+                2565 เป็นต้นไป */}
+              </Button>
+            </div>
+            <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
+          </LineCard>
           {/* </div> */}
         </TableSection>
       </Container>
