@@ -2,24 +2,22 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux"
+import { Provider } from "react-redux";
 
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-import store from './store'
+import store from "./store";
 
-import VConsole from 'vconsole';
+import VConsole from "vconsole";
 
 // const container = document.getElementById("app");
 // const root = createRoot(container);
 
-const vConsole = new VConsole();
-
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter >
+    <BrowserRouter>
       <App />
     </BrowserRouter>
   </Provider>,
