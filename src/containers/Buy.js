@@ -623,6 +623,7 @@ const Buy = () => {
   }, [currentStockVolume]);
 
   const formatNumber = (number) => {
+    console.log(number);
     return Number(number)
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -1544,7 +1545,7 @@ const Buy = () => {
                               value={formatNumber(currentStockVolume)}
                               onChange={(e) => {
                                 setCurrentStockVolume(
-                                  e.target.value.replace(/[^0-9.]/, "")
+                                  e.target.value.replace(/[^0-100.]/, "")
                                 );
 
                                 if (
