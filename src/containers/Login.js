@@ -24,11 +24,11 @@ const Login = () => {
   const [isButtonChecked, setIsButtonChecked] = useState(false);
   const [isCheckedFirst, setIsCheckedFirst] = useState(false);
   const [isCheckedSecond, setIsCheckedSecond] = useState(false);
-  const [isCheckedThrid, setIsCheckedThrid] = useState(false)
+  const [isCheckedThrid, setIsCheckedThrid] = useState(false);
 
   const [isConfirmModal, setIsConfirmModal] = useState(false);
-  
-  localStorage.clear()
+
+  localStorage.clear();
 
   const endpoint = "auth/signIn?type=customer";
 
@@ -140,7 +140,9 @@ const Login = () => {
                         <p>การยินยอมเปิดเผยข้อมูล และข้อตกลงการให้บริการ</p>
                       </div>
                       <div className="card-term-condition">
-                        <LineCard style={{ width: "100%", paddingBottom: "1rem" }}>
+                        <LineCard
+                          style={{ width: "100%", paddingBottom: "1rem" }}
+                        >
                           <div className="div-term-condition">
                             <pre className="pre-term-condition">
                               <input
@@ -150,7 +152,9 @@ const Login = () => {
                                   setIsCheckedFirst(!isCheckedFirst)
                                 }
                               />
-                              {Parser(` ข้าพเจ้าตกลงยินยอมให้ บริษัทหลักทรัพย์ เอเชียเวลท์ จำกัด เก็บรวบรวม ใช้ เปิดเผย ซึ่งข้อมูลส่วนบุคคลของข้าพเจ้า เพื่อประโยชน์ในการทำธุรกรรมของข้าพเจ้ากับบริษัท โดยบริษัทจะใช้ข้อมูลส่วนบุคคลของท่านให้สอดคล้องกับวัตถุประสงค์ตามหลักเกณฑ์และนโยบายที่บริษัทกำหนด รวมถึงกฏหมายที่เกี่ยวข้องบัญญัติให้สามารถกระทำได้  โดยท่านสามารถศึกษานโยบายความเป็นส่วนตัวของบริษัท <a href="http://www.asiawealth.co.th/uploads/files/file_060102_pdygt.pdf">คลิกที่นี่</a>`)}
+                              {Parser(
+                                ` ข้าพเจ้าตกลงยินยอมให้ บริษัทหลักทรัพย์ เอเชียเวลท์ จำกัด เก็บรวบรวม ใช้ เปิดเผย ซึ่งข้อมูลส่วนบุคคลของข้าพเจ้า เพื่อประโยชน์ในการทำธุรกรรมของข้าพเจ้ากับบริษัท โดยบริษัทจะใช้ข้อมูลส่วนบุคคลของท่านให้สอดคล้องกับวัตถุประสงค์ตามหลักเกณฑ์และนโยบายที่บริษัทกำหนด รวมถึงกฏหมายที่เกี่ยวข้องบัญญัติให้สามารถกระทำได้  โดยท่านสามารถศึกษานโยบายความเป็นส่วนตัวของบริษัท <a href="http://www.asiawealth.co.th/uploads/files/pdpa01.pdf">คลิกที่นี่</a>`
+                              )}
                             </pre>
                           </div>
                         </LineCard>
@@ -169,7 +173,9 @@ const Login = () => {
                                   setIsCheckedSecond(!isCheckedSecond)
                                 }
                               />
-                              {Parser(` ข้าพเจ้ายืนยันที่จะจองซื้อหลักทรัพย์ และยอมรับความเสี่ยงที่อาจเกิดขึ้นจากการลงทุนในหลักทรัพย์โดยข้าพเจ้าขอรับรองว่าได้ศึกษาข้อมูลเกี่ยวกับลักษณะ ความเสี่ยง ผลตอบแทนของการลงทุน และข้อมูลอื่น ๆ ในหนังสือชี้ชวนข้อมูลสรุป (Executive Summary) หรือสรุปข้อมูลสำคัญของตราสาร (Fact Sheet) <a href="https://market.sec.or.th/public/ipos/IPOSEQ01.aspx?TransID=294797">คลิกที่นี่</a>`)}
+                              {Parser(
+                                ` ข้าพเจ้ายืนยันที่จะจองซื้อหลักทรัพย์ และยอมรับความเสี่ยงที่อาจเกิดขึ้นจากการลงทุนในหลักทรัพย์โดยข้าพเจ้าขอรับรองว่าได้ศึกษาข้อมูลเกี่ยวกับลักษณะ ความเสี่ยง ผลตอบแทนของการลงทุน และข้อมูลอื่น ๆ ในหนังสือชี้ชวนข้อมูลสรุป (Executive Summary) หรือสรุปข้อมูลสำคัญของตราสาร (Fact Sheet) <a href="https://market.sec.or.th/public/ipos/IPOSEQ01.aspx?TransID=294797">คลิกที่นี่</a>`
+                              )}
                             </pre>
                           </div>
                         </LineCard>
@@ -246,23 +252,23 @@ const Login = () => {
                       <div className="btn-div">
                         <Button
                           type="button"
-                          value="ไม่ยินยอม"
-                          onClick={handlerOnCancel}
-                          style={{
-                            width: "292px",
-                            fontSize: "20px",
-                            background: "#809FB8",
-                            marginBottom: "1rem",
-                          }}
-                        />
-                        <Button
-                          type="button"
                           value="ยินยอม"
                           onClick={handlerOnAcceptForm}
                           disabled={!isButtonChecked}
                           style={{
                             width: "292px",
                             fontSize: "20px",
+                            marginBottom: "1rem",
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          value="ไม่ยินยอม"
+                          onClick={handlerOnCancel}
+                          style={{
+                            width: "292px",
+                            fontSize: "20px",
+                            background: "#809FB8",
                             marginBottom: "1rem",
                           }}
                         />

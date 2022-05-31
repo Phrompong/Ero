@@ -41,7 +41,7 @@ const Buy = () => {
   const [alertMessage, setAlertMessage] = useState();
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [showStepOneVerify, setShowStepOneVerify] = useState(false)
+  const [showStepOneVerify, setShowStepOneVerify] = useState(false);
   const [showRegistrationModal, setShowRegistrationModal] = useState(true);
   const [status, setStatus] = useState();
 
@@ -56,8 +56,8 @@ const Buy = () => {
 
   const [isDisableToPage2, setIsDisableToPage2] = useState(true);
 
-  const [paymentDate, setPaymentDate] = useState(null)
-  const [paymentTime, setPaymentTime] = useState(null)
+  const [paymentDate, setPaymentDate] = useState(null);
+  const [paymentTime, setPaymentTime] = useState(null);
 
   /// input file upload
   const [bookbankFile, setBookbankFile] = useState(null);
@@ -435,9 +435,7 @@ const Buy = () => {
     } else if (!phoneNo) {
       setShow(true);
       setStatus(999);
-      setAlertMessage(
-        "กรุณากรอกเบอร์โทรศัพท์"
-      );
+      setAlertMessage("กรุณากรอกเบอร์โทรศัพท์");
       setTimeout(() => {
         setShow(false);
       }, 5000);
@@ -528,7 +526,7 @@ const Buy = () => {
         registrationNo: shareId,
         bankRefund: depositBank._id,
         bankRefundNo: bank,
-        paymentDate: new Date(`${paymentDate} ${paymentTime}`)
+        paymentDate: new Date(`${paymentDate} ${paymentTime}`),
       },
       "orders"
     );
@@ -596,7 +594,7 @@ const Buy = () => {
 
   useEffect(() => {
     if (depositBank && depositBank.nameTH === "อื่นๆ") {
-      setBank(null)
+      setBank(null);
       setBankDisableButton(false);
     } else if (depositBank && bank && bookbankFile) {
       setBankDisableButton(false);
@@ -604,8 +602,8 @@ const Buy = () => {
   }, [depositBank, bank, bookbankFile]);
 
   useEffect(() => {
-    setBookbankFile(null)
-  }, [depositBank])
+    setBookbankFile(null);
+  }, [depositBank]);
 
   useEffect(() => {
     if (Number(currentStockVolume) > 0 && isAcceptVerify) {
@@ -613,7 +611,7 @@ const Buy = () => {
     } else {
       setIsConfirmOrder(true);
     }
-  }, [currentStockVolume])
+  }, [currentStockVolume]);
 
   useEffect(() => {
     setCurrentPrice(Number(currentStockVolume) * Number(offerPrice));
@@ -818,7 +816,7 @@ const Buy = () => {
                       setPhoneNoModal(e.target.value.replace(/[^0-9.]/, ""))
                     }
                     maxLength={10}
-                    placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"}
+                    placeholder={"กรุณากรอกเบอร์โทรศัพท์"}
                   />
                 </div>
               </div>
@@ -907,8 +905,8 @@ const Buy = () => {
                 type="submit"
                 value={"ถัดไป"}
                 onClick={() => {
-                  setShowStepOneVerify(false)
-                  handlerOnClickPage(2)
+                  setShowStepOneVerify(false);
+                  handlerOnClickPage(2);
                 }}
                 style={{
                   fontSize: "17px",
@@ -944,7 +942,7 @@ const Buy = () => {
                 />
                 <h3 style={{ color: "#FB0303" }}>
                   กรณีที่ท่านแจ้งบัญชีธนาคารนอกเหนือจาก 9 ธนาคาร
-                  <br/>
+                  <br />
                   ทางบริษัทขอคืนเงินให้ท่านเป็นเช็ค
                 </h3>
               </Header>
@@ -1384,14 +1382,12 @@ const Buy = () => {
                             if (!phoneNo) {
                               setShow(true);
                               setStatus(999);
-                              setAlertMessage(
-                                "กรุณากรอกเบอร์โทรศัพท์"
-                              );
+                              setAlertMessage("กรุณากรอกเบอร์โทรศัพท์");
                               setTimeout(() => {
                                 setShow(false);
                               }, 5000);
                             } else {
-                              setShowStepOneVerify(true)
+                              setShowStepOneVerify(true);
                             }
                           }}
                         />
@@ -1673,30 +1669,39 @@ const Buy = () => {
                                   />
                                 </InputDiv>
                               </div>
-                              {
-                                ( depositBank && depositBank.nameTH === "อื่นๆ") &&
-                                (
-                                  <div className="input-div">
-                                    <InputDiv
-                                      style={{ width: "100%", margin: "auto" }}
+                              {depositBank && depositBank.nameTH === "อื่นๆ" && (
+                                <div className="input-div">
+                                  <InputDiv
+                                    style={{ width: "100%", margin: "auto" }}
+                                  >
+                                    <p
+                                      style={{
+                                        width: "200px",
+                                        textAlign: "start",
+                                        fontWeight: "bold",
+                                      }}
+                                    ></p>
+                                  </InputDiv>
+                                  <InputDiv
+                                    style={{
+                                      width: "100%",
+                                      textAlign: "start",
+                                      margin: "0",
+                                    }}
+                                  >
+                                    <p
+                                      style={{
+                                        width: "100%",
+                                        color: "#FB0303",
+                                        margin: "0",
+                                      }}
                                     >
-                                      <p
-                                        style={{
-                                          width: "200px",
-                                          textAlign: "start",
-                                          fontWeight: "bold",
-                                        }}
-                                      >
-                                      </p>
-                                    </InputDiv>
-                                    <InputDiv
-                                      style={{ width: "100%", textAlign: "start", margin: "0" }}
-                                    >
-                                      <p style={{ width: "100%", color: "#FB0303", margin: "0" }}>กรณีที่ท่านแจ้งบัญชีธนาคารนอกเหนือจาก 9 ธนาคาร ทางบริษัทขอคืนเงินให้ท่านเป็นเช็ค</p>
-                                    </InputDiv>
-                                  </div>
-                                )
-                              }
+                                      กรณีที่ท่านแจ้งบัญชีธนาคารนอกเหนือจาก 9
+                                      ธนาคาร ทางบริษัทขอคืนเงินให้ท่านเป็นเช็ค
+                                    </p>
+                                  </InputDiv>
+                                </div>
+                              )}
                               <div className="input-div">
                                 <InputDiv
                                   style={{ width: "100%", margin: "auto" }}
@@ -1717,7 +1722,10 @@ const Buy = () => {
                                   <FieldInput
                                     placeholder={"หมายเลขบัญชีธนาคาร"}
                                     value={bank}
-                                    disabled={depositBank && depositBank.nameTH === "อื่นๆ"}
+                                    disabled={
+                                      depositBank &&
+                                      depositBank.nameTH === "อื่นๆ"
+                                    }
                                     onChange={(e) =>
                                       setBank(
                                         e.target.value.replace(/[^0-9.]/, "")
@@ -1751,7 +1759,10 @@ const Buy = () => {
                                     value="แนบหน้าบัญชีธนาคาร"
                                     onClick={handleClick}
                                     accept="image/jpeg, image/png"
-                                    disabled={depositBank && depositBank.nameTH === "อื่นๆ"}
+                                    disabled={
+                                      depositBank &&
+                                      depositBank.nameTH === "อื่นๆ"
+                                    }
                                     style={{ width: "100%" }}
                                   />
                                   <input
@@ -1962,7 +1973,7 @@ const Buy = () => {
                             </p>
                           </div>
                         </div>
-                        { filename && (
+                        {filename && (
                           <div
                             className="payment-method"
                             style={{
@@ -2062,7 +2073,7 @@ const Buy = () => {
                         <Button
                           type="button"
                           value={"ถัดไป"}
-                          disabled={(!file)}
+                          disabled={!file}
                           style={{ marginTop: "1rem", margin: "0 2rem" }}
                           onClick={handleSubmit}
                         />
