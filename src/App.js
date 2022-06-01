@@ -21,7 +21,7 @@ import "./App.css";
 const App = (props) => {
   const routes = (
     <Routes>
-      <Route path="/login/admin" element={<Auth {...props} />} />
+      <Route path="/admin" element={<Auth {...props} />} />
       <Route path="/import" element={<ImportData {...props} />} />
       <Route
         path="/admin/service"
@@ -33,7 +33,7 @@ const App = (props) => {
       />
       <Route path="/checkRightAdmin" element={<CheckRightAdmin {...props} />} />
 
-      <Route path="/login/customer" element={<Login {...props} />} />
+      <Route path="" element={<Login {...props} />} />
       <Route path="/buy" element={<Buy {...props} />} />
       <Route
         path="/checkRightCustomer"

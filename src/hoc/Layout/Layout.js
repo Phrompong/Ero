@@ -41,7 +41,7 @@ const Layout = ({ children }) => {
   const [showSideDrawer, setShowSideDrawer] = useState(false);
 
   const pagesAdmin = [
-    "/login/admin",
+    "/admin",
     "/dashboard",
     "/checkRightAdmin",
     "/import",
@@ -49,7 +49,7 @@ const Layout = ({ children }) => {
   ];
 
   const pagesCustomer = [
-    "/login/customer",
+    "/",
     "/buy",
     "/checkRightCustomer",
     "/checkRightCustomer/info",
@@ -64,8 +64,8 @@ const Layout = ({ children }) => {
   const isPage = pagesAll.includes(path);
 
   const isLogin =
-    path !== "/login/admin" &&
-    path !== "/login/customer" &&
+    path !== "/admin" &&
+    path !== "/" &&
     path !== "/customer/service" &&
     path !== "/admin/service";
 
@@ -82,8 +82,8 @@ const Layout = ({ children }) => {
 
   // * Case normally login
   if (
-    (path === "/login/admin" ||
-      path === "/login/customer" ||
+    (path === "/admin" ||
+      path === "/" ||
       path === "/customer/service" ||
       path === "/admin/service") &&
     (!user || user.length === 0)
@@ -107,7 +107,7 @@ const Layout = ({ children }) => {
     let isPageAllow = false;
     switch (role) {
       case "admin":
-        pagesAdmin.push("/login/customer");
+        pagesAdmin.push("");
         isPageAllow =
           pagesAdmin.filter((o) => o.includes(path)).length > 0 ? true : false;
 
@@ -121,7 +121,7 @@ const Layout = ({ children }) => {
 
         break;
       case "client":
-        pagesCustomer.push("/login/admin");
+        pagesCustomer.push("/admin");
         isPageAllow =
           pagesCustomer.filter((o) => o.includes(path)).length > 0
             ? true
