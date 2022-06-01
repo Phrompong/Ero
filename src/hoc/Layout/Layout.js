@@ -8,6 +8,7 @@ import { ivory } from "../../utils/color";
 import { useSelector } from "react-redux";
 import Notfound from "../../assets/notfound.png";
 import UnAuth from "../../assets/unAuth.png";
+import Ma from "../../assets/ma.png";
 import Cookies from "js-cookie";
 
 const Container = styled.div`
@@ -70,6 +71,8 @@ const Layout = ({ children }) => {
     path !== "/admin/service";
 
   console.log(user);
+
+  return <DisplayMaintenance></DisplayMaintenance>;
 
   // * Case path is not pages allow
   if (!isPage) {
@@ -184,6 +187,27 @@ const DisplayUnAuth = styled.div`
   min-width: 600px;
   min-height: 740px;
   background-image: url(${UnAuth});
+  background-position: center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  .inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 510px;
+    height: 740px;
+  }
+`;
+
+const DisplayMaintenance = styled.div`
+  width: 100vw;
+  height: 100vh;
+  min-width: 600px;
+  min-height: 740px;
+  background-image: url(${Ma});
   background-position: center center;
   background-size: cover;
   display: flex;
