@@ -84,7 +84,7 @@ const NavigationItems = () => {
                   <NavigationItem link="/checkRightAdmin" img={Vector}>
                     ตรวจสอบสิทธิ / Check rights
                   </NavigationItem>
-                  <NavigationItem link="/login/admin" exact="true" img={Logout}>
+                  <NavigationItem link="/admin" exact="true" img={Logout}>
                     ออกจากระบบ / Log out
                   </NavigationItem>
                 </>

@@ -67,7 +67,7 @@ const CustomerServiceAdmin = () => {
   };
 
   const redirectPage = () => {
-    navigate("/login/admin");
+    navigate("/admin");
   };
 
   return (
