@@ -14,7 +14,7 @@ import { httpFetch } from "../../utils/fetch";
 import { ModalAlert } from "../../components/ModalAlert/ModalAlert";
 import { showAlert } from "../../utils/showAlert";
 import { useNavigate } from "react-router-dom";
-import Iframe from 'react-iframe'
+import Iframe from "react-iframe";
 
 const CustomerService = () => {
   const navigate = useNavigate();
@@ -69,7 +69,7 @@ const CustomerService = () => {
 
   const redirectPage = () => {
     console.log("redirect");
-    navigate("/login/customer");
+    navigate("/");
   };
 
   return (
@@ -109,10 +109,12 @@ const CustomerService = () => {
             />
             cs@asiawealth.co.th
           </Info>
-          <Header style={{ marginBottom: "0" }}>(วันทำการ จันทร์-ศุกร์ เวลา 08.30 -17.00 น.)</Header>
+          <Header style={{ marginBottom: "0" }}>
+            (วันทำการ จันทร์-ศุกร์ เวลา 08.30 -17.00 น.)
+          </Header>
         </div>
         <div className="form-input">
-          <Iframe 
+          <Iframe
             url="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.590078805388!2d100.54203281500452!3d13.743250090352943!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29f29a76569cd%3A0x44d9202229edba57!2sAsia%20Wealth%20Security!5e0!3m2!1sth!2sth!4v1653241766237!5m2!1sth!2sth"
             width="100%"
             height="100%"

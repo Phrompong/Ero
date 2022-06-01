@@ -101,11 +101,7 @@ const NavigationItems = () => {
                   {/* <NavigationItem link="/buy" img={traffic}>
                     จองซื้อ / Book
                   </NavigationItem> */}
-                  <NavigationItem
-                    link="/login/customer"
-                    exact="true"
-                    img={Logout}
-                  >
+                  <NavigationItem link="/" exact="true" img={Logout}>
                     ออกจากระบบ / Log out
                   </NavigationItem>
                 </>
