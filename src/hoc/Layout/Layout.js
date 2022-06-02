@@ -72,8 +72,6 @@ const Layout = ({ children }) => {
 
   console.log(user);
 
-  return <DisplayMaintenance></DisplayMaintenance>;
-
   // * Case path is not pages allow
   if (!isPage) {
     return (
