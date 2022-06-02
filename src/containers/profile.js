@@ -14,8 +14,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useMemo } from "react";
 import { httpGetRequest } from "../utils/fetch";
 
-import { Spinner } from "../components/Logo/Spinner"
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { Spinner } from "../components/Logo/Spinner";
+import { GoogleMap, LoadScript } from "@react-google-maps/api";
+import { decrypt } from "../utils/encrypt";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
@@ -24,7 +25,7 @@ const Dashboard = () => {
 
   const { user } = useSelector((state) => state);
   const [totalPages, setTotalPages] = useState(1);
-  const [isFetching, setIsFetching] = useState(true)
+  const [isFetching, setIsFetching] = useState(true);
 
   // nowDate = `${nowDate.getHours()}:${nowDate.getMinutes()} at ${nowDate.getDate()}th ${nowDate.getMonth()}`;
   const fakedata = [
@@ -92,7 +93,7 @@ const Dashboard = () => {
   ];
 
   async function fetchDataTable() {
-    setIsFetching(true)
+    setIsFetching(true);
     let endpoint = `orders?customerId=${user.customerId}`;
 
     const [res, status] = await httpGetRequest(endpoint);
@@ -100,7 +101,7 @@ const Dashboard = () => {
 
     setTotalPages(totalPages);
     setData(res["data"]);
-    setIsFetching(false)
+    setIsFetching(false);
   }
 
   async function fetchDataProfile() {
@@ -113,7 +114,7 @@ const Dashboard = () => {
 
   async function fetchDataNews() {
     let endpoint = `news`;
-    const [res, status] = await httpGetRequest(endpoint)
+    const [res, status] = await httpGetRequest(endpoint);
     console.log(res["data"][0]);
     setNews(res["data"][0]);
     console.log(news);
