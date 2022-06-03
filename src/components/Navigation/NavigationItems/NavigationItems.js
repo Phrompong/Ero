@@ -84,7 +84,7 @@ const NavigationItems = () => {
                   <NavigationItem link="/checkRightAdmin" img={Vector}>
                     ตรวจสอบสิทธิ / Check rights
                   </NavigationItem>
-                  <NavigationItem link="/login/admin" exact="true" img={Logout}>
+                  <NavigationItem link="/admin" exact="true" img={Logout}>
                     ออกจากระบบ / Log out
                   </NavigationItem>
                 </>
@@ -98,14 +98,10 @@ const NavigationItems = () => {
                   <NavigationItem link="/checkRightCustomer" img={Vector}>
                     ตรวจสอบสิทธิ / Check rights
                   </NavigationItem>
-                  <NavigationItem link="/buy" img={traffic}>
+                  {/* <NavigationItem link="/buy" img={traffic}>
                     จองซื้อ / Book
-                  </NavigationItem>
-                  <NavigationItem
-                    link="/login/customer"
-                    exact="true"
-                    img={Logout}
-                  >
+                  </NavigationItem> */}
+                  <NavigationItem link="/" exact="true" img={Logout}>
                     ออกจากระบบ / Log out
                   </NavigationItem>
                 </>

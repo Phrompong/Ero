@@ -14,9 +14,16 @@ import Details from "./Details";
 import Paginate from "../Paginate/Paginate";
 import { httpGetRequest } from "../../utils/fetch";
 
-import { Spinner } from "../Logo/Spinner"
+import { Spinner } from "../Logo/Spinner";
+import { decrypt } from "../../utils/encrypt";
 
-const DataTableProfile = ({ header, theaders, data, refreshData, isFetching }) => {
+const DataTableProfile = ({
+  header,
+  theaders,
+  data,
+  refreshData,
+  isFetching,
+}) => {
   const [showDetails, setShowDetails] = useState(false);
   // const [isFetching, setIsFetching] = useState(true)
   const [details, setDetails] = useState();
@@ -79,7 +86,7 @@ const DataTableProfile = ({ header, theaders, data, refreshData, isFetching }) =
 
   const formatNumber = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
+  };
 
   return (
     <Container>
@@ -93,39 +100,50 @@ const DataTableProfile = ({ header, theaders, data, refreshData, isFetching }) =
               ))}
             </TR>
           </THead>
-          {
-            isFetching ? (
-              <TBody>
-                <TR>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
+          {isFetching ? (
+            <TBody>
+              <TR>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+              </TR>
+            </TBody>
+          ) : (
+            <TBody>
+              {data.map((x, index) => (
+                <TR key={index}>
+                  <TD className="center">
+                    {new Date(x["createdOn"]).toLocaleDateString()}
+                  </TD>
+                  <TD>{x["rightStockName"]}</TD>
+                  <TD>{formatNumber(x["paidRightVolume"])}</TD>
+                  <TD>
+                    {x["customerStock"]["rightSpecialName"]}{" "}
+                    {x["customerStock"]["rightSpecialVolume"]}
+                  </TD>
+                  <TD>{formatNumber(x["paymentAmount"])}</TD>
+                  <Status color={color[x["status"]["value"]]}>
+                    {x["status"]["status"]}
+                  </Status>
                 </TR>
-              </TBody> ) : (
-                <TBody>
-                  {data.map((x, index) => (
-                    <TR key={index}>
-                      <TD className="center">
-                        {new Date(x["createdOn"]).toLocaleDateString()}
-                      </TD>
-                      <TD>{x["rightStockName"]}</TD>
-                      <TD>{formatNumber(x["paidRightVolume"])}</TD>
-                      <TD>
-                        {x["customerStock"]["rightSpecialName"]}{" "}
-                        {x["customerStock"]["rightSpecialVolume"]}
-                      </TD>
-                      <TD>{formatNumber(x["paymentAmount"])}</TD>
-                      <Status color={color[x["status"]["value"]]}>
-                        {x["status"]["status"]}
-                      </Status>
-                    </TR>
-                  ))}
-                </TBody>
-              )
-          }
+              ))}
+            </TBody>
+          )}
         </Table>
       )}
       {showDetails && detailsModal}

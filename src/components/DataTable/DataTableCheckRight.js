@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 
 import styled from "styled-components";
+import { decrypt } from "../../utils/encrypt";
 
 import {
   balihai,
@@ -34,7 +35,7 @@ const DataTableProfile = ({
   const [details, setDetails] = useState();
   const [options, setOptions] = useState([]);
 
-  const [verifyOrder, setVerifyOrder] = useState(0)
+  const [verifyOrder, setVerifyOrder] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
@@ -62,7 +63,7 @@ const DataTableProfile = ({
   };
 
   const handleClicked = (details) => {
-    console.log(details)
+    console.log(details);
     setShowDetails(true);
     setDetails(details);
   };
@@ -80,7 +81,7 @@ const DataTableProfile = ({
 
   const handleOnUpdate = () => {
     // checkbox ผ่าน ไม่ผ่าน parameter => verifyOrder
-  }
+  };
 
   const detailsModal = useMemo(() => {
     if (details && user.role === "admin") {
@@ -172,9 +173,9 @@ const DataTableProfile = ({
               hanlderOnBack={() => setShowDetails(false)}
               handlerOnAccept={() => {
                 if (details["status"].length > 0) {
-                  handleOnUpdate()
+                  handleOnUpdate();
                 }
-                setShowDetails(false)
+                setShowDetails(false);
               }}
               isCheckRight={true}
               checkRightStatus={details["status"]}
@@ -247,13 +248,15 @@ const DataTableProfile = ({
                 <TR key={index} onClick={() => handleClicked(x)}>
                   <TD style={{ width: "100px" }}>จองซื้อ / Book</TD>
                   <TD>{x["rightStockName"]}</TD>
-                  <TD>{x["registrationNo"]}</TD>
-                  <TD>{x["customers"].refNo}</TD>
+                  <TD>{decrypt(x["registrationNo"])}</TD>
+                  <TD>{decrypt(x["customers"].refNo)}</TD>
                   <TD>{`${
-                    x["customers"].name + " " + x["customers"].lastname
+                    decrypt(x["customers"].name) +
+                    " " +
+                    decrypt(x["customers"].lastname)
                   }`}</TD>
-                  <TD>{formatNumber(x["stockVolume"])}</TD>
-                  <TD>{formatNumber(x["rightStockVolume"])}</TD>
+                  <TD>{formatNumber(decrypt(x["stockVolume"]))}</TD>
+                  <TD>{formatNumber(decrypt(x["rightStockVolume"]))}</TD>
                   {x["status"].length > 0 ? (
                     x["status"].map((obj) => (
                       <TD color={color[obj["value"]]}>{obj["status"]}</TD>
