@@ -14,6 +14,7 @@ import { LineCard } from "../components/UI/Card";
 import { Input } from "../components/UI/Input";
 import { persianblue } from "../utils/color";
 import { httpFetch } from "../utils/fetch";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -27,8 +28,10 @@ const Login = () => {
   const [isCheckedThrid, setIsCheckedThrid] = useState(false)
 
   const [isConfirmModal, setIsConfirmModal] = useState(false);
-  
+  const [isNotRobot, setIsNotRobot] = useState(false)
+
   localStorage.clear()
+  Cookies.remove("token")
 
   const endpoint = "auth/signIn?type=customer";
 
@@ -42,6 +45,11 @@ const Login = () => {
 
     consentSubmited(customerId);
   };
+
+  const onRecaptchaSuccess = async () => {
+    console.log("test")
+    setIsNotRobot(true)
+  }
 
   const consentSubmited = async (customerId) => {
     const endpoint = "consentHistory";
@@ -295,10 +303,16 @@ const Login = () => {
                         </div>
 
                         <div className="submit">
+                          <ReCAPTCHA
+                            sitekey="6LdMnkAgAAAAAPRO-6HmAcoc0gRT0VFXtihfFqS1"
+                            style={{ marginBottom: "1rem" }}
+                            onChange={onRecaptchaSuccess}
+                          />
                           <Button
                             type="submit"
                             value="Sign in"
                             onClick={handleSubmited}
+                            disabled={!isNotRobot}
                           />
                           {link("Problem to sign in ?", "/customer/service")}
                           {link(
@@ -389,7 +403,7 @@ const Form = styled.form`
     width: 100%;
   }
   .input > :not(:last-child) {
-    margin-top: 35px;
+    margin-top: 60px;
   }
   .submit {
     display: flex;

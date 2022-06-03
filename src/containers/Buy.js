@@ -33,6 +33,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import ViewProfile from "../components/ViewProfile/ViewProfile";
+import { format } from "date-fns";
 
 const Buy = () => {
   const { user } = useSelector((state) => state);
@@ -616,6 +617,9 @@ const Buy = () => {
   }, [currentStockVolume])
 
   useEffect(() => {
+    console.log("currenctStockVolunmn" + currentStockVolume)
+    console.log("offerPrice" + Number(offerPrice))
+    console.log(Number(currentStockVolume) * Number(offerPrice))
     setCurrentPrice(Number(currentStockVolume) * Number(offerPrice));
     setExcessVolume(
       Number(currentStockVolume) > Number(rightStockVolume)
@@ -625,9 +629,7 @@ const Buy = () => {
   }, [currentStockVolume]);
 
   const formatNumber = (number) => {
-    return Number(number)
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return Number(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   return (
@@ -818,7 +820,7 @@ const Buy = () => {
                       setPhoneNoModal(e.target.value.replace(/[^0-9.]/, ""))
                     }
                     maxLength={10}
-                    placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"}
+                    placeholder={"กรุณากรอกเบอร์โทรศัพท์"}
                   />
                 </div>
               </div>
@@ -1548,7 +1550,7 @@ const Buy = () => {
                               value={formatNumber(currentStockVolume)}
                               onChange={(e) => {
                                 setCurrentStockVolume(
-                                  e.target.value.replace(/[^0-9.]/, "")
+                                  (e.target.value.replace(/\,/g,'')).replace(/[^0-9.]/, "")
                                 );
 
                                 if (
@@ -1578,7 +1580,7 @@ const Buy = () => {
                             <p>จำนวนเงิน</p>
                             <Input
                               type={"text"}
-                              value={formatNumber(currentPrice)}
+                              value={formatNumber(Number(currentPrice))}
                               disabled
                             />
                             <p>บาท</p>

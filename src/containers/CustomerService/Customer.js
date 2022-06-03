@@ -77,7 +77,7 @@ const CustomerService = () => {
       <ModalAlert show={show} msg={alertMessage} status={status} />
       <div className="bg-img">
         <div className="bg-text">
-          <p>Customer Service</p>
+          <p className="title-text">Customer Service</p>
           <Button onClick={redirectPage} className="btn">
             <FontAwesomeIcon
               icon={faCircleLeft}
@@ -154,6 +154,14 @@ const Container = styled.div`
       margin-top: 5rem;
       display: flex;
       justify-content: space-between;
+
+      .title-text {
+        margin: 0 10%;
+      }
+
+      .btn {
+        margin: 0 10%;
+      }
     }
 
     /* For Mobile */
@@ -163,14 +171,13 @@ const Container = styled.div`
       .bg-text {
         margin-top: 2rem;
 
+        .title-text {
+          margin: auto 0 auto 10%;
+        }
         .btn {
-          margin: auto;
+          margin: auto 10% auto 0;
         }
       }
-    }
-
-    /* For Tablet */
-    @media screen and (min-width: 541px) and (min-width: 880px) {
     }
   }
 `;
@@ -253,8 +260,8 @@ const Card = styled.div`
   @media screen and (max-width: 540px) {
     display: inline-block;
     width: 100%;
-    height: 100%;
-    margin-top: 150px;
+    // height: 100%;
+    // margin-top: 100%;
 
     .info-detail {
       width: 100%;

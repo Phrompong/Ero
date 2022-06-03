@@ -12,6 +12,7 @@ import { Card } from "../components/UI/Card";
 import { Input } from "../components/UI/Input";
 import { persianblue } from "../utils/color";
 import { httpPostRequest } from "../utils/fetch";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Auth = () => {
   const dispatch = useDispatch();
@@ -20,8 +21,10 @@ const Auth = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const usernameInputRef = useRef("");
   const passwordInputRef = useRef("");
+  const [isNotRobot, setIsNotRobot] = useState(false)
   
   localStorage.clear()
+  Cookies.remove("token")
 
   const handleSubmited = async (event) => {
     event.preventDefault();
@@ -59,6 +62,10 @@ const Auth = () => {
     }
   };
 
+  const onRecaptchaSuccess = async () => {
+    setIsNotRobot(true)
+  }
+
   const link = (text, url) => <Link href={url}>{text}</Link>;
 
   return (
@@ -89,10 +96,16 @@ const Auth = () => {
               </div>
 
               <div className="submit" style={{ width: "100%" }}>
+                <ReCAPTCHA
+                  sitekey="6LdMnkAgAAAAAPRO-6HmAcoc0gRT0VFXtihfFqS1"
+                  style={{ marginBottom: "1rem" }}
+                  onChange={onRecaptchaSuccess}
+                />
                 <Button
                   type="submit"
                   value="Sign in"
                   onClick={handleSubmited}
+                  disabled={!isNotRobot}
                 />
                 {/* {link("Problem to sign in ?", "/customer/service")}
                 {link(
@@ -183,6 +196,10 @@ const Button = styled.input`
   border-radius: 10px;
   text-transform: capitalize;
   cursor: pointer;
+
+  :disabled {
+    background: #809fb8;
+  }
 `;
 
 const Link = styled.a`
