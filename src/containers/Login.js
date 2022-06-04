@@ -22,6 +22,8 @@ const Login = () => {
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const usernameInputRef = useRef("3100503053540");
+  const [_customerId, _setCustomerId] = useState("")
+  const [_username, _setUsername] = useState("")
   const [isButtonChecked, setIsButtonChecked] = useState(false);
   const [isCheckedFirst, setIsCheckedFirst] = useState(false);
   const [isCheckedSecond, setIsCheckedSecond] = useState(false);
@@ -35,29 +37,22 @@ const Login = () => {
 
   const endpoint = "auth/signIn?type=customer";
 
-  const handlerOnAcceptForm = () => {
-    const payload = JSON.parse(Cookies.get("token")).user;
-    dispatch({
-      type: "SET",
-      payload,
-    });
-    const { customerId } = payload;
-
-    consentSubmited(customerId);
-  };
-
   const onRecaptchaSuccess = async () => {
-    console.log("test")
     setIsNotRobot(true)
   }
 
   const consentSubmited = async (customerId) => {
     const endpoint = "consentHistory";
-    console.log(`consentSubmited : ${customerId}`);
 
     const [res, status] = await httpFetch("POST", { customerId }, endpoint);
+    console.log(res.data)
 
     if (status === 200) {
+      await createAuth({
+        username: _username,
+        customerId,
+        role: "client",
+      });
       navigate(`/profile`);
     } else {
       setShowError(true);
@@ -76,7 +71,7 @@ const Login = () => {
       payload,
     });
 
-    const setCookie = await Cookies.set(
+    Cookies.set(
       "token",
       JSON.stringify({
         user: payload,
@@ -99,17 +94,17 @@ const Login = () => {
 
     if (status === 200) {
       const { customerId, isAccept } = res.data;
-      console.log(isAccept);
 
-      await createAuth({
-        username,
-        customerId,
-        role: "client",
-      });
-
-      if (isAccept) {
-        await navigate("/profile");
+      if (!isAccept) {
+        await createAuth({
+          username,
+          customerId,
+          role: "client",
+        });
+        navigate("/profile");
       } else {
+        _setCustomerId(customerId)
+        _setUsername(username)
         setIsConfirmModal(true);
       }
     } else {
@@ -261,7 +256,7 @@ const Login = () => {
                         <Button
                           type="button"
                           value="ยินยอม"
-                          onClick={handlerOnAcceptForm}
+                          onClick={() => consentSubmited(_customerId)}
                           disabled={!isButtonChecked}
                           style={{
                             width: "292px",
@@ -287,7 +282,7 @@ const Login = () => {
               </Container>
             </>
           );
-        } else if (!isConfirmModal) {
+        } else {
           return (
             <>
               <Container>
@@ -309,11 +304,12 @@ const Login = () => {
                         </div>
 
                         <div className="submit">
-                          <ReCAPTCHA
-                            sitekey="6LdMnkAgAAAAAPRO-6HmAcoc0gRT0VFXtihfFqS1"
-                            style={{ marginBottom: "1rem" }}
-                            onChange={onRecaptchaSuccess}
-                          />
+                          <div style={{ marginBottom: "1rem" }}>
+                            <ReCAPTCHA
+                              sitekey="6LdMnkAgAAAAAPRO-6HmAcoc0gRT0VFXtihfFqS1"
+                              onChange={onRecaptchaSuccess}
+                            />
+                          </div>
                           <Button
                             type="submit"
                             value="Sign in"
