@@ -15,7 +15,6 @@ import Paginate from "../Paginate/Paginate";
 import { httpGetRequest } from "../../utils/fetch";
 
 import { Spinner } from "../Logo/Spinner";
-import { decrypt } from "../../utils/encrypt";
 
 const DataTableProfile = ({
   header,

@@ -4,7 +4,6 @@ import { ProgressPie } from "../UI/ProgressPie";
 import { persianblue } from "../../utils/color";
 import { FlexContainer } from "../UI/FlexContainer";
 import { gold } from "../../utils/color";
-import { decrypt } from "../../utils/encrypt";
 
 const Container = styled.div`
   display: flex;
@@ -112,12 +111,9 @@ const ViewProfile = ({ header, profile }) => {
   return (
     <Container color={color}>
       <Header>{header}</Header>
-      {info(
-        "ชื่อ-นามสกุล / Name-Lastname   :",
-        decrypt(name) + " " + decrypt(lastname)
-      )}
-      {info("โทรศัพท์ / Telephone  :", decrypt(telephone))}
-      {info("ที่อยู่ / Address  :", decrypt(address) + " " + decrypt(zipcode))}
+      {info("ชื่อ-นามสกุล / Name-Lastname   :", name + " " + lastname)}
+      {info("โทรศัพท์ / Telephone  :", telephone)}
+      {info("ที่อยู่ / Address  :", address + " " + zipcode)}
     </Container>
   );
 };

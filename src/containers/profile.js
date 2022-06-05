@@ -16,7 +16,6 @@ import { httpGetRequest } from "../utils/fetch";
 
 import { Spinner } from "../components/Logo/Spinner";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
-import { decrypt } from "../utils/encrypt";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);

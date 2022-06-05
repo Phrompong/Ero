@@ -98,9 +98,9 @@ const NavigationItems = () => {
                   <NavigationItem link="/checkRightCustomer" img={Vector}>
                     ตรวจสอบสิทธิ / Check rights
                   </NavigationItem>
-                  {/* <NavigationItem link="/buy" img={traffic}>
+                  <NavigationItem link="/buy" img={traffic}>
                     จองซื้อ / Book
-                  </NavigationItem> */}
+                  </NavigationItem>
                   <NavigationItem link="/" exact="true" img={Logout}>
                     ออกจากระบบ / Log out
                   </NavigationItem>

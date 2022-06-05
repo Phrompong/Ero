@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 
 import styled from "styled-components";
-import { decrypt } from "../../utils/encrypt";
 
 import {
   balihai,
@@ -248,15 +247,13 @@ const DataTableProfile = ({
                 <TR key={index} onClick={() => handleClicked(x)}>
                   <TD style={{ width: "100px" }}>จองซื้อ / Book</TD>
                   <TD>{x["rightStockName"]}</TD>
-                  <TD>{decrypt(x["registrationNo"])}</TD>
-                  <TD>{decrypt(x["customers"].refNo)}</TD>
+                  <TD>{x["registrationNo"]}</TD>
+                  <TD>{x["customers"].refNo}</TD>
                   <TD>{`${
-                    decrypt(x["customers"].name) +
-                    " " +
-                    decrypt(x["customers"].lastname)
+                    x["customers"].name + " " + x["customers"].lastname
                   }`}</TD>
-                  <TD>{formatNumber(decrypt(x["stockVolume"]))}</TD>
-                  <TD>{formatNumber(decrypt(x["rightStockVolume"]))}</TD>
+                  <TD>{formatNumber(x["stockVolume"])}</TD>
+                  <TD>{formatNumber(x["rightStockVolume"])}</TD>
                   {x["status"].length > 0 ? (
                     x["status"].map((obj) => (
                       <TD color={color[obj["value"]]}>{obj["status"]}</TD>
