@@ -97,7 +97,7 @@ const Auth = () => {
 
               <div className="submit" style={{ width: "100%" }}>
                 <ReCAPTCHA
-                  sitekey="6LdqEEYgAAAAAAekLPC7FvG1xZ5Av2GvSX5nduLv"
+                  sitekey="6LdqEEYgAAAAAON28BrLv_TYSCvS1Uaug-LnUUBU"
                   style={{ marginBottom: "1rem" }}
                   onChange={onRecaptchaSuccess}
                 />
