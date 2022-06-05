@@ -125,22 +125,39 @@ const Details = ({ show, details, closed, options }) => {
                   </BoldText>
 
                   <div className="row">
-                    <SmallText>
-                      {`วันที่โอนเงิน ${formatDate(details["paymentDate"])}`}
-                      {console.log(details)}
+                    <SmallText style={{ fontWeight: "bold" }}>
+                      {`วันที่โอนเงิน`}
                       {/* waiting for api */}
                     </SmallText>
-                    <SmallText>
-                      {`เวลาที่โอนเงิน ${formatTime(details["paymentDate"])}`}
+                    <SmallText style={{ fontWeight: "bold" }}>
+                      {`เวลาที่โอนเงิน`}
                       {/* waiting for api */}
                     </SmallText>
                   </div>
                   <div className="row">
                     <SmallText>
-                      {`ส่งคำสั่งซื้อเมื่อ ${formatDate(details["createdOn"])}`}
+                      {`${formatDate(details["paymentDate"])}`}
+                      {/* waiting for api */}
                     </SmallText>
                     <SmallText>
-                      {`แนบหลักฐานการโอนเมื่อ ${formatDate(
+                      {`${formatTime(details["paymentDate"])}`}
+                      {/* waiting for api */}
+                    </SmallText>
+                  </div>
+                  <div className="row" style={{ marginTop: "1rem" }}>
+                    <SmallText style={{ fontWeight: "bold" }}>
+                      {`ส่งคำสั่งซื้อเมื่อ`}
+                    </SmallText>
+                    <SmallText style={{ fontWeight: "bold" }}>
+                      {`แนบหลักฐานการโอนเมื่อ`}
+                    </SmallText>
+                  </div>
+                  <div className="row">
+                    <SmallText>
+                      {`${formatDate(details["createdOn"])}`}
+                    </SmallText>
+                    <SmallText>
+                      {`${formatDate(
                         details["attachedOn"]
                       )}`}
                     </SmallText>

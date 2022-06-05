@@ -95,7 +95,7 @@ const Login = () => {
     if (status === 200) {
       const { customerId, isAccept } = res.data;
 
-      if (!isAccept) {
+      if (isAccept) {
         await createAuth({
           username,
           customerId,
