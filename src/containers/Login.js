@@ -22,30 +22,30 @@ const Login = () => {
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const usernameInputRef = useRef("3100503053540");
-  const [_customerId, _setCustomerId] = useState("")
-  const [_username, _setUsername] = useState("")
+  const [_customerId, _setCustomerId] = useState("");
+  const [_username, _setUsername] = useState("");
   const [isButtonChecked, setIsButtonChecked] = useState(false);
   const [isCheckedFirst, setIsCheckedFirst] = useState(false);
   const [isCheckedSecond, setIsCheckedSecond] = useState(false);
   const [isCheckedThrid, setIsCheckedThrid] = useState(false);
 
   const [isConfirmModal, setIsConfirmModal] = useState(false);
-  const [isNotRobot, setIsNotRobot] = useState(false)
+  const [isNotRobot, setIsNotRobot] = useState(false);
 
-  localStorage.clear()
-  Cookies.remove("token")
+  localStorage.clear();
+  Cookies.remove("token");
 
   const endpoint = "auth/signIn?type=customer";
 
   const onRecaptchaSuccess = async () => {
-    setIsNotRobot(true)
-  }
+    setIsNotRobot(true);
+  };
 
   const consentSubmited = async (customerId) => {
     const endpoint = "consentHistory";
 
     const [res, status] = await httpFetch("POST", { customerId }, endpoint);
-    console.log(res.data)
+    console.log(res.data);
 
     if (status === 200) {
       await createAuth({
@@ -103,8 +103,8 @@ const Login = () => {
         });
         navigate("/profile");
       } else {
-        _setCustomerId(customerId)
-        _setUsername(username)
+        _setCustomerId(customerId);
+        _setUsername(username);
         setIsConfirmModal(true);
       }
     } else {
@@ -306,7 +306,7 @@ const Login = () => {
                         <div className="submit">
                           <div style={{ marginBottom: "1rem" }}>
                             <ReCAPTCHA
-                              sitekey="6LdMnkAgAAAAAPRO-6HmAcoc0gRT0VFXtihfFqS1"
+                              sitekey="6LfEFkYgAAAAADvrIu_5yAhLw6P6opapY7_1950K"
                               onChange={onRecaptchaSuccess}
                             />
                           </div>
