@@ -21,10 +21,10 @@ const Auth = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const usernameInputRef = useRef("");
   const passwordInputRef = useRef("");
-  const [isNotRobot, setIsNotRobot] = useState(false)
-  
-  localStorage.clear()
-  Cookies.remove("token")
+  const [isNotRobot, setIsNotRobot] = useState(false);
+
+  localStorage.clear();
+  Cookies.remove("token");
 
   const handleSubmited = async (event) => {
     event.preventDefault();
@@ -63,8 +63,8 @@ const Auth = () => {
   };
 
   const onRecaptchaSuccess = async () => {
-    setIsNotRobot(true)
-  }
+    setIsNotRobot(true);
+  };
 
   const link = (text, url) => <Link href={url}>{text}</Link>;
 
@@ -97,7 +97,7 @@ const Auth = () => {
 
               <div className="submit" style={{ width: "100%" }}>
                 <ReCAPTCHA
-                  sitekey="6LdMnkAgAAAAAPRO-6HmAcoc0gRT0VFXtihfFqS1"
+                  sitekey="6LdqEEYgAAAAAAekLPC7FvG1xZ5Av2GvSX5nduLv"
                   style={{ marginBottom: "1rem" }}
                   onChange={onRecaptchaSuccess}
                 />
