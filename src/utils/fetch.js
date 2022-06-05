@@ -1,5 +1,5 @@
-//const BASE_URL = "";
-const BASE_URL = "http://localhost:3002/api/v1/";
+const BASE_URL = "http://ero-bke-test.asiawealth.co.th:3002/api/v1";
+//const BASE_URL = "http://localhost:3002/api/v1/";
 
 class JSONRPCError extends Error {
   constructor(errData) {
