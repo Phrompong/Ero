@@ -21,7 +21,7 @@ const Auth = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const usernameInputRef = useRef("");
   const passwordInputRef = useRef("");
-  const [isNotRobot, setIsNotRobot] = useState(false);
+  const [isNotRobot, setIsNotRobot] = useState(true);
 
   localStorage.clear();
   Cookies.remove("token");
