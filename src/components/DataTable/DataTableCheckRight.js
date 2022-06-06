@@ -81,6 +81,10 @@ const DataTableProfile = ({
   const handleOnUpdate = () => {
     // checkbox ผ่าน ไม่ผ่าน parameter => verifyOrder
   };
+  
+  useEffect(() => {
+    // function handleOnUpdate(verifyOrder)
+  }, [verifyOrder])
 
   const detailsModal = useMemo(() => {
     if (details && user.role === "admin") {

@@ -65,6 +65,7 @@ const CheckRightAdmin = () => {
     const { totalPages } = res["_metadata"];
     setTotalPages(totalPages);
     setData(res["data"]);
+    handleSearchButtonClicked()
     setIsFetching(false);
   }
 
