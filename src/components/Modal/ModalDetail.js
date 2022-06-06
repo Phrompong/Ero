@@ -548,6 +548,7 @@ export const ModalDetail = ({
                   style={{
                     height: "40px",
                     margin: "0 10px 10px 10px",
+                    backgroundColor: "#809FB8",
                   }}
                 />
                 <Button
