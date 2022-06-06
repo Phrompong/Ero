@@ -215,7 +215,7 @@ const DataTableProfile = ({
               verifyOrder={verifyOrder}
               setVerifyOrder={(e) => setVerifyOrder(e)}
               submitVerify={handleOnUpdate}
-              // bookbankImage={details["url ภาพ book bank "]} **details["attachedFile"]
+              bookbankImage={details["orders"].attachedFileBookBank} //**details["attachedFile"]
             />
           </ModalContainer>
         </Modal>
