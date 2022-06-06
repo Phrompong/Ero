@@ -115,10 +115,6 @@ const DataTableProfile = ({
       }, 2000);
     }
   };
-  
-  useEffect(() => {
-    // function handleOnUpdate(verifyOrder)
-  }, [verifyOrder])
 
   const detailsModal = useMemo(() => {
     if (details && user.role === "admin") {
