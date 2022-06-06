@@ -226,9 +226,12 @@ const Buy = () => {
 
     if (status === 200) {
       const payload = res.data[0];
+
       const registrations = res.data.map((data) => {
         return { registraionNo: data.registrationNo };
       });
+
+      registrations.unshift({ registraionNo: "" });
       setAllRegistrations(registrations);
       setShareId(
         registrations.length > 0 ? registrations[0].registraionNo : null
@@ -725,7 +728,7 @@ const Buy = () => {
                   type="button"
                   value={"ยืนยันว่าตรวจสอบแล้ว"}
                   onClick={() => setShowRegistrationModal(false)}
-                  disabled={isRegistrationChecked}
+                  disabled={shareId && !isRegistrationChecked ? false : true}
                   style={{
                     fontSize: "16px",
                     margin: "auto",
