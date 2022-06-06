@@ -111,18 +111,18 @@ const Dashboard = () => {
     setProfile(res["data"]);
   }
 
-  async function fetchDataNews() {
-    let endpoint = `news`;
-    const [res, status] = await httpGetRequest(endpoint);
-    console.log(res["data"][0]);
-    setNews(res["data"][0]);
-    console.log(news);
-  }
+  // async function fetchDataNews() {
+  //   let endpoint = `news`;
+  //   const [res, status] = await httpGetRequest(endpoint);
+  //   console.log(res["data"][0]);
+  //   setNews(res["data"][0]);
+  //   console.log(news);
+  // }
 
   useEffect(() => {
     fetchDataTable();
     fetchDataProfile();
-    fetchDataNews();
+    //fetchDataNews();
   }, []);
 
   return (
