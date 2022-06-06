@@ -43,14 +43,15 @@ export const ModalDetail = ({
   checkRightStatus,
   verifyOrder,
   setVerifyOrder,
-  bookbankImage
+  bookbankImage,
+  submitVerify,
 }) => {
-  const [_verifyOrder, _setVerifyOrder] = useState(verifyOrder || null)
+  const [_verifyOrder, _setVerifyOrder] = useState(verifyOrder || null);
   useEffect(() => {
     if (_verifyOrder) {
-      setVerifyOrder(_verifyOrder)
+      setVerifyOrder(_verifyOrder);
     }
-  }, [_verifyOrder])
+  }, [_verifyOrder]);
   return (
     <>
       <FlexContainer>
@@ -191,8 +192,7 @@ export const ModalDetail = ({
                   <p>หน่วย</p>
                 </div>
               </div>
-              {
-                ( isBuy || checkbox )&& (
+              {(isBuy || checkbox) && (
                 <div className="content-detail-share">
                   <div className="text-title">
                     <p>จำนวนที่ต้องการจองซื้อ</p>
@@ -200,12 +200,13 @@ export const ModalDetail = ({
                   </div>
                   <div className="text-amount right">
                     <p>จำนวน</p>
-                    <b className="text-black">{formatNumber(paidRightVolume) || "-"}</b>
+                    <b className="text-black">
+                      {formatNumber(paidRightVolume) || "-"}
+                    </b>
                     <p>หุ้น</p>
                   </div>
                 </div>
-                )
-              }
+              )}
               <div className="content-detail-share">
                 <div className="text-title">
                   <p>หุ้นจองซื้อเกินสิทธิ</p>
@@ -213,7 +214,9 @@ export const ModalDetail = ({
                 </div>
                 <div className="text-amount right">
                   <p>จำนวน</p>
-                  <b className="text-black">{formatNumber(excessVolume) || "-"}</b>
+                  <b className="text-black">
+                    {formatNumber(excessVolume) || "-"}
+                  </b>
                   <p>หุ้น</p>
                 </div>
               </div>
@@ -349,17 +352,25 @@ export const ModalDetail = ({
               </div>
               {bookbankImage && (
                 <div
-                  style={{ width: "100%", textAlign: "center", marginTop: "1rem" }}
+                  style={{
+                    width: "100%",
+                    textAlign: "center",
+                    marginTop: "1rem",
+                  }}
                 >
                   <img
                     src={bookbankImage}
-                    style={{ width: "100%", height: "600px", maxWidth: "600px" }}
+                    style={{
+                      width: "100%",
+                      height: "600px",
+                      maxWidth: "600px",
+                    }}
                   />
                 </div>
               )}
             </>
           )}
-          {(checkRightStatus && checkRightStatus.length > 0) && (
+          {checkRightStatus && checkRightStatus.length > 0 && (
             <>
               <div
                 className="content-header"
@@ -370,17 +381,18 @@ export const ModalDetail = ({
                   color: persianblue,
                 }}
               >
-                <b>
-                  การตรวจสอบข้อมูล
-                </b>
+                <b>การตรวจสอบข้อมูล</b>
               </div>
               <div className="content-member">
                 <div className="content-detail-member">
-                  <div className="content-detail-text checkbox" style={{ display: "flex", justifyContent: "space-between"}}>
+                  <div
+                    className="content-detail-text checkbox"
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
                     <p>
                       <input
                         type={"checkbox"}
-                        checked={Number(_verifyOrder)===1}
+                        checked={Number(_verifyOrder) === 1}
                         value={1}
                         style={{ transform: "scale(1.5)", margin: "auto" }}
                         onChange={(e) => _setVerifyOrder(e.target.value)}
@@ -390,7 +402,7 @@ export const ModalDetail = ({
                     <p>
                       <input
                         type={"checkbox"}
-                        checked={Number(_verifyOrder)===2}
+                        checked={Number(_verifyOrder) === 2}
                         value={2}
                         style={{ transform: "scale(1.5)", margin: "auto" }}
                         onChange={(e) => _setVerifyOrder(e.target.value)}
@@ -528,15 +540,26 @@ export const ModalDetail = ({
             );
           } else {
             return (
-              <Button
-                type="submit"
-                value={"ปิดหน้าต่าง"}
-                onClick={() => handlerOnAccept()}
-                style={{
-                  height: "40px",
-                  margin: "0 10px 10px 10px",
-                }}
-              />
+              <>
+                <Button
+                  type="submit"
+                  value={"ย้อนกลับ"}
+                  onClick={() => handlerOnAccept()}
+                  style={{
+                    height: "40px",
+                    margin: "0 10px 10px 10px",
+                  }}
+                />
+                <Button
+                  type="submit"
+                  value={"บันทึกข้อมูล"}
+                  onClick={() => submitVerify()}
+                  style={{
+                    height: "40px",
+                    margin: "0 10px 10px 10px",
+                  }}
+                />
+              </>
             );
           }
         })()}

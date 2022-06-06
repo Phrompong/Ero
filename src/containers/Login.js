@@ -30,7 +30,7 @@ const Login = () => {
   const [isCheckedThrid, setIsCheckedThrid] = useState(false);
 
   const [isConfirmModal, setIsConfirmModal] = useState(false);
-  const [isNotRobot, setIsNotRobot] = useState(false);
+  const [isNotRobot, setIsNotRobot] = useState(true);
 
   localStorage.clear();
   Cookies.remove("token");

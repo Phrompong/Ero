@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
+import { ModalAlert } from "../../components/ModalAlert/ModalAlert";
+import { httpPutRequest, httpPatchRequest } from "../../utils/fetch";
 
 import styled from "styled-components";
 
@@ -21,7 +23,6 @@ import { Modal } from "../UI/Modal";
 import { Spinner } from "../Logo/Spinner";
 
 import { httpGetRequest } from "../../utils/fetch";
-
 const DataTableProfile = ({
   header,
   theaders,
@@ -29,10 +30,13 @@ const DataTableProfile = ({
   refreshData,
   isFetching,
 }) => {
+  const [alertMessage, setAlertMessage] = useState();
   const { user } = useSelector((state) => state);
   const [showDetails, setShowDetails] = useState(false);
   const [details, setDetails] = useState();
   const [options, setOptions] = useState([]);
+  const [show, setShow] = useState(false);
+  const [status, setStatus] = useState();
 
   const [verifyOrder, setVerifyOrder] = useState(0);
 
@@ -42,8 +46,13 @@ const DataTableProfile = ({
       const [res, status] = await httpGetRequest(endpoint);
       handleFetchStatusOption(res);
     }
+
     fetchData();
   }, []);
+
+  useEffect(() => {
+    console.log(setVerifyOrder);
+  }, [setVerifyOrder]);
 
   const handleFetchStatusOption = (res) => {
     const options = res["data"].map((x) => ({
@@ -52,6 +61,8 @@ const DataTableProfile = ({
     }));
     setOptions(options);
   };
+
+  const submitVerifyOrder = () => {};
 
   const color = {
     0: red,
@@ -78,8 +89,31 @@ const DataTableProfile = ({
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  const handleOnUpdate = () => {
-    // checkbox ผ่าน ไม่ผ่าน parameter => verifyOrder
+  const handleOnUpdate = async () => {
+    const orderId = details["_id"];
+
+    const endpoint = `orders/${orderId}`;
+
+    const [res, status] = await httpPatchRequest(
+      { isCheck: verifyOrder === 1 ? true : false },
+      endpoint
+    );
+    if (status === 200) {
+      setStatus(200);
+      setAlertMessage("บันทึกสำเร็จ");
+      setShow(true);
+      setTimeout(() => {
+        setShow(false);
+        setShowDetails(false);
+      }, 2000);
+    } else {
+      setStatus(400);
+      setAlertMessage("บันทึกไม่สำเร็จสำเร็จ");
+      setShow(true);
+      setTimeout(() => {
+        setShow(false);
+      }, 2000);
+    }
   };
 
   const detailsModal = useMemo(() => {
@@ -180,6 +214,7 @@ const DataTableProfile = ({
               checkRightStatus={details["status"]}
               verifyOrder={verifyOrder}
               setVerifyOrder={(e) => setVerifyOrder(e)}
+              submitVerify={handleOnUpdate}
               // bookbankImage={details["url ภาพ book bank "]} **details["attachedFile"]
             />
           </ModalContainer>
@@ -200,6 +235,7 @@ const DataTableProfile = ({
 
   return (
     <Container>
+      <ModalAlert show={show} msg={alertMessage} status={status} />
       <TableHeader>{header}</TableHeader>
       {data && (
         <Table>
