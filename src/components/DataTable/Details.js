@@ -68,7 +68,7 @@ const Details = ({ show, details, closed, options }) => {
             <Header>ตรวจสอบข้อมูลการชำระเงิน / เปลี่ยนสถานะ</Header>
             <LineCard>
               <UserInfo>
-                <SubHeader>ข้อมูลทั่วของผู้สั่งซื้อ</SubHeader>
+                <SubHeader>ข้อมูลทั่วไปของผู้สั่งซื้อ</SubHeader>
                 <div className="info">
                   {info(
                     "ชื่อ-นามสกุล / Name-Lastname   :",
@@ -157,9 +157,7 @@ const Details = ({ show, details, closed, options }) => {
                       {`${formatDate(details["createdOn"])}`}
                     </SmallText>
                     <SmallText>
-                      {`${formatDate(
-                        details["attachedOn"]
-                      )}`}
+                      {`${formatDate(details["attachedOn"])}`}
                     </SmallText>
                   </div>
                 </TransactionInfo>

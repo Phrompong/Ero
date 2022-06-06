@@ -595,8 +595,11 @@ const Buy = () => {
 
   useEffect(() => {
     if (depositBank && depositBank.nameTH === "อื่นๆ") {
-      setBank(null);
+      setBank("");
+      setFilename(null);
+      setFile(null);
       setBankDisableButton(false);
+      setPreviewImage(null);
     } else if (depositBank && bank && bookbankFile) {
       setBankDisableButton(false);
     }
@@ -615,9 +618,9 @@ const Buy = () => {
   }, [currentStockVolume]);
 
   useEffect(() => {
-    console.log("currenctStockVolunmn" + currentStockVolume)
-    console.log("offerPrice" + Number(offerPrice))
-    console.log(Number(currentStockVolume) * Number(offerPrice))
+    console.log("currenctStockVolunmn" + currentStockVolume);
+    console.log("offerPrice" + Number(offerPrice));
+    console.log(Number(currentStockVolume) * Number(offerPrice));
     setCurrentPrice(Number(currentStockVolume) * Number(offerPrice));
     setExcessVolume(
       Number(currentStockVolume) > Number(rightStockVolume)
@@ -627,7 +630,9 @@ const Buy = () => {
   }, [currentStockVolume]);
 
   const formatNumber = (number) => {
-    return Number(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return Number(number)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   return (
@@ -1546,7 +1551,9 @@ const Buy = () => {
                               value={formatNumber(currentStockVolume)}
                               onChange={(e) => {
                                 setCurrentStockVolume(
-                                  (e.target.value.replace(/\,/g,'')).replace(/[^0-9.]/, "")
+                                  e.target.value
+                                    .replace(/\,/g, "")
+                                    .replace(/[^0-9.]/, "")
                                 );
 
                                 if (
