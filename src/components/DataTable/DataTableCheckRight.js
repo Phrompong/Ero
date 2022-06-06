@@ -41,13 +41,13 @@ const DataTableProfile = ({
   const [verifyOrder, setVerifyOrder] = useState(0);
   const [isSubmit, setIsSubmit] = useState(false)
 
-  useEffect(() => {
-    async function fetchData() {
-      const endpoint = "status";
-      const [res, status] = await httpGetRequest(endpoint);
-      handleFetchStatusOption(res);
-    }
+  const fetchData = async () => {
+    const endpoint = "status";
+    const [res, status] = await httpGetRequest(endpoint);
+    handleFetchStatusOption(res);
+  }
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -112,6 +112,7 @@ const DataTableProfile = ({
       setTimeout(() => {
         setShow(false);
         setShowDetails(false);
+        refreshData()
       }, 2000);
     } else {
       setStatus(400);
