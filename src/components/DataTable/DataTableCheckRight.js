@@ -205,9 +205,6 @@ const DataTableProfile = ({
               }
               hanlderOnBack={() => setShowDetails(false)}
               handlerOnAccept={() => {
-                if (details["status"].length > 0) {
-                  handleOnUpdate();
-                }
                 setShowDetails(false);
               }}
               isCheckRight={true}
