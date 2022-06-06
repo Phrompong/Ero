@@ -39,6 +39,7 @@ const DataTableProfile = ({
   const [status, setStatus] = useState();
 
   const [verifyOrder, setVerifyOrder] = useState(0);
+  const [isSubmit, setIsSubmit] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
@@ -50,10 +51,6 @@ const DataTableProfile = ({
     fetchData();
   }, []);
 
-  useEffect(() => {
-    console.log(setVerifyOrder);
-  }, [setVerifyOrder]);
-
   const handleFetchStatusOption = (res) => {
     const options = res["data"].map((x) => ({
       label: x["status"],
@@ -61,8 +58,6 @@ const DataTableProfile = ({
     }));
     setOptions(options);
   };
-
-  const submitVerifyOrder = () => {};
 
   const color = {
     0: red,
@@ -73,14 +68,11 @@ const DataTableProfile = ({
   };
 
   const handleClicked = (details) => {
-    console.log(details);
     setShowDetails(true);
+    if (Object.prototype.hasOwnProperty.call(details["orders"], 'isCheck')) {
+      setVerifyOrder(details["orders"].isCheck ? 1 : 2)
+    }
     setDetails(details);
-  };
-
-  const handleClosedModal = () => {
-    setShowDetails(false);
-    refreshData();
   };
 
   const formatNumber = (number) => {
@@ -89,13 +81,28 @@ const DataTableProfile = ({
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
+  useEffect(() => {
+    setVerifyOrder(0)
+  }, [showDetails])
+
+  useEffect(() => {
+    if (isSubmit) {
+      isPatchData(verifyOrder)
+      setIsSubmit(false)
+    }
+  }, [isSubmit])
+
   const handleOnUpdate = async () => {
-    const orderId = details["_id"];
+    setIsSubmit(true)
+  };
+
+  const isPatchData = async (isVerifyOrder) => {
+    const orderId = details["orders"]._id;
 
     const endpoint = `orders/${orderId}`;
 
     const [res, status] = await httpPatchRequest(
-      { isCheck: verifyOrder === 1 ? true : false },
+      { isCheck: Number(isVerifyOrder) === 1 ? true : false },
       endpoint
     );
     if (status === 200) {
@@ -114,7 +121,7 @@ const DataTableProfile = ({
         setShow(false);
       }, 2000);
     }
-  };
+  }
 
   const detailsModal = useMemo(() => {
     if (details && user.role === "admin") {
@@ -212,7 +219,7 @@ const DataTableProfile = ({
               verifyOrder={verifyOrder}
               setVerifyOrder={(e) => setVerifyOrder(e)}
               submitVerify={handleOnUpdate}
-              bookbankImage={details["orders"].attachedFileBookBank} //**details["attachedFile"]
+              bookbankImage={details["orders"].attachedFileBookBank}
             />
           </ModalContainer>
         </Modal>
