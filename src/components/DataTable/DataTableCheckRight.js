@@ -90,7 +90,7 @@ const DataTableProfile = ({
   };
 
   const handleOnUpdate = async () => {
-    const orderId = details["_id"];
+    const orderId = details["orders"]._id;
 
     const endpoint = `orders/${orderId}`;
 
@@ -205,9 +205,6 @@ const DataTableProfile = ({
               }
               hanlderOnBack={() => setShowDetails(false)}
               handlerOnAccept={() => {
-                if (details["status"].length > 0) {
-                  handleOnUpdate();
-                }
                 setShowDetails(false);
               }}
               isCheckRight={true}
