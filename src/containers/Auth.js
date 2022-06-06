@@ -21,7 +21,7 @@ const Auth = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const usernameInputRef = useRef("");
   const passwordInputRef = useRef("");
-  const [isNotRobot, setIsNotRobot] = useState(true);
+  const [isNotRobot, setIsNotRobot] = useState(false);
 
   localStorage.clear();
   Cookies.remove("token");
@@ -97,7 +97,7 @@ const Auth = () => {
 
               <div className="submit" style={{ width: "100%" }}>
                 <ReCAPTCHA
-                  sitekey="6LfEFkYgAAAAADvrIu_5yAhLw6P6opapY7_1950K"
+                  sitekey="6LcolksgAAAAAJeVPCw4kcTrsQffgVfjqWeA6lWN"
                   style={{ marginBottom: "1rem" }}
                   onChange={onRecaptchaSuccess}
                 />

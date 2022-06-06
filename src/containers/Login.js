@@ -30,7 +30,7 @@ const Login = () => {
   const [isCheckedThrid, setIsCheckedThrid] = useState(false);
 
   const [isConfirmModal, setIsConfirmModal] = useState(false);
-  const [isNotRobot, setIsNotRobot] = useState(true);
+  const [isNotRobot, setIsNotRobot] = useState(false);
 
   localStorage.clear();
   Cookies.remove("token");
@@ -306,7 +306,7 @@ const Login = () => {
                         <div className="submit">
                           <div style={{ marginBottom: "1rem" }}>
                             <ReCAPTCHA
-                              sitekey="6LfEFkYgAAAAADvrIu_5yAhLw6P6opapY7_1950K"
+                              sitekey="6LcolksgAAAAAJeVPCw4kcTrsQffgVfjqWeA6lWN"
                               onChange={onRecaptchaSuccess}
                             />
                           </div>
