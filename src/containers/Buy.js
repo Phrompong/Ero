@@ -108,13 +108,6 @@ const Buy = () => {
       });
       reader.readAsDataURL(fileUploaded);
     }
-    // const fileUploaded = event.target.files[0];
-    // setBookbankFile(fileUploaded);
-    // const reader = new FileReader();
-    // reader.addEventListener("load", () => {
-    //   setPreviewImage(reader.result);
-    // });
-    // reader.readAsDataURL(fileUploaded);
   };
 
   // modal registration
@@ -334,6 +327,7 @@ const Buy = () => {
   const handleSelectedFile = (e) => {
     const allowTypeFile = ["image/jpeg", "image/png"];
     const [file] = e.target.files;
+
     const maxAllowedSize = 5 * 1024 * 1024;
     const { name: fileName, size, type } = file;
 
@@ -618,7 +612,9 @@ const Buy = () => {
   }, [depositBank, bank, bookbankFile]);
 
   useEffect(() => {
-    setBookbankFile(null);
+    if (depositBank && depositBank.nameTH === "อื่นๆ") {
+      setBookbankFile(null);
+    }
   }, [depositBank]);
 
   useEffect(() => {
