@@ -226,16 +226,14 @@ const Buy = () => {
 
     if (status === 200) {
       const payload = res.data[0];
-
-      let registrations = [];
-
-      for (const data of res.data) {
+      const registrations = [];
+      res.data.forEach((data) => {
         const { orders } = data;
 
         if (!orders) {
-          return { registraionNo: data.registrationNo };
+          registrations.push({ registraionNo: data.registrationNo });
         }
-      }
+      });
 
       registrations.unshift({ registraionNo: "" });
       setAllRegistrations(registrations);
