@@ -228,7 +228,13 @@ const Buy = () => {
       const payload = res.data[0];
 
       const registrations = res.data.map((data) => {
-        return { registraionNo: data.registrationNo };
+        const { orders } = data;
+
+        if (!orders) {
+          return { registraionNo: data.registrationNo };
+        } else {
+          return { registraionNo: "" };
+        }
       });
 
       registrations.unshift({ registraionNo: "" });
@@ -621,15 +627,22 @@ const Buy = () => {
   }, [currentStockVolume]);
 
   useEffect(() => {
-    console.log("currenctStockVolunmn" + currentStockVolume);
-    console.log("offerPrice" + Number(offerPrice));
-    console.log(Number(currentStockVolume) * Number(offerPrice));
     setCurrentPrice(Number(currentStockVolume) * Number(offerPrice));
+
     setExcessVolume(
       Number(currentStockVolume) > Number(rightStockVolume)
         ? Number(currentStockVolume) - Number(rightStockVolume)
         : 0
     );
+
+    if (
+      Number(currentStockVolume) <= Number(rightStockVolume) &&
+      Number(currentStockVolume) !== 0
+    ) {
+      setIsConfirmOrder(false);
+    } else {
+      setIsConfirmOrder(true);
+    }
   }, [currentStockVolume]);
 
   const formatNumber = (number) => {
