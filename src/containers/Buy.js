@@ -227,15 +227,15 @@ const Buy = () => {
     if (status === 200) {
       const payload = res.data[0];
 
-      const registrations = res.data.map((data) => {
+      let registrations = [];
+
+      for (const data of res.data) {
         const { orders } = data;
 
         if (!orders) {
           return { registraionNo: data.registrationNo };
-        } else {
-          return { registraionNo: "" };
         }
-      });
+      }
 
       registrations.unshift({ registraionNo: "" });
       setAllRegistrations(registrations);
