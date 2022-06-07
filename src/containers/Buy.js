@@ -36,6 +36,7 @@ import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import ViewProfile from "../components/ViewProfile/ViewProfile";
 import { format } from "date-fns";
+import Vector from "../assets/paymentprocess.png";
 
 const Buy = () => {
   const { user } = useSelector((state) => state);
@@ -3010,12 +3011,12 @@ const InputSeacrh = styled.input`
 const PaymentProcessImage = styled.img`
   width: 800px;
   height: 500px;
-  content: url("/static/media/paymentprocess.5a824a3b33675455f0a1.png");
+  content: url("https://ero-bke.asiawealth.co.th/api/v1/renders?filename=1654622806782.png");
 
   /* For Mobile */
   @media screen and (max-width: 540px) {
     width: 100%;
-    content: url("/static/media/paymentprocess_mobile.ed7e02f63cb10db0dd2c.png");
+    content: url("https://ero-bke.asiawealth.co.th/api/v1/renders?filename=1654622876364.png");
   }
 `;
 
