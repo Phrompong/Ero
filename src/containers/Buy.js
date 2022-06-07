@@ -736,6 +736,20 @@ const Buy = () => {
               </label>
             </SubTitleDescription>
             <Header style={{ textAlign: "center" }}>
+              <Button
+                type="button"
+                value={"ย้อนกลับ"}
+                onClick={() => {
+                  navigate(`/profile`);
+                }}
+                disabled={false}
+                style={{
+                  backgroundColor: "#809FB8",
+                  fontSize: "16px",
+                  margin: "auto",
+                }}
+              />
+              &nbsp;
               {
                 <Button
                   type="button"
