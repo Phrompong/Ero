@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { DownArrow } from "@styled-icons/boxicons-solid/DownArrow";
 
 import change from "../assets/icon_change.png";
+import PaymentProcess from "../assets/paymentprocess.png";
+import PaymentProcessMobile from "../assets/paymentprocess_mobile.png";
 
 import { Card } from "../components/UI/Card";
 import { FlexContainer } from "../components/UI/FlexContainer";
@@ -59,6 +61,8 @@ const Buy = () => {
 
   const [paymentDate, setPaymentDate] = useState(null);
   const [paymentTime, setPaymentTime] = useState(null);
+
+  const [onOpenPaymentImageModal, setOnOpenPaymentImageModal] = useState(false)
 
   /// input file upload
   const [bookbankFile, setBookbankFile] = useState(null);
@@ -354,7 +358,7 @@ const Buy = () => {
       setStatus(999);
       setAlertMessage("ไม่พบไฟล์ภาพ");
       showAlert(setShow, 2000);
-    } else if (!paymentDate && !paymentTime) {
+    } else if (!paymentDate || !paymentTime) {
       setStatus(999);
       setAlertMessage("กรุณาระบุ วันที่โอน และเวลาที่โอน");
       showAlert(setShow, 2000);
@@ -729,6 +733,27 @@ const Buy = () => {
                   }}
                 />
               }
+            </Header>
+          </ContainerCard>
+        </Card>
+      </Modal>
+      <Modal show={onOpenPaymentImageModal} style={{ width: "100%" }}>
+        <Card>
+          <ContainerCard>
+            <PaymentProcessImage/>
+            <Header style={{ textAlign: "center" }}>
+              <Button
+                type="submit"
+                value={"ปิดหน้าต่าง"}
+                onClick={() => setOnOpenPaymentImageModal(false)}
+                style={{
+                  fontSize: "16px",
+                  height: "35px",
+                  width: "50%",
+                  margin: "auto",
+                  backgroundColor: "#809FB8",
+                }}
+              />
             </Header>
           </ContainerCard>
         </Card>
@@ -1870,6 +1895,9 @@ const Buy = () => {
                         >
                           <hr style={{ border: "0.75px solid #D9E1E7" }} />
                         </div>
+                        <div className="payment-method" style={{ justifyContent: "end", textAlign: "end" }}>
+                          <a style={{ textDecoration: "underline", color: "#1D3AB1", cursor: "pointer" }} onClick={() => setOnOpenPaymentImageModal(true)}>คลิกเพื่อดูวิธีการชำระเงิน</a>
+                        </div>
                         <div className="payment-method">
                           <b style={{ width: "20%", margin: "10px" }}>
                             เลือกวิธีการชำระเงิน
@@ -1951,6 +1979,25 @@ const Buy = () => {
                                             </div>
                                           </div>
                                         ))}
+                                        <b>หรือ</b>
+                                        <div className="bank-div">
+                                          <div className="bank-img" style={{ width: "32px" }}>
+                                          </div>
+                                          <div className="bank-detail">
+                                            <b>Bill ID : หลักทรัพย์เอเชีย เวลท์</b>
+                                            <p>
+                                              หมายเลข
+                                              <b
+                                                style={{ marginLeft: "20px" }}
+                                              >
+                                                010554105359404
+                                              </b>
+                                            </p>
+                                            <p>
+                                              ชื่อ บจ.หลักทรัพย์เอเชียเวลท์ เพื่อการจองซื้อ
+                                            </p>
+                                          </div>
+                                        </div>
                                     </BankCard>
                                   </div>
                                 </>
@@ -2020,6 +2067,7 @@ const Buy = () => {
                               onChange={(e) => {
                                 setPaymentDate(e.target.value);
                               }}
+                              required
                             />
                           </div>
                           <div className="btn-label">
@@ -2912,5 +2960,17 @@ const InputSeacrh = styled.input`
     }
   }
 `;
+
+const PaymentProcessImage = styled.img`
+  width: 1500px;
+  height: 1000px;
+  content: url("/static/media/paymentprocess.5a824a3b33675455f0a1.png");
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    width: 100%;
+    content: url("/static/media/paymentprocess_mobile.ed7e02f63cb10db0dd2c.png");
+  }
+`
 
 export default Buy;
