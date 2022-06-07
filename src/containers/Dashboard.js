@@ -170,7 +170,7 @@ const Dashboard = () => {
     const { value, fileExtension } = valueMasterExport;
 
     window.open(
-      `https://ero-test.asiawealth.co.th//api/v1/exports?topic=${value}&fileExtension=${fileExtension}`
+      `https://ero-test.asiawealth.co.th/api/v1/exports?topic=${value}&fileExtension=${fileExtension}`
     );
   };
 
