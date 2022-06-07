@@ -534,7 +534,7 @@ const Buy = () => {
         excessVolume,
         address: `${profile.address} ${profile.zipcode}`,
         registrationNo: shareId,
-        bankRefund: depositBank._id,
+        bankRefund: depositBank ? depositBank._id : "",
         bankRefundNo: bank,
         paymentDate: new Date(`${paymentDate} ${paymentTime}`),
       },
