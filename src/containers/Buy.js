@@ -69,6 +69,8 @@ const Buy = () => {
   const [bookbankFile, setBookbankFile] = useState(null);
   const hiddenFileInput = React.useRef(null);
 
+  const [onSubmit, setOnSubmit] = useState(false)
+
   const [previewImage, setPreviewImage] = useState(null);
 
   const handleClick = (e) => {
@@ -511,70 +513,85 @@ const Buy = () => {
   };
 
   const handlerOnSubmitedOrder = async () => {
-    const [res, status] = await httpFetch(
-      "POST",
-      {
-        customerId: user.customerId,
-        rightStockName,
-        stockVolume,
-        rightSpecialName,
-        rightSpecialVolume,
-        paidRightVolume: Number(currentStockVolume),
-        paidSpecialVolume: 0,
-        paymentAmount: Number(currentPrice),
-        returnAmount: 0,
-        customerName: fullname,
-        customerTel: phoneNo,
-        brokerId: dropdownSelect._id,
-        accountNo: tradingAccountNo,
-        customerStockId: customerStockId,
-        excessVolume,
-        address: `${profile.address} ${profile.zipcode}`,
-        registrationNo: shareId,
-        bankRefund: depositBank ? depositBank._id : "",
-        bankRefundNo: bank,
-        paymentDate: new Date(`${paymentDate} ${paymentTime}`),
-      },
-      "orders"
-    );
-
-    if (status === 200) {
-      setIsConfirmBooking(true);
-      setOrderId(res.data._id);
-      setStatus(200);
-      setAlertMessage("ยืนยันคำจองซื้อสำเร็จ");
-      showAlert(setShow, 2000);
-      localStorage.clear();
-
-      const formDataBookbank = new FormData();
-      formDataBookbank.append("File", bookbankFile);
-      const endpointBookbank = `uploads/bookbank?orderId=${res.data._id}`;
-      const [resBookbank, statusBookbank] = await httpPostRequestUploadFile(
-        formDataBookbank,
-        endpointBookbank
-      );
-      if (statusBookbank === 200) {
-        const formData = new FormData();
-        formData.append("File", file);
-        const endpoint = `uploads/image?orderId=${res.data._id}`;
-
-        const [_res, _status] = await httpPostRequestUploadFile(
-          formData,
-          endpoint
+    try {
+      if (!onSubmit) {
+        console.log('on submit')
+        setOnSubmit(true)
+        const [res, status] = await httpFetch(
+          "POST",
+          {
+            customerId: user.customerId,
+            rightStockName,
+            stockVolume,
+            rightSpecialName,
+            rightSpecialVolume,
+            paidRightVolume: Number(currentStockVolume),
+            paidSpecialVolume: 0,
+            paymentAmount: Number(currentPrice),
+            returnAmount: 0,
+            customerName: fullname,
+            customerTel: phoneNo,
+            brokerId: dropdownSelect._id,
+            accountNo: tradingAccountNo,
+            customerStockId: customerStockId,
+            excessVolume,
+            address: `${profile.address} ${profile.zipcode}`,
+            registrationNo: shareId,
+            bankRefund: depositBank ? depositBank._id : "",
+            bankRefundNo: bank,
+            paymentDate: new Date(`${paymentDate} ${paymentTime}`),
+          },
+          "orders"
         );
-        let msg = _res.message;
-        setStatus(_status);
-        if (_status === 200) {
-          msg = "Upload Completed";
-          console.log(msg);
-          setAlertMessage(msg);
-          showAlert(setShow, 2000);
-          setFile();
-          setTimeout(() => {
-            navigate(`/profile`);
-          }, 2000);
+    
+        if (status === 200) {
+          setIsConfirmBooking(true);
+          setOrderId(res.data._id);
+          // setStatus(200);
+          // setAlertMessage("ยืนยันคำจองซื้อสำเร็จ");
+          // showAlert(setShow, 2000);
+          localStorage.clear();
+    
+          const formDataBookbank = new FormData();
+          formDataBookbank.append("File", bookbankFile);
+          const endpointBookbank = `uploads/bookbank?orderId=${res.data._id}`;
+          const [resBookbank, statusBookbank] = await httpPostRequestUploadFile(
+            formDataBookbank,
+            endpointBookbank
+          );
+          if (statusBookbank === 200) {
+            const formData = new FormData();
+            formData.append("File", file);
+            const endpoint = `uploads/image?orderId=${res.data._id}`;
+    
+            const [_res, _status] = await httpPostRequestUploadFile(
+              formData,
+              endpoint
+            );
+            let msg = _res.message;
+            setStatus(_status);
+            if (_status === 200) {
+              msg = "Upload Completed";
+              console.log(msg);
+              setAlertMessage(msg);
+              showAlert(setShow, 2000);
+              setFile();
+              setTimeout(() => {
+                setOnSubmit(false)
+                navigate(`/profile`);
+              }, 2000);
+            }
+          }
         }
       }
+    } catch (error) {
+      setOnSubmit(false)
+      setStatus(999);
+      setAlertMessage("เกิดข้อผิดพลาดในระบบ");
+      setShow(true);
+      setTimeout(() => {
+        setShow(false);
+      }, 2000);
     }
   };
 
@@ -2041,6 +2058,7 @@ const Buy = () => {
                                           </p>
                                         </div>
                                       </div>
+                                      <p style={{ color: "#FB0303" }}>หมายเหตุ : "ชื่อผู้ชำระเงินจะต้องเป็นชื่อเดียวกับผู้จองซื้อหุ้นเท่านั้น"</p>
                                     </BankCard>
                                   </div>
                                 </>

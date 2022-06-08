@@ -100,7 +100,7 @@ const CustomerService = () => {
               icon={faPhone}
               style={{ margin: "0", marginRight: "0.5rem" }}
             />
-            02-680-5033-5
+            02-680-5033-5, 02-680-5159-63
           </Info>
           <Info>
             <FontAwesomeIcon
