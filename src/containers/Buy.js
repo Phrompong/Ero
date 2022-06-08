@@ -69,7 +69,7 @@ const Buy = () => {
   const [bookbankFile, setBookbankFile] = useState(null);
   const hiddenFileInput = React.useRef(null);
 
-  const [onSubmit, setOnSubmit] = useState(false)
+  const [onSubmit, setOnSubmit] = useState(false);
 
   const [previewImage, setPreviewImage] = useState(null);
 
@@ -515,8 +515,8 @@ const Buy = () => {
   const handlerOnSubmitedOrder = async () => {
     try {
       if (!onSubmit) {
-        console.log('on submit')
-        setOnSubmit(true)
+        console.log("on submit");
+        setOnSubmit(true);
         const [res, status] = await httpFetch(
           "POST",
           {
@@ -543,7 +543,7 @@ const Buy = () => {
           },
           "orders"
         );
-    
+
         if (status === 200) {
           setIsConfirmBooking(true);
           setOrderId(res.data._id);
@@ -551,7 +551,7 @@ const Buy = () => {
           // setAlertMessage("ยืนยันคำจองซื้อสำเร็จ");
           // showAlert(setShow, 2000);
           localStorage.clear();
-    
+
           const formDataBookbank = new FormData();
           formDataBookbank.append("File", bookbankFile);
           const endpointBookbank = `uploads/bookbank?orderId=${res.data._id}`;
@@ -563,7 +563,7 @@ const Buy = () => {
             const formData = new FormData();
             formData.append("File", file);
             const endpoint = `uploads/image?orderId=${res.data._id}`;
-    
+
             const [_res, _status] = await httpPostRequestUploadFile(
               formData,
               endpoint
@@ -577,7 +577,7 @@ const Buy = () => {
               showAlert(setShow, 2000);
               setFile();
               setTimeout(() => {
-                setOnSubmit(false)
+                setOnSubmit(false);
                 navigate(`/profile`);
               }, 2000);
             }
@@ -585,7 +585,7 @@ const Buy = () => {
         }
       }
     } catch (error) {
-      setOnSubmit(false)
+      setOnSubmit(false);
       setStatus(999);
       setAlertMessage("เกิดข้อผิดพลาดในระบบ");
       setShow(true);
@@ -2054,11 +2054,14 @@ const Buy = () => {
                                           </p>
                                           <p>
                                             ชื่อ บจ.หลักทรัพย์เอเชียเวลท์
-                                            เพื่อการจองซื้อ
+                                            เพื่อจองซื้อ
                                           </p>
                                         </div>
                                       </div>
-                                      <p style={{ color: "#FB0303" }}>หมายเหตุ : "ชื่อผู้ชำระเงินจะต้องเป็นชื่อเดียวกับผู้จองซื้อหุ้นเท่านั้น"</p>
+                                      <p style={{ color: "#FB0303" }}>
+                                        หมายเหตุ :
+                                        "ชื่อผู้ชำระเงินจะต้องเป็นชื่อเดียวกับผู้จองซื้อหุ้นเท่านั้น"
+                                      </p>
                                     </BankCard>
                                   </div>
                                 </>
@@ -3025,12 +3028,12 @@ const InputSeacrh = styled.input`
 const PaymentProcessImage = styled.img`
   width: 800px;
   height: 500px;
-  content: url("https://ero-bke.asiawealth.co.th/api/v1/renders?filename=1654622806782.png");
+  content: url("https://ero-bke.asiawealth.co.th/api/v1/renders?filename=1654704092869.png");
 
   /* For Mobile */
   @media screen and (max-width: 540px) {
     width: 100%;
-    content: url("https://ero-bke.asiawealth.co.th/api/v1/renders?filename=1654622876364.png");
+    content: url("https://ero-bke.asiawealth.co.th/api/v1/renders?filename=1654704158394.png");
   }
 `;
 
