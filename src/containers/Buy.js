@@ -188,7 +188,6 @@ const Buy = () => {
     await fetchDataProfile();
 
     if (JSON.parse(localStorage.getItem("step_1")) && page === 1) {
-      console.log("------ Loading local storage step 1 ------");
       setShareId(JSON.parse(localStorage.getItem("step_1")).shareId);
       setPhoneNo(JSON.parse(localStorage.getItem("step_1")).phoneNo);
       setDropdownSelect(
@@ -206,7 +205,6 @@ const Buy = () => {
     await fetchDataProfile();
 
     if (JSON.parse(localStorage.getItem("step_2")) && page === 2) {
-      console.log("------ Loading local storage step 2 ------");
       setCurrentStockVolume(
         JSON.parse(localStorage.getItem("step_2")).currentStockVolume
       );
