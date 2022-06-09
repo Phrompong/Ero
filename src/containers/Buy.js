@@ -539,8 +539,8 @@ const Buy = () => {
             address: `${profile.address} ${profile.zipcode}`,
             registrationNo: shareId,
             bankRefund: depositBank ? depositBank._id : "",
-            bankRefundNo: bank
-            // paymentDate: new Date(`${paymentDate} ${paymentTime}`),
+            bankRefundNo: bank,
+            paymentDate: `${paymentDate} ${paymentTime}`,
           },
           "orders"
         );
