@@ -1211,7 +1211,10 @@ const Buy = () => {
                   currentPrice={currentPrice}
                   depositBank={depositBank}
                   bank={bank}
-                  hanlderOnBack={() => setValidateAccept(false)}
+                  hanlderOnBack={() => {
+                    setValidateAccept(false)
+                    setLastVerifyChecked(false)
+                  }}
                   handlerOnAccept={handlerOnSubmitedOrder}
                   lastVerifyChecked={lastVerifyChecked}
                   setLastVerifyChecked={() =>
