@@ -514,6 +514,9 @@ const Buy = () => {
     try {
       if (!onSubmit) {
         console.log('on submit')
+        console.log(paymentDate)
+        console.log(paymentTime)
+        console.log(new Date(`${paymentDate} ${paymentTime}`))
         setOnSubmit(true)
         const [res, status] = await httpFetch(
           "POST",
@@ -536,8 +539,8 @@ const Buy = () => {
             address: `${profile.address} ${profile.zipcode}`,
             registrationNo: shareId,
             bankRefund: depositBank ? depositBank._id : "",
-            bankRefundNo: bank,
-            paymentDate: new Date(`${paymentDate} ${paymentTime}`),
+            bankRefundNo: bank
+            // paymentDate: new Date(`${paymentDate} ${paymentTime}`),
           },
           "orders"
         );
