@@ -15,9 +15,6 @@ import { httpGetRequest, httpPutRequest } from "../../utils/fetch";
 import { format } from "date-fns";
 
 const Details = ({ show, details, closed, options }) => {
-  console.log(show);
-  console.log(details);
-  console.log(options);
   const [selectedStatus, setSelectedStatus] = useState(
     details["status"]["_id"]
   );
@@ -41,8 +38,6 @@ const Details = ({ show, details, closed, options }) => {
   );
 
   const customer = details["customerId"];
-
-  console.log(details);
 
   const formatDate = (date) => {
     return date ? format(new Date(date), "dd/MM/yyyy") : "";

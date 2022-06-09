@@ -11,6 +11,7 @@ import reportWebVitals from "./reportWebVitals";
 import store from "./store";
 
 // import VConsole from 'vconsole';
+// const vConsole = new VConsole({ theme: 'dark' });
 
 // const container = document.getElementById("app");
 // const root = createRoot(container);

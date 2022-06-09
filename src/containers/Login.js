@@ -45,7 +45,6 @@ const Login = () => {
     const endpoint = "consentHistory";
 
     const [res, status] = await httpFetch("POST", { customerId }, endpoint);
-    console.log(res.data);
 
     if (status === 200) {
       await createAuth({

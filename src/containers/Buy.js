@@ -188,7 +188,6 @@ const Buy = () => {
     await fetchDataProfile();
 
     if (JSON.parse(localStorage.getItem("step_1")) && page === 1) {
-      console.log("------ Loading local storage step 1 ------");
       setShareId(JSON.parse(localStorage.getItem("step_1")).shareId);
       setPhoneNo(JSON.parse(localStorage.getItem("step_1")).phoneNo);
       setDropdownSelect(
@@ -206,7 +205,6 @@ const Buy = () => {
     await fetchDataProfile();
 
     if (JSON.parse(localStorage.getItem("step_2")) && page === 2) {
-      console.log("------ Loading local storage step 2 ------");
       setCurrentStockVolume(
         JSON.parse(localStorage.getItem("step_2")).currentStockVolume
       );
@@ -516,6 +514,9 @@ const Buy = () => {
     try {
       if (!onSubmit) {
         console.log("on submit");
+        console.log(paymentDate);
+        console.log(paymentTime);
+        console.log(new Date(`${paymentDate} ${paymentTime}`));
         setOnSubmit(true);
         const [res, status] = await httpFetch(
           "POST",
@@ -539,7 +540,7 @@ const Buy = () => {
             registrationNo: shareId,
             bankRefund: depositBank ? depositBank._id : "",
             bankRefundNo: bank,
-            paymentDate: new Date(`${paymentDate} ${paymentTime}`),
+            paymentDate: `${paymentDate} ${paymentTime}`,
           },
           "orders"
         );
@@ -1212,8 +1213,8 @@ const Buy = () => {
                   depositBank={depositBank}
                   bank={bank}
                   hanlderOnBack={() => {
-                    setValidateAccept(false)
-                    setLastVerifyChecked(false)
+                    setValidateAccept(false);
+                    setLastVerifyChecked(false);
                   }}
                   handlerOnAccept={handlerOnSubmitedOrder}
                   lastVerifyChecked={lastVerifyChecked}
