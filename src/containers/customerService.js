@@ -41,7 +41,6 @@ const CustomerService = () => {
   };
 
   const handlerOnSubmited = async () => {
-    console.log(masterIssue);
     const [res, status] = await httpFetch(
       "POST",
       {

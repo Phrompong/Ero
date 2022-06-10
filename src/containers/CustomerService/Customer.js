@@ -44,7 +44,6 @@ const CustomerService = () => {
   };
 
   const handlerOnSubmited = async () => {
-    console.log(masterIssue);
     const [res, status] = await httpFetch(
       "POST",
       {
@@ -68,7 +67,6 @@ const CustomerService = () => {
   };
 
   const redirectPage = () => {
-    console.log("redirect");
     navigate("/");
   };
 

@@ -39,7 +39,6 @@ const Auth = () => {
       endpoint
     );
 
-    console.log(status);
     if (status === 200) {
       const payload = {
         username,

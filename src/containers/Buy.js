@@ -513,10 +513,6 @@ const Buy = () => {
   const handlerOnSubmitedOrder = async () => {
     try {
       if (!onSubmit) {
-        console.log('on submit')
-        console.log(paymentDate)
-        console.log(paymentTime)
-        console.log(new Date(`${paymentDate} ${paymentTime}`))
         setOnSubmit(true)
         const [res, status] = await httpFetch(
           "POST",
@@ -573,7 +569,6 @@ const Buy = () => {
             setStatus(_status);
             if (_status === 200) {
               msg = "Upload Completed";
-              console.log(msg);
               setAlertMessage(msg);
               showAlert(setShow, 2000);
               setFile();
@@ -597,7 +592,6 @@ const Buy = () => {
   };
 
   const handlerOnReadMore = () => {
-    console.log(isReadMore);
     if (!isReadMore) {
       setShareDescription(shareDescriptionMore);
       setIsReadMore(true);

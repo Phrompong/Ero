@@ -83,7 +83,6 @@ const Dashboard = () => {
 
     const [res, status] = await httpGetRequest(endpoint);
 
-    console.log(res["data"]);
     setMasterExport(res["data"]);
   }
 

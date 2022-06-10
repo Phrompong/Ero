@@ -70,8 +70,6 @@ const Layout = ({ children }) => {
     path !== "/customer/service" &&
     path !== "/admin/service";
 
-  console.log(user);
-
   // * Case path is not pages allow
   if (!isPage) {
     return (

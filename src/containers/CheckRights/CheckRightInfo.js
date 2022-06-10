@@ -162,7 +162,6 @@ const CheckRightInfo = () => {
     const [res, status] = await httpGetRequest(endpoint);
 
     if (res["data"].length > 0) {
-      console.log(res["data"][0]);
 
       const {
         registrationNo,
@@ -190,8 +189,6 @@ const CheckRightInfo = () => {
       setPaidRightVolume(paidRightVolume); // * รวมจำนวนหุ้นที่ได้รับทั้งสิ้น
 
       const tempNumCert = paidRightVolume / getRight;
-      console.log(`paidRightVolume : ${paidRightVolume}`);
-      console.log(`getRight : ${getRight}`);
       setNumCert(paidRightVolume / getRight); // * รวมจำนวนใบสำคัญแสดงสิทธที่ได้รับทั้งสิ้น
     } else {
       setCompany("");
