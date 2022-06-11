@@ -533,7 +533,7 @@ const Buy = () => {
             returnAmount: 0,
             customerName: fullname,
             customerTel: phoneNo,
-            brokerId: dropdownSelect._id,
+            brokerId: dropdownSelect ? dropdownSelect._id : null,
             accountNo: tradingAccountNo,
             customerStockId: customerStockId,
             excessVolume,
