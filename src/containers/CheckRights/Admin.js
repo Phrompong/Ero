@@ -55,8 +55,6 @@ const CheckRightAdmin = () => {
   async function fetchDataTable() {
     setIsFetching(true);
     const inputValue = searchInputRef.current.value;
-    console.log(inputValue);
-    console.log(currentPage);
     let endpoint = `customerStocks/search/value?page=${currentPage}${
       inputValue ? "&key=" + inputValue : ""
     }`;

@@ -82,7 +82,6 @@ const CheckRightCustomer = () => {
     let endpoint = `masterCustomers/${user.customerId}`;
 
     const [res, status] = await httpGetRequest(endpoint);
-    console.log(res["data"]);
     setProfile(res["data"]);
   }
 
@@ -90,9 +89,7 @@ const CheckRightCustomer = () => {
     let endpoint = `news`;
 
     const [res, status] = await httpGetRequest(endpoint);
-    console.log(res["data"][0]);
     setNews(res["data"][0]);
-    console.log(news);
   }
 
   async function fetchTextControl() {

@@ -43,7 +43,6 @@ const CustomerServiceAdmin = () => {
   };
 
   const handlerOnSubmited = async () => {
-    console.log(masterIssue);
     const [res, status] = await httpFetch(
       "POST",
       {

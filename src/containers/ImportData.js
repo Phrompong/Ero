@@ -65,8 +65,6 @@ const ImportData = () => {
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append("File", file);
-    console.log(file);
-    console.log(formData);
     const endpoint = "uploads";
 
     const [res, status] = await httpPostRequestUploadFile(formData, endpoint);

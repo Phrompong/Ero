@@ -31,7 +31,6 @@ export async function httpPostRequest(body, endpoint) {
 export async function httpGetRequest(endpoint) {
   const url = `${BASE_URL}${endpoint}`;
 
-  console.log(url);
   const res = await fetch(url, {
     method: "GET",
   });

@@ -129,6 +129,7 @@ const Buy = () => {
   const [shareOption, setShareOption] = useState([]);
   const [shareBankRefundOption, setShareBankRefundOption] = useState([]);
   const [dropdownSelect, setDropdownSelect] = useState(null);
+  const [shareRadio, setShareRadio] = useState('first')
   const [dropdownBankRefundSelect, setDropdownBankRefundSelect] =
     useState(null);
   const [isReadMore, setIsReadMore] = useState(false);
@@ -196,6 +197,7 @@ const Buy = () => {
       setTradingAccountNo(
         JSON.parse(localStorage.getItem("step_1")).tradingAccountNo
       );
+      setShareRadio(JSON.parse(localStorage.getItem("step_1")).shareRadio);
     }
   };
 
@@ -402,6 +404,7 @@ const Buy = () => {
           phoneNo,
           dropdownSelect,
           tradingAccountNo,
+          shareRadio
         })
       );
     }
@@ -416,7 +419,16 @@ const Buy = () => {
         })
       );
     }
-    if (!dropdownSelect) {
+    if (!phoneNo) {
+      setShow(true);
+      setStatus(999);
+      setAlertMessage("กรุณากรอกเบอร์โทรศัพท์");
+      setTimeout(() => {
+        setShow(false);
+      }, 5000);
+    } else if (shareRadio === "second") {
+      setPage(page);
+    } else if (!dropdownSelect) {
       setShow(true);
       setStatus(999);
       setAlertMessage(
@@ -436,13 +448,6 @@ const Buy = () => {
       setShow(true);
       setStatus(999);
       setAlertMessage("กรุณาตรวจสอบข้อมูลในขั้นตอนที่ 2");
-      setTimeout(() => {
-        setShow(false);
-      }, 5000);
-    } else if (!phoneNo) {
-      setShow(true);
-      setStatus(999);
-      setAlertMessage("กรุณากรอกเบอร์โทรศัพท์");
       setTimeout(() => {
         setShow(false);
       }, 5000);
@@ -513,11 +518,7 @@ const Buy = () => {
   const handlerOnSubmitedOrder = async () => {
     try {
       if (!onSubmit) {
-        console.log("on submit");
-        console.log(paymentDate);
-        console.log(paymentTime);
-        console.log(new Date(`${paymentDate} ${paymentTime}`));
-        setOnSubmit(true);
+        setOnSubmit(true)
         const [res, status] = await httpFetch(
           "POST",
           {
@@ -541,6 +542,7 @@ const Buy = () => {
             bankRefund: depositBank ? depositBank._id : "",
             bankRefundNo: bank,
             paymentDate: `${paymentDate} ${paymentTime}`,
+            isCert: shareRadio === "first" ? false : true
           },
           "orders"
         );
@@ -573,7 +575,6 @@ const Buy = () => {
             setStatus(_status);
             if (_status === 200) {
               msg = "Upload Completed";
-              console.log(msg);
               setAlertMessage(msg);
               showAlert(setShow, 2000);
               setFile();
@@ -597,7 +598,6 @@ const Buy = () => {
   };
 
   const handlerOnReadMore = () => {
-    console.log(isReadMore);
     if (!isReadMore) {
       setShareDescription(shareDescriptionMore);
       setIsReadMore(true);
@@ -661,6 +661,20 @@ const Buy = () => {
       setIsConfirmOrder(true);
     }
   }, [currentStockVolume]);
+
+  useEffect(() => {
+    if (shareRadio === 'second') {
+      setDropdownSelect(null);
+      setTradingAccountNo(null);
+      setIsDisableToPage2(false);
+    } else {
+      if (dropdownSelect && tradingAccountNo) {
+        setIsDisableToPage2(false);
+      } else {
+        setIsDisableToPage2(true);
+      }
+    }
+  }, [shareRadio])
 
   const formatNumber = (number) => {
     return Number(number)
@@ -1409,11 +1423,33 @@ const Buy = () => {
                         </Header>
                         <Content>
                           <InputDiv>
-                            <Dot />
-                            <p style={{ fontWeight: "bold" }}>
-                              ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก
-                            </p>
+                            {/* <Dot /> */}
                           </InputDiv>
+                          <RadioDiv>
+                            <div className="radio-div">
+                              <Radio type="radio" name="type" value={'first'} checked={shareRadio === 'first'} onChange={(e) => {
+                                setShareRadio(e.target.value)
+                              }}/>
+                              <p className="radio-label">
+                                  ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก
+                              </p>
+                            </div>
+                            <div className="radio-div">
+                              <Radio type="radio" name="type" value={'second'} checked={shareRadio === 'second'}  onChange={(e) => {
+                                setShareRadio(e.target.value)
+                                setTradingAccountNo(null)
+                                setDropdownSelect(null)
+                              }}/>
+                              <p className="radio-label">
+                                  รับใบหุ้น
+                              </p>
+                            </div>
+                          </RadioDiv>
+                        </Content>
+                        <Content>
+                          {/* <InputDiv>
+                            <Dot />
+                          </InputDiv> */}
                           <InputDiv
                             style={{ marginTop: "20px", marginLeft: "50px" }}
                           >
@@ -1421,11 +1457,20 @@ const Buy = () => {
                               options={shareOption}
                               searchFrom={"fullname"}
                               isOpen={isOpenDropdown}
-                              onClick={() => setIsOpenDropdown(!isOpenDropdown)}
-                              onBlur={() => setIsOpenDropdown(false)}
+                              onClick={() => {
+                                if (shareRadio !== 'second') {
+                                  setIsOpenDropdown(!isOpenDropdown)
+                                }
+                              }}
+                              onBlur={() => {
+                                if (shareRadio !== 'second') {
+                                  setIsOpenDropdown(false)
+                                }
+                              }}
+                              disabled={shareRadio === 'second'}
                               setSelected={setDropdownSelect}
                               selected={
-                                JSON.parse(localStorage.getItem("step_1"))
+                                JSON.parse(localStorage.getItem("step_1")) && shareRadio !== 'second'
                                   ? JSON.parse(localStorage.getItem("step_1"))
                                       .dropdownSelect
                                   : dropdownSelect
@@ -1443,6 +1488,7 @@ const Buy = () => {
                               onChange={(e) =>
                                 setTradingAccountNo(e.target.value)
                               }
+                              disabled={shareRadio === 'second'}
                               placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"}
                             />
                           </InputDiv>
@@ -3040,5 +3086,43 @@ const PaymentProcessImage = styled.img`
     content: url("https://ero-bke.asiawealth.co.th/api/v1/renders?filename=1654704158394.png");
   }
 `;
+
+const Radio = styled.input`
+  accent-color: #1d3ab1;
+  width: 15%;
+  height: 30px;
+  margin-top: auto;
+  margin-bottom: auto;
+
+  // margin: 0px 20px 5px 0px;
+  // float: left;
+  // clear: both;
+`
+
+const RadioDiv = styled.div`
+  display: flex;
+
+  .radio-div {
+    width: 50%;
+    display: flex;
+
+    .radio-label {
+      width: 85%;
+      font-weight: bold;
+      margin-left: 20px;
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+  }
+
+  /* For Mobile */
+  @media screen and (max-width: 540px) {
+    display: block;
+
+    .radio-div {
+      width: 100%;
+    }
+  }
+`
 
 export default Buy;

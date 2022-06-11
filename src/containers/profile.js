@@ -107,7 +107,6 @@ const Dashboard = () => {
     let endpoint = `masterCustomers/${user.customerId}`;
 
     const [res, status] = await httpGetRequest(endpoint);
-    console.log(res["data"]);
     setProfile(res["data"]);
   }
 
