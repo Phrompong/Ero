@@ -129,7 +129,7 @@ const Buy = () => {
   const [shareOption, setShareOption] = useState([]);
   const [shareBankRefundOption, setShareBankRefundOption] = useState([]);
   const [dropdownSelect, setDropdownSelect] = useState(null);
-  const [shareRadio, setShareRadio] = useState('first')
+  const [shareRadio, setShareRadio] = useState("first");
   const [dropdownBankRefundSelect, setDropdownBankRefundSelect] =
     useState(null);
   const [isReadMore, setIsReadMore] = useState(false);
@@ -404,7 +404,7 @@ const Buy = () => {
           phoneNo,
           dropdownSelect,
           tradingAccountNo,
-          shareRadio
+          shareRadio,
         })
       );
     }
@@ -518,7 +518,7 @@ const Buy = () => {
   const handlerOnSubmitedOrder = async () => {
     try {
       if (!onSubmit) {
-        setOnSubmit(true)
+        setOnSubmit(true);
         const [res, status] = await httpFetch(
           "POST",
           {
@@ -542,7 +542,7 @@ const Buy = () => {
             bankRefund: depositBank ? depositBank._id : "",
             bankRefundNo: bank,
             paymentDate: `${paymentDate} ${paymentTime}`,
-            isCert: shareRadio === "first" ? false : true
+            isCert: shareRadio === "first" ? false : true,
           },
           "orders"
         );
@@ -587,6 +587,7 @@ const Buy = () => {
         }
       }
     } catch (error) {
+      console.log(error);
       setOnSubmit(false);
       setStatus(999);
       setAlertMessage("เกิดข้อผิดพลาดในระบบ");
@@ -663,7 +664,7 @@ const Buy = () => {
   }, [currentStockVolume]);
 
   useEffect(() => {
-    if (shareRadio === 'second') {
+    if (shareRadio === "second") {
       setDropdownSelect(null);
       setTradingAccountNo(null);
       setIsDisableToPage2(false);
@@ -674,7 +675,7 @@ const Buy = () => {
         setIsDisableToPage2(true);
       }
     }
-  }, [shareRadio])
+  }, [shareRadio]);
 
   const formatNumber = (number) => {
     return Number(number)
@@ -1422,27 +1423,35 @@ const Buy = () => {
                           </h3>
                         </Header>
                         <Content>
-                          <InputDiv>
-                            {/* <Dot /> */}
-                          </InputDiv>
+                          <InputDiv>{/* <Dot /> */}</InputDiv>
                           <RadioDiv>
                             <div className="radio-div">
-                              <Radio type="radio" name="type" value={'first'} checked={shareRadio === 'first'} onChange={(e) => {
-                                setShareRadio(e.target.value)
-                              }}/>
+                              <Radio
+                                type="radio"
+                                name="type"
+                                value={"first"}
+                                checked={shareRadio === "first"}
+                                onChange={(e) => {
+                                  setShareRadio(e.target.value);
+                                }}
+                              />
                               <p className="radio-label">
-                                  ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก
+                                ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก
                               </p>
                             </div>
                             <div className="radio-div">
-                              <Radio type="radio" name="type" value={'second'} checked={shareRadio === 'second'}  onChange={(e) => {
-                                setShareRadio(e.target.value)
-                                setTradingAccountNo(null)
-                                setDropdownSelect(null)
-                              }}/>
-                              <p className="radio-label">
-                                  รับใบหุ้น
-                              </p>
+                              <Radio
+                                type="radio"
+                                name="type"
+                                value={"second"}
+                                checked={shareRadio === "second"}
+                                onChange={(e) => {
+                                  setShareRadio(e.target.value);
+                                  setTradingAccountNo(null);
+                                  setDropdownSelect(null);
+                                }}
+                              />
+                              <p className="radio-label">รับใบหุ้น</p>
                             </div>
                           </RadioDiv>
                         </Content>
@@ -1458,19 +1467,20 @@ const Buy = () => {
                               searchFrom={"fullname"}
                               isOpen={isOpenDropdown}
                               onClick={() => {
-                                if (shareRadio !== 'second') {
-                                  setIsOpenDropdown(!isOpenDropdown)
+                                if (shareRadio !== "second") {
+                                  setIsOpenDropdown(!isOpenDropdown);
                                 }
                               }}
                               onBlur={() => {
-                                if (shareRadio !== 'second') {
-                                  setIsOpenDropdown(false)
+                                if (shareRadio !== "second") {
+                                  setIsOpenDropdown(false);
                                 }
                               }}
-                              disabled={shareRadio === 'second'}
+                              disabled={shareRadio === "second"}
                               setSelected={setDropdownSelect}
                               selected={
-                                JSON.parse(localStorage.getItem("step_1")) && shareRadio !== 'second'
+                                JSON.parse(localStorage.getItem("step_1")) &&
+                                shareRadio !== "second"
                                   ? JSON.parse(localStorage.getItem("step_1"))
                                       .dropdownSelect
                                   : dropdownSelect
@@ -1488,7 +1498,7 @@ const Buy = () => {
                               onChange={(e) =>
                                 setTradingAccountNo(e.target.value)
                               }
-                              disabled={shareRadio === 'second'}
+                              disabled={shareRadio === "second"}
                               placeholder={"กรุณากรอกเลขที่บัญชีซื้อขาย"}
                             />
                           </InputDiv>
@@ -3097,7 +3107,7 @@ const Radio = styled.input`
   // margin: 0px 20px 5px 0px;
   // float: left;
   // clear: both;
-`
+`;
 
 const RadioDiv = styled.div`
   display: flex;
@@ -3123,6 +3133,6 @@ const RadioDiv = styled.div`
       width: 100%;
     }
   }
-`
+`;
 
 export default Buy;
