@@ -587,6 +587,7 @@ const Buy = () => {
         }
       }
     } catch (error) {
+      console.log(error)
       setOnSubmit(false)
       setStatus(999);
       setAlertMessage("เกิดข้อผิดพลาดในระบบ");
