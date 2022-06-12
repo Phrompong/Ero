@@ -655,7 +655,7 @@ const Buy = () => {
 
     if (
       Number(currentStockVolume) <= Number(rightStockVolume) &&
-      Number(currentStockVolume) !== 0 && isAcceptVerify
+      Number(currentStockVolume) !== 0
     ) {
       setIsConfirmOrder(false);
     } else {
