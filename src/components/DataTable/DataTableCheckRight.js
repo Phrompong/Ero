@@ -39,13 +39,13 @@ const DataTableProfile = ({
   const [status, setStatus] = useState();
 
   const [verifyOrder, setVerifyOrder] = useState(0);
-  const [isSubmit, setIsSubmit] = useState(false)
+  const [isSubmit, setIsSubmit] = useState(false);
 
   const fetchData = async () => {
     const endpoint = "status";
     const [res, status] = await httpGetRequest(endpoint);
     handleFetchStatusOption(res);
-  }
+  };
 
   useEffect(() => {
     fetchData();
@@ -69,8 +69,8 @@ const DataTableProfile = ({
 
   const handleClicked = (details) => {
     setShowDetails(true);
-    if (Object.prototype.hasOwnProperty.call(details["orders"], 'isCheck')) {
-      setVerifyOrder(details["orders"].isCheck ? 1 : 2)
+    if (Object.prototype.hasOwnProperty.call(details["orders"], "isCheck")) {
+      setVerifyOrder(details["orders"].isCheck ? 1 : 2);
     }
     setDetails(details);
   };
@@ -82,18 +82,18 @@ const DataTableProfile = ({
   };
 
   useEffect(() => {
-    setVerifyOrder(0)
-  }, [showDetails])
+    setVerifyOrder(0);
+  }, [showDetails]);
 
   useEffect(() => {
     if (isSubmit) {
-      isPatchData(verifyOrder)
-      setIsSubmit(false)
+      isPatchData(verifyOrder);
+      setIsSubmit(false);
     }
-  }, [isSubmit])
+  }, [isSubmit]);
 
   const handleOnUpdate = async () => {
-    setIsSubmit(true)
+    setIsSubmit(true);
   };
 
   const isPatchData = async (isVerifyOrder) => {
@@ -112,7 +112,7 @@ const DataTableProfile = ({
       setTimeout(() => {
         setShow(false);
         setShowDetails(false);
-        refreshData()
+        refreshData();
       }, 2000);
     } else {
       setStatus(400);
@@ -122,7 +122,7 @@ const DataTableProfile = ({
         setShow(false);
       }, 2000);
     }
-  }
+  };
 
   const detailsModal = useMemo(() => {
     if (details && user.role === "admin") {
@@ -142,11 +142,15 @@ const DataTableProfile = ({
               dropdownSelect={{
                 code:
                   Object.keys(details["orders"]).length > 0
-                    ? details["orders"].brokerId.code
+                    ? details["orders"].brokerId
+                      ? details["orders"].brokerId.code
+                      : "-"
                     : "-",
                 name:
                   Object.keys(details["orders"]).length > 0
-                    ? details["orders"].brokerId.name
+                    ? details["orders"].brokerId
+                      ? details["orders"].brokerId.name
+                      : "-"
                     : "-",
               }}
               tradingAccountNo={
