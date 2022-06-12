@@ -636,13 +636,13 @@ const Buy = () => {
     }
   }, [depositBank]);
 
-  useEffect(() => {
-    if (Number(currentStockVolume) > 0 && isAcceptVerify) {
-      setIsConfirmOrder(false);
-    } else {
-      setIsConfirmOrder(true);
-    }
-  }, [currentStockVolume]);
+  // useEffect(() => {
+  //   if (Number(currentStockVolume) > 0 && isAcceptVerify) {
+  //     setIsConfirmOrder(false);
+  //   } else {
+  //     setIsConfirmOrder(true);
+  //   }
+  // }, [currentStockVolume]);
 
   useEffect(() => {
     setCurrentPrice(Number(currentStockVolume) * Number(offerPrice));
@@ -655,7 +655,7 @@ const Buy = () => {
 
     if (
       Number(currentStockVolume) <= Number(rightStockVolume) &&
-      Number(currentStockVolume) !== 0
+      Number(currentStockVolume) !== 0 && isAcceptVerify
     ) {
       setIsConfirmOrder(false);
     } else {
