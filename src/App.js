@@ -34,7 +34,7 @@ const App = (props) => {
       <Route path="/checkRightAdmin" element={<CheckRightAdmin {...props} />} />
 
       <Route path="" element={<Login {...props} />} />
-      <Route path="/buy" element={<Buy {...props} />} />
+      {/* <Route path="/buy" element={<Buy {...props} />} /> */}
       <Route
         path="/checkRightCustomer"
         element={<CheckRightCustomer {...props} />}

@@ -127,6 +127,10 @@ const Dashboard = () => {
   return (
     <Card>
       <Container>
+        <h3 style={{ color: "red" }}>
+          หมดระยะเวลาในการจองซื้อหุ้นสามัญเพิ่มทุน บริษัท เน็คซ์ แคปปิตอล จำกัด
+          (มหาชน) - NCAP
+        </h3>
         <OverviewSection>
           <LineCard>
             <ViewProfile header="ข้อมูลทั่วไปของท่าน" profile={profile} />
