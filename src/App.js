@@ -35,6 +35,7 @@ const App = (props) => {
 
       <Route path="" element={<Login {...props} />} />
       {/* <Route path="/buy" element={<Buy {...props} />} /> */}
+      <Route path="/editBuy" element={<Buy {...props} />} />
       <Route
         path="/checkRightCustomer"
         element={<CheckRightCustomer {...props} />}

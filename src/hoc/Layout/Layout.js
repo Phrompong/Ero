@@ -52,6 +52,7 @@ const Layout = ({ children }) => {
   const pagesCustomer = [
     "/",
     "/buy",
+    "/editBuy",
     "/checkRightCustomer",
     "/checkRightCustomer/info",
     "/profile",
