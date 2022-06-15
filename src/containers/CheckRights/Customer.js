@@ -124,8 +124,8 @@ const CheckRightCustomer = () => {
             </div>
             <div className="button-section">
               <Button
-                style={{ "background-color": balihai }}
-                disabled={true}
+                // style={{ "background-color": balihai }}
+                disabled={false}
                 onClick={() => navigate(`${location.pathname}/info`)}
               >
                 {textControl}
