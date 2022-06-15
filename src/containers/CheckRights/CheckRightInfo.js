@@ -152,9 +152,10 @@ const CheckRightInfo = () => {
   };
 
   async function fetchCustomerStock() {
-    const endpoint = `customerStocks/search/value?customerId=${user.customerId}`;
+    const endpoint = `orders/search/value?key=${shareId}`;
 
     const inputValue = searchInputRef.current.value;
+
     if (inputValue) {
       endpoint = `${endpoint}&key=${inputValue}`;
     }
@@ -162,34 +163,25 @@ const CheckRightInfo = () => {
     const [res, status] = await httpGetRequest(endpoint);
 
     if (res["data"].length > 0) {
+      console.log(res["data"][0]["customerStock"]);
+      const { customerStock, customerId, excessAmount, paidRightVolume } =
+        res["data"][0];
 
-      const {
-        registrationNo,
-        customers,
-        customerStock,
-        offerPrice,
-        orders,
-        getRight,
-      } = res["data"][0];
+      const { offerPrice } = customerStock;
 
-      const { name, lastname } = customers;
+      const { name, lastname } = customerId;
 
       setRegistrationNo(registrationNo);
       setName(name);
       setLastname(lastname);
 
-      const { excessAmount, paidRightVolume } = orders;
+      setBookingRight(1); // * จองตามสิทธิ
 
-      const tempBooking = excessAmount / offerPrice - paidRightVolume;
-      setBookingRight(tempBooking < 0 ? -1 * tempBooking : tempBooking); // * จองตามสิทธิ
+      setBookingOverRight(1); // * จองเกินสิทธิ
 
-      const tempBookingOver = excessAmount / offerPrice;
-      setBookingOverRight(tempBookingOver); // * จองเกินสิทธิ
+      setPaidRightVolume(1); // * รวมจำนวนหุ้นที่ได้รับทั้งสิ้น
 
-      setPaidRightVolume(paidRightVolume); // * รวมจำนวนหุ้นที่ได้รับทั้งสิ้น
-
-      const tempNumCert = paidRightVolume / getRight;
-      setNumCert(paidRightVolume / getRight); // * รวมจำนวนใบสำคัญแสดงสิทธที่ได้รับทั้งสิ้น
+      setNumCert(1); // * รวมจำนวนใบสำคัญแสดงสิทธที่ได้รับทั้งสิ้น
     } else {
       setCompany("");
       setRightStockName("");
@@ -213,6 +205,10 @@ const CheckRightInfo = () => {
   useEffect(() => {
     getCustomerProfile();
   }, []);
+
+  useEffect(() => {
+    fetchCustomerStock();
+  }, [shareId]);
 
   const header = (
     <Header>
