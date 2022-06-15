@@ -202,6 +202,12 @@ const CheckRightInfo = () => {
     fetchCustomerStock();
   };
 
+  const formatNumber = (number) => {
+    return Number(number)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   useEffect(() => {
     getCustomerProfile();
   }, []);
@@ -293,7 +299,7 @@ const CheckRightInfo = () => {
           <p>จองตามสิทธิ</p>
           <p>จำนวน</p>
           <p className="unit">
-            {bookingRight || "-"}
+            {formatNumber(bookingRight) || "-"}
             <span>หุ้น</span>
           </p>
         </Details>
@@ -301,7 +307,7 @@ const CheckRightInfo = () => {
           <p>จองเกินสิทธิ</p>
           <p>จำนวน</p>
           <p className="unit">
-            {bookingOverRight || "-"}
+            {formatNumber(bookingOverRight) || "-"}
             <span>หุ้น</span>
           </p>
         </Details>
@@ -309,7 +315,7 @@ const CheckRightInfo = () => {
           <p>รวมจำนวนหุ้นที่ได้รับทั้งสิ้น</p>
           <p>จำนวน</p>
           <p className="unit">
-            {paidRightVolume || "-"}
+            {formatNumber(paidRightVolume) || "-"}
             <span>หุ้น</span>
           </p>
         </Details>
@@ -317,7 +323,7 @@ const CheckRightInfo = () => {
           <p>รวมจำนวนใบสำคัญแสดงสิทธที่ได้รับทั้งสิ้น</p>
           <p>จำนวน</p>
           <p className="unit">
-            {numCert || "-"}
+            {formatNumber(numCert) || "-"}
             <span>หน่วย</span>
           </p>
         </Details>
