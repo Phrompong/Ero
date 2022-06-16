@@ -9,6 +9,7 @@ import { httpGetRequest } from "../../utils/fetch";
 import { useDispatch, useSelector } from "react-redux";
 
 import { DropdownArrow } from "../../components/UI/Dropdown";
+import { Spinner } from "../../../src/components/Logo/Spinner";
 
 const Container = styled.div`
   padding: 30px 20px;
@@ -118,9 +119,7 @@ const CheckRightInfo = () => {
   const [rightStockName, setRightStockName] = useState("");
   const [getRight, setGetRight] = useState("");
   const [ratio, setRatio] = useState("");
-  const [registrationNo, setRegistrationNo] = useState(
-    "โปรดรอสักครู่ระบบกำลังทำงาน"
-  );
+  const [registrationNo, setRegistrationNo] = useState("");
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
   const [bookingRight, setBookingRight] = useState("");
@@ -128,6 +127,7 @@ const CheckRightInfo = () => {
   const [paidRightVolume, setPaidRightVolume] = useState("");
   const [numCert, setNumCert] = useState("");
   const searchInputRef = useRef("");
+  const [isFetching, setIsFetching] = useState(true);
 
   const [shareId, setShareId] = useState(null);
   const [allRegistrations, setAllRegistrations] = useState([]);
@@ -191,6 +191,8 @@ const CheckRightInfo = () => {
       setPaidRightVolume(allVolume ? formatNumber(allVolume) : 0); // * รวมจำนวนหุ้นที่ได้รับทั้งสิ้น
 
       setNumCert(warrantList ? formatNumber(warrantList) : 0); // * รวมจำนวนใบสำคัญแสดงสิทธที่ได้รับทั้งสิ้น
+
+      setIsFetching(false);
     } else {
       setCompany("");
       setRightStockName("");
@@ -214,6 +216,7 @@ const CheckRightInfo = () => {
   };
 
   const handleSearchButtonClicked = async () => {
+    setIsFetching(true);
     fetchCustomerStock();
   };
 
@@ -270,6 +273,7 @@ const CheckRightInfo = () => {
               </div>
               <Button onClick={handleSearchButtonClicked}>ค้นหา</Button>
             </Search>
+            {isFetching ? <Spinner /> : ""}
           </div>
           <HighLightText>
             <h3>
@@ -287,7 +291,7 @@ const CheckRightInfo = () => {
             <p style={{ color: persianblue, fontWeight: 600 }}>
               ตรวจสอบผลการจองซื้อ
             </p>
-            <p>{registrationNo}</p>
+            <p> {registrationNo} </p>
             <p>
               {name} {lastname}
             </p>
