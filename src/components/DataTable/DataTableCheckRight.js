@@ -188,8 +188,7 @@ const DataTableProfile = ({
               }
               optional2={
                 Object.keys(details["orders"]).length > 0
-                  ? Number(details["orders"].moreThanVolume) /
-                    Number(details.offerPrice)
+                  ? Number(details["orders"].moreThanVolume)
                   : "-"
               }
               optional3={
