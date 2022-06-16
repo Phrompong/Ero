@@ -75,7 +75,7 @@ const NavigationItems = () => {
             if (user.role === "admin") {
               return (
                 <>
-                  {/* <NavigationItem link="/dashboard" exact="true" img={traffic}>
+                  <NavigationItem link="/dashboard" exact="true" img={traffic}>
                     แดชบอร์ด / Dashboard
                   </NavigationItem>
                   <NavigationItem link="/import" img={account}>
@@ -86,7 +86,7 @@ const NavigationItems = () => {
                   </NavigationItem>
                   <NavigationItem link="/admin" exact="true" img={Logout}>
                     ออกจากระบบ / Log out
-                  </NavigationItem> */}
+                  </NavigationItem>
                 </>
               );
             } else if (user.role === "client") {

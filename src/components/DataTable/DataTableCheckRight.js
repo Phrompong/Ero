@@ -183,26 +183,23 @@ const DataTableProfile = ({
               }
               optional1={
                 Object.keys(details["orders"]).length > 0
-                  ? Number(details["orders"].paidRightVolume) -
-                    Number(details["orders"].excessAmount) /
-                      Number(details.offerPrice)
+                  ? Number(details["orders"].rightVolume)
                   : "-"
               }
               optional2={
                 Object.keys(details["orders"]).length > 0
-                  ? Number(details["orders"].excessAmount) /
+                  ? Number(details["orders"].moreThanVolume) /
                     Number(details.offerPrice)
                   : "-"
               }
               optional3={
                 Object.keys(details["orders"]).length > 0
-                  ? Number(details["orders"].paidRightVolume)
+                  ? Number(details["orders"].allVolume)
                   : "-"
               }
               optional4={
                 Object.keys(details["orders"]).length > 0
-                  ? Number(details["orders"].paidRightVolume) /
-                    Number(details.getRight)
+                  ? Number(details["orders"].warrantList)
                   : "-"
               }
               depositBank={
