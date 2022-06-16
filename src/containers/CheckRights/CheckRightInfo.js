@@ -118,7 +118,9 @@ const CheckRightInfo = () => {
   const [rightStockName, setRightStockName] = useState("");
   const [getRight, setGetRight] = useState("");
   const [ratio, setRatio] = useState("");
-  const [registrationNo, setRegistrationNo] = useState("");
+  const [registrationNo, setRegistrationNo] = useState(
+    "โปรดรอสักครู่ระบบกำลังทำงาน"
+  );
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
   const [bookingRight, setBookingRight] = useState("");
@@ -164,10 +166,17 @@ const CheckRightInfo = () => {
 
     if (res["data"].length > 0) {
       console.log(res["data"][0]["customerStock"]);
-      const { customerStock, customerId, excessAmount, paidRightVolume } =
-        res["data"][0];
+      const {
+        customerStock,
+        customerId,
+        rightVolume,
+        paidRightVolume,
+        moreThanVolume,
+        allVolume,
+        warrantList,
+      } = res["data"][0];
 
-      const { offerPrice } = customerStock;
+      const { offerPrice, registrationNo } = customerStock;
 
       const { name, lastname } = customerId;
 
@@ -175,13 +184,13 @@ const CheckRightInfo = () => {
       setName(name);
       setLastname(lastname);
 
-      setBookingRight(1); // * จองตามสิทธิ
+      setBookingRight(rightVolume ? formatNumber(rightVolume) : 0); // * จองตามสิทธิ
 
-      setBookingOverRight(1); // * จองเกินสิทธิ
+      setBookingOverRight(moreThanVolume ? formatNumber(moreThanVolume) : 0); // * จองเกินสิทธิ
 
-      setPaidRightVolume(1); // * รวมจำนวนหุ้นที่ได้รับทั้งสิ้น
+      setPaidRightVolume(allVolume ? formatNumber(allVolume) : 0); // * รวมจำนวนหุ้นที่ได้รับทั้งสิ้น
 
-      setNumCert(1); // * รวมจำนวนใบสำคัญแสดงสิทธที่ได้รับทั้งสิ้น
+      setNumCert(warrantList ? formatNumber(warrantList) : 0); // * รวมจำนวนใบสำคัญแสดงสิทธที่ได้รับทั้งสิ้น
     } else {
       setCompany("");
       setRightStockName("");
@@ -197,6 +206,12 @@ const CheckRightInfo = () => {
       setNumCert("");
     }
   }
+
+  const formatNumber = (number) => {
+    return Number(number)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
 
   const handleSearchButtonClicked = async () => {
     fetchCustomerStock();
