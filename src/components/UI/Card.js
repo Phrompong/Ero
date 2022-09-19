@@ -145,7 +145,7 @@ export const StyledLineCard = styled.div`
     }
 
     .btn-label {
-      width: 24%;
+      width: 20%;
       margin: auto 10px;
     }
 

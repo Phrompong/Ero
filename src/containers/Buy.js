@@ -164,8 +164,8 @@ const Buy = () => {
   const [addressZipcode, setAddressZipcode] = useState(null);
   const [addressTel, setAddressTel] = useState(null);
 
-  const [file, setFile] = useState(null);
-  const [filename, setFilename] = useState("");
+  const [file, setFile] = useState([]);
+  const [filename, setFilename] = useState([]);
   const [orderId, setOrderId] = useState(null);
 
   const [masterBankRefund, setMasterBankRefund] = useState([]);
@@ -176,7 +176,7 @@ const Buy = () => {
   const [profile, setProfile] = useState(null);
   const [isConfirmOrder, setIsConfirmOrder] = useState(true);
   const [isSummitOrder, setIsSummitOrder] = useState(true);
-  const [depositAmount, setDepositAmount] = useState(0);
+  const [depositAmount, setDepositAmount] = useState(null);
 
   const fetchStep1 = async () => {
     await getCustomerProfile();
@@ -347,8 +347,16 @@ const Buy = () => {
         setShow(false);
       }, 2000);
     } else {
-      setFilename(fileName);
-      setFile(file);
+      // setFilename(fileName);
+      // setFile(file);
+
+      setFilename((current) => [
+        ...current,
+        <div style={{ color: "blue" }}>
+          {fileName} <hr></hr>
+        </div>,
+      ]);
+      setFile((current) => [...current, file]);
     }
   };
 
@@ -2110,9 +2118,15 @@ const Buy = () => {
                         </div>
                         <div className="payment-method">
                           <div className="btn-label">
-                            <b>หลักฐานการชำระเงิน</b>
+                            <b>จำนวนเงินที่ฝาก</b>
                           </div>
-                          <InputDiv style={{ marginTop: "20px", width: "16%" }}>
+                          <InputDiv
+                            style={{
+                              marginTop: "20px",
+                              marginBottom: "20px",
+                              width: "300px",
+                            }}
+                          >
                             <FieldInput
                               value={formatNumber(depositAmount)}
                               placeholder={"จำนวนเงินที่ฝาก"}
@@ -2125,7 +2139,12 @@ const Buy = () => {
                               }}
                             />
                           </InputDiv>
-                          &nbsp;
+                        </div>
+                        <div className="payment-method">
+                          <div className="btn-label">
+                            <b>หลักฐานการชำระเงิน</b>
+                          </div>
+
                           <UploadButton className="btn-upload">
                             แนบหลักฐานการชำระเงิน
                             <input
@@ -2133,6 +2152,7 @@ const Buy = () => {
                               style={{ display: "none" }}
                               accept="image/jpeg, image/png"
                               onChange={handleSelectedFile}
+                              multiple
                             />
                           </UploadButton>
                           <div className="warning-text">
@@ -2162,14 +2182,17 @@ const Buy = () => {
                             <div>
                               <p
                                 style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  marginLeft: "10px",
                                   width: "100%",
                                   fontSize: "17px",
                                   margin: "auto",
                                   marginBottom: "20px",
-                                  marginTop: "20px",
                                 }}
-                              ></p>
-                              {filename}
+                              >
+                                {filename}
+                              </p>
                             </div>
                           </div>
                         )}
@@ -2577,7 +2600,6 @@ const InputDiv = styled.div`
       display: block;
       width: 100%;
       align-items: baseline;
-
       p {
         position: static;
         width: 100%;
