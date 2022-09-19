@@ -12,7 +12,7 @@ export const StyledCard = styled.div`
   border-radius: 15px;
   background: ${white};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  overflow: ${props => props.isScroll ? 'scroll' : 'visible'};
+  overflow: ${(props) => (props.isScroll ? "scroll" : "visible")};
   scrollbar-color: rebeccapurple green;
   scrollbar-width: thin;
   overflow-x: auto;
@@ -60,8 +60,8 @@ export const StyledCard = styled.div`
     margin: auto;
     overflow: scroll;
     overflow-x: auto;
-    overflow-y: auto;    
-    
+    overflow-y: auto;
+
     .btn-div {
       display: grid;
       text-align: center;
@@ -139,14 +139,13 @@ export const StyledLineCard = styled.div`
   .payment-method {
     padding: 10px 20px;
     display: flex;
-
     .bank-name {
       margin-top: 1rem;
       width: 80%;
     }
 
     .btn-label {
-      width: 20%;
+      width: 24%;
       margin: auto 10px;
     }
 
@@ -338,7 +337,11 @@ export const StyledLineCardBank = styled.div`
   }
 `;
 
-export const Card = ({ children, isScroll, style }) => <StyledCard isScroll={isScroll} style={style}>{children}</StyledCard>;
+export const Card = ({ children, isScroll, style }) => (
+  <StyledCard isScroll={isScroll} style={style}>
+    {children}
+  </StyledCard>
+);
 
 export const LineCard = ({ children, style }) => (
   <StyledLineCard style={style}>{children}</StyledLineCard>

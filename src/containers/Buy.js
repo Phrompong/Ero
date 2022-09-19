@@ -40,7 +40,7 @@ const Buy = () => {
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showStepOneVerify, setShowStepOneVerify] = useState(false);
-  const [showRegistrationModal, setShowRegistrationModal] = useState(true);
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false); //! อย่าลืมแก้กลับเป็น true
   const [status, setStatus] = useState();
 
   const [currentStockVolume, setCurrentStockVolume] = useState(0);
@@ -176,6 +176,7 @@ const Buy = () => {
   const [profile, setProfile] = useState(null);
   const [isConfirmOrder, setIsConfirmOrder] = useState(true);
   const [isSummitOrder, setIsSummitOrder] = useState(true);
+  const [depositAmount, setDepositAmount] = useState(0);
 
   const fetchStep1 = async () => {
     await getCustomerProfile();
@@ -413,6 +414,7 @@ const Buy = () => {
         })
       );
     }
+
     if (!phoneNo) {
       setShow(true);
       setStatus(999);
@@ -1265,7 +1267,7 @@ const Buy = () => {
               style={{ display: "block", justifyContent: "flex-start" }}
             >
               {(() => {
-                if (page === 1) {
+                if (page === 3) {
                   return (
                     <>
                       <LineCard
@@ -1927,7 +1929,7 @@ const Buy = () => {
                   );
                 }
 
-                if (page === 3) {
+                if (page === 1) {
                   return (
                     <>
                       <LineCard
@@ -2110,6 +2112,20 @@ const Buy = () => {
                           <div className="btn-label">
                             <b>หลักฐานการชำระเงิน</b>
                           </div>
+                          <InputDiv style={{ marginTop: "20px", width: "16%" }}>
+                            <FieldInput
+                              value={formatNumber(depositAmount)}
+                              placeholder={"จำนวนเงินที่ฝาก"}
+                              onChange={(e) => {
+                                setDepositAmount(
+                                  e.target.value
+                                    .replace(/\,/g, "")
+                                    .replace(/[^0-9.]/, "")
+                                );
+                              }}
+                            />
+                          </InputDiv>
+                          &nbsp;
                           <UploadButton className="btn-upload">
                             แนบหลักฐานการชำระเงิน
                             <input
