@@ -1,45 +1,20 @@
 import styled from "styled-components";
-import Overview from "../../components/Overview/Overview";
-import DataTable from "../../components/DataTable/DataTable";
 import DataTableCheckRight from "../../components/DataTable/DataTableCheckRight";
-import ViewProfile from "../../components/ViewProfile/ViewProfile";
-import News from "../../components/News/News";
 import Paginate from "../../components/Paginate/Paginate";
 
 import { Card, LineCard } from "../../components/UI/Card";
-import { SearchableInput } from "../../components/UI/Search";
-import { balihai, shamrock } from "../../utils/color";
-import { useDispatch, useSelector } from "react-redux";
+import { balihai } from "../../utils/color";
+import { useSelector } from "react-redux";
 import { useState, useEffect, useRef } from "react";
 import { httpGetRequest } from "../../utils/fetch";
-import { Search } from "@styled-icons/bootstrap/Search";
 import { Button } from "../../components/UI/Button";
 
 const CheckRightAdmin = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [data, setData] = useState([]);
-  const [profile, setProfile] = useState(null);
-  const [news, setNews] = useState(null);
   const [isFetching, setIsFetching] = useState(true);
   const searchInputRef = useRef("");
-  const { user } = useSelector((state) => state);
-
-  // nowDate = `${nowDate.getHours()}:${nowDate.getMinutes()} at ${nowDate.getDate()}th ${nowDate.getMonth()}`;
-  const fakedata = [
-    {
-      name: "รชดี ชื่นภักดี",
-      phone: "0890389311",
-      email: "rachadeec@gmail.com",
-      ats: "00877755656",
-      bank: "SCB",
-      details: "หุ้นเพิ่มทุน STOWER 2022",
-      amount: "70,000",
-      extraOffer: "STOWER-W4   140,000",
-      totalPrice: "2,200,000",
-      status: { status: 1, text: "ยืนยันการชำระเงิน" },
-    },
-  ];
 
   const theaders = [
     "รายการ",
@@ -63,7 +38,7 @@ const CheckRightAdmin = () => {
     const { totalPages } = res["_metadata"];
     setTotalPages(totalPages);
     setData(res["data"]);
-    handleSearchButtonClicked()
+    handleSearchButtonClicked();
     setIsFetching(false);
   }
 
@@ -91,7 +66,6 @@ const CheckRightAdmin = () => {
         </SearchDiv>
 
         <TableSection>
-          {/* <div style={{ overflow: "scroll" }}> */}
           <LineCard>
             <div className="table-detail">
               <DataTableCheckRight
@@ -101,11 +75,9 @@ const CheckRightAdmin = () => {
                 refreshData={fetchDataTable}
                 isFetching={isFetching}
               />
-              {/* <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} /> */}
             </div>
             <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
           </LineCard>
-          {/* </div> */}
         </TableSection>
       </Container>
     </Card>

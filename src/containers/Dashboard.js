@@ -169,7 +169,7 @@ const Dashboard = () => {
     const { value, fileExtension } = valueMasterExport;
 
     window.open(
-      `https://ero-bke-test.asiawealth.co.th/api/v1/exports?topic=${value}&fileExtension=${fileExtension}`
+      `${process.env.REACT_APP_ERO_URI}/exports?topic=${value}&fileExtension=${fileExtension}`
     );
   };
 
@@ -247,14 +247,6 @@ const Dashboard = () => {
                 }}
               />
             </div>
-            {/* <div className="search-div">
-              <Dropdown
-                options={type}
-                selected={selectedType}
-                setSelected={setSelectedType}
-                style={{ height: "42px" }}
-              />
-            </div> */}
             <div className="search-div flex">
               <InputSeacrh placeholder="Search..." ref={searchInputRef} />
               <Button
@@ -276,26 +268,6 @@ const Dashboard = () => {
               setSelected={setValueMasterExport}
               selected={valueMasterExport}
               display={"name"}
-              //     selected={{
-              //       registraionNo:
-              //         allRegistrations.length > 0 && !shareId
-              //           ? allRegistrations[0].registraionNo
-              //           : shareId,
-              //     }}
-              // <DropdownArrow
-              //     options={allRegistrations}
-              //     isOpen={isOpenDropdownArrow}
-              //     onClick={() => setIsOpenDropdownArrow(!isOpenDropdownArrow)}
-              //     onBlur={() => setIsOpenDropdownArrow(false)}
-              //     setSelected={(e) => setShareId(e.registraionNo)}
-              //     selected={{
-              //       registraionNo:
-              //         allRegistrations.length > 0 && !shareId
-              //           ? allRegistrations[0].registraionNo
-              //           : shareId,
-              //     }}
-              //     display={"registraionNo"}
-              //   />
             />
           </InputDiv>
           <Button onClick={handleExport}>

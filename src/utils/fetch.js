@@ -1,6 +1,7 @@
 //const BASE_URL = "https://ero-bke.asiawealth.co.th/api/v1/";
-const BASE_URL = "https://ero-bke-test.asiawealth.co.th/api/v1/";
+//const BASE_URL = "https://ero-bke-test.asiawealth.co.th/api/v1/";
 //const BASE_URL = "http://localhost:3002/api/v1/";
+const BASE_URL = process.env.REACT_APP_ERO_URI;
 
 class JSONRPCError extends Error {
   constructor(errData) {
@@ -12,7 +13,7 @@ class JSONRPCError extends Error {
 }
 
 export async function httpPostRequest(body, endpoint) {
-  const url = `${BASE_URL}${endpoint}`;
+  const url = `${BASE_URL}/${endpoint}`;
   const res = await fetch(url, {
     method: "POST",
     headers: {
@@ -30,7 +31,7 @@ export async function httpPostRequest(body, endpoint) {
 }
 
 export async function httpGetRequest(endpoint) {
-  const url = `${BASE_URL}${endpoint}`;
+  const url = `${BASE_URL}/${endpoint}`;
 
   const res = await fetch(url, {
     method: "GET",
@@ -45,7 +46,7 @@ export async function httpGetRequest(endpoint) {
 }
 
 export async function httpPutRequest(body, endpoint) {
-  const url = `${BASE_URL}${endpoint}`;
+  const url = `${BASE_URL}/${endpoint}`;
 
   const res = await fetch(url, {
     method: "PUT",
@@ -64,7 +65,7 @@ export async function httpPutRequest(body, endpoint) {
 }
 
 export async function httpPatchRequest(body, endpoint) {
-  const url = `${BASE_URL}${endpoint}`;
+  const url = `${BASE_URL}/${endpoint}`;
 
   const res = await fetch(url, {
     method: "PATCH",
@@ -83,7 +84,7 @@ export async function httpPatchRequest(body, endpoint) {
 }
 
 export async function httpFetch(method, body, endpoint) {
-  const url = `${BASE_URL}${endpoint}`;
+  const url = `${BASE_URL}/${endpoint}`;
   const res = await fetch(url, {
     method: method,
     headers: {
@@ -97,7 +98,7 @@ export async function httpFetch(method, body, endpoint) {
 }
 
 export async function httpPostRequestUploadFile(body, endpoint) {
-  const url = `${BASE_URL}${endpoint}`;
+  const url = `${BASE_URL}/${endpoint}`;
   const res = await fetch(url, {
     method: "POST",
     body: body,

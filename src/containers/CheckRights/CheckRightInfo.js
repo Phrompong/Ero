@@ -170,7 +170,6 @@ const CheckRightInfo = () => {
         customerStock,
         customerId,
         rightVolume,
-        paidRightVolume,
         moreThanVolume,
         allVolume,
         warrantList,
@@ -248,10 +247,6 @@ const CheckRightInfo = () => {
           <div className="inner search">
             <p>เพื่อตรวจสอบสิทธิของท่านแล้วกรอกข้อมูลให้ถูกต้อง</p>
             <Search>
-              {/* <InputSearch
-                placeholder="ค้นหาหมายเลชประจำตัวประชาชน / เลขที่หนังสือเดินทาง/เลขทะเบียนนิติบุคคล"
-                ref={searchInputRef}
-              /> */}
               <div
                 className="modal-block-label"
                 style={{ marginRight: "1rem" }}

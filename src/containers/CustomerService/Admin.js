@@ -61,7 +61,7 @@ const CustomerServiceAdmin = () => {
       setTimeout(() => {
         redirectPage();
       }, 2000);
-      //navigate("/login/admin");
+      
     }
   };
 

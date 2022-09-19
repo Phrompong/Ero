@@ -5,16 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { DownArrow } from "@styled-icons/boxicons-solid/DownArrow";
 
 import change from "../assets/icon_change.png";
-import PaymentProcess from "../assets/paymentprocess.png";
-import PaymentProcessMobile from "../assets/paymentprocess_mobile.png";
 
 import { Card } from "../components/UI/Card";
 import { FlexContainer } from "../components/UI/FlexContainer";
-import {
-  DropdownSelect,
-  DropdownSelectMasterBank,
-  DropdownArrow,
-} from "../components/UI/Dropdown";
+import { DropdownSelect, DropdownArrow } from "../components/UI/Dropdown";
 import { LineCard, LineCardBank } from "../components/UI/Card";
 import { FieldInput } from "../components/UI/Search";
 import { ModalAlert } from "../components/ModalAlert/ModalAlert";
@@ -505,11 +499,6 @@ const Buy = () => {
       setFullname(fullnameModal);
       setShareId(shareIdModal);
       setPhoneNo(phoneNoModal);
-
-      // localStorage.setItem("step_1", JSON.stringify({
-      //   ...JSON.parse(localStorage.getItem("step_1")),
-      //   phoneNo: phoneNoModal
-      // }))
     } else if (page === 2) {
       setShowAlertModal(false);
     }
@@ -550,9 +539,6 @@ const Buy = () => {
         if (status === 200) {
           setIsConfirmBooking(true);
           setOrderId(res.data._id);
-          // setStatus(200);
-          // setAlertMessage("ยืนยันคำจองซื้อสำเร็จ");
-          // showAlert(setShow, 2000);
           localStorage.clear();
 
           const formDataBookbank = new FormData();
@@ -635,14 +621,6 @@ const Buy = () => {
       setBookbankFile(null);
     }
   }, [depositBank]);
-
-  // useEffect(() => {
-  //   if (Number(currentStockVolume) > 0 && isAcceptVerify) {
-  //     setIsConfirmOrder(false);
-  //   } else {
-  //     setIsConfirmOrder(true);
-  //   }
-  // }, [currentStockVolume]);
 
   useEffect(() => {
     setCurrentPrice(Number(currentStockVolume) * Number(offerPrice));
@@ -1318,7 +1296,6 @@ const Buy = () => {
                             ข้อมูลโดยสรุป
                           </p>
                           <div className="desc">
-                            {/* <p style={{ height: "157.4px" }}>{shareDescription}</p> */}
                             <p
                               style={{
                                 textIndent: "2rem",

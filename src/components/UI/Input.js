@@ -11,7 +11,6 @@ export const Input = React.forwardRef((props, ref) => {
     case "input":
       inputElement = (
         <StyledInput
-          //   onChange={props.changed}
           ref={ref}
           {...props.elementConfig}
           autoComplete="new-password"

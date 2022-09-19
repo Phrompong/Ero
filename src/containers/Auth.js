@@ -106,11 +106,6 @@ const Auth = () => {
                   onClick={handleSubmited}
                   disabled={!isNotRobot}
                 />
-                {/* {link("Problem to sign in ?", "/customer/service")}
-                {link(
-                  "มีปัญหาในการเข้าใช้งานกรุณาคลิกที่นี่",
-                  "/customer/service"
-                )} */}
               </div>
             </div>
 

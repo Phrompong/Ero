@@ -1,5 +1,4 @@
-import { Routes, Route, useHistory, useLocation } from "react-router-dom";
-
+import { Routes, Route } from "react-router-dom";
 import Layout from "./hoc/Layout/Layout";
 import Auth from "./containers/Auth";
 import Login from "./containers/Login";
@@ -11,10 +10,7 @@ import CheckRightAdmin from "./containers/CheckRights/Admin";
 import CheckRightCustomer from "./containers/CheckRights/Customer";
 import CustomerServiceAdmin from "./containers/CustomerService/Admin";
 import CustomerService from "./containers/CustomerService/Customer";
-//import CustomerService from "./containers/customerService/Customer";
 import CheckRightInfo from "./containers/CheckRights/CheckRightInfo";
-import { useSelector } from "react-redux";
-import Cookies from "js-cookie";
 
 import "./App.css";
 

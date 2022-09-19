@@ -63,14 +63,6 @@ const DataTableProfile = ({
     refreshData();
   };
 
-  // useEffect(() => {
-  //   if (data.length === 0) {
-  //     setIsFetching(true)
-  //   } else {
-  //     setIsFetching(false)
-  //   }
-  // }, [data])
-
   const detailsModal = useMemo(
     () => (
       <Details

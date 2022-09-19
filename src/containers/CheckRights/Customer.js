@@ -33,22 +33,6 @@ const CheckRightCustomer = () => {
 
   const { user } = useSelector((state) => state);
 
-  // nowDate = `${nowDate.getHours()}:${nowDate.getMinutes()} at ${nowDate.getDate()}th ${nowDate.getMonth()}`;
-  const fakedata = [
-    {
-      name: "รชดี ชื่นภักดี",
-      phone: "0890389311",
-      email: "rachadeec@gmail.com",
-      ats: "00877755656",
-      bank: "SCB",
-      details: "หุ้นเพิ่มทุน STOWER 2022",
-      amount: "70,000",
-      extraOffer: "STOWER-W4   140,000",
-      totalPrice: "2,200,000",
-      status: { status: 1, text: "ยืนยันการชำระเงิน" },
-    },
-  ];
-
   const theaders = [
     "รายการ",
     "ถือหุ้น",
@@ -111,7 +95,6 @@ const CheckRightCustomer = () => {
     <Card>
       <Container>
         <TableSection>
-          {/* <div style={{ overflow: "scroll" }}> */}
           <LineCard>
             <div className="table-detail">
               <DataTableCheckRight
@@ -120,11 +103,9 @@ const CheckRightCustomer = () => {
                 data={data}
                 refreshData={fetchDataTable}
               />
-              {/* <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} /> */}
             </div>
             <div className="button-section">
               <Button
-                // style={{ "background-color": balihai }}
                 disabled={false}
                 onClick={() => navigate(`${location.pathname}/info`)}
               >
@@ -135,7 +116,6 @@ const CheckRightCustomer = () => {
             </div>
             <Paginate setCurrentPage={setCurrentPage} totalPages={totalPages} />
           </LineCard>
-          {/* </div> */}
         </TableSection>
       </Container>
     </Card>

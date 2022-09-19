@@ -87,19 +87,11 @@ const CustomerService = () => {
             </Header>
           </div>
           <Info>
-            <FontAwesomeIcon
-              icon={faPhone}
-              height={50}
-            // style={{ margin: "0", marginRight: "0.5rem" }}
-            />
+            <FontAwesomeIcon icon={faPhone} height={50} />
             <p>02-680-5033-5</p>
           </Info>
           <Info>
-            <FontAwesomeIcon
-              icon={faEnvelope}
-              height={50}
-            // style={{ margin: "0", marginRight: "0.5rem" }}
-            />
+            <FontAwesomeIcon icon={faEnvelope} height={50} />
             <p> cs@asiawealth.co.th</p>
           </Info>
           <Header>(วันทำการ จันทร์-ศุกร์ เวลา 08.30 -17.00 น.)</Header>
@@ -300,7 +292,7 @@ const Card = styled.div`
         background: #ffffff;
         border-radius: 0px 8px 8px 0px;
         marign: auto;
-  
+
         .logo-img {
           height: 100px;
           width: 220px;
@@ -316,7 +308,6 @@ const Card = styled.div`
 
   /* For Mobiles */
   @media screen and (min-width: 541px) and (max-width: 1024px) {
-    
   }
 `;
 
@@ -340,7 +331,7 @@ const Info = styled.p`
   text-align: start;
 
   /* For Tablets */
-  @media screen and (max-width: 540px){
+  @media screen and (max-width: 540px) {
   }
 `;
 

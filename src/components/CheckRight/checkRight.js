@@ -1,6 +1,4 @@
 import styled from "styled-components";
-
-import { ProgressPie } from "../UI/ProgressPie";
 import { persianblue } from "../../utils/color";
 import { FlexContainer } from "../UI/FlexContainer";
 import { gold } from "../../utils/color";
@@ -46,10 +44,6 @@ const gridItem = styled.div`
   text-align: center;
 `;
 
-const Progress = styled.div``;
-
-const Paragraph = styled.p``;
-
 const Div = styled.div`
   padding: 10px;
 `;
@@ -85,7 +79,7 @@ const Datagrid = styled(Div)`
 const CheckRight = ({ header, profile }) => {
   if (!profile) return;
 
-  const { name, telephone, email, atsBankNo, atsBank, color } = profile;
+  const { name, telephone, color } = profile;
   const info = (label, value, link) => (
     <FlexContainer>
       <p style={{ flex: 1 }}>{label}</p>

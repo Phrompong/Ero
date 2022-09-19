@@ -226,16 +226,6 @@ const DataTableProfile = ({
         </Modal>
       );
     }
-    // else if (details && user.role == "client") {
-    //   return (
-    //     <Details
-    //       options={options}
-    //       show={showDetails}
-    //       closed={handleClosedModal}
-    //       details={details}
-    //     />
-    //   )
-    // }
   }, [details, showDetails]);
 
   return (
