@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   balihai,
@@ -13,11 +14,13 @@ import {
 import Details from "./Details";
 import Paginate from "../Paginate/Paginate";
 import Detail from "../Modal/ModalDetail";
-import { Spinner } from "../Logo/Spinner"
+import { Spinner } from "../Logo/Spinner";
+import Cookies from "js-cookie";
 
 import { httpGetRequest } from "../../utils/fetch";
 
 const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
+  const dispatch = useDispatch();
   const [showDetails, setShowDetails] = useState(false);
   const [details, setDetails] = useState();
   const [options, setOptions] = useState([]);
@@ -71,7 +74,7 @@ const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
 
   const formatNumber = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
+  };
 
   return (
     <Container>
@@ -85,40 +88,74 @@ const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
               ))}
             </TR>
           </THead>
-          {
-            isFetching ? (
-              <TBody>
-                <TR>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
-                  <TD><Spinner/></TD>
+          {isFetching ? (
+            <TBody>
+              <TR>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+                <TD>
+                  <Spinner />
+                </TD>
+              </TR>
+            </TBody>
+          ) : (
+            <TBody>
+              {data.map((x, index) => (
+                // <TR key={index} onClick={() => handleClicked(x)}>
+                <TR key={index}>
+                  <TD>{new Date(x["createdOn"]).toLocaleDateString()}</TD>
+                  <TD>{`${x["customerId"]["name"]} ${x["customerId"]["lastname"]} `}</TD>
+                  <TD>{x["rightStockName"]}</TD>
+                  <TD>{formatNumber(x["paidRightVolume"])}</TD>
+                  <TD>
+                    {x["customerStock"]["rightSpecialName"]}{" "}
+                    {x["customerStock"]["rightSpecialVolume"]}
+                  </TD>
+                  <TD>{formatNumber(x["paymentAmount"])}</TD>
+                  <Status color={color[x["status"]["value"]]}>
+                    {x["status"]["status"]}
+                  </Status>
+                  <TD>
+                    <a
+                      onClick={() => {
+                        const payload = {
+                          username: x["customerId"]["refNo"],
+                          customerId: x["customerId"]["_id"],
+                          role: "client",
+                        };
+
+                        // Cookies.set(
+                        //   "token",
+                        //   JSON.stringify({
+                        //     user: payload,
+                        //   })
+                        // );
+
+                        window.open(
+                          `/profile?event=change&customerId=${x["customerId"]["_id"]}`
+                        );
+                      }}
+                    >
+                      แก้ไข
+                    </a>
+                  </TD>
                 </TR>
-              </TBody> ) : (
-                <TBody>
-                  {data.map((x, index) => (
-                    <TR key={index} onClick={() => handleClicked(x)}>
-                      <TD>
-                        {new Date(x["createdOn"]).toLocaleDateString()}
-                      </TD>
-                      <TD>{`${x["customerId"]["name"]} ${x["customerId"]["lastname"]} `}</TD>
-                      <TD>{x["rightStockName"]}</TD>
-                      <TD>{formatNumber(x["paidRightVolume"])}</TD>
-                      <TD>
-                        {x["customerStock"]["rightSpecialName"]}{" "}
-                        {x["customerStock"]["rightSpecialVolume"]}
-                      </TD>
-                      <TD>{formatNumber(x["paymentAmount"])}</TD>
-                      <Status color={color[x["status"]["value"]]}>
-                        {x["status"]["status"]}
-                      </Status>
-                    </TR>
-                  ))}
-                </TBody>
-              )
-          }
+              ))}
+            </TBody>
+          )}
         </Table>
       )}
       {showDetails && detailsModal}

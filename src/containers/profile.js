@@ -7,6 +7,7 @@ import { balihai } from "../utils/color";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { httpGetRequest } from "../utils/fetch";
+import { useLocation } from "react-router-dom";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
@@ -15,6 +16,7 @@ const Dashboard = () => {
   const { user } = useSelector((state) => state);
   const [totalPages, setTotalPages] = useState(1);
   const [isFetching, setIsFetching] = useState(true);
+  const search = useLocation().search;
 
   const theaders = [
     "วันที่",
@@ -25,9 +27,11 @@ const Dashboard = () => {
     "สถานะรายการ",
   ];
 
+  const customerId = new URLSearchParams(search).get("customerId");
+
   async function fetchDataTable() {
     setIsFetching(true);
-    let endpoint = `orders?customerId=${user.customerId}`;
+    let endpoint = `orders?customerId=${user.customerId || customerId}`;
 
     const [res, status] = await httpGetRequest(endpoint);
     const { totalPages } = res["_metadata"];
@@ -38,7 +42,7 @@ const Dashboard = () => {
   }
 
   async function fetchDataProfile() {
-    let endpoint = `masterCustomers/${user.customerId}`;
+    let endpoint = `masterCustomers/${user.customerId || customerId}`;
 
     const [res, status] = await httpGetRequest(endpoint);
     setProfile(res["data"]);

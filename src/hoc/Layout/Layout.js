@@ -39,6 +39,7 @@ const Main = styled.main`
 const Layout = ({ children }) => {
   const { user } = useSelector((state) => state);
 
+  console.log(`user : ${JSON.stringify(user)}`);
   const [showSideDrawer, setShowSideDrawer] = useState(false);
 
   const pagesAdmin = [
@@ -65,6 +66,7 @@ const Layout = ({ children }) => {
 
   const isPage = pagesAll.includes(path);
 
+  console.log(`isPage : ${isPage}`);
   const isLogin =
     path !== "/admin" &&
     path !== "/" &&
@@ -90,7 +92,7 @@ const Layout = ({ children }) => {
   ) {
     return <>{children}</>;
   }
-
+  const { role } = user;
   // * Case no authentication
   if (isPage && user.length === 0) {
     return (
@@ -102,15 +104,14 @@ const Layout = ({ children }) => {
 
   // * Case path allow and authentication
   if (isPage && (user || user.length > 0)) {
-    const { role } = user;
-
     let isPageAllow = false;
     switch (role) {
       case "admin":
         pagesAdmin.push("");
         isPageAllow =
-          pagesAdmin.filter((o) => o.includes(path)).length > 0 ? true : false;
+          pagesAll.filter((o) => o.includes(path)).length > 0 ? true : false;
 
+        console.log(`path : ${path}`);
         if (!isPageAllow) {
           return (
             <>
@@ -148,6 +149,7 @@ const Layout = ({ children }) => {
       </>
     );
 
+    console.log(`isLogin : ${isLogin}`);
     return (
       <Container>
         {sidebar}

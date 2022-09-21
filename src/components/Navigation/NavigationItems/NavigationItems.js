@@ -7,6 +7,7 @@ import profile from "../../../assets/icon_profile.png";
 import Vector from "../../../assets/vector.png";
 import Logout from "../../../assets/logout.png";
 import Notfound from "../../../assets/notfound.png";
+import { useLocation } from "react-router-dom";
 
 import { Logo } from "../../Logo/Logo";
 import { balihai, ivory } from "../../../utils/color";
@@ -65,6 +66,9 @@ const Nav = styled.nav`
 
 const NavigationItems = () => {
   const { user } = useSelector((state) => state);
+  const search = useLocation().search;
+  const event = new URLSearchParams(search).get("event");
+
   return (
     <>
       <Nav>
@@ -72,7 +76,7 @@ const NavigationItems = () => {
 
         <Items>
           {(() => {
-            if (user.role === "admin") {
+            if (!event && user.role === "admin") {
               return (
                 <>
                   <NavigationItem link="/dashboard" exact="true" img={traffic}>
@@ -89,7 +93,7 @@ const NavigationItems = () => {
                   </NavigationItem>
                 </>
               );
-            } else if (user.role === "client") {
+            } else if (user.role === "client" || event === "change") {
               return (
                 <>
                   <NavigationItem link="/profile" img={profile}>
