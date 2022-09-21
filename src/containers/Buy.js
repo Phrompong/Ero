@@ -15,7 +15,6 @@ import { ModalAlert } from "../components/ModalAlert/ModalAlert";
 import { showAlert } from "../utils/showAlert";
 import { Modal } from "../components/UI/Modal";
 import { ModalDetail } from "../components/Modal/ModalDetail";
-
 import { balihai, ivory, persianblue, shamrock, white } from "../utils/color";
 import {
   httpFetch,
@@ -33,6 +32,7 @@ import { format } from "date-fns";
 import Vector from "../assets/paymentprocess.png";
 
 const Buy = () => {
+  const tempFilenames = ["test"];
   const { user } = useSelector((state) => state);
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
@@ -350,13 +350,10 @@ const Buy = () => {
       // setFilename(fileName);
       // setFile(file);
 
-      setFilename((current) => [
-        ...current,
-        <div style={{ color: "blue" }}>
-          {fileName} <hr></hr>
-        </div>,
-      ]);
+      setFilename((current) => [...current, fileName]);
       setFile((current) => [...current, file]);
+
+      console.log(filename);
     }
   };
 
@@ -669,6 +666,14 @@ const Buy = () => {
     return Number(number)
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const removeFilename = async (value) => {
+    const index = filename.findIndex((o) => o === value);
+
+    if (index === -1) return;
+    filename.splice(index, 1);
+    setFilename(filename.filter((o) => o !== value));
   };
 
   return (
@@ -2166,36 +2171,52 @@ const Buy = () => {
                             </p>
                           </div>
                         </div>
-                        {filename && (
-                          <div
-                            className="payment-method"
+
+                        <div
+                          className="payment-method"
+                          style={{
+                            display: "flex",
+                          }}
+                        >
+                          <b
                             style={{
-                              display: "flex",
+                              width: "20%",
+                              margin: "20px 10px 10px 10px",
                             }}
-                          >
-                            <b
+                          ></b>
+                          <div>
+                            <p
                               style={{
-                                width: "20%",
-                                margin: "20px 10px 10px 10px",
+                                display: "flex",
+                                flexDirection: "column",
+                                marginLeft: "10px",
+                                width: "100%",
+                                fontSize: "17px",
+                                margin: "auto",
+                                marginBottom: "20px",
                               }}
-                            ></b>
-                            <div>
-                              <p
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  marginLeft: "10px",
-                                  width: "100%",
-                                  fontSize: "17px",
-                                  margin: "auto",
-                                  marginBottom: "20px",
-                                }}
-                              >
-                                {filename}
-                              </p>
-                            </div>
+                            >
+                              {filename.map((_tempFilename) => (
+                                <div
+                                  style={{
+                                    display: "grid",
+                                    gridTemplateColumns: "100% 100%",
+                                  }}
+                                >
+                                  {_tempFilename}
+                                  <h4
+                                    onClick={() => {
+                                      removeFilename(_tempFilename);
+                                    }}
+                                  >
+                                    X
+                                  </h4>
+                                </div>
+                              ))}
+                            </p>
                           </div>
-                        )}
+                        </div>
+
                         <div className="payment-method">
                           <div className="btn-label">
                             <b>วันที่โอน</b>
