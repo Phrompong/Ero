@@ -64,6 +64,7 @@ const Buy = () => {
 
   /// input file upload
   const [bookbankFile, setBookbankFile] = useState(null);
+  const [tempBookBankFile, setTempBookBankFile] = useState(null);
   const hiddenFileInput = React.useRef(null);
 
   const [onSubmit, setOnSubmit] = useState(false);
@@ -185,7 +186,6 @@ const Buy = () => {
   const customerId = localStorage.getItem("customerId");
 
   const fetchStep1 = async () => {
-    await getOrder();
     await getCustomerProfile();
     await getBrokers();
     await fetchDataProfile();
@@ -201,6 +201,8 @@ const Buy = () => {
       );
       setShareRadio(JSON.parse(localStorage.getItem("step_1")).shareRadio);
     }
+
+    await getOrder();
   };
 
   const fetchStep2 = async () => {
@@ -229,9 +231,19 @@ const Buy = () => {
 
     if (status !== 200) return;
 
-    const { customerTel, customerStock, isCert, brokerId, accountNo } =
-      res.data[0];
-    const { registrationNo } = customerStock;
+    const {
+      customerTel,
+      customerStock,
+      isCert,
+      brokerId,
+      accountNo,
+      paidRightVolume,
+      paymentAmount,
+      bankRefund,
+      bankRefundNo,
+      attachedFileBookBank,
+    } = res.data[0];
+    const { registrationNo, rightStockName } = customerStock;
     setTradingAccountNo(accountNo); // * Set เลขที่บัญชีซื้อชาย
     setDisplayBroker(`${brokerId.code} ${brokerId.name}`);
     // * broker
@@ -248,6 +260,13 @@ const Buy = () => {
     setShareId(registrationNo);
     setPhoneNo(customerTel);
 
+    // * step 2
+    setCurrentStockVolume(paidRightVolume);
+    setCurrentPrice(paymentAmount);
+    setDepositBank(bankRefund);
+    setBank(bankRefundNo);
+    setTempBookBankFile(attachedFileBookBank);
+    console.log(attachedFileBookBank);
     // * Set display button
     setIsDisableToPage2(false);
   };
@@ -315,7 +334,9 @@ const Buy = () => {
 
   const getCustomerStock = async () => {
     const [res, status] = await httpGetRequest(
-      `customerStocks?customerId=${user.customerId}&registrationNo=${shareIdModal}`
+      `customerStocks?customerId=${
+        user.customerId || customerId
+      }&registrationNo=${shareIdModal}`
     );
 
     if (status === 200) {
@@ -553,69 +574,69 @@ const Buy = () => {
     try {
       if (!onSubmit) {
         setOnSubmit(true);
-        const [res, status] = await httpFetch(
-          "POST",
-          {
-            customerId: user.customerId,
-            rightStockName,
-            stockVolume,
-            rightSpecialName,
-            rightSpecialVolume,
-            paidRightVolume: Number(currentStockVolume),
-            paidSpecialVolume: 0,
-            paymentAmount: Number(currentPrice),
-            returnAmount: 0,
-            customerName: fullname,
-            customerTel: phoneNo,
-            brokerId: dropdownSelect ? dropdownSelect._id : null,
-            accountNo: tradingAccountNo,
-            customerStockId: customerStockId,
-            excessVolume,
-            address: `${profile.address} ${profile.zipcode}`,
-            registrationNo: shareId,
-            bankRefund: depositBank ? depositBank._id : "",
-            bankRefundNo: bank,
-            paymentDate: `${paymentDate} ${paymentTime}`,
-            isCert: shareRadio === "first" ? false : true,
-          },
-          "orders"
-        );
+        // const [res, status] = await httpFetch(
+        //   "POST",
+        //   {
+        //     customerId: user.customerId,
+        //     rightStockName,
+        //     stockVolume,
+        //     rightSpecialName,
+        //     rightSpecialVolume,
+        //     paidRightVolume: Number(currentStockVolume),
+        //     paidSpecialVolume: 0,
+        //     paymentAmount: Number(currentPrice),
+        //     returnAmount: 0,
+        //     customerName: fullname,
+        //     customerTel: phoneNo,
+        //     brokerId: dropdownSelect ? dropdownSelect._id : null,
+        //     accountNo: tradingAccountNo,
+        //     customerStockId: customerStockId,
+        //     excessVolume,
+        //     address: `${profile.address} ${profile.zipcode}`,
+        //     registrationNo: shareId,
+        //     bankRefund: depositBank ? depositBank._id : "",
+        //     bankRefundNo: bank,
+        //     paymentDate: `${paymentDate} ${paymentTime}`,
+        //     isCert: shareRadio === "first" ? false : true,
+        //   },
+        //   "orders"
+        // );
 
-        if (status === 200) {
-          setIsConfirmBooking(true);
-          setOrderId(res.data._id);
-          localStorage.clear();
+        // if (status === 200) {
+        //   setIsConfirmBooking(true);
+        //   setOrderId(res.data._id);
+        //   localStorage.clear();
 
-          const formDataBookbank = new FormData();
-          formDataBookbank.append("File", bookbankFile);
-          const endpointBookbank = `uploads/bookbank?orderId=${res.data._id}`;
-          const [resBookbank, statusBookbank] = await httpPostRequestUploadFile(
-            formDataBookbank,
-            endpointBookbank
-          );
-          if (statusBookbank === 200) {
-            const formData = new FormData();
-            formData.append("File", file);
-            const endpoint = `uploads/image?orderId=${res.data._id}`;
+        //   const formDataBookbank = new FormData();
+        //   formDataBookbank.append("File", bookbankFile);
+        //   const endpointBookbank = `uploads/bookbank?orderId=${res.data._id}`;
+        //   const [resBookbank, statusBookbank] = await httpPostRequestUploadFile(
+        //     formDataBookbank,
+        //     endpointBookbank
+        //   );
+        //   if (statusBookbank === 200) {
+        //     const formData = new FormData();
+        //     formData.append("File", file);
+        //     const endpoint = `uploads/image?orderId=${res.data._id}`;
 
-            const [_res, _status] = await httpPostRequestUploadFile(
-              formData,
-              endpoint
-            );
-            let msg = _res.message;
-            setStatus(_status);
-            if (_status === 200) {
-              msg = "Upload Completed";
-              setAlertMessage(msg);
-              showAlert(setShow, 2000);
-              setFile();
-              setTimeout(() => {
-                setOnSubmit(false);
-                navigate(`/profile`);
-              }, 2000);
-            }
-          }
-        }
+        //     const [_res, _status] = await httpPostRequestUploadFile(
+        //       formData,
+        //       endpoint
+        //     );
+        //     let msg = _res.message;
+        //     setStatus(_status);
+        //     if (_status === 200) {
+        //       msg = "Upload Completed";
+        //       setAlertMessage(msg);
+        //       showAlert(setShow, 2000);
+        //       setFile();
+        //       setTimeout(() => {
+        //         setOnSubmit(false);
+        //         navigate(`/profile`);
+        //       }, 2000);
+        //     }
+        //   }
+        // } //! Temporary comment
       }
     } catch (error) {
       console.log(error);
@@ -1556,7 +1577,6 @@ const Buy = () => {
                                 setShow(false);
                               }, 5000);
                             } else {
-                              alert("test");
                               setShowStepOneVerify(true);
                             }
                           }}
@@ -1906,7 +1926,8 @@ const Buy = () => {
                                   />
                                 </InputDiv>
                               </div>
-                              {bookbankFile && (
+
+                              {bookbankFile ? (
                                 <div
                                   style={{
                                     width: "100%",
@@ -1916,7 +1937,10 @@ const Buy = () => {
                                 >
                                   {bookbankFile.name}
                                 </div>
+                              ) : (
+                                <img src={tempBookBankFile}></img>
                               )}
+
                               <div className="input-div">
                                 <InputDiv
                                   style={{

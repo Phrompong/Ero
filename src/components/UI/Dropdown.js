@@ -162,6 +162,7 @@ export const DropdownArrow = ({
   display,
   otherOption = false,
 }) => {
+  console.log(selected);
   return (
     <Container
       onClick={onClick}
