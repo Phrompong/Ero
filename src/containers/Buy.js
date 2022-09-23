@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { DownArrow } from "@styled-icons/boxicons-solid/DownArrow";
 
 import change from "../assets/icon_change.png";
@@ -32,15 +32,18 @@ import { format } from "date-fns";
 import Vector from "../assets/paymentprocess.png";
 
 const Buy = () => {
-  const tempFilenames = ["test"];
   const { user } = useSelector((state) => state);
   const navigate = useNavigate();
+  const search = useLocation().search;
+  const event = new URLSearchParams(search).get("event");
   const [page, setPage] = useState(1);
   const [alertMessage, setAlertMessage] = useState();
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showStepOneVerify, setShowStepOneVerify] = useState(false);
-  const [showRegistrationModal, setShowRegistrationModal] = useState(false); //! อย่าลืมแก้กลับเป็น true
+  const [showRegistrationModal, setShowRegistrationModal] = useState(
+    event ? false : true
+  ); //! อย่าลืมแก้กลับเป็น true
   const [status, setStatus] = useState();
 
   const [currentStockVolume, setCurrentStockVolume] = useState(0);
@@ -123,6 +126,8 @@ const Buy = () => {
   const [shareOption, setShareOption] = useState([]);
   const [shareBankRefundOption, setShareBankRefundOption] = useState([]);
   const [dropdownSelect, setDropdownSelect] = useState(null);
+  const [displayBroker, setDisplayBroker] = useState(null);
+  const [brokerSelect, setBrokerSelect] = useState(null);
   const [shareRadio, setShareRadio] = useState("first");
   const [dropdownBankRefundSelect, setDropdownBankRefundSelect] =
     useState(null);
@@ -177,8 +182,10 @@ const Buy = () => {
   const [isConfirmOrder, setIsConfirmOrder] = useState(true);
   const [isSummitOrder, setIsSummitOrder] = useState(true);
   const [depositAmount, setDepositAmount] = useState(null);
+  const customerId = localStorage.getItem("customerId");
 
   const fetchStep1 = async () => {
+    await getOrder();
     await getCustomerProfile();
     await getBrokers();
     await fetchDataProfile();
@@ -214,9 +221,40 @@ const Buy = () => {
     getMasterBank();
   };
 
+  // * Get order
+  const getOrder = async () => {
+    const [res, status] = await httpGetRequest(
+      `orders?customerId=${user.customerId || customerId}`
+    );
+
+    if (status !== 200) return;
+
+    const { customerTel, customerStock, isCert, brokerId, accountNo } =
+      res.data[0];
+    const { registrationNo } = customerStock;
+    setTradingAccountNo(accountNo); // * Set เลขที่บัญชีซื้อชาย
+    setDisplayBroker(`${brokerId.code} ${brokerId.name}`);
+    // * broker
+    const obj = {
+      code: brokerId.code,
+      fullname: `${brokerId.code} ${brokerId.name}`,
+      name: brokerId.name,
+      searchValue: `${brokerId.code} ${brokerId.name}`,
+      status: brokerId.status,
+      _id: brokerId._id,
+    };
+    setBrokerSelect(obj);
+    setShareRadio(!isCert ? "first" : "second");
+    setShareId(registrationNo);
+    setPhoneNo(customerTel);
+
+    // * Set display button
+    setIsDisableToPage2(false);
+  };
+
   const getCustomerProfile = async () => {
     const [res, status] = await httpGetRequest(
-      `customerStocks?customerId=${user.customerId}`
+      `customerStocks?customerId=${user.customerId || customerId}`
     );
 
     if (status === 200) {
@@ -429,7 +467,7 @@ const Buy = () => {
       }, 5000);
     } else if (shareRadio === "second") {
       setPage(page);
-    } else if (!dropdownSelect) {
+    } else if (!dropdownSelect && !event) {
       setShow(true);
       setStatus(999);
       setAlertMessage(
@@ -467,7 +505,7 @@ const Buy = () => {
   };
 
   async function fetchDataProfile() {
-    let endpoint = `masterCustomers/${user.customerId}`;
+    let endpoint = `masterCustomers/${user.customerId || customerId}`;
 
     const [res, status] = await httpGetRequest(endpoint);
 
@@ -1280,7 +1318,7 @@ const Buy = () => {
               style={{ display: "block", justifyContent: "flex-start" }}
             >
               {(() => {
-                if (page === 3) {
+                if (page === 1) {
                   return (
                     <>
                       <LineCard
@@ -1473,10 +1511,12 @@ const Buy = () => {
                               selected={
                                 JSON.parse(localStorage.getItem("step_1")) &&
                                 shareRadio !== "second"
-                                  ? JSON.parse(localStorage.getItem("step_1"))
+                                  ? brokerSelect ||
+                                    JSON.parse(localStorage.getItem("step_1"))
                                       .dropdownSelect
                                   : dropdownSelect
                               }
+                              filtered={displayBroker}
                             />
                           </InputDiv>
                           <InputDiv style={{ marginLeft: "50px" }}>
@@ -1516,6 +1556,7 @@ const Buy = () => {
                                 setShow(false);
                               }, 5000);
                             } else {
+                              alert("test");
                               setShowStepOneVerify(true);
                             }
                           }}
@@ -1942,7 +1983,7 @@ const Buy = () => {
                   );
                 }
 
-                if (page === 1) {
+                if (page === 3) {
                   return (
                     <>
                       <LineCard

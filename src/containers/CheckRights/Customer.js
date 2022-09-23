@@ -44,6 +44,8 @@ const CheckRightCustomer = () => {
     "สถานะการจอง",
   ];
 
+  const customerId = localStorage.getItem("customerId");
+
   const handleSearchButtonClicked = async () => {
     setCurrentPage(1);
     fetchDataTable();
@@ -52,7 +54,7 @@ const CheckRightCustomer = () => {
   async function fetchDataTable() {
     const inputValue = searchInputRef.current.value;
     let endpoint = `customerStocks/search/value?customerId=${
-      user.customerId
+      user.customerId || customerId
     }&page=${currentPage}${inputValue ? "&key=" + inputValue : ""}`;
 
     const [res, status] = await httpGetRequest(endpoint);

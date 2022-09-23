@@ -137,16 +137,12 @@ const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
                           role: "client",
                         };
 
-                        // Cookies.set(
-                        //   "token",
-                        //   JSON.stringify({
-                        //     user: payload,
-                        //   })
-                        // );
-
-                        window.open(
-                          `/profile?event=change&customerId=${x["customerId"]["_id"]}`
+                        localStorage.setItem(
+                          "customerId",
+                          x["customerId"]["_id"]
                         );
+
+                        window.open(`/buy?event=change`);
                       }}
                     >
                       แก้ไข

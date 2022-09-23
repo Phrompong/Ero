@@ -27,7 +27,7 @@ const Dashboard = () => {
     "สถานะรายการ",
   ];
 
-  const customerId = new URLSearchParams(search).get("customerId");
+  const customerId = localStorage.getItem("customerId");
 
   async function fetchDataTable() {
     setIsFetching(true);

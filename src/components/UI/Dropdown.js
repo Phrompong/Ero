@@ -292,9 +292,10 @@ export const DropdownSelect = ({
   isOpen,
   onClick,
   onBlur,
-  disabled = false
+  disabled = false,
+  filtered,
 }) => {
-  const [filter, setFilter] = useState(null);
+  const [filter, setFilter] = useState(filtered);
   const [optionsFiltered, setOptionsFiltered] = useState([]);
   const [optionSelect, setOptionSelect] = useState(selected);
 
@@ -311,9 +312,9 @@ export const DropdownSelect = ({
 
   useEffect(() => {
     if (!!disabled) {
-      setFilter('');
+      setFilter("");
     }
-  }, [disabled])
+  }, [disabled]);
 
   useEffect(() => {
     if (filter) {
@@ -330,7 +331,7 @@ export const DropdownSelect = ({
         {searchFrom && (
           <div className="input-select">
             <Input
-              value={filter}
+              value={filter || filtered}
               onChange={(e) => setFilter(e.target.value)}
               placeholder={"กรุณาเลือก"}
               disabled={disabled}

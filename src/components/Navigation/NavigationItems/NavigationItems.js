@@ -68,6 +68,7 @@ const NavigationItems = () => {
   const { user } = useSelector((state) => state);
   const search = useLocation().search;
   const event = new URLSearchParams(search).get("event");
+  const path = window.location.pathname;
 
   return (
     <>
@@ -76,7 +77,12 @@ const NavigationItems = () => {
 
         <Items>
           {(() => {
-            if (!event && user.role === "admin") {
+            if (
+              user.role === "admin" &&
+              path !== "/profile" &&
+              path !== "/checkRightCustomer" &&
+              path !== "/buy"
+            ) {
               return (
                 <>
                   <NavigationItem link="/dashboard" exact="true" img={traffic}>
@@ -93,7 +99,7 @@ const NavigationItems = () => {
                   </NavigationItem>
                 </>
               );
-            } else if (user.role === "client" || event === "change") {
+            } else {
               return (
                 <>
                   <NavigationItem link="/profile" img={profile}>
@@ -105,9 +111,13 @@ const NavigationItems = () => {
                   <NavigationItem link="/buy" img={traffic}>
                     จองซื้อ / Book
                   </NavigationItem>
-                  <NavigationItem link="/" exact="true" img={Logout}>
-                    ออกจากระบบ / Log out
-                  </NavigationItem>
+                  {() => {
+                    if (user.role === "client") {
+                      <NavigationItem link="/" exact="true" img={Logout}>
+                        ออกจากระบบ / Log out
+                      </NavigationItem>;
+                    }
+                  }}
                 </>
               );
             }
