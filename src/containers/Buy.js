@@ -178,6 +178,7 @@ const Buy = () => {
   const [masterBankPayment, setMasterBankPayment] = useState([]);
   const [bank, setBank] = useState(null);
   const [depositBank, setDepositBank] = useState(null);
+  const [tempAttachFile, setAttachFile] = useState(null);
 
   const [profile, setProfile] = useState(null);
   const [isConfirmOrder, setIsConfirmOrder] = useState(true);
@@ -217,10 +218,14 @@ const Buy = () => {
       setDepositBank(JSON.parse(localStorage.getItem("step_2")).depositBank);
       setBank(JSON.parse(localStorage.getItem("step_2")).bank);
     }
+
+    await getOrder();
   };
 
-  const fetchStep3 = () => {
+  const fetchStep3 = async () => {
     getMasterBank();
+
+    await getOrder();
   };
 
   // * Get order
@@ -242,6 +247,9 @@ const Buy = () => {
       bankRefund,
       bankRefundNo,
       attachedFileBookBank,
+      attachedFile,
+      createdOn,
+      paymentDate,
     } = res.data[0];
     const { registrationNo, rightStockName } = customerStock;
     setTradingAccountNo(accountNo); // * Set เลขที่บัญชีซื้อชาย
@@ -266,7 +274,18 @@ const Buy = () => {
     setDepositBank(bankRefund);
     setBank(bankRefundNo);
     setTempBookBankFile(attachedFileBookBank);
-    console.log(attachedFileBookBank);
+    setAttachFile();
+    setFilename([attachedFileBookBank]);
+
+    // * step 3
+    const convertDate = new Date(paymentDate).toLocaleDateString("fr-CA", {
+      timeZone: "Asia/Bangkok",
+    });
+    const convertTime = new Date(paymentDate).toLocaleTimeString("en-GB", {
+      timeZone: "Asia/Bangkok",
+    });
+    setPaymentDate(convertDate);
+    setPaymentTime(convertTime);
     // * Set display button
     setIsDisableToPage2(false);
   };
@@ -698,8 +717,9 @@ const Buy = () => {
     );
 
     if (
-      Number(currentStockVolume) <= Number(rightStockVolume) &&
-      Number(currentStockVolume) !== 0
+      (Number(currentStockVolume) <= Number(rightStockVolume) &&
+        Number(currentStockVolume) !== 0) ||
+      event
     ) {
       setIsConfirmOrder(false);
     } else {
@@ -2291,6 +2311,7 @@ const Buy = () => {
                               type="date"
                               value={paymentDate}
                               onChange={(e) => {
+                                console.log(e.target.value);
                                 setPaymentDate(e.target.value);
                               }}
                               required
@@ -2304,6 +2325,7 @@ const Buy = () => {
                               type="time"
                               value={paymentTime}
                               onChange={(e) => {
+                                console.log(e.target.value);
                                 setPaymentTime(e.target.value);
                               }}
                             />
