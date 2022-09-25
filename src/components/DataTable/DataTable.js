@@ -137,10 +137,14 @@ const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
                           role: "client",
                         };
 
+                        // * Set customerId
                         localStorage.setItem(
                           "customerId",
                           x["customerId"]["_id"]
                         );
+
+                        // * Set orderId
+                        localStorage.setItem("orderId", x["_id"]);
 
                         window.open(`/buy?event=change`);
                       }}

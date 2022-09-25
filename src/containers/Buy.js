@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { DownArrow } from "@styled-icons/boxicons-solid/DownArrow";
+import { EyeFill } from "@styled-icons/bootstrap/EyeFill";
+import { CloseOutline } from "@styled-icons/evaicons-outline/CloseOutline";
 
 import change from "../assets/icon_change.png";
 
@@ -65,6 +67,7 @@ const Buy = () => {
   /// input file upload
   const [bookbankFile, setBookbankFile] = useState(null);
   const [tempBookBankFile, setTempBookBankFile] = useState(null);
+  const [tempBookBankFileUrl, setTempBookBankFileUrl] = useState(null);
   const hiddenFileInput = React.useRef(null);
 
   const [onSubmit, setOnSubmit] = useState(false);
@@ -156,6 +159,7 @@ const Buy = () => {
   const [isConfirmBooking, setIsConfirmBooking] = useState(false);
 
   const [bankDisableButton, setBankDisableButton] = useState(true);
+  const [isShowModalImage, setShowModalImage] = useState(false);
 
   // step 3
   const [radioCheckedPayment, setRadioCheckPayment] = useState(false);
@@ -170,8 +174,9 @@ const Buy = () => {
   const [addressZipcode, setAddressZipcode] = useState(null);
   const [addressTel, setAddressTel] = useState(null);
 
-  const [file, setFile] = useState([]);
+  const [fileSlipImage, setFileSlipImage] = useState([]);
   const [filename, setFilename] = useState([]);
+  const [slipFile, setSlipFile] = useState([]);
   const [orderId, setOrderId] = useState(null);
 
   const [masterBankRefund, setMasterBankRefund] = useState([]);
@@ -185,6 +190,7 @@ const Buy = () => {
   const [isSummitOrder, setIsSummitOrder] = useState(true);
   const [depositAmount, setDepositAmount] = useState(null);
   const customerId = localStorage.getItem("customerId");
+  const _orderId = localStorage.getItem("orderId");
 
   const fetchStep1 = async () => {
     await getCustomerProfile();
@@ -249,6 +255,7 @@ const Buy = () => {
       attachedFileBookBank,
       attachedFile,
       createdOn,
+      attachedFiles,
       paymentDate,
     } = res.data[0];
     const { registrationNo, rightStockName } = customerStock;
@@ -273,9 +280,13 @@ const Buy = () => {
     setCurrentPrice(paymentAmount);
     setDepositBank(bankRefund);
     setBank(bankRefundNo);
+
+    setTempBookBankFileUrl(attachedFileBookBank);
+
     setTempBookBankFile(attachedFileBookBank);
-    setAttachFile();
-    setFilename([attachedFileBookBank]);
+
+    setFilename(attachedFiles);
+    setFileSlipImage(attachedFiles);
 
     // * step 3
     const convertDate = new Date(paymentDate).toLocaleDateString("fr-CA", {
@@ -288,6 +299,10 @@ const Buy = () => {
     setPaymentTime(convertTime);
     // * Set display button
     setIsDisableToPage2(false);
+  };
+
+  const getFilenameFromImageUrl = (imageUrl) => {
+    return imageUrl.substring(imageUrl.length, imageUrl.indexOf("=") + 1);
   };
 
   const getCustomerProfile = async () => {
@@ -429,14 +444,13 @@ const Buy = () => {
       // setFile(file);
 
       setFilename((current) => [...current, fileName]);
-      setFile((current) => [...current, file]);
-
-      console.log(filename);
+      setFileSlipImage((current) => [...current, file]);
+      console.log(file);
     }
   };
 
   const handleSubmit = async () => {
-    if (!file) {
+    if (!fileSlipImage) {
       setStatus(999);
       setAlertMessage("ไม่พบไฟล์ภาพ");
       showAlert(setShow, 2000);
@@ -591,71 +605,100 @@ const Buy = () => {
 
   const handlerOnSubmitedOrder = async () => {
     try {
+      console.log(onSubmit);
       if (!onSubmit) {
+        const formData = new FormData();
+        console.log(fileSlipImage);
+        for (const _file of fileSlipImage) {
+          formData.append("File", _file);
+        }
+
+        const endpoint = `uploads/image?orderId=${_orderId || res.data._id}`;
+
+        const [_res, _status] = await httpPostRequestUploadFile(
+          formData,
+          endpoint
+        );
+        let msg = _res.message;
+        setStatus(_status);
+        if (_status === 200) {
+          msg = "Upload Completed";
+          setAlertMessage(msg);
+          showAlert(setShow, 2000);
+          setFileSlipImage();
+          setTimeout(() => {
+            setOnSubmit(false);
+            navigate(`/profile`);
+          }, 2000);
+        }
+
+        return;
+
         setOnSubmit(true);
-        // const [res, status] = await httpFetch(
-        //   "POST",
-        //   {
-        //     customerId: user.customerId,
-        //     rightStockName,
-        //     stockVolume,
-        //     rightSpecialName,
-        //     rightSpecialVolume,
-        //     paidRightVolume: Number(currentStockVolume),
-        //     paidSpecialVolume: 0,
-        //     paymentAmount: Number(currentPrice),
-        //     returnAmount: 0,
-        //     customerName: fullname,
-        //     customerTel: phoneNo,
-        //     brokerId: dropdownSelect ? dropdownSelect._id : null,
-        //     accountNo: tradingAccountNo,
-        //     customerStockId: customerStockId,
-        //     excessVolume,
-        //     address: `${profile.address} ${profile.zipcode}`,
-        //     registrationNo: shareId,
-        //     bankRefund: depositBank ? depositBank._id : "",
-        //     bankRefundNo: bank,
-        //     paymentDate: `${paymentDate} ${paymentTime}`,
-        //     isCert: shareRadio === "first" ? false : true,
-        //   },
-        //   "orders"
-        // );
+        const [res, status] = await httpFetch(
+          "POST",
+          {
+            customerId: user.customerId || customerId,
+            rightStockName,
+            stockVolume,
+            rightSpecialName,
+            rightSpecialVolume,
+            paidRightVolume: Number(currentStockVolume),
+            paidSpecialVolume: 0,
+            paymentAmount: Number(currentPrice),
+            returnAmount: 0,
+            customerName: fullname,
+            customerTel: phoneNo,
+            brokerId: dropdownSelect ? dropdownSelect._id : null,
+            accountNo: tradingAccountNo,
+            customerStockId: customerStockId,
+            excessVolume,
+            address: `${profile.address} ${profile.zipcode}`,
+            registrationNo: shareId,
+            bankRefund: depositBank ? depositBank._id : "",
+            bankRefundNo: bank,
+            paymentDate: `${paymentDate} ${paymentTime}`,
+            isCert: shareRadio === "first" ? false : true,
+          },
+          "orders"
+        );
 
-        // if (status === 200) {
-        //   setIsConfirmBooking(true);
-        //   setOrderId(res.data._id);
-        //   localStorage.clear();
+        if (status === 200) {
+          setIsConfirmBooking(true);
+          setOrderId(res.data._id);
+          localStorage.clear();
 
-        //   const formDataBookbank = new FormData();
-        //   formDataBookbank.append("File", bookbankFile);
-        //   const endpointBookbank = `uploads/bookbank?orderId=${res.data._id}`;
-        //   const [resBookbank, statusBookbank] = await httpPostRequestUploadFile(
-        //     formDataBookbank,
-        //     endpointBookbank
-        //   );
-        //   if (statusBookbank === 200) {
-        //     const formData = new FormData();
-        //     formData.append("File", file);
-        //     const endpoint = `uploads/image?orderId=${res.data._id}`;
+          const formDataBookbank = new FormData();
+          formDataBookbank.append("File", bookbankFile);
+          const endpointBookbank = `uploads/bookbank?orderId=${res.data._id}`;
+          const [resBookbank, statusBookbank] = await httpPostRequestUploadFile(
+            formDataBookbank,
+            endpointBookbank
+          );
+          if (statusBookbank === 200) {
+            const formData = new FormData();
+            formData.append("File", fileSlipImage);
+            console.log(fileSlipImage);
+            const endpoint = `uploads/image?orderId=${res.data._id}`;
 
-        //     const [_res, _status] = await httpPostRequestUploadFile(
-        //       formData,
-        //       endpoint
-        //     );
-        //     let msg = _res.message;
-        //     setStatus(_status);
-        //     if (_status === 200) {
-        //       msg = "Upload Completed";
-        //       setAlertMessage(msg);
-        //       showAlert(setShow, 2000);
-        //       setFile();
-        //       setTimeout(() => {
-        //         setOnSubmit(false);
-        //         navigate(`/profile`);
-        //       }, 2000);
-        //     }
-        //   }
-        // } //! Temporary comment
+            const [_res, _status] = await httpPostRequestUploadFile(
+              formData,
+              endpoint
+            );
+            let msg = _res.message;
+            setStatus(_status);
+            if (_status === 200) {
+              msg = "Upload Completed";
+              setAlertMessage(msg);
+              showAlert(setShow, 2000);
+              setFileSlipImage();
+              setTimeout(() => {
+                setOnSubmit(false);
+                navigate(`/profile`);
+              }, 2000);
+            }
+          }
+        }
       }
     } catch (error) {
       console.log(error);
@@ -693,7 +736,7 @@ const Buy = () => {
     if (depositBank && depositBank.nameTH === "อื่นๆ") {
       setBank("");
       setFilename(null);
-      setFile(null);
+      setFileSlipImage(null);
       setBankDisableButton(false);
       setPreviewImage(null);
     } else if (depositBank && bank && bookbankFile) {
@@ -752,7 +795,13 @@ const Buy = () => {
 
     if (index === -1) return;
     filename.splice(index, 1);
+
+    setFileSlipImage(
+      fileSlipImage.filter((o) => o !== value && o.name !== value)
+    );
     setFilename(filename.filter((o) => o !== value));
+
+    console.log(fileSlipImage);
   };
 
   return (
@@ -1251,6 +1300,29 @@ const Buy = () => {
                 type="submit"
                 value={"ฉันรับทราบแล้ว"}
                 onClick={() => setAddressModal(false)}
+              />
+            </div>
+          </ContainerCard>
+        </Card>
+      </Modal>
+      {/* Modal show image */}
+      <Modal show={isShowModalImage} style={{ padding: "50px" }}>
+        <Card style={{ height: "auto", width: "60%" }}>
+          <ContainerCard>
+            <img
+              style={{
+                display: "block",
+                marginLeft: "auto",
+                marginRight: "auto",
+                width: "50%",
+              }}
+              src={slipFile}
+            ></img>
+            <div style={{ margin: "auto", width: "400px" }}>
+              <Button
+                type="submit"
+                value={"ปิด"}
+                onClick={() => setShowModalImage(false)}
               />
             </div>
           </ContainerCard>
@@ -1958,7 +2030,31 @@ const Buy = () => {
                                   {bookbankFile.name}
                                 </div>
                               ) : (
-                                <img src={tempBookBankFile}></img>
+                                <div
+                                  style={{
+                                    display: "grid",
+                                    gridTemplateColumns: "12% 1%",
+                                    gap: "2%",
+                                    border: "#000000",
+                                    color: "#000000",
+                                  }}
+                                >
+                                  <div>
+                                    {getFilenameFromImageUrl(tempBookBankFile)}
+                                  </div>
+                                  <div>
+                                    <EyeFill
+                                      onClick={() => {
+                                        setShowModalImage(true);
+                                        setSlipFile(tempBookBankFile);
+                                      }}
+                                      style={{
+                                        width: "20px",
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                                // <img src={tempBookBankFile}></img>
                               )}
 
                               <div className="input-div">
@@ -2285,17 +2381,28 @@ const Buy = () => {
                                 <div
                                   style={{
                                     display: "grid",
-                                    gridTemplateColumns: "100% 100%",
+                                    gridTemplateColumns: "90% 14% 100%",
                                   }}
                                 >
-                                  {_tempFilename}
-                                  <h4
-                                    onClick={() => {
-                                      removeFilename(_tempFilename);
+                                  {getFilenameFromImageUrl(_tempFilename)}
+
+                                  <CloseOutline
+                                    onClick={() =>
+                                      removeFilename(_tempFilename)
+                                    }
+                                    style={{
+                                      width: "20px",
                                     }}
-                                  >
-                                    X
-                                  </h4>
+                                  />
+                                  <EyeFill
+                                    onClick={() => {
+                                      setShowModalImage(true);
+                                      setSlipFile(_tempFilename);
+                                    }}
+                                    style={{
+                                      width: "20px",
+                                    }}
+                                  />
                                 </div>
                               ))}
                             </p>
@@ -2371,14 +2478,14 @@ const Buy = () => {
                           onClick={() => {
                             setValidateAccept(false);
                             setPage(2);
-                            setFile(null);
+                            setFileSlipImage(null);
                           }}
                         />
 
                         <Button
                           type="button"
                           value={"ถัดไป"}
-                          disabled={!file}
+                          disabled={!fileSlipImage}
                           style={{ marginTop: "1rem", margin: "0 2rem" }}
                           onClick={handleSubmit}
                         />
