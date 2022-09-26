@@ -608,34 +608,52 @@ const Buy = () => {
     try {
       console.log(onSubmit);
       if (!onSubmit) {
-        const formData = new FormData();
-        console.log(fileSlipImage);
-        for (const _file of fileSlipImage) {
-          formData.append("File", _file);
-        }
+        // const formData = new FormData();
+        // console.log(fileSlipImage);
+        // for (const _file of fileSlipImage) {
+        //   formData.append("File", _file);
+        // }
 
-        const endpoint = `uploads/image?orderId=${_orderId || res.data._id}`;
+        // const endpoint = `uploads/image?orderId=${_orderId || res.data._id}`;
 
-        const [_res, _status] = await httpPostRequestUploadFile(
-          formData,
-          endpoint
-        );
-        let msg = _res.message;
-        setStatus(_status);
-        if (_status === 200) {
-          msg = "Upload Completed";
-          setAlertMessage(msg);
-          showAlert(setShow, 2000);
-          setFileSlipImage();
-          setTimeout(() => {
-            setOnSubmit(false);
-            navigate(`/profile`);
-          }, 2000);
-        }
+        // const [_res, _status] = await httpPostRequestUploadFile(
+        //   formData,
+        //   endpoint
+        // );
+        // let msg = _res.message;
+        // setStatus(_status);
+        // if (_status === 200) {
+        //   msg = "Upload Completed";
+        //   setAlertMessage(msg);
+        //   showAlert(setShow, 2000);
+        //   setFileSlipImage();
+        //   setTimeout(() => {
+        //     setOnSubmit(false);
+        //     navigate(`/profile`);
+        //   }, 2000);
+        // }
 
-        return;
+        // return;
 
         setOnSubmit(true);
+        let allocateDetail;
+        if (shareRadio === "first") {
+          allocateDetail = {
+            type: 1,
+            name: "ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก",
+          };
+        } else if (shareRadio === "second") {
+          allocateDetail = {
+            type: 2,
+            name: "รับใบหุ้น",
+          };
+        } else if (shareRadio === "third") {
+          allocateDetail = {
+            type: 3,
+            name: "บัญชีสมาชิกเลขที่ 600 เพิ่มข้าพเจ้า",
+          };
+        }
+
         const [res, status] = await httpFetch(
           "POST",
           {
@@ -659,7 +677,8 @@ const Buy = () => {
             bankRefund: depositBank ? depositBank._id : "",
             bankRefundNo: bank,
             paymentDate: `${paymentDate} ${paymentTime}`,
-            isCert: shareRadio === "first" ? false : true,
+            allocateDetail,
+            depositAmount,
           },
           "orders"
         );
@@ -678,6 +697,10 @@ const Buy = () => {
           );
           if (statusBookbank === 200) {
             const formData = new FormData();
+
+            for (const _file of fileSlipImage) {
+              formData.append("File", _file);
+            }
             formData.append("File", fileSlipImage);
             console.log(fileSlipImage);
             const endpoint = `uploads/image?orderId=${res.data._id}`;
@@ -695,7 +718,7 @@ const Buy = () => {
               setFileSlipImage();
               setTimeout(() => {
                 setOnSubmit(false);
-                navigate(`/profile`);
+                if (!event) navigate(`/profile`);
               }, 2000);
             }
           }
@@ -775,6 +798,9 @@ const Buy = () => {
     if (shareRadio === "second") {
       setDropdownSelect(null);
       setTradingAccountNo(null);
+      setIsDisableToPage2(false);
+    } else if (shareRadio === "third") {
+      setDropdownSelect(null);
       setIsDisableToPage2(false);
     } else {
       if (dropdownSelect && tradingAccountNo) {
@@ -1627,16 +1653,27 @@ const Buy = () => {
                               searchFrom={"fullname"}
                               isOpen={isOpenDropdown}
                               onClick={() => {
-                                if (shareRadio !== "second") {
+                                if (
+                                  shareRadio !== "second" &&
+                                  shareRadio !== "third"
+                                ) {
                                   setIsOpenDropdown(!isOpenDropdown);
                                 }
                               }}
                               onBlur={() => {
-                                if (shareRadio !== "second") {
+                                if (
+                                  shareRadio !== "second" &&
+                                  shareRadio !== "third"
+                                ) {
                                   setIsOpenDropdown(false);
                                 }
                               }}
-                              disabled={shareRadio === "second"}
+                              disabled={
+                                shareRadio === "second" ||
+                                shareRadio === "third"
+                                  ? true
+                                  : false
+                              }
                               setSelected={setDropdownSelect}
                               selected={
                                 JSON.parse(localStorage.getItem("step_1")) &&
