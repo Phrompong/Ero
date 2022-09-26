@@ -13,7 +13,8 @@ import change from "../../assets/icon_change.png";
 import transaction from "../../assets/transaction.png";
 import { httpGetRequest, httpPutRequest } from "../../utils/fetch";
 import { format } from "date-fns";
-import Carousel from "react-bootstrap/Carousel";
+import Carousel from "better-react-carousel";
+// import "bootstrap/dist/css/bootstrap.min.css";
 const Details = ({ show, details, closed, options }) => {
   const [selectedStatus, setSelectedStatus] = useState(
     details["status"]["_id"]
@@ -160,28 +161,35 @@ const Details = ({ show, details, closed, options }) => {
                   </div>
                 </TransactionInfo>
               </LineCard>
-              <LineCard style={{ flex: 1 }}>
-                <TransactionPhoto>
-                  <Carousel variant="dark">
-                    <Carousel.Item>
-                      <img src={details["attachedFile"]} height="400px" />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                      <img
-                        src={details["attachedFile"]}
-                        alt="Second slide"
-                        height="400px"
-                      />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                      <img
-                        src={details["attachedFile"]}
-                        alt="Second slide"
-                        height="400px"
-                      />
-                    </Carousel.Item>
-                  </Carousel>
-                </TransactionPhoto>
+              <LineCard style={{ flex: 1, display: "flex" }}>
+                <Carousel style={{ width: "500px" }} loop>
+                  <Carousel.Item>
+                    <img
+                      src={details["attachedFile"]}
+                      alt="Second slide"
+                      width="100%"
+                    />
+                    {/* <img
+                      width="100%"
+                      src="https://picsum.photos/800/600?random=1"
+                    /> */}
+                  </Carousel.Item>
+                  <Carousel.Item>
+                    <img
+                      src={details["attachedFile"]}
+                      alt="Second slide"
+                      width="100%"
+                    />
+                  </Carousel.Item>
+                  <Carousel.Item>
+                    <img
+                      src={details["attachedFile"]}
+                      alt="Second slide"
+                      width="100%"
+                    />
+                  </Carousel.Item>
+                  <Carousel.Item></Carousel.Item>
+                </Carousel>
               </LineCard>
             </FlexContainer>
             <Footer>

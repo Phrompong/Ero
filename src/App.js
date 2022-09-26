@@ -11,7 +11,7 @@ import CheckRightCustomer from "./containers/CheckRights/Customer";
 import CustomerServiceAdmin from "./containers/CustomerService/Admin";
 import CustomerService from "./containers/CustomerService/Customer";
 import CheckRightInfo from "./containers/CheckRights/CheckRightInfo";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 import "./App.css";
 

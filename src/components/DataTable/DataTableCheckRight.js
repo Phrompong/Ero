@@ -20,6 +20,8 @@ import Paginate from "../Paginate/Paginate";
 import { Modal } from "../UI/Modal";
 
 import { Spinner } from "../Logo/Spinner";
+import { Add } from "@styled-icons/fluentui-system-filled/Add";
+import { InfoCircle } from "@styled-icons/bootstrap/InfoCircle";
 
 import { httpGetRequest } from "../../utils/fetch";
 const DataTableProfile = ({
@@ -291,6 +293,33 @@ const DataTableProfile = ({
                   ) : (
                     <TD color={color[0]}>ยังไม่ได้ดำเนินการ</TD>
                   )}
+                  <TD
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      width: "100px",
+                    }}
+                  >
+                    <Add
+                      onClick={() => {
+                        // * Set customerId
+                        localStorage.setItem("customerId", x["customerId"]);
+
+                        // * Set orderId
+                        localStorage.setItem("orderId", x["_id"]);
+
+                        window.open(`/buy?event=add`);
+                      }}
+                    ></Add>
+                    <InfoCircle
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-start",
+                      }}
+                      key={index}
+                      onClick={() => handleClicked(x)}
+                    ></InfoCircle>
+                  </TD>
                 </TR>
               ))}
             </TBody>

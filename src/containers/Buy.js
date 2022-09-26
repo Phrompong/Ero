@@ -44,7 +44,7 @@ const Buy = () => {
   const [showModal, setShowModal] = useState(false);
   const [showStepOneVerify, setShowStepOneVerify] = useState(false);
   const [showRegistrationModal, setShowRegistrationModal] = useState(
-    event ? false : true
+    event === "change" ? false : true
   ); //! อย่าลืมแก้กลับเป็น true
   const [status, setStatus] = useState();
 
@@ -302,6 +302,7 @@ const Buy = () => {
   };
 
   const getFilenameFromImageUrl = (imageUrl) => {
+    if (!imageUrl) return;
     return imageUrl.substring(imageUrl.length, imageUrl.indexOf("=") + 1);
   };
 
