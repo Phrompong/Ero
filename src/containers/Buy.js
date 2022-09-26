@@ -1587,6 +1587,22 @@ const Buy = () => {
                               <Radio
                                 type="radio"
                                 name="type"
+                                value={"third"}
+                                checked={shareRadio === "third"}
+                                onChange={(e) => {
+                                  setShareRadio(e.target.value);
+                                  setTradingAccountNo(null);
+                                  setDropdownSelect(null);
+                                }}
+                              />
+                              <p className="radio-label">
+                                บัญชีสมาชิกเลขที่ 600 เพิ่มข้าพเจ้า
+                              </p>
+                            </div>
+                            <div className="radio-div">
+                              <Radio
+                                type="radio"
+                                name="type"
                                 value={"second"}
                                 checked={shareRadio === "second"}
                                 onChange={(e) => {
@@ -2044,15 +2060,17 @@ const Buy = () => {
                                     {getFilenameFromImageUrl(tempBookBankFile)}
                                   </div>
                                   <div>
-                                    <EyeFill
-                                      onClick={() => {
-                                        setShowModalImage(true);
-                                        setSlipFile(tempBookBankFile);
-                                      }}
-                                      style={{
-                                        width: "20px",
-                                      }}
-                                    />
+                                    {tempBookBankFile && (
+                                      <EyeFill
+                                        onClick={() => {
+                                          setShowModalImage(true);
+                                          setSlipFile(tempBookBankFile);
+                                        }}
+                                        style={{
+                                          width: "20px",
+                                        }}
+                                      />
+                                    )}
                                   </div>
                                 </div>
                                 // <img src={tempBookBankFile}></img>
@@ -2378,34 +2396,35 @@ const Buy = () => {
                                 marginBottom: "20px",
                               }}
                             >
-                              {filename.map((_tempFilename) => (
-                                <div
-                                  style={{
-                                    display: "grid",
-                                    gridTemplateColumns: "90% 14% 100%",
-                                  }}
-                                >
-                                  {getFilenameFromImageUrl(_tempFilename)}
+                              {filename &&
+                                filename.map((_tempFilename) => (
+                                  <div
+                                    style={{
+                                      display: "grid",
+                                      gridTemplateColumns: "90% 14% 100%",
+                                    }}
+                                  >
+                                    {getFilenameFromImageUrl(_tempFilename)}
 
-                                  <CloseOutline
-                                    onClick={() =>
-                                      removeFilename(_tempFilename)
-                                    }
-                                    style={{
-                                      width: "20px",
-                                    }}
-                                  />
-                                  <EyeFill
-                                    onClick={() => {
-                                      setShowModalImage(true);
-                                      setSlipFile(_tempFilename);
-                                    }}
-                                    style={{
-                                      width: "20px",
-                                    }}
-                                  />
-                                </div>
-                              ))}
+                                    <CloseOutline
+                                      onClick={() =>
+                                        removeFilename(_tempFilename)
+                                      }
+                                      style={{
+                                        width: "20px",
+                                      }}
+                                    />
+                                    <EyeFill
+                                      onClick={() => {
+                                        setShowModalImage(true);
+                                        setSlipFile(_tempFilename);
+                                      }}
+                                      style={{
+                                        width: "20px",
+                                      }}
+                                    />
+                                  </div>
+                                ))}
                             </p>
                           </div>
                         </div>
@@ -3342,15 +3361,14 @@ const Radio = styled.input`
 
 const RadioDiv = styled.div`
   display: flex;
-
   .radio-div {
-    width: 50%;
+    width: 60%;
     display: flex;
-
     .radio-label {
       width: 85%;
       font-weight: bold;
       margin-left: 20px;
+
       margin-top: auto;
       margin-bottom: auto;
     }

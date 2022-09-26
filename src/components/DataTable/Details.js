@@ -162,18 +162,7 @@ const Details = ({ show, details, closed, options }) => {
                 </TransactionInfo>
               </LineCard>
               <LineCard style={{ flex: 1, display: "flex" }}>
-                <Carousel style={{ width: "500px" }} loop>
-                  <Carousel.Item>
-                    <img
-                      src={details["attachedFile"]}
-                      alt="Second slide"
-                      width="100%"
-                    />
-                    {/* <img
-                      width="100%"
-                      src="https://picsum.photos/800/600?random=1"
-                    /> */}
-                  </Carousel.Item>
+                <Carousel loop>
                   <Carousel.Item>
                     <img
                       src={details["attachedFile"]}
@@ -181,14 +170,6 @@ const Details = ({ show, details, closed, options }) => {
                       width="100%"
                     />
                   </Carousel.Item>
-                  <Carousel.Item>
-                    <img
-                      src={details["attachedFile"]}
-                      alt="Second slide"
-                      width="100%"
-                    />
-                  </Carousel.Item>
-                  <Carousel.Item></Carousel.Item>
                 </Carousel>
               </LineCard>
             </FlexContainer>
