@@ -10,13 +10,14 @@ import {
   shamrock,
   gold,
 } from "../../utils/color";
-
+import { EditOutline } from "@styled-icons/evaicons-outline/EditOutline";
 import Details from "./Details";
 import Paginate from "../Paginate/Paginate";
 import Detail from "../Modal/ModalDetail";
 import { Spinner } from "../Logo/Spinner";
 import Cookies from "js-cookie";
-
+import { CloseOutline } from "@styled-icons/evaicons-outline/CloseOutline";
+import { InfoCircle } from "@styled-icons/bootstrap/InfoCircle";
 import { httpGetRequest } from "../../utils/fetch";
 
 const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
@@ -128,8 +129,14 @@ const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
                   <Status color={color[x["status"]["value"]]}>
                     {x["status"]["status"]}
                   </Status>
-                  <TD>
-                    <a
+                  <TD
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      width: "100px",
+                    }}
+                  >
+                    <EditOutline
                       onClick={() => {
                         const payload = {
                           username: x["customerId"]["refNo"],
@@ -148,9 +155,11 @@ const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
 
                         window.open(`/buy?event=change`);
                       }}
-                    >
-                      แก้ไข
-                    </a>
+                    ></EditOutline>
+                    <InfoCircle
+                      key={index}
+                      onClick={() => handleClicked(x)}
+                    ></InfoCircle>
                   </TD>
                 </TR>
               ))}

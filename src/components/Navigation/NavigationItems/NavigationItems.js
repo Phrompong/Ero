@@ -99,6 +99,12 @@ const NavigationItems = () => {
                   </NavigationItem>
                 </>
               );
+            } else if (event === "change") {
+              <>
+                <NavigationItem link="/buy" img={traffic}>
+                  จองซื้อ / Book
+                </NavigationItem>
+              </>;
             } else {
               return (
                 <>
