@@ -257,6 +257,7 @@ const Buy = () => {
       createdOn,
       attachedFiles,
       paymentDate,
+      depositAmount,
     } = res.data[0];
     const { registrationNo, rightStockName } = customerStock;
     setTradingAccountNo(accountNo); // * Set เลขที่บัญชีซื้อชาย
@@ -297,6 +298,7 @@ const Buy = () => {
     });
     setPaymentDate(convertDate);
     setPaymentTime(convertTime);
+    setDepositAmount(depositAmount);
     // * Set display button
     setIsDisableToPage2(false);
   };
