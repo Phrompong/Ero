@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { ModalAlert } from "../../components/ModalAlert/ModalAlert";
 import { httpPutRequest, httpPatchRequest } from "../../utils/fetch";
-
 import styled from "styled-components";
 
 import {

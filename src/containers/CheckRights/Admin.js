@@ -51,7 +51,7 @@ const CheckRightAdmin = () => {
   }, [currentPage]);
 
   const handleSearchButtonClicked = async () => {
-    setCurrentPage(1);
+    setCurrentPage(currentPage);
   };
 
   return (

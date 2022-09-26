@@ -60,7 +60,9 @@ const Paginate = ({ setCurrentPage, totalPages }) => (
     previousLabel="< previous"
     renderOnZeroPageCount={null}
     marginPagesDisplayed={2}
-    onPageChange={(e) => setCurrentPage(e.selected + 1)}
+    onPageChange={(e) => {
+      setCurrentPage(e.selected + 1);
+    }}
   />
 );
 

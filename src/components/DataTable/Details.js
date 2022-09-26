@@ -13,7 +13,7 @@ import change from "../../assets/icon_change.png";
 import transaction from "../../assets/transaction.png";
 import { httpGetRequest, httpPutRequest } from "../../utils/fetch";
 import { format } from "date-fns";
-
+import Carousel from "react-bootstrap/Carousel";
 const Details = ({ show, details, closed, options }) => {
   const [selectedStatus, setSelectedStatus] = useState(
     details["status"]["_id"]
@@ -89,7 +89,9 @@ const Details = ({ show, details, closed, options }) => {
                       <div className="num-box">
                         {formatNumber(details["paidRightVolume"])}
                       </div>
-                      <p className="unit">หุ้น</p>
+                      หุ้น
+                      <p className="unit"></p>
+                      {/* <p className="unit">หุ้น</p> */}
                     </div>
                     <div className="row">
                       <div className="text-box" />
@@ -103,7 +105,8 @@ const Details = ({ show, details, closed, options }) => {
                       <div className="num-box">
                         {formatNumber(details["paymentAmount"])}
                       </div>
-                      <p className="unit">บาท</p>
+                      บาท
+                      <p className="unit"></p>
                     </div>
                   </div>
                   <SubHeader>สิทธิเพิ่มเติมที่ท่านได้รับ</SubHeader>
@@ -159,7 +162,25 @@ const Details = ({ show, details, closed, options }) => {
               </LineCard>
               <LineCard style={{ flex: 1 }}>
                 <TransactionPhoto>
-                  <img src={details["attachedFile"]} height="400px" />
+                  <Carousel variant="dark">
+                    <Carousel.Item>
+                      <img src={details["attachedFile"]} height="400px" />
+                    </Carousel.Item>
+                    <Carousel.Item>
+                      <img
+                        src={details["attachedFile"]}
+                        alt="Second slide"
+                        height="400px"
+                      />
+                    </Carousel.Item>
+                    <Carousel.Item>
+                      <img
+                        src={details["attachedFile"]}
+                        alt="Second slide"
+                        height="400px"
+                      />
+                    </Carousel.Item>
+                  </Carousel>
                 </TransactionPhoto>
               </LineCard>
             </FlexContainer>
