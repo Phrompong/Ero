@@ -138,6 +138,9 @@ const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
                   >
                     <EditOutline
                       onClick={() => {
+                        // * Clear localstorage
+                        localStorage.clear();
+
                         const payload = {
                           username: x["customerId"]["refNo"],
                           customerId: x["customerId"]["_id"],

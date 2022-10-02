@@ -18,7 +18,7 @@ import { ModalDetail } from "../Modal/ModalDetail";
 import Paginate from "../Paginate/Paginate";
 
 import { Modal } from "../UI/Modal";
-
+import { Button } from "../../components/UI/Button";
 import { Spinner } from "../Logo/Spinner";
 import { Add } from "@styled-icons/fluentui-system-filled/Add";
 import { InfoCircle } from "@styled-icons/bootstrap/InfoCircle";
@@ -276,7 +276,7 @@ const DataTableProfile = ({
           ) : (
             <TBody>
               {data.map((x, index) => (
-                <TR key={index} onClick={() => handleClicked(x)}>
+                <TR key={index}>
                   <TD style={{ width: "100px" }}>จองซื้อ / Book</TD>
                   <TD>{x["rightStockName"]}</TD>
                   <TD>{x["registrationNo"]}</TD>
@@ -297,11 +297,18 @@ const DataTableProfile = ({
                     style={{
                       display: "flex",
                       justifyContent: "flex-start",
-                      width: "100px",
                     }}
                   >
-                    <Add
+                    <Button
+                      style={{
+                        width: "100px",
+                        background: x["status"].length > 0 ? "gray" : "",
+                      }}
+                      disabled={x["status"].length > 0 ? true : false}
                       onClick={() => {
+                        // * Clear localstorage
+                        localStorage.clear();
+
                         // * Set customerId
                         localStorage.setItem("customerId", x["customerId"]);
 
@@ -310,15 +317,17 @@ const DataTableProfile = ({
 
                         window.open(`/buy?event=add`);
                       }}
-                    ></Add>
-                    <InfoCircle
+                    >
+                      จองซื้อ
+                    </Button>
+                    {/* <InfoCircle
                       style={{
                         display: "flex",
                         justifyContent: "flex-start",
                       }}
                       key={index}
                       onClick={() => handleClicked(x)}
-                    ></InfoCircle>
+                    ></InfoCircle> */}
                   </TD>
                 </TR>
               ))}

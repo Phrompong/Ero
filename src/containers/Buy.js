@@ -261,7 +261,9 @@ const Buy = () => {
     } = res.data[0];
     const { registrationNo, rightStockName } = customerStock;
     setTradingAccountNo(accountNo); // * Set เลขที่บัญชีซื้อชาย
+    console.log(brokerId);
     setDisplayBroker(`${brokerId.code} ${brokerId.name}`);
+    console.log(displayBroker);
     // * broker
     const obj = {
       code: brokerId.code,
@@ -286,8 +288,8 @@ const Buy = () => {
 
     setTempBookBankFile(attachedFileBookBank);
 
-    setFilename(attachedFiles);
-    setFileSlipImage(attachedFiles);
+    setFilename(attachedFiles || []);
+    setFileSlipImage(attachedFiles || []);
 
     // * step 3
     const convertDate = new Date(paymentDate).toLocaleDateString("fr-CA", {
@@ -447,7 +449,17 @@ const Buy = () => {
       // setFile(file);
 
       setFilename((current) => [...current, fileName]);
-      setFileSlipImage((current) => [...current, file]);
+      console.log(fileSlipImage);
+
+      if (file)
+        setFileSlipImage((current) => {
+          console.log(current);
+          if (current) {
+            return [...current, file];
+          } else {
+            return [file];
+          }
+        });
       console.log(file);
     }
   };
@@ -608,35 +620,7 @@ const Buy = () => {
 
   const handlerOnSubmitedOrder = async () => {
     try {
-      console.log(onSubmit);
       if (!onSubmit) {
-        // const formData = new FormData();
-        // console.log(fileSlipImage);
-        // for (const _file of fileSlipImage) {
-        //   formData.append("File", _file);
-        // }
-
-        // const endpoint = `uploads/image?orderId=${_orderId || res.data._id}`;
-
-        // const [_res, _status] = await httpPostRequestUploadFile(
-        //   formData,
-        //   endpoint
-        // );
-        // let msg = _res.message;
-        // setStatus(_status);
-        // if (_status === 200) {
-        //   msg = "Upload Completed";
-        //   setAlertMessage(msg);
-        //   showAlert(setShow, 2000);
-        //   setFileSlipImage();
-        //   setTimeout(() => {
-        //     setOnSubmit(false);
-        //     navigate(`/profile`);
-        //   }, 2000);
-        // }
-
-        // return;
-
         setOnSubmit(true);
         let allocateDetail;
         if (shareRadio === "first") {
@@ -2445,20 +2429,22 @@ const Buy = () => {
                                   >
                                     {getFilenameFromImageUrl(_tempFilename)}
 
-                                    <CloseOutline
-                                      onClick={() =>
-                                        removeFilename(_tempFilename)
-                                      }
-                                      style={{
-                                        width: "20px",
-                                      }}
-                                    />
                                     <EyeFill
                                       onClick={() => {
                                         setShowModalImage(true);
                                         setSlipFile(_tempFilename);
                                       }}
                                       style={{
+                                        color: "#1C37A9",
+                                        width: "20px",
+                                      }}
+                                    />
+                                    <CloseOutline
+                                      onClick={() =>
+                                        removeFilename(_tempFilename)
+                                      }
+                                      style={{
+                                        color: "#FF0000",
                                         width: "20px",
                                       }}
                                     />

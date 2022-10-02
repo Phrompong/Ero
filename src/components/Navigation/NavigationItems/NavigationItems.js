@@ -69,6 +69,9 @@ const NavigationItems = () => {
   const search = useLocation().search;
   const event = new URLSearchParams(search).get("event");
   const path = window.location.pathname;
+  console.log(user.role);
+  console.log(path);
+  console.log(event);
 
   return (
     <>
@@ -78,10 +81,11 @@ const NavigationItems = () => {
         <Items>
           {(() => {
             if (
-              user.role === "admin" &&
-              path !== "/profile" &&
-              path !== "/checkRightCustomer" &&
-              path !== "/buy"
+              (user.role === "admin" &&
+                path !== "/profile" &&
+                path !== "/checkRightCustomer" &&
+                path !== "/buy") ||
+              event === "change"
             ) {
               return (
                 <>
@@ -99,12 +103,6 @@ const NavigationItems = () => {
                   </NavigationItem>
                 </>
               );
-            } else if (event === "change" || event === "add") {
-              <>
-                <NavigationItem link="/buy" img={traffic}>
-                  จองซื้อ / Book
-                </NavigationItem>
-              </>;
             } else {
               return (
                 <>
