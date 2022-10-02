@@ -295,12 +295,15 @@ const Buy = () => {
     setFileSlipImage(attachedFiles || []);
 
     let _allocateDetail = "";
-    if (allocateDetail.type === 1) {
-      _allocateDetail = "first";
-    } else if (allocateDetail.type === 2) {
-      _allocateDetail = "second";
-    } else if (allocateDetail.type === 3) {
-      _allocateDetail = "third";
+
+    if (allocateDetail) {
+      if (allocateDetail.type === 1) {
+        _allocateDetail = "first";
+      } else if (allocateDetail.type === 2) {
+        _allocateDetail = "second";
+      } else if (allocateDetail.type === 3) {
+        _allocateDetail = "third";
+      }
     }
 
     setExcessAmount(excessAmount);
@@ -2382,8 +2385,8 @@ const Buy = () => {
                               onChange={(e) => {
                                 setDepositAmount(
                                   e.target.value
-                                    .replace(/\./g, "")
-                                    .replace(/[^0-9]/, "")
+                                    .replace(/\,/g, "")
+                                    .replace(/[^0-9.]/, "")
                                 );
                               }}
                             />
