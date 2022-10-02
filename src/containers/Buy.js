@@ -763,7 +763,7 @@ const Buy = () => {
   useEffect(() => {
     if (depositBank && depositBank.nameTH === "อื่นๆ") {
       setBank("");
-      setFilename(null);
+      setFilename([]);
       setFileSlipImage(null);
       setBankDisableButton(false);
       setPreviewImage(null);
