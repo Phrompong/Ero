@@ -920,10 +920,8 @@ const Buy = () => {
                 value={"ย้อนกลับ"}
                 onClick={() => {
                   if (event === "add") {
-                    alert("add");
                     window.close();
                   } else {
-                    alert("profile");
                     navigate(`/profile`);
                   }
                 }}
