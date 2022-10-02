@@ -161,19 +161,29 @@ const Details = ({ show, details, closed, options }) => {
                   </div>
                 </TransactionInfo>
               </LineCard>
-              <LineCard style={{ flex: 1, display: "flex" }}>
-                <Carousel loop>
-                  <Carousel.Item>
-                    <img
-                      src={details["attachedFile"]}
-                      alt="Second slide"
-                      width="100%"
-                    />
-                  </Carousel.Item>
-                </Carousel>
+
+              <LineCard style={{ flex: 1 }}>
+                {details["attachedFiles"] ? (
+                  <Carousel style={{ height: "10px" }} rows={1} loop>
+                    {details["attachedFiles"].map((imageUrl) => (
+                      <Carousel.Item>
+                        <img src={imageUrl} width="100%" height="500px" />
+                      </Carousel.Item>
+                    ))}
+                  </Carousel>
+                ) : (
+                  <img
+                    src={details["attachedFile"]}
+                    width="100%"
+                    height="600px"
+                  />
+                )}
               </LineCard>
             </FlexContainer>
             <Footer>
+              {[1, 3].map((imageUrl) => (
+                <div>test{JSON.stringify(imageUrl)}</div>
+              ))}
               <Dropdown
                 options={options}
                 setSelected={setSelectedStatus}

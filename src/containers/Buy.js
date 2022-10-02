@@ -155,6 +155,7 @@ const Buy = () => {
   const [rightSpecialName, setRightSpecialName] = useState("-");
   const [rightSpecialVolume, setRightSpecialVolume] = useState(null);
   const [excessVolume, setExcessVolume] = useState(null);
+  const [excessAmount, setExcessAmount] = useState(null);
   const [isAcceptVerify, setIsAcceptVerify] = useState(false);
   const [isConfirmBooking, setIsConfirmBooking] = useState(false);
 
@@ -208,8 +209,6 @@ const Buy = () => {
       );
       setShareRadio(JSON.parse(localStorage.getItem("step_1")).shareRadio);
     }
-
-    await getOrder();
   };
 
   const fetchStep2 = async () => {
@@ -224,14 +223,10 @@ const Buy = () => {
       setDepositBank(JSON.parse(localStorage.getItem("step_2")).depositBank);
       setBank(JSON.parse(localStorage.getItem("step_2")).bank);
     }
-
-    await getOrder();
   };
 
   const fetchStep3 = async () => {
     getMasterBank();
-
-    await getOrder();
   };
 
   // * Get order
@@ -260,9 +255,8 @@ const Buy = () => {
       depositAmount,
       allocateDetail,
     } = res.data[0];
-    const { registrationNo, rightStockName } = customerStock;
+    const { registrationNo, rightStockName, offerPrice } = customerStock;
     setTradingAccountNo(accountNo); // * Set เลขที่บัญชีซื้อชาย
-    console.log(brokerId);
     if (brokerId) {
       setDisplayBroker(`${brokerId.code} ${brokerId.name}`);
 
@@ -290,7 +284,7 @@ const Buy = () => {
     setTempBookBankFileUrl(attachedFileBookBank);
 
     setTempBookBankFile(attachedFileBookBank);
-
+    setOfferPrice(offerPrice);
     setFilename(attachedFiles || []);
     setFileSlipImage(attachedFiles || []);
 
@@ -304,6 +298,8 @@ const Buy = () => {
     }
 
     setShareRadio(_allocateDetail);
+    setExcessVolume(excessAmount / offerPrice);
+    console.log(excessVolume);
 
     // * step 3
     const convertDate = new Date(paymentDate).toLocaleDateString("fr-CA", {
@@ -321,6 +317,7 @@ const Buy = () => {
 
   const getFilenameFromImageUrl = (imageUrl) => {
     if (!imageUrl) return;
+
     return imageUrl.substring(imageUrl.length, imageUrl.indexOf("=") + 1);
   };
 
@@ -463,18 +460,15 @@ const Buy = () => {
       // setFile(file);
 
       setFilename((current) => [...current, fileName]);
-      console.log(fileSlipImage);
 
       if (file)
         setFileSlipImage((current) => {
-          console.log(current);
           if (current) {
             return [...current, file];
           } else {
             return [file];
           }
         });
-      console.log(file);
     }
   };
 
@@ -492,6 +486,10 @@ const Buy = () => {
       setValidateAccept(true);
     }
   };
+
+  useEffect(async () => {
+    await getOrder();
+  }, []);
 
   useEffect(() => {
     if (shareId && isRegistrationChecked) {
@@ -653,7 +651,8 @@ const Buy = () => {
             name: "บัญชีสมาชิกเลขที่ 600 เพิ่มข้าพเจ้า",
           };
         }
-
+        alert(bank);
+        console.log(excessVolume);
         const [res, status] = await httpFetch(
           "POST",
           {
@@ -697,14 +696,13 @@ const Buy = () => {
           );
           if (statusBookbank === 200) {
             const formData = new FormData();
-
+            console.log(fileSlipImage);
             for (const _file of fileSlipImage) {
               formData.append("File", _file);
             }
-            formData.append("File", fileSlipImage);
-            console.log(fileSlipImage);
+            //formData.append("File", fileSlipImage);
             const endpoint = `uploads/image?orderId=${res.data._id}`;
-
+            console.log(formData);
             const [_res, _status] = await httpPostRequestUploadFile(
               formData,
               endpoint
@@ -727,7 +725,6 @@ const Buy = () => {
         }
       }
     } catch (error) {
-      console.log(error);
       setOnSubmit(false);
       setStatus(999);
       setAlertMessage("เกิดข้อผิดพลาดในระบบ");
@@ -829,8 +826,6 @@ const Buy = () => {
       fileSlipImage.filter((o) => o !== value && o.name !== value)
     );
     setFilename(filename.filter((o) => o !== value));
-
-    console.log(fileSlipImage);
   };
 
   return (
@@ -1599,7 +1594,6 @@ const Buy = () => {
                           </h3>
                         </Header>
                         <Content>
-                          <InputDiv>{/* <Dot /> */}</InputDiv>
                           <RadioDiv>
                             <div className="radio-div">
                               <Radio
@@ -1611,7 +1605,10 @@ const Buy = () => {
                                   setShareRadio(e.target.value);
                                 }}
                               />
-                              <p className="radio-label">
+                              <p
+                                className="radio-label"
+                                style={{ width: "400px" }}
+                              >
                                 ฝากหุ้นที่ได้รับการจัดสรรไว้ที่หมายเลขสมาชิก
                               </p>
                             </div>
@@ -1957,8 +1954,8 @@ const Buy = () => {
                             <ShareDetail>
                               <p>{rightStockName}</p>
                               <b>
-                                {excessVolume
-                                  ? formatNumber(excessVolume)
+                                {excessAmount
+                                  ? formatNumber(excessAmount / offerPrice)
                                   : "-"}
                               </b>
                               <p>หุ้น</p>
@@ -2484,7 +2481,6 @@ const Buy = () => {
                               type="date"
                               value={paymentDate}
                               onChange={(e) => {
-                                console.log(e.target.value);
                                 setPaymentDate(e.target.value);
                               }}
                               required
@@ -2498,7 +2494,6 @@ const Buy = () => {
                               type="time"
                               value={paymentTime}
                               onChange={(e) => {
-                                console.log(e.target.value);
                                 setPaymentTime(e.target.value);
                               }}
                             />
@@ -3068,7 +3063,7 @@ const ContentSpace = styled.div`
   }
 
   .input-detail {
-    width: 30%;
+    width: 35%;
   }
 
   /* For Mobile */

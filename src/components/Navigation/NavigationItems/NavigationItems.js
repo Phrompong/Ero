@@ -116,13 +116,9 @@ const NavigationItems = () => {
                   <NavigationItem link="/buy" img={traffic}>
                     จองซื้อ / Book
                   </NavigationItem>
-                  {() => {
-                    if (user.role === "client") {
-                      <NavigationItem link="/" exact="true" img={Logout}>
-                        ออกจากระบบ / Log out
-                      </NavigationItem>;
-                    }
-                  }}
+                  <NavigationItem link="/" exact="true" img={Logout}>
+                    ออกจากระบบ / Log out
+                  </NavigationItem>
                 </>
               );
             }

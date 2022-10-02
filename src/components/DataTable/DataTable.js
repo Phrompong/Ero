@@ -18,6 +18,7 @@ import { Spinner } from "../Logo/Spinner";
 import Cookies from "js-cookie";
 import { CloseOutline } from "@styled-icons/evaicons-outline/CloseOutline";
 import { InfoCircle } from "@styled-icons/bootstrap/InfoCircle";
+import { ClipboardCheck } from "@styled-icons/bootstrap/ClipboardCheck";
 import { httpGetRequest } from "../../utils/fetch";
 
 const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
@@ -53,6 +54,7 @@ const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
 
   const handleClicked = (details) => {
     setShowDetails(true);
+    console.log(details);
     setDetails(details);
   };
 
@@ -136,7 +138,13 @@ const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
                       width: "100px",
                     }}
                   >
+                    <ClipboardCheck
+                      style={{ color: "#1C37A9 " }}
+                      key={index}
+                      onClick={() => handleClicked(x)}
+                    ></ClipboardCheck>
                     <EditOutline
+                      style={{ color: "#1C37A9 " }}
                       onClick={() => {
                         // * Clear localstorage
                         localStorage.clear();
@@ -160,10 +168,6 @@ const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
                         window.open(`/buy?event=change`);
                       }}
                     ></EditOutline>
-                    <InfoCircle
-                      key={index}
-                      onClick={() => handleClicked(x)}
-                    ></InfoCircle>
                   </TD>
                 </TR>
               ))}

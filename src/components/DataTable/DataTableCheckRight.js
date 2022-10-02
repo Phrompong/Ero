@@ -33,6 +33,7 @@ const DataTableProfile = ({
 }) => {
   const [alertMessage, setAlertMessage] = useState();
   const { user } = useSelector((state) => state);
+  console.log(user);
   const [showDetails, setShowDetails] = useState(false);
   const [details, setDetails] = useState();
   const [options, setOptions] = useState([]);
@@ -299,35 +300,47 @@ const DataTableProfile = ({
                       justifyContent: "flex-start",
                     }}
                   >
-                    <Button
-                      style={{
-                        width: "100px",
-                        background: x["status"].length > 0 ? "gray" : "",
-                      }}
-                      disabled={x["status"].length > 0 ? true : false}
-                      onClick={() => {
-                        // * Clear localstorage
-                        localStorage.clear();
+                    {user.role === "admin" ? (
+                      x["status"].length > 0 ? (
+                        <Button
+                          key={index}
+                          style={{
+                            width: "100px",
+                            background: "#EDEDED",
+                          }}
+                          disabled={false}
+                          onClick={() => handleClicked(x)}
+                        >
+                          <div style={{ color: "#1C37A9", fontSize: "10px" }}>
+                            รายละเอียด
+                          </div>
+                        </Button>
+                      ) : (
+                        <Button
+                          style={{
+                            width: "100px",
+                            background: x["status"].length > 0 ? "gray" : "",
+                          }}
+                          disabled={x["status"].length > 0 ? true : false}
+                          onClick={() => {
+                            // * Clear localstorage
+                            localStorage.clear();
 
-                        // * Set customerId
-                        localStorage.setItem("customerId", x["customerId"]);
+                            // * Set customerId
+                            localStorage.setItem("customerId", x["customerId"]);
 
-                        // * Set orderId
-                        localStorage.setItem("orderId", x["_id"]);
+                            // * Set orderId
+                            localStorage.setItem("orderId", x["_id"]);
 
-                        window.open(`/buy?event=add`);
-                      }}
-                    >
-                      จองซื้อ
-                    </Button>
-                    {/* <InfoCircle
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-start",
-                      }}
-                      key={index}
-                      onClick={() => handleClicked(x)}
-                    ></InfoCircle> */}
+                            window.open(`/buy?event=add`);
+                          }}
+                        >
+                          <div style={{ fontSize: "10px" }}>จองซื้อ</div>
+                        </Button>
+                      )
+                    ) : (
+                      <></>
+                    )}
                   </TD>
                 </TR>
               ))}
