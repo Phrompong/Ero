@@ -132,7 +132,7 @@ const Buy = () => {
   const [dropdownSelect, setDropdownSelect] = useState(null);
   const [displayBroker, setDisplayBroker] = useState(null);
   const [brokerSelect, setBrokerSelect] = useState(null);
-  const [shareRadio, setShareRadio] = useState("first");
+  const [shareRadio, setShareRadio] = useState(null);
   const [dropdownBankRefundSelect, setDropdownBankRefundSelect] =
     useState(null);
   const [isReadMore, setIsReadMore] = useState(false);
@@ -258,23 +258,26 @@ const Buy = () => {
       attachedFiles,
       paymentDate,
       depositAmount,
+      allocateDetail,
     } = res.data[0];
     const { registrationNo, rightStockName } = customerStock;
     setTradingAccountNo(accountNo); // * Set เลขที่บัญชีซื้อชาย
     console.log(brokerId);
-    setDisplayBroker(`${brokerId.code} ${brokerId.name}`);
-    console.log(displayBroker);
-    // * broker
-    const obj = {
-      code: brokerId.code,
-      fullname: `${brokerId.code} ${brokerId.name}`,
-      name: brokerId.name,
-      searchValue: `${brokerId.code} ${brokerId.name}`,
-      status: brokerId.status,
-      _id: brokerId._id,
-    };
-    setBrokerSelect(obj);
-    setShareRadio(!isCert ? "first" : "second");
+    if (brokerId) {
+      setDisplayBroker(`${brokerId.code} ${brokerId.name}`);
+
+      // * broker
+      const obj = {
+        code: brokerId.code,
+        fullname: `${brokerId.code} ${brokerId.name}`,
+        name: brokerId.name,
+        searchValue: `${brokerId.code} ${brokerId.name}`,
+        status: brokerId.status,
+        _id: brokerId._id,
+      };
+      setBrokerSelect(obj);
+    }
+
     setShareId(registrationNo);
     setPhoneNo(customerTel);
 
@@ -290,6 +293,17 @@ const Buy = () => {
 
     setFilename(attachedFiles || []);
     setFileSlipImage(attachedFiles || []);
+
+    let _allocateDetail = "";
+    if (allocateDetail.type === 1) {
+      _allocateDetail = "first";
+    } else if (allocateDetail.type === 2) {
+      _allocateDetail = "second";
+    } else if (allocateDetail.type === 3) {
+      _allocateDetail = "third";
+    }
+
+    setShareRadio(_allocateDetail);
 
     // * step 3
     const convertDate = new Date(paymentDate).toLocaleDateString("fr-CA", {
@@ -385,7 +399,7 @@ const Buy = () => {
       setStockVolume(payload.stockVolume);
       setOfferPrice(payload.offerPrice);
       setRightStockName(payload.rightStockName);
-      setRightStockVolume(payload.rightStockVolume || "-");
+      setRightStockVolume(payload.rightStockVolume || 0);
       setRightSpecialName(payload.rightSpecialName);
       setRightSpecialVolume(payload.rightSpecialVolume);
     }
@@ -703,6 +717,8 @@ const Buy = () => {
               showAlert(setShow, 2000);
               setFileSlipImage();
               setTimeout(() => {
+                if (event === "change" || event === "add") window.close();
+
                 setOnSubmit(false);
                 if (!event) navigate(`/profile`);
               }, 2000);
@@ -906,7 +922,11 @@ const Buy = () => {
                 type="button"
                 value={"ย้อนกลับ"}
                 onClick={() => {
-                  navigate(`/profile`);
+                  if (event === "add") {
+                    window.close();
+                  } else {
+                    navigate(`/profile`);
+                  }
                 }}
                 disabled={false}
                 style={{
@@ -1604,7 +1624,7 @@ const Buy = () => {
                                 onChange={(e) => {
                                   setShareRadio(e.target.value);
                                   setTradingAccountNo(null);
-                                  setDropdownSelect(null);
+                                  setDisplayBroker("");
                                 }}
                               />
                               <p className="radio-label">
@@ -2073,7 +2093,7 @@ const Buy = () => {
                                 <div
                                   style={{
                                     display: "grid",
-                                    gridTemplateColumns: "12% 1%",
+                                    gridTemplateColumns: "50% 1%",
                                     gap: "2%",
                                     border: "#000000",
                                     color: "#000000",
@@ -2090,6 +2110,7 @@ const Buy = () => {
                                           setSlipFile(tempBookBankFile);
                                         }}
                                         style={{
+                                          color: "#1C37A9",
                                           width: "20px",
                                         }}
                                       />

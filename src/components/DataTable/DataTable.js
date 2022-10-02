@@ -154,6 +154,7 @@ const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
                         );
 
                         // * Set orderId
+
                         localStorage.setItem("orderId", x["_id"]);
 
                         window.open(`/buy?event=change`);

@@ -85,7 +85,8 @@ const NavigationItems = () => {
                 path !== "/profile" &&
                 path !== "/checkRightCustomer" &&
                 path !== "/buy") ||
-              event === "change"
+              event === "change" ||
+              event === "add"
             ) {
               return (
                 <>
