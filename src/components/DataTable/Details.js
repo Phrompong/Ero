@@ -181,9 +181,6 @@ const Details = ({ show, details, closed, options }) => {
               </LineCard>
             </FlexContainer>
             <Footer>
-              {[1, 3].map((imageUrl) => (
-                <div>test{JSON.stringify(imageUrl)}</div>
-              ))}
               <Dropdown
                 options={options}
                 setSelected={setSelectedStatus}

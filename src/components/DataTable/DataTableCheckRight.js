@@ -311,7 +311,7 @@ const DataTableProfile = ({
                           disabled={false}
                           onClick={() => handleClicked(x)}
                         >
-                          <div style={{ color: "#1C37A9", fontSize: "10px" }}>
+                          <div style={{ color: "#1C37A9", fontSize: "11px" }}>
                             รายละเอียด
                           </div>
                         </Button>
@@ -335,7 +335,7 @@ const DataTableProfile = ({
                             window.open(`/buy?event=add`);
                           }}
                         >
-                          <div style={{ fontSize: "10px" }}>จองซื้อ</div>
+                          <div style={{ fontSize: "11px" }}>จองซื้อ</div>
                         </Button>
                       )
                     ) : (

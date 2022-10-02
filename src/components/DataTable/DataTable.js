@@ -142,9 +142,11 @@ const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
                       style={{ color: "#1C37A9 " }}
                       key={index}
                       onClick={() => handleClicked(x)}
+                      title="ตรวจสอบการชำระเงิน"
                     ></ClipboardCheck>
                     <EditOutline
-                      style={{ color: "#1C37A9 " }}
+                      title="แก้ไขคำจองซื้อ"
+                      style={{ color: "#1C37A9", marginLeft: "10px" }}
                       onClick={() => {
                         // * Clear localstorage
                         localStorage.clear();

@@ -45,11 +45,11 @@ const Buy = () => {
   const [showStepOneVerify, setShowStepOneVerify] = useState(false);
   const [showRegistrationModal, setShowRegistrationModal] = useState(
     event === "change" ? false : true
-  ); //! อย่าลืมแก้กลับเป็น true
+  );
   const [status, setStatus] = useState();
 
   const [currentStockVolume, setCurrentStockVolume] = useState(0);
-  const [currentPrice, setCurrentPrice] = useState(0);
+  const [currentPrice, setCurrentPrice] = useState(null);
 
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
   const [isOpenDropdownArrow, setIsOpenDropdownArrow] = useState(false);
@@ -209,6 +209,8 @@ const Buy = () => {
       );
       setShareRadio(JSON.parse(localStorage.getItem("step_1")).shareRadio);
     }
+
+    await getOrder();
   };
 
   const fetchStep2 = async () => {
@@ -223,6 +225,8 @@ const Buy = () => {
       setDepositBank(JSON.parse(localStorage.getItem("step_2")).depositBank);
       setBank(JSON.parse(localStorage.getItem("step_2")).bank);
     }
+
+    await getOrder();
   };
 
   const fetchStep3 = async () => {
@@ -230,7 +234,7 @@ const Buy = () => {
   };
 
   // * Get order
-  const getOrder = async () => {
+  async function getOrder() {
     const [res, status] = await httpGetRequest(
       `orders?customerId=${user.customerId || customerId}`
     );
@@ -253,9 +257,11 @@ const Buy = () => {
       attachedFiles,
       paymentDate,
       depositAmount,
+      excessAmount,
       allocateDetail,
     } = res.data[0];
     const { registrationNo, rightStockName, offerPrice } = customerStock;
+
     setTradingAccountNo(accountNo); // * Set เลขที่บัญชีซื้อชาย
     if (brokerId) {
       setDisplayBroker(`${brokerId.code} ${brokerId.name}`);
@@ -297,9 +303,10 @@ const Buy = () => {
       _allocateDetail = "third";
     }
 
+    setExcessAmount(excessAmount);
     setShareRadio(_allocateDetail);
     setExcessVolume(excessAmount / offerPrice);
-    console.log(excessVolume);
+    console.log(excessAmount);
 
     // * step 3
     const convertDate = new Date(paymentDate).toLocaleDateString("fr-CA", {
@@ -313,7 +320,7 @@ const Buy = () => {
     setDepositAmount(depositAmount);
     // * Set display button
     setIsDisableToPage2(false);
-  };
+  }
 
   const getFilenameFromImageUrl = (imageUrl) => {
     if (!imageUrl) return;
@@ -487,10 +494,6 @@ const Buy = () => {
     }
   };
 
-  useEffect(async () => {
-    await getOrder();
-  }, []);
-
   useEffect(() => {
     if (shareId && isRegistrationChecked) {
       setIsDisableRegistration(false);
@@ -548,7 +551,7 @@ const Buy = () => {
       }, 5000);
     } else if (shareRadio === "second") {
       setPage(page);
-    } else if (!dropdownSelect && !event) {
+    } else if (!dropdownSelect && shareRadio !== "third") {
       setShow(true);
       setStatus(999);
       setAlertMessage(
@@ -651,7 +654,6 @@ const Buy = () => {
             name: "บัญชีสมาชิกเลขที่ 600 เพิ่มข้าพเจ้า",
           };
         }
-        alert(bank);
         console.log(excessVolume);
         const [res, status] = await httpFetch(
           "POST",
@@ -918,8 +920,10 @@ const Buy = () => {
                 value={"ย้อนกลับ"}
                 onClick={() => {
                   if (event === "add") {
+                    alert("add");
                     window.close();
                   } else {
+                    alert("profile");
                     navigate(`/profile`);
                   }
                 }}
@@ -1953,9 +1957,10 @@ const Buy = () => {
                             </Header>
                             <ShareDetail>
                               <p>{rightStockName}</p>
+
                               <b>
-                                {excessAmount
-                                  ? formatNumber(excessAmount / offerPrice)
+                                {excessVolume
+                                  ? formatNumber(excessVolume)
                                   : "-"}
                               </b>
                               <p>หุ้น</p>
@@ -2379,8 +2384,8 @@ const Buy = () => {
                               onChange={(e) => {
                                 setDepositAmount(
                                   e.target.value
-                                    .replace(/\,/g, "")
-                                    .replace(/[^0-9.]/, "")
+                                    .replace(/\./g, "")
+                                    .replace(/[^0-9]/, "")
                                 );
                               }}
                             />
