@@ -73,6 +73,7 @@ const Buy = () => {
   const [onSubmit, setOnSubmit] = useState(false);
 
   const [previewImage, setPreviewImage] = useState(null);
+  const [previewImageBookBank, setPreviewImageBookBank] = useState(null);
 
   const handleClick = (e) => {
     hiddenFileInput.current.click();
@@ -103,10 +104,14 @@ const Buy = () => {
         setShow(false);
       }, 2000);
     } else {
+      console.log(e.target.files);
       const fileUploaded = e.target.files[0];
+      console.log("file uploaded");
+
       setBookbankFile(fileUploaded);
       const reader = new FileReader();
       reader.addEventListener("load", () => {
+        setPreviewImageBookBank(reader.result);
         setPreviewImage(reader.result);
       });
       reader.readAsDataURL(fileUploaded);
@@ -190,6 +195,7 @@ const Buy = () => {
   const [isConfirmOrder, setIsConfirmOrder] = useState(true);
   const [isSummitOrder, setIsSummitOrder] = useState(true);
   const [depositAmount, setDepositAmount] = useState(null);
+  const [_depositAmount, _setDepositAmount] = useState(null);
   const customerId = localStorage.getItem("customerId");
   const _orderId = localStorage.getItem("orderId");
 
@@ -291,7 +297,13 @@ const Buy = () => {
 
     setTempBookBankFile(attachedFileBookBank);
     setOfferPrice(offerPrice);
-    setFilename(attachedFiles || []);
+
+    const _attachedFiles = attachedFiles.map((o) => {
+      return { fileName: o, display: o };
+    });
+
+    setFilename(_attachedFiles || []);
+
     setFileSlipImage(attachedFiles || []);
 
     let _allocateDetail = "";
@@ -444,6 +456,7 @@ const Buy = () => {
     const allowTypeFile = ["image/jpeg", "image/png"];
     const [file] = e.target.files;
 
+    console.log(file);
     const maxAllowedSize = 5 * 1024 * 1024;
     const { name: fileName, size, type } = file;
 
@@ -466,19 +479,27 @@ const Buy = () => {
         setShow(false);
       }, 2000);
     } else {
-      // setFilename(fileName);
-      // setFile(file);
+      const reader = new FileReader();
+      let display;
+      reader.addEventListener("load", () => {
+        console.log("onload");
+        display = reader.result;
 
-      setFilename((current) => [...current, fileName]);
+        setFilename((current) => [...current, { fileName, display }]);
 
-      if (file)
-        setFileSlipImage((current) => {
-          if (current) {
-            return [...current, file];
-          } else {
-            return [file];
-          }
-        });
+        console.log(filename);
+
+        if (file)
+          setFileSlipImage((current) => {
+            if (current) {
+              return [...current, file];
+            } else {
+              return [file];
+            }
+          });
+      });
+
+      reader.readAsDataURL(file);
     }
   };
 
@@ -819,6 +840,17 @@ const Buy = () => {
     return Number(number)
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const formatNumberDecimal = (number, event) => {
+    return Number(number);
+    // return Number(number)
+    //   .toFixed(2)
+    //   .replace(/\d(?=(\d{3})+\.)/g, "$&,");
+    // if (number === 0) return number;
+    // return Number(number)
+    //   .toFixed(2)
+    //   .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   const removeFilename = async (value) => {
@@ -2085,12 +2117,28 @@ const Buy = () => {
                               {bookbankFile ? (
                                 <div
                                   style={{
-                                    width: "100%",
-                                    textAlign: "start",
-                                    marginLeft: "2rem",
+                                    display: "grid",
+                                    gridTemplateColumns: "50% 1%",
+                                    gap: "2%",
+                                    border: "#000000",
+                                    color: "#000000",
                                   }}
                                 >
-                                  {bookbankFile.name}
+                                  <div>{bookbankFile.name}</div>
+                                  <div>
+                                    {previewImage && (
+                                      <EyeFill
+                                        onClick={() => {
+                                          setShowModalImage(true);
+                                          setSlipFile(previewImage);
+                                        }}
+                                        style={{
+                                          color: "#1C37A9",
+                                          width: "20px",
+                                        }}
+                                      />
+                                    )}
+                                  </div>
                                 </div>
                               ) : (
                                 <div
@@ -2380,7 +2428,7 @@ const Buy = () => {
                             }}
                           >
                             <FieldInput
-                              value={formatNumber(depositAmount)}
+                              value={depositAmount}
                               placeholder={"จำนวนเงินที่ฝาก"}
                               onChange={(e) => {
                                 setDepositAmount(
@@ -2451,12 +2499,13 @@ const Buy = () => {
                                       gridTemplateColumns: "90% 14% 100%",
                                     }}
                                   >
-                                    {getFilenameFromImageUrl(_tempFilename)}
-
+                                    {getFilenameFromImageUrl(
+                                      _tempFilename.fileName
+                                    )}
                                     <EyeFill
                                       onClick={() => {
                                         setShowModalImage(true);
-                                        setSlipFile(_tempFilename);
+                                        setSlipFile(_tempFilename.display);
                                       }}
                                       style={{
                                         color: "#1C37A9",
@@ -2465,7 +2514,7 @@ const Buy = () => {
                                     />
                                     <CloseOutline
                                       onClick={() =>
-                                        removeFilename(_tempFilename)
+                                        removeFilename(_tempFilename.fileName)
                                       }
                                       style={{
                                         color: "#FF0000",
