@@ -167,7 +167,7 @@ const Details = ({ show, details, closed, options }) => {
                   <Carousel style={{ height: "10px" }} rows={1} loop>
                     {details["attachedFiles"].map((imageUrl) => (
                       <Carousel.Item>
-                        <img src={imageUrl} width="100%" height="500px" />
+                        <img src={imageUrl} width="100%" height="800px" />
                       </Carousel.Item>
                     ))}
                   </Carousel>
