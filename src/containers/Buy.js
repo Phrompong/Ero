@@ -854,7 +854,7 @@ const Buy = () => {
   };
 
   const removeFilename = async (value) => {
-    const index = filename.findIndex((o) => o === value);
+    const index = filename.findIndex((o) => o.fileName === value);
 
     if (index === -1) return;
     filename.splice(index, 1);
@@ -2513,9 +2513,10 @@ const Buy = () => {
                                       }}
                                     />
                                     <CloseOutline
-                                      onClick={() =>
-                                        removeFilename(_tempFilename.fileName)
-                                      }
+                                      onClick={() => {
+                                        console.log("test");
+                                        removeFilename(_tempFilename.fileName);
+                                      }}
                                       style={{
                                         color: "#FF0000",
                                         width: "20px",
