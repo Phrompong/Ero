@@ -237,6 +237,10 @@ const Buy = () => {
 
   const fetchStep3 = async () => {
     getMasterBank();
+
+    if (filename.length > 0) {
+      setFileSlipImage([]);
+    }
   };
 
   // * Get order
@@ -282,6 +286,7 @@ const Buy = () => {
         _id: brokerId._id,
       };
       setBrokerSelect(obj);
+      setDropdownSelect(obj);
     }
 
     setShareId(registrationNo);
@@ -566,6 +571,7 @@ const Buy = () => {
       );
     }
 
+    console.log(dropdownSelect);
     if (!phoneNo) {
       setShow(true);
       setStatus(999);
