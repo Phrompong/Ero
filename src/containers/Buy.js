@@ -863,6 +863,11 @@ const Buy = () => {
       fileSlipImage.filter((o) => o !== value && o.name !== value)
     );
     setFilename(filename.filter((o) => o !== value));
+
+    console.log(filename.length);
+    if (filename.length === 0) {
+      setFileSlipImage(null);
+    }
   };
 
   return (
@@ -2514,7 +2519,6 @@ const Buy = () => {
                                     />
                                     <CloseOutline
                                       onClick={() => {
-                                        console.log("test");
                                         removeFilename(_tempFilename.fileName);
                                       }}
                                       style={{
