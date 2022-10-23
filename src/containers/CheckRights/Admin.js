@@ -30,7 +30,7 @@ const CheckRightAdmin = () => {
   async function fetchDataTable() {
     setIsFetching(true);
     const inputValue = searchInputRef.current.value;
-    let endpoint = `customerStocks/search/value?page=${currentPage}${
+    let endpoint = `customerStocks/search/value?page=${currentPage}&limit=10${
       inputValue ? "&key=" + inputValue : ""
     }`;
 

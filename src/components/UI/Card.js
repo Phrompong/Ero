@@ -94,13 +94,14 @@ export const StyledLineCard = styled.div`
   border-radius: 10px;
   border: 1px solid #d9e1e7;
   width: 100%;
+  
   // margin: 0 10px;
 
   .table-detail {
     overflow: scroll;
     overflow-x: auto;
     overflow-y: auto;
-    // height: 100%;
+    height: 100%;
   }
 
   .modal-flex {

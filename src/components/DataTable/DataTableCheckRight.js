@@ -279,17 +279,26 @@ const DataTableProfile = ({
               {data.map((x, index) => (
                 <TR key={index}>
                   <TD style={{ width: "100px" }}>จองซื้อ / Book</TD>
-                  <TD>{x["rightStockName"]}</TD>
-                  <TD>{x["registrationNo"]}</TD>
-                  <TD>{x["customers"].refNo}</TD>
-                  <TD>{`${
+                  <TD style={{ width: "50px" }}>{x["rightStockName"]}</TD>
+                  <TD style={{ width: "50px" }}>{x["registrationNo"]}</TD>
+                  <TD style={{ width: "50px" }}>{x["customers"].refNo}</TD>
+                  <TD style={{ width: "160px" }}>{`${
                     x["customers"].name + " " + x["customers"].lastname
                   }`}</TD>
-                  <TD>{formatNumber(x["stockVolume"])}</TD>
-                  <TD>{formatNumber(x["rightStockVolume"])}</TD>
+                  <TD style={{ width: "50px" }}>
+                    {formatNumber(x["stockVolume"])}
+                  </TD>
+                  <TD style={{ width: "50px" }}>
+                    {formatNumber(x["rightStockVolume"])}
+                  </TD>
                   {x["status"].length > 0 ? (
                     x["status"].map((obj) => (
-                      <TD color={color[obj["value"]]}>{obj["status"]}</TD>
+                      <TD
+                        style={{ width: "300px" }}
+                        color={color[obj["value"]]}
+                      >
+                        {obj["status"]}
+                      </TD>
                     ))
                   ) : (
                     <TD color={color[0]}>ยังไม่ได้ดำเนินการ</TD>
