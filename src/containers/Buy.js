@@ -197,6 +197,7 @@ const Buy = () => {
   const [depositAmount, setDepositAmount] = useState(null);
   const [_depositAmount, _setDepositAmount] = useState(null);
   const customerId = localStorage.getItem("customerId");
+  const registrationNoStorage = localStorage.getItem("registrationNo");
   const _orderId = localStorage.getItem("orderId");
 
   const fetchStep1 = async () => {
@@ -216,7 +217,9 @@ const Buy = () => {
       setShareRadio(JSON.parse(localStorage.getItem("step_1")).shareRadio);
     }
 
-    await getOrder();
+    if (customerId) {
+      await getOrder();
+    }
   };
 
   const fetchStep2 = async () => {
@@ -231,8 +234,9 @@ const Buy = () => {
       setDepositBank(JSON.parse(localStorage.getItem("step_2")).depositBank);
       setBank(JSON.parse(localStorage.getItem("step_2")).bank);
     }
-
-    await getOrder();
+    if (customerId) {
+      await getOrder();
+    }
   };
 
   const fetchStep3 = async () => {
@@ -246,7 +250,9 @@ const Buy = () => {
   // * Get order
   async function getOrder() {
     const [res, status] = await httpGetRequest(
-      `orders?customerId=${user.customerId || customerId}`
+      `orders?customerId=${user.customerId || customerId}${
+        registrationNoStorage ? "registrationNo=" + registrationNoStorage : ""
+      }`
     );
 
     if (status !== 200) return;
@@ -350,24 +356,25 @@ const Buy = () => {
 
   const getCustomerProfile = async () => {
     const [res, status] = await httpGetRequest(
-      `customerStocks?customerId=${user.customerId || customerId}`
+      `customerStocks?customerId=${user.customerId || customerId}${
+        registrationNoStorage ? "&registrationNo=" + registrationNoStorage : ""
+      }`
     );
 
     if (status === 200) {
       const payload = res.data[0];
       const registrations = [];
-      res.data.forEach((data) => {
-        const { orders } = data;
 
-        if (!orders) {
-          registrations.push({ registraionNo: data.registrationNo });
+      for (const data of res.data) {
+        if (!data.orders) {
+          registrations.push({ registrationNo: data.registrationNo });
         }
-      });
+      }
 
-      registrations.unshift({ registraionNo: "" });
+      console.log(registrations);
       setAllRegistrations(registrations);
       setShareId(
-        registrations.length > 0 ? registrations[0].registraionNo : null
+        registrations.length > 0 ? registrations[0].registrationNo : null
       );
       setNationalId(payload.customerId.refNo);
       setFullname(`${payload.customerId.name} ${payload.customerId.lastname}`);
@@ -932,16 +939,16 @@ const Buy = () => {
                     onClick={() => setIsOpenDropdownArrow(!isOpenDropdownArrow)}
                     onBlur={() => setIsOpenDropdownArrow(false)}
                     setSelected={(e) => {
-                      setShareId(e.registraionNo);
-                      setShareIdModal(e.registraionNo);
+                      setShareId(e.registrationNo);
+                      setShareIdModal(e.registrationNo);
                     }}
                     selected={{
-                      registraionNo:
+                      registrationNo:
                         allRegistrations.length > 0 && !shareId
-                          ? allRegistrations[0].registraionNo
+                          ? allRegistrations[0].registrationNo
                           : shareId,
                     }}
-                    display={"registraionNo"}
+                    display={"registrationNo"}
                   />
                 </div>
               </div>

@@ -144,11 +144,11 @@ const CheckRightInfo = () => {
     if (status === 200) {
       const payload = res.data[0];
       const registrations = res.data.map((data) => {
-        return { registraionNo: data.registrationNo };
+        return { registrationNo: data.registrationNo };
       });
       setAllRegistrations(registrations);
       setShareId(
-        registrations.length > 0 ? registrations[0].registraionNo : null
+        registrations.length > 0 ? registrations[0].registrationNo : null
       );
     }
   };
@@ -256,14 +256,14 @@ const CheckRightInfo = () => {
                   isOpen={isOpenDropdownArrow}
                   onClick={() => setIsOpenDropdownArrow(!isOpenDropdownArrow)}
                   onBlur={() => setIsOpenDropdownArrow(false)}
-                  setSelected={(e) => setShareId(e.registraionNo)}
+                  setSelected={(e) => setShareId(e.registrationNo)}
                   selected={{
-                    registraionNo:
+                    registrationNo:
                       allRegistrations.length > 0 && !shareId
-                        ? allRegistrations[0].registraionNo
+                        ? allRegistrations[0].registrationNo
                         : shareId,
                   }}
-                  display={"registraionNo"}
+                  display={"registrationNo"}
                 />
               </div>
               <Button onClick={handleSearchButtonClicked}>ค้นหา</Button>

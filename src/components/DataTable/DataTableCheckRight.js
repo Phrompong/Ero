@@ -55,9 +55,9 @@ const DataTableProfile = ({
 
   useEffect(() => {
     if (windowValue && windowValue.name === "_myWindow") {
-      const myInterval = setInterval(async function () {
+      const myInterval = setInterval(function () {
         if (windowValue && windowValue.name === "") {
-          await refreshData();
+          refreshData();
           clearInterval(myInterval);
           setWindowValue(window);
         }
@@ -349,6 +349,12 @@ const DataTableProfile = ({
 
                             // * Set customerId
                             localStorage.setItem("customerId", x["customerId"]);
+
+                            // * Set registrationNo
+                            localStorage.setItem(
+                              "registrationNo",
+                              x["registrationNo"]
+                            );
 
                             // * Set orderId
                             localStorage.setItem("orderId", x["_id"]);
