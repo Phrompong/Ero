@@ -241,10 +241,6 @@ const Buy = () => {
 
   const fetchStep3 = async () => {
     getMasterBank();
-
-    if (filename.length > 0) {
-      setFileSlipImage([]);
-    }
   };
 
   // * Get order
@@ -499,9 +495,10 @@ const Buy = () => {
 
         setFilename((current) => [...current, { fileName, display }]);
 
-        console.log(filename);
+        console.log(fileSlipImage);
 
-        if (file)
+        if (file) {
+          console.log("add file");
           setFileSlipImage((current) => {
             if (current) {
               return [...current, file];
@@ -509,6 +506,7 @@ const Buy = () => {
               return [file];
             }
           });
+        }
       });
 
       reader.readAsDataURL(file);
@@ -741,7 +739,7 @@ const Buy = () => {
             }
             //formData.append("File", fileSlipImage);
             const endpoint = `uploads/image?orderId=${res.data._id}`;
-            console.log(formData);
+
             const [_res, _status] = await httpPostRequestUploadFile(
               formData,
               endpoint
