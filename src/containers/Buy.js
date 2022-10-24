@@ -251,7 +251,7 @@ const Buy = () => {
   async function getOrder() {
     const [res, status] = await httpGetRequest(
       `orders?customerId=${user.customerId || customerId}${
-        registrationNoStorage ? "registrationNo=" + registrationNoStorage : ""
+        registrationNoStorage ? "&registrationNo=" + registrationNoStorage : ""
       }`
     );
 
@@ -424,7 +424,7 @@ const Buy = () => {
     );
 
     if (status === 200) {
-      const payload = res.data;
+      const payload = res.data[0];
       setCustomerStockId(payload._id);
       setRightStockName(payload.rightStockName);
       setStockVolume(payload.stockVolume);
