@@ -163,6 +163,12 @@ const DataTable = ({ header, theaders, data, refreshData, isFetching }) => {
                           x["customerId"]["_id"]
                         );
 
+                        // * Set registrationNo
+                        localStorage.setItem(
+                          "registrationNo",
+                          x["customerStock"]["registrationNo"]
+                        );
+
                         // * Set orderId
 
                         localStorage.setItem("orderId", x["_id"]);
