@@ -33,7 +33,6 @@ const DataTableProfile = ({
 }) => {
   const [alertMessage, setAlertMessage] = useState();
   const { user } = useSelector((state) => state);
-  console.log(user);
   const [showDetails, setShowDetails] = useState(false);
   const [details, setDetails] = useState();
   const [options, setOptions] = useState([]);
@@ -42,16 +41,29 @@ const DataTableProfile = ({
 
   const [verifyOrder, setVerifyOrder] = useState(0);
   const [isSubmit, setIsSubmit] = useState(false);
+  const [windowValue, setWindowValue] = useState(window);
+  const [isRefresh, setIsRefresh] = useState(null);
 
   const fetchData = async () => {
     const endpoint = "status";
     const [res, status] = await httpGetRequest(endpoint);
     handleFetchStatusOption(res);
   };
-
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (windowValue && windowValue.name === "_myWindow") {
+      const myInterval = setInterval(async function () {
+        if (windowValue && windowValue.name === "") {
+          await refreshData();
+          clearInterval(myInterval);
+          setWindowValue(window);
+        }
+      }, 1);
+    }
+  });
 
   const handleFetchStatusOption = (res) => {
     const options = res["data"].map((x) => ({
@@ -341,7 +353,13 @@ const DataTableProfile = ({
                             // * Set orderId
                             localStorage.setItem("orderId", x["_id"]);
 
-                            window.open(`/buy?event=add`);
+                            let _window = windowValue.open(
+                              `/buy?event=add`,
+                              "_myWindow"
+                            );
+
+                            setIsRefresh(true);
+                            setWindowValue(_window);
                           }}
                         >
                           <div style={{ fontSize: "11.6px" }}>จองซื้อ</div>
