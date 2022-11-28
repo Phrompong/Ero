@@ -17,7 +17,7 @@ const Link = styled(NavLink)`
   text-transform: capitalize;
   font-style: normal;
   font-weight: 400;
-  font-size: 17px;
+  font-size: 14px;
   line-height: 23px;
   color: ${balihai};
 

@@ -10,6 +10,7 @@ import Notfound from "../../../assets/notfound.png";
 import { useLocation } from "react-router-dom";
 
 import { Logo } from "../../Logo/Logo";
+import mapAsiaWealth from "../../../assets/mapAsiaWealth.png";
 import { balihai, ivory } from "../../../utils/color";
 import logo from "../../../assets/logo_awsc.jpg";
 
@@ -21,7 +22,7 @@ const Items = styled.ul`
   flex-direction: column;
   margin: 0;
   padding: 0;
-  margin-top: 20px;
+  margin-top: 2px;
 `;
 
 const Footer = styled.div`
@@ -77,7 +78,6 @@ const NavigationItems = () => {
     <>
       <Nav>
         <Logo small />
-
         <Items>
           {(() => {
             if (
@@ -126,11 +126,44 @@ const NavigationItems = () => {
         </Items>
       </Nav>
       <Footer>
+        <p className="text" style={{ color: "#1D3AB1", fontSize: "11px" }}>
+          ติดต่อเรา บริษัทหลักทรัพย์ เอเชีย เวลท์ จำกัด
+        </p>
+        <p className="text" style={{ fontSize: "10px", fontWeight: "bold" }}>
+          สำนักงานใหญ่ (อาคารเมอร์คิวรี่ทาวเวอร์)
+        </p>
+        <p className="text" style={{ fontSize: "10px" }}>
+          เลขที่ 540 อาคารเมอร์คิวรี่ ทาวเวอร์ ชั้น 14
+        </p>
+        <p className="text" style={{ fontSize: "10px" }}>
+          ห้อง 1401-1402 ถนนเพลินจิต
+        </p>
+        <p className="text" style={{ fontSize: "10px" }}>
+          แขวงลุมพินี เขตปทุมวัน กรุงเทพมหานคร 10330
+        </p>
+        <p className="text" style={{ fontSize: "10px" }}>
+          โทรศัพท์ : 02-680-5000
+        </p>
+        <p className="text" style={{ fontSize: "10px" }}>
+          โทรสาร : 02-680-5111
+        </p>
+        <p className="text" style={{ fontSize: "10px", fontWeight: "bold" }}>
+          Customer Service : 02-680-5033-5
+        </p>
+        <p className="text" style={{ fontSize: "10px" }}>
+          (วันทำการ จ-ศ เวลา 08:30 - 17:00 น.)
+        </p>
+        <p className="text" style={{ fontSize: "10px" }}>
+          cs@asiawealth.co.th
+        </p>
         <div className="img">
-          <img src={logo} />
+          <img src={mapAsiaWealth} />
+        </div>
+        <div className="img">
+          <img src={logo} width="10px" />
           <p className="year">© 2022 </p>
         </div>
-        <p className="text">
+        <p className="text" style={{ fontSize: "10px" }}>
           สงวนสิทธิในการใช้งาน <br />
           เป็นไปตามเงื่อนไขที่บริษัทกำหนด
         </p>
